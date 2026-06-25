@@ -1,0 +1,3 @@
+# What is Threat Hunting?
+
+Threat hunting is a proactive cybersecurity discipline...
