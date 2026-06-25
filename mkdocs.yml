@@ -1,0 +1,23 @@
+site_name: Threat Hunting Academy
+site_url: https://threathuntlabs.com
+
+theme:
+  name: material
+
+plugins:
+  - search
+
+nav:
+  - Home: index.md
+
+  - Foundations:
+      - What is Threat Hunting: foundations/what-is-threat-hunting.md
+
+  - MITRE ATT&CK:
+      - Introduction: mitre/introduction.md
+
+  - Windows Hunting:
+      - PowerShell Hunting: windows/powershell-hunting.md
+
+  - Blog:
+      - Daily Posts: blog/index.md
