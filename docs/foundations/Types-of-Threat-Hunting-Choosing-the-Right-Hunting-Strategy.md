@@ -283,5 +283,5 @@ As a result, IOC Hunting is excellent for identifying known compromises but far 
 
 Experienced Threat Hunters rarely rely on IOC Hunting alone.
 
-Instead, they combine it with behavioral analysis to identify attacker activity that cannot be detected using static indicators. [Continue to explore more types here]()
+Instead, they combine it with behavioral analysis to identify attacker activity that cannot be detected using static indicators. [Continue to explore more types here](Types-of-Threat-Hunting-Choosing-the-Right-Hunting-Strategy-2.md)
 
