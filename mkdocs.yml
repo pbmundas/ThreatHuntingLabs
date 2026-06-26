@@ -36,4 +36,4 @@ nav:
       - PowerShell Hunting: windows/powershell-hunting.md
       
   - Blog:
-      - Daily Posts: index.md
+      - Daily Posts: blog/index.md
