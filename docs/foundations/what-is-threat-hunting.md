@@ -52,7 +52,7 @@ Threat Hunting begins with understanding:
 
 Only then do tools become powerful.
 
-### How to avoid this mistake
+**How to avoid this mistake**
 
 Before spending weeks mastering a SIEM or EDR platform, invest time in learning:
 
@@ -108,7 +108,7 @@ Notice how understanding the objective is more valuable than memorizing a list.
 
 Threat Hunting rewards understanding over memorization.
 
-### How to avoid this mistake
+**How to avoid this mistake**
 
 Instead of asking:
 
@@ -160,7 +160,7 @@ Threat Hunting isn't about recognizing names.
 
 It's about recognizing behavior.
 
-### Areas every beginner should understand
+**Areas every beginner should understand**
 
 * Windows Processes
 * Services
@@ -209,7 +209,7 @@ With a hypothesis, irrelevant data naturally falls away.
 
 Threat Hunting becomes focused, repeatable, and measurable.
 
-### Build simple hypotheses
+**Build simple hypotheses**
 
 Instead of asking:
 
@@ -275,7 +275,7 @@ Credentials still need to be accessed.
 
 Behavior survives where IOCs expire.
 
-### Balance IOC and behavioral hunting
+**Balance IOC and behavioral hunting**
 
 Use IOCs to confirm findings.
 
@@ -288,5 +288,303 @@ That's where Threat Hunting becomes truly proactive.
 ---
 
 
-More importantly, we'll discuss practical ways to avoid these pitfalls and build habits that will serve you throughout your cybersecurity career.
+# Mistake 6: Confusing Threat Hunting with Incident Response
+
+One of the most common misconceptions is believing that Threat Hunting and Incident Response are the same discipline.
+
+They're closely related—but they have very different goals.
+
+**Incident Response** begins after something suspicious has already been detected. An alert is triggered, a user reports unusual activity, or a compromise is confirmed. The responder's job is to understand what happened, contain the threat, eradicate it, and recover the affected systems.
+
+**Threat Hunting**, on the other hand, is proactive.
+
+The assumption isn't that you've already found an attacker.
+
+The assumption is that an attacker *might* be present without generating an alert.
+
+Imagine walking into a library.
+
+An Incident Responder is called because someone reported a missing book.
+
+A Threat Hunter walks through the shelves looking for signs that books are being quietly removed without anyone noticing.
+
+The difference is subtle but important.
+
+Threat hunters actively search for weak signals, unusual behaviors, and hidden attacker activity long before an incident becomes obvious.
+
+**How to avoid this mistake**
+
+Always begin your hunt with a question rather than an alert.
+
+For example:
+
+* Are Office applications spawning command shells?
+* Are users authenticating from multiple geographic locations within minutes?
+* Are privileged accounts behaving differently from their normal baseline?
+
+Threat Hunting is about discovering the unknown—not confirming what you already know.
+
+> **Key takeaway:** Incident Response investigates confirmed problems. Threat Hunting searches for problems that haven't been discovered yet.
+
+---
+
+# Mistake 7: Ignoring Normal Behaviour
+
+One of the first lessons every experienced threat hunter learns is surprisingly simple:
+
+**You can't identify abnormal behaviour until you understand what's normal.**
+
+Beginners often assume that every PowerShell execution, scheduled task, or network connection is suspicious.
+
+In reality, enterprise environments are noisy.
+
+System administrators automate tasks.
+
+Backup software launches scripts.
+
+Monitoring tools collect telemetry.
+
+Security products generate their own activity.
+
+Without understanding this baseline, almost everything appears malicious.
+
+Imagine walking into a busy airport.
+
+If you've never visited one before, every person running might seem suspicious.
+
+But after observing for a while, you realize people run because they're late for flights.
+
+Context changes everything.
+
+Threat Hunting works the same way.
+
+Experienced hunters spend significant time learning how users, applications, and systems normally behave before looking for anomalies.
+
+**How to avoid this mistake**
+
+Start by asking:
+
+* What normally happens here?
+* Which applications usually launch PowerShell?
+* What are the expected login hours?
+* Which administrative accounts routinely perform privileged actions?
+
+The better you understand normal behaviour, the easier it becomes to identify genuine anomalies.
+
+> **Key takeaway:** Baselines reduce false positives and improve confidence during investigations.
+
+---
+
+# Mistake 8: Believing a Tool Makes You a Threat Hunter
+
+The cybersecurity industry offers an incredible number of tools.
+
+Microsoft Sentinel.
+
+Splunk.
+
+Elastic Security.
+
+CrowdStrike.
+
+Microsoft Defender XDR.
+
+Google SecOps.
+
+While these platforms are incredibly powerful, they don't automatically make someone a threat hunter.
+
+A common mistake beginners make is believing they need access to enterprise products before they can start learning.
+
+This creates an unnecessary barrier.
+
+Threat Hunting isn't defined by the software you use.
+
+It's defined by the questions you ask and the methodology you follow.
+
+An experienced hunter can learn valuable lessons by analysing Windows Event Logs on a personal computer.
+
+Meanwhile, someone with access to a multi-million-dollar SIEM may still struggle if they don't know what they're looking for.
+
+Technology accelerates investigations.
+
+It doesn't replace analytical thinking.
+
+**How to avoid this mistake**
+
+Instead of asking:
+
+*"Which tool should I learn next?"*
+
+Ask:
+
+*"What investigation skill should I improve next?"*
+
+Focus on building skills that transfer across platforms.
+
+Understanding attacker behaviour, Windows internals, MITRE ATT&CK, and investigation methodology will remain valuable regardless of which SIEM or EDR your organisation uses.
+
+> **Key takeaway:** Great threat hunters rely on their thinking first and their tools second.
+
+---
+
+# Mistake 9: Not Documenting Investigations
+
+Many beginners complete an investigation, find something interesting, and move on.
+
+Experienced threat hunters do something different.
+
+They document everything.
+
+Documentation isn't just for compliance or reporting.
+
+It's an essential part of becoming a better analyst.
+
+Imagine discovering suspicious PowerShell activity today.
+
+Six months later, a similar incident occurs.
+
+Without documentation, you'll repeat the same investigation from scratch.
+
+With documentation, you've created your own knowledge base.
+
+A well-documented investigation typically includes:
+
+* The original hypothesis
+* Data sources examined
+* Evidence collected
+* Analysis performed
+* Findings
+* Final conclusion
+* Recommended detections
+* Lessons learned
+
+Professional investigations aren't judged solely by what was discovered.
+
+They're judged by whether someone else can understand and reproduce the investigation.
+
+**How to avoid this mistake**
+
+Create a simple investigation template and use it consistently.
+
+Document both successful and unsuccessful hunts.
+
+Sometimes proving that *nothing malicious occurred* is just as valuable as finding an attacker.
+
+> **Key takeaway:** Every investigation should leave behind knowledge that makes the next investigation easier.
+
+---
+
+# Mistake 10: Expecting to Become a Threat Hunter Overnight
+
+Threat Hunting combines knowledge from multiple disciplines.
+
+Operating systems.
+
+Networking.
+
+Digital Forensics.
+
+Detection Engineering.
+
+Threat Intelligence.
+
+Malware Analysis.
+
+Incident Response.
+
+Cloud Security.
+
+It's completely normal to feel overwhelmed.
+
+Many beginners compare themselves to experienced analysts who have spent years investigating real-world incidents.
+
+What they don't see are the countless hours those professionals spent reading documentation, analysing logs, making mistakes, and learning from failed investigations.
+
+Threat Hunting isn't a destination.
+
+It's a continuous learning process.
+
+Every investigation teaches something new.
+
+Every article expands your understanding.
+
+Every mistake improves your judgement.
+
+The goal isn't to know everything.
+
+The goal is to become slightly better than you were yesterday.
+
+**How to avoid this mistake**
+
+Focus on consistency rather than speed.
+
+Read one technical article each day.
+
+Recreate simple attack scenarios in a lab environment.
+
+Study one Windows artifact at a time.
+
+Most importantly, remain curious.
+
+Curiosity is the single most valuable quality a threat hunter can develop.
+
+> **Key takeaway:** Progress in Threat Hunting is measured by continuous learning—not by how many tools you know.
+
+---
+
+# Final Thoughts
+
+Every experienced Threat Hunter was once a beginner.
+
+They asked the same questions.
+
+Made the same mistakes.
+
+Felt overwhelmed by the same technologies.
+
+What separates experienced analysts from beginners isn't intelligence or access to expensive tools.
+
+It's the willingness to remain curious, challenge assumptions, validate evidence, and continuously improve.
+
+If there's one lesson I'd like you to take away from this article, it's this:
+
+> **Threat Hunting isn't about finding attackers. It's about learning how to think like an investigator.**
+
+Tools will evolve.
+
+Attack techniques will change.
+
+Security products will come and go.
+
+But the ability to ask meaningful questions, analyse evidence objectively, and follow the data wherever it leads will always remain the foundation of effective Threat Hunting.
+
+Build that foundation first.
+
+Everything else becomes much easier.
+
+---
+
+# Key Takeaways
+
+* Learn concepts before learning tools.
+* Understand behaviour instead of memorising indicators.
+* Build strong Windows fundamentals.
+* Always start with a hypothesis.
+* Hunt for behaviours, not just IOCs.
+* Understand the difference between Threat Hunting and Incident Response.
+* Learn normal behaviour before searching for anomalies.
+* Develop investigation skills instead of chasing products.
+* Document every investigation.
+* Stay curious and keep learning.
+
+---
+
+## What's Next?
+
+If you're beginning your Threat Hunting journey, the next step is understanding what Threat Hunting really is.
+
+**"What Is Threat Hunting? Understanding the Mindset Before the Methodology."**
+
+We'll break down what Threat Hunting actually means, how it differs from other cybersecurity disciplines, and why developing the right mindset is more important than mastering any particular tool.
+
 
