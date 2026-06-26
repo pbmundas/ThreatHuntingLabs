@@ -30,6 +30,7 @@ nav:
       - 10 Common Mistakes: foundations/10-Common-Mistakes-Every-Beginner-Makes-When-Learning-Threat-Hunting.md
       - Cybersecurity Fundamentals: foundations/Cybersecurity-Fundamentals-The-Foundation-Every-Threat-Hunter-Needs-part-1.md
       - Why and Where Threat Hunting: foundations/Why-Every-Organization-Needs-Threat-Hunting.md
+      - Threat Hunting Explained: foundations/Threat-Hunting-Explained-Beyond-Alerts-Dashboards-and-SIEM-Queries.md
 
   #- MITRE ATT&CK:
   #    - Introduction: mitre/introduction.md
