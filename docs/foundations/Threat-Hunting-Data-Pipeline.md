@@ -206,6 +206,6 @@ Questions such as:
 - Which process suddenly became unusually active?
 - Which service account logged into systems it has never accessed before?
 
-This is where hunting truly begins. At this point, we've transformed raw logs into meaningful information. But information alone doesn't stop attackers. How do Threat Hunters turn those observations into actionable intelligence that improves an organization's defenses?
+This is where hunting truly begins. At this point, we've transformed raw logs into meaningful information. But information alone doesn't stop attackers. How do Threat Hunters turn those observations into actionable intelligence that improves an organization's defenses? [Let's explore other stages of Pipeline here](Threat-Hunting-Data-Pipeline-2.md)
 
 
