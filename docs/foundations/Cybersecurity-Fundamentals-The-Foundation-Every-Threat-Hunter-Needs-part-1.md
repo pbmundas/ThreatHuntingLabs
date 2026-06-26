@@ -93,7 +93,7 @@ Understanding the relationship between them helps Threat Hunters identify why at
 A threat is anything capable of causing harm.
 
 Examples include:
-![Types of Common Threats](../images/Types-of-common-threats.png)
+
 * Ransomware groups
 * Insider threats
 * Phishing campaigns
@@ -240,7 +240,7 @@ However, most attacks still fall into several well-established categories.
 
 The following illustration highlights some of the most common threats encountered across modern enterprise environments.
 
-> **Insert the HD "Common Types of Cyber Threats" diagram here**
+> ![Types of Common Threats](../images/Types-of-common-threats.png)
 
 Understanding these threats doesn't mean memorizing definitions.
 
