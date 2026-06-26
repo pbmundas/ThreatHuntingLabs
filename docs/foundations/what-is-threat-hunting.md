@@ -23,7 +23,7 @@ In this article, we'll explore ten common mistakes beginners make while learning
 
 ---
 
-# Mistake 1: Focusing on Tools Before Understanding the Fundamentals
+## Mistake 1: Focusing on Tools Before Understanding the Fundamentals
 
 One of the biggest mistakes beginners make is believing that Threat Hunting starts with tools.
 
@@ -70,7 +70,7 @@ The fundamentals rarely do.
 
 ---
 
-# Mistake 2: Trying to Memorize Everything
+## Mistake 2: Trying to Memorize Everything
 
 Threat Hunting can feel overwhelming.
 
@@ -124,7 +124,7 @@ The answers will stay with you much longer.
 
 ---
 
-# Mistake 3: Ignoring Windows Fundamentals
+## Mistake 3: Ignoring Windows Fundamentals
 
 Threat Hunting is impossible without understanding the operating system you're defending.
 
@@ -177,7 +177,7 @@ These topics form the foundation of nearly every investigation you'll perform.
 
 ---
 
-# Mistake 4: Hunting Without a Hypothesis
+## Mistake 4: Hunting Without a Hypothesis
 
 One of the most misunderstood aspects of Threat Hunting is the role of a hypothesis.
 
@@ -228,7 +228,7 @@ Each question creates a meaningful investigation.
 
 ---
 
-# Mistake 5: Depending Only on Indicators of Compromise (IOCs)
+## Mistake 5: Depending Only on Indicators of Compromise (IOCs)
 
 Many newcomers spend significant time collecting:
 
