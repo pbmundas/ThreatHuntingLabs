@@ -4,6 +4,19 @@ site_url: https://threathuntlabs.com
 theme:
   name: material
 
+markdown_extensions:
+  - admonition
+  - attr_list
+  - md_in_html
+
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.highlight
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.tabbed:
+      alternate_style: true
+
 plugins:
   - search
 
