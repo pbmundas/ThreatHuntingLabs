@@ -32,6 +32,7 @@ nav:
       - Why and Where Threat Hunting: foundations/Why-Every-Organization-Needs-Threat-Hunting.md
       - Threat Hunting Explained: foundations/Threat-Hunting-Explained-Beyond-Alerts-Dashboards-and-SIEM-Queries.md
       - Threat Hunting Data Pipeline: foundations/Threat-Hunting-Data-Pipeline.md
+      - Threat Hunting Life Cycle: foundations/Inside-a-Threat-Hunt-Understanding-the-Threat-Hunting-Lifecycle.md
 
   #- MITRE ATT&CK:
   #    - Introduction: mitre/introduction.md
