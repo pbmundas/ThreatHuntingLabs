@@ -210,6 +210,8 @@ The CIA Triad forms the foundation of information security.
 
 It defines the three primary objectives organizations try to protect.
 
+![Types of Common Threats](../images/The-CIA-Triad-for-Cyber-Security.png)
+
 **Confidentiality**
 
 Ensuring information is accessible only to authorized individuals.
