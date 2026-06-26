@@ -48,7 +48,7 @@ Identity systems authenticate users.
 
 Every one of these technologies presents opportunities for attackers.
 
-The objective of cybersecurity is not to eliminate every attack—that is impossible.
+The objective of cybersecurity is not to eliminate every attack that is impossible.
 
 Instead, cybersecurity aims to reduce risk by making attacks more difficult, detecting malicious activity quickly, and minimizing the impact when incidents occur.
 
