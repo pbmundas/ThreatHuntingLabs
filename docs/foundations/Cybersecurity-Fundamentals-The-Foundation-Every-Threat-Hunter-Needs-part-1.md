@@ -8,7 +8,7 @@
 
 Threat Hunting is often viewed as one of the most advanced disciplines in cybersecurity. It involves proactively searching for malicious activity that has bypassed traditional security controls and identifying attackers before they can achieve their objectives.
 
-Because of this, many aspiring Threat Hunters immediately begin learning tools such as Microsoft Sentinel, Splunk, Elastic Security, Sigma rules, Sysmon, or MITRE ATT&CK. While these technologies are essential, they answer only one part of the problem—they help us investigate. They don't teach us **what to investigate, why an activity is suspicious, or how attackers operate**.
+Because of this, many aspiring Threat Hunters immediately begin learning tools such as Microsoft Sentinel, Splunk, Elastic Security, Sigma rules, Sysmon, or MITRE ATT&CK. While these technologies are essential, they answer only one part of the problem they help us investigate. They don't teach us **what to investigate, why an activity is suspicious, or how attackers operate**.
 
 Imagine receiving thousands of security events from firewalls, endpoint detection solutions, Windows Event Logs, DNS servers, and cloud platforms every hour.
 
