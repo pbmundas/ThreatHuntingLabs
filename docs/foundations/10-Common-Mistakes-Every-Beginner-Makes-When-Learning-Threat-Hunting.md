@@ -288,7 +288,7 @@ That's where Threat Hunting becomes truly proactive.
 ---
 
 
-# Mistake 6: Confusing Threat Hunting with Incident Response
+## Mistake 6: Confusing Threat Hunting with Incident Response
 
 One of the most common misconceptions is believing that Threat Hunting and Incident Response are the same discipline.
 
@@ -328,7 +328,7 @@ Threat Hunting is about discovering the unknown—not confirming what you alread
 
 ---
 
-# Mistake 7: Ignoring Normal Behaviour
+## Mistake 7: Ignoring Normal Behaviour
 
 One of the first lessons every experienced threat hunter learns is surprisingly simple:
 
@@ -375,7 +375,7 @@ The better you understand normal behaviour, the easier it becomes to identify ge
 
 ---
 
-# Mistake 8: Believing a Tool Makes You a Threat Hunter
+## Mistake 8: Believing a Tool Makes You a Threat Hunter
 
 The cybersecurity industry offers an incredible number of tools.
 
@@ -427,7 +427,7 @@ Understanding attacker behaviour, Windows internals, MITRE ATT&CK, and investiga
 
 ---
 
-# Mistake 9: Not Documenting Investigations
+## Mistake 9: Not Documenting Investigations
 
 Many beginners complete an investigation, find something interesting, and move on.
 
@@ -474,7 +474,7 @@ Sometimes proving that *nothing malicious occurred* is just as valuable as findi
 
 ---
 
-# Mistake 10: Expecting to Become a Threat Hunter Overnight
+## Mistake 10: Expecting to Become a Threat Hunter Overnight
 
 Threat Hunting combines knowledge from multiple disciplines.
 
