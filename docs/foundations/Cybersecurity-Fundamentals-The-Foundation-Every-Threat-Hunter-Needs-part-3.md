@@ -1,4 +1,4 @@
-# Security Controls, Telemetry and Logs: Where Threat Hunting Begins - Part 3
+# Security Controls, Telemetry and Logs: Where Threat Hunting Begins
 
 [*Threat Hunting Foundations – Part 1*](Cybersecurity-Fundamentals-The-Foundation-Every-Threat-Hunter-Needs-part-1.md)       
 [*Thinking Like a Threat Hunter - Part 2*](Cybersecurity-Fundamentals-The-Foundation-Every-Threat-Hunter-Needs-part-2.md)
