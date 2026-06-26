@@ -156,7 +156,7 @@ Not every attacker has the same motivation.
 
 Understanding who is attacking often explains **how** they attack.
 
-Threat Hunters rarely investigate malware alone—they investigate people, groups, and objectives.
+Threat Hunters rarely investigate malware alone they investigate people, groups, and objectives.
 
 The most common threat actors include:
 
