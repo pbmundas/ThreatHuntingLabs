@@ -35,3 +35,6 @@ nav:
 
   - Windows Hunting:
       - PowerShell Hunting: windows/powershell-hunting.md
+
+  - Learn Cyber Attacks:
+      - Attacks: learn-known-cyber-attacks/index.html
