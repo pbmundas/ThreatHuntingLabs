@@ -10,8 +10,6 @@ title: Threat Hunt Labs
 
 Whether you're beginning your journey in cybersecurity or already working as a SOC Analyst, Threat Hunt Labs aims to simplify complex security concepts through practical, research-driven technical articles.
 
-[Explore Articles](blog/index.md){ .md-button .md-button--primary }
-
 ---
 
 ## What You'll Find Here
