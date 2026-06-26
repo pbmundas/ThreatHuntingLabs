@@ -21,6 +21,7 @@ markdown_extensions:
 
 plugins:
   - search
+  - blog
 
 nav:
   - Home: index.md
@@ -33,4 +34,3 @@ nav:
 
   - Windows Hunting:
       - PowerShell Hunting: windows/powershell-hunting.md
-    
