@@ -240,7 +240,7 @@ However, most attacks still fall into several well-established categories.
 
 The following illustration highlights some of the most common threats encountered across modern enterprise environments.
 
-> ![Types of Common Threats](../images/Types-of-common-threats.png)
+![Types of Common Threats](../images/Types-of-common-threats.png)
 
 Understanding these threats doesn't mean memorizing definitions.
 
