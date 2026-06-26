@@ -1,4 +1,4 @@
-```markdown id="threat-hunting-data-pipeline-part2"
+
 ## Stage 4 — Intelligence
 
 By now, we've transformed millions of raw events into meaningful observations.
@@ -25,7 +25,7 @@ This is where Threat Hunters begin adding context.
 
 ---
 
-### Context Changes Everything
+## Context Changes Everything
 
 Imagine the following observations.
 
@@ -140,7 +140,7 @@ That knowledge should be shared across multiple security functions.
 
 Examples include:
 
-### Detection Engineering
+## Detection Engineering
 
 New attacker behaviour becomes:
 
@@ -155,7 +155,7 @@ Tomorrow's alerts often begin as today's Threat Hunt.
 
 ---
 
-### Threat Intelligence
+## Threat Intelligence
 
 If the investigation uncovers new attacker infrastructure, domains, file hashes, or TTPs, those findings enrich internal Threat Intelligence.
 
@@ -175,7 +175,7 @@ Analysts recognise suspicious behaviour more quickly because hunters have alread
 
 ---
 
-### Security Engineering
+## Security Engineering
 
 Sometimes a Threat Hunt doesn't reveal a missing detection.
 
@@ -253,7 +253,7 @@ They measure success by how much better the organisation becomes after every hun
 
 ---
 
-# Key Takeaways
+## Key Takeaways
 
 The Threat Hunting Data Pipeline is far more than a sequence of technical stages.
 
@@ -278,4 +278,4 @@ The next question is equally important.
 That's where the **Threat Hunting Lifecycle** begins.
 
 In the next article, we'll walk through each stage of the lifecycle—from developing a hypothesis and planning a hunt to validating findings, documenting evidence, and continuously improving future hunting operations.
-```
+
