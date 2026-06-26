@@ -1,7 +1,7 @@
 
 # Cybersecurity Fundamentals: The Foundation Every Threat Hunter Needs
 
-*Threat Hunting Foundations – Part 1*
+[*Thinking Like a Threat Hunter - Part 2*](Cybersecurity-Fundamentals-The-Foundation-Every-Threat-Hunter-Needs-part-2.md)
 
 
 ## Introduction
