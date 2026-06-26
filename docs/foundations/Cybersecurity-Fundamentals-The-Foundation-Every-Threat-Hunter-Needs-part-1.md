@@ -93,7 +93,7 @@ Understanding the relationship between them helps Threat Hunters identify why at
 A threat is anything capable of causing harm.
 
 Examples include:
-
+![Types of Common Threats](../images/Types-of-common-threats.png)
 * Ransomware groups
 * Insider threats
 * Phishing campaigns
