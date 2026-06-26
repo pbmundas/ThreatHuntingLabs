@@ -287,6 +287,8 @@ The Cyber Kill Chain explains the progression of an attack from beginning to end
 
 Although different attacks vary, many follow a similar sequence.
 
+![Cyber Kill Chain Model](../images/Cyber-Kill-Chain-Model.png)
+
 Typical stages include:
 
 1. Reconnaissance
