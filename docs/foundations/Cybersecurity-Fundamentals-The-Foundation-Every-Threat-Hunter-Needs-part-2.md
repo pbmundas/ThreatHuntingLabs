@@ -1,7 +1,8 @@
 
 # Cybersecurity Fundamentals: The Foundation Every Threat Hunter Needs
 
-[*Threat Hunting Foundations – Part 1*](Cybersecurity-Fundamentals-The-Foundation-Every-Threat-Hunter-Needs-part-1.md)           
+[*Threat Hunting Foundations – Part 1*](Cybersecurity-Fundamentals-The-Foundation-Every-Threat-Hunter-Needs-part-1.md)    
+[*Security Controls, Telemetry and Logs: Where Threat Hunting Begins - Part 3*](Cybersecurity-Fundamentals-The-Foundation-Every-Threat-Hunter-Needs-part-3.md)
 
 
 In the first part of this article, we explored what cybersecurity is, who the common threat actors are, and the different types of cyber threats organizations face today.
