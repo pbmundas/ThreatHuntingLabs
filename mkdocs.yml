@@ -28,6 +28,7 @@ nav:
 
   - Foundations:
       - 10 Common Mistakes: foundations/10-Common-Mistakes-Every-Beginner-Makes-When-Learning-Threat-Hunting.md
+      - Cybersecurity Fundamentals: foundations/Cybersecurity-Fundamentals-The-Foundation-Every-Threat-Hunter-Needs.md
 
   - MITRE ATT&CK:
       - Introduction: mitre/introduction.md
