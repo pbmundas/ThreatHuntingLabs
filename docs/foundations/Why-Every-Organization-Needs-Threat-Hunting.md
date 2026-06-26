@@ -254,13 +254,13 @@ Purple Teaming validates defensive controls by simulating real-world adversary b
 
 Detection Engineering transforms attacker techniques into detection logic by creating SIEM correlation rules, EDR detections, and analytics capable of identifying malicious behavior.
 
-Immediately after Detection Engineering comes Threat Hunting.
+Immediately before Detection Engineering comes Threat Hunting.
 
 This positioning is intentional.
 
 Unlike traditional SOC operations, Threat Hunters are **not waiting for alerts to appear**.
 
-Instead, they begin with a different assumption.
+Instead, they begin with a different assumption to find out new patterns and threats then creates new detections.
 
 > **"What if an attacker is already inside our environment, but none of our security controls have detected them yet?"**
 
