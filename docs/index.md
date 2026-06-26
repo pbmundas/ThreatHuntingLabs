@@ -1,7 +1,6 @@
 ---
 title: Threat Hunt Labs
-hide:
-  - navigation
+
 ---
 
 # Threat Hunt Labs
