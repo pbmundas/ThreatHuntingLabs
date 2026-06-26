@@ -35,5 +35,3 @@ nav:
   - Windows Hunting:
       - PowerShell Hunting: windows/powershell-hunting.md
 
-  - Blog:
-      - Daily Posts: blog/index.md
