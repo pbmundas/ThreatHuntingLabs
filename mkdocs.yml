@@ -27,7 +27,7 @@ nav:
   - Home: index.md
 
   - Foundations:
-      - What is Threat Hunting: foundations/10 Common Mistakes Every Beginner Makes When Learning Threat Hunting.md
+      - 10 Common Mistakes: foundations/10-Common-Mistakes-Every-Beginner-Makes-When-Learning-Threat-Hunting.md
 
   - MITRE ATT&CK:
       - Introduction: mitre/introduction.md
