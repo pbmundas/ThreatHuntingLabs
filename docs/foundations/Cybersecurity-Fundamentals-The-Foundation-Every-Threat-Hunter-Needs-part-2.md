@@ -260,7 +260,7 @@ Denial-of-Service attacks directly target availability.
 If the CIA Triad explains **what we protect**, MITRE ATT&CK explains **how attackers behave**.
 
 Instead of focusing on malware families, MITRE ATT&CK documents real-world attacker tactics and techniques.
-
+![MITRE ATT&CK Model](../images/mitre-attack-model.png)
 Examples include:
 
 * Initial Access
@@ -306,6 +306,8 @@ The earlier defenders detect malicious activity, the less damage attackers can c
 ## Diamond Model
 
 The Diamond Model focuses on relationships rather than attack stages.
+
+![Diamond Model](../images/diamond-model.png)
 
 Every investigation attempts to connect four elements.
 
