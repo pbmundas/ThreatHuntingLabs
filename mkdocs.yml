@@ -33,6 +33,7 @@ nav:
       - Threat Hunting Explained: foundations/Threat-Hunting-Explained-Beyond-Alerts-Dashboards-and-SIEM-Queries.md
       - Threat Hunting Data Pipeline: foundations/Threat-Hunting-Data-Pipeline.md
       - Threat Hunting Life Cycle: foundations/Inside-a-Threat-Hunt-Understanding-the-Threat-Hunting-Lifecycle.md
+      - Threat Hunting Types: foundations/Types-of-Threat-Hunting-Choosing-the-Right-Hunting-Strategy.md
 
   #- MITRE ATT&CK:
   #    - Introduction: mitre/introduction.md
