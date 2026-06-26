@@ -2,7 +2,7 @@
 # Cybersecurity Fundamentals: The Foundation Every Threat Hunter Needs
 
 [*Thinking Like a Threat Hunter - Part 2*](Cybersecurity-Fundamentals-The-Foundation-Every-Threat-Hunter-Needs-part-2.md)
-
+[*Security Controls, Telemetry and Logs: Where Threat Hunting Begins - Part 3*](Cybersecurity-Fundamentals-The-Foundation-Every-Threat-Hunter-Needs-part-3.md)
 
 ## Introduction
 
