@@ -332,6 +332,8 @@ Instead of viewing alerts independently, Threat Hunters connect these relationsh
 
 The Pyramid of Pain teaches one of the most valuable lessons in Threat Hunting.
 
+![Pyramid of Pain](../images/Pyramid-of-pain-model.png)
+
 Not every detection affects attackers equally.
 
 Blocking a malicious IP address causes little inconvenience.
