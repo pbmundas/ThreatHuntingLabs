@@ -1,4 +1,3 @@
-```markdown
 ---
 title: Threat Hunt Labs
 hide:
@@ -242,4 +241,3 @@ This platform is designed for:
 [Explore All Labs](labs/index.md){ .md-button }
 
 </center>
-```
