@@ -43,9 +43,11 @@ nav:
   - Start Hunting:
       - Lab Setup: Start-Hunting/threat-hunting-lab.md
 
-
   - Hunting Case Studies:
      - Solarwind Supply Chain Attack: case-studies/hunting-the-SolarWinds-supply-chain-attack.md
+
+  - Resources:
+     - Documents & Reports: Resources/threat-hunting-related-document-references.md
 
   - Learn Cyber Attacks:
       - Attacks: learn-known-cyber-attacks/index.html
