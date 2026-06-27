@@ -40,8 +40,9 @@ nav:
       - Mindset: foundations/The-Threat-Hunting-Mindset-Thinking-Like-an-Attacker.md
       - Maturity Model: foundations/The-Threat-Hunting-Maturity-Model-Explained.md
 
-  #- MITRE ATT&CK:
-  #    - Introduction: mitre/introduction.md
+  - Start Hunting:
+      - Lab Setup: Start-Hunting/threat-hunting-lab.md
+
 
   - Hunting Case Studies:
      - Solarwind Supply Chain Attack: case-studies/hunting-the-SolarWinds-supply-chain-attack.md
