@@ -43,8 +43,8 @@ nav:
   #- MITRE ATT&CK:
   #    - Introduction: mitre/introduction.md
 
-  #- Windows Hunting:
-  #   - PowerShell Hunting: windows/powershell-hunting.md
+  - Hunting Case Studies:
+     - Solarwind Supply Chain Attack: case-studies/hunting-the-SolarWinds-supply-chain-attack.md
 
   - Learn Cyber Attacks:
       - Attacks: learn-known-cyber-attacks/index.html
