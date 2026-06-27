@@ -44,6 +44,8 @@ Rather than comparing your SOC with world-class security teams, a maturity model
 
 The Threat Hunting Maturity Model (HMM) describes how organizations evolve from relying entirely on automated detections to performing highly proactive, intelligence-driven threat hunting.
 
+![Threat Hunting Maturity Model](../images/Threat-Hunting-Maturity-Model.png)
+
 One of the most widely referenced models was introduced by Sqrrl (later acquired by Splunk). Although different organizations use slightly different terminology, the underlying progression remains the same:
 
 * Level 0 – No Hunting
@@ -240,6 +242,8 @@ At this level, hunting doesn't replace automation—it improves it.
 ## Understanding the Sqrrl Threat Hunting Maturity Model
 
 The original Sqrrl model emphasizes that maturity is driven primarily by **data quality** and **analytical capability**, not simply by technology purchases.
+
+![Sqrrl Threat Hunting Maturity Model](../images/Sqrrl-Maturity-Model.png)
 
 Organizations typically progress through three major dimensions:
 
