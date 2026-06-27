@@ -36,7 +36,8 @@ nav:
       - Threat Hunting Types: foundations/Types-of-Threat-Hunting-Choosing-the-Right-Hunting-Strategy.md
       - Data Analysis Techniques: foundations/Threat-Hunting-Data-Analysis-Techniques.md
       - Hypothesis Development: foundations/Hypothesis-Development-Thinking-Like-a-Threat-Hunter-Before-Writing-a-Single-Query.md
-      - Methodologies: foundations/Threat-Hunting-Methodologies:-Choosing-the-Right-Hunting-Approach.md
+      - Methodologies: foundations/Threat-Hunting-Methodologies:-Choosing-the-Right-Hunting-Approach.md- 
+      - Mindset: foundations/The-Threat-Hunting-Mindset-Thinking-Like-an-Attacker.md
 
   #- MITRE ATT&CK:
   #    - Introduction: mitre/introduction.md
