@@ -12,11 +12,11 @@ Because of this, many aspiring Threat Hunters immediately begin learning tools s
 
 Imagine receiving thousands of security events from firewalls, endpoint detection solutions, Windows Event Logs, DNS servers, and cloud platforms every hour.
 
-How do you decide which events deserve your attention?
+* How do you decide which events deserve your attention?
 
-How do you differentiate normal administrator activity from malicious PowerShell execution?
+* How do you differentiate normal administrator activity from malicious PowerShell execution?
 
-How do you know whether a failed login is a user typing the wrong password or the beginning of a password spraying attack?
+* How do you know whether a failed login is a user typing the wrong password or the beginning of a password spraying attack?
 
 Without understanding cybersecurity fundamentals, every event looks equally important.
 
@@ -36,15 +36,15 @@ Cybersecurity is the practice of protecting digital systems, networks, applicati
 
 Every organization relies on technology to conduct its daily operations.
 
-Employees communicate through email.
+* Employees communicate through email.
 
-Customers access web applications.
+* Customers access web applications.
 
-Servers process business transactions.
+* Servers process business transactions.
 
-Cloud platforms store sensitive information.
+* Cloud platforms store sensitive information.
 
-Identity systems authenticate users.
+* Identity systems authenticate users.
 
 Every one of these technologies presents opportunities for attackers.
 
