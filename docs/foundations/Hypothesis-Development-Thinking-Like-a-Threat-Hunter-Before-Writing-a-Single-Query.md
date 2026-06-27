@@ -6,35 +6,35 @@ Imagine you've just joined your Threat Hunting team's morning stand-up.
 
 Overnight, there were no major incidents.
 
-No ransomware alerts.
+* No ransomware alerts.
 
-No phishing campaigns.
+* No phishing campaigns.
 
-No compromised accounts.
+* No compromised accounts.
 
-Everything appears... quiet.
+* Everything appears... quiet.
 
 Your manager turns to you and says:
 
 > **"Pick something to hunt today."**
 
-You open Microsoft Sentinel.
+* You open Microsoft Sentinel.
 
-Hundreds of tables.
+* Hundreds of tables.
 
-Billions of records.
+* Billions of records.
 
-Authentication logs.
+* Authentication logs.
 
-Process creation events.
+* Process creation events.
 
-DNS queries.
+* DNS queries.
 
-Firewall logs.
+* Firewall logs.
 
-Cloud audit events.
+* Cloud audit events.
 
-PowerShell executions.
+* PowerShell executions.
 
 Where do you begin?
 
