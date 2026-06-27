@@ -2,9 +2,11 @@
 
 **By a SOC Analyst who's built and burned down more VMs than they care to admit**
 
+Alternative labs you can try from these Github repos: **[Threat Hunting Labs using Docker](https://github.com/pbmundas/Threat-Hunting-Docker-Lab)** and for creating vulnreable machines you can use **[Creating Vulnerable machines using scripts (Ubuntu & Windows)](https://github.com/pbmundas/Purple-Teaming-Lab-for-SOC)**
+
 ---
 
-There's a specific kind of frustration that comes with reading about threat hunting in theory — attacker persistence via registry run keys, lateral movement through WMI, credential dumping with LSASS — and then sitting in front of a production SIEM where you can't actually test anything without your change advisory board needing three weeks' notice and a project code. That gap between knowing what to look for and having a safe place to actually look for it is exactly what a home lab solves.
+There's a specific kind of frustration that comes with reading about threat hunting in theory attacker persistence via registry run keys, lateral movement through WMI, credential dumping with LSASS and then sitting in front of a production SIEM where you can't actually test anything without your change advisory board needing three weeks' notice and a project code. That gap between knowing what to look for and having a safe place to actually look for it is exactly what a home lab solves.
 
 This guide is for analysts who want a real working environment: not a screenshot walkthrough, not a "spin up this SaaS and call it done," but an actual local lab where you can detonate malware samples, watch Sysmon scream about it, ingest those logs into Elastic, and build detection logic you can later carry into production. Everything here runs on your own hardware. Nothing phones home except for the software packages you pull during setup.
 
@@ -18,9 +20,9 @@ Let's get the hardware conversation out of the way first, because this is where 
 
 **Minimum viable spec:**
 - 16 GB RAM (you can squeeze by with 12 but it's not fun)
-- A CPU with hardware virtualization support (check BIOS — Intel VT-x or AMD-V must be enabled)
+- A CPU with hardware virtualization support (check BIOS Intel VT-x or AMD-V must be enabled)
 - 250 GB free disk space, SSD preferred
-- A host OS you're comfortable with — Windows 10/11, Ubuntu 22.04, or macOS all work
+- A host OS you're comfortable with Windows 10/11, Ubuntu 22.04, or macOS all work
 
 **Comfortable spec:**
 - 32 GB RAM
@@ -32,8 +34,8 @@ If you're on 8 GB RAM, this lab will technically run but you'll be waiting a lot
 For software, you'll need:
 
 - **VMware Workstation Pro** (now free for personal use as of 2024) or **VirtualBox 7.x** (free, open source)
-- **Windows Server 2022 Evaluation ISO** — free 180-day eval from Microsoft
-- **Windows 10 Enterprise Evaluation ISO** — also free from Microsoft's eval center
+- **Windows Server 2022 Evaluation ISO** free 180-day eval from Microsoft
+- **Windows 10 Enterprise Evaluation ISO** also free from Microsoft's eval center
 - **Docker Desktop** (for running the Elastic stack)
 - **Sysmon** from Sysinternals, plus the SwiftOnSecurity or Olaf Hartong config
 - **Winlogbeat** for shipping logs
@@ -48,7 +50,7 @@ The VMware vs VirtualBox question comes up every time, and the honest answer is:
 
 **VMware Workstation Pro** is faster, handles nested virtualization better (important if you later want to run Hyper-V inside a VM), has better USB and network device passthrough, and the snapshot management is cleaner. The downside used to be cost, but Broadcom made it free for personal use. The licensing interface is annoying but the product itself is solid.
 
-**VirtualBox** is open source, runs on everything including Linux hosts without any fuss, has an extensive API, and the community is large. Performance is noticeably lower than VMware for disk I/O intensive workloads — which Elastic definitely is — but for this lab it's perfectly usable. If you're on Linux and don't want to deal with Broadcom's licensing portal, VirtualBox is the pragmatic choice.
+**VirtualBox** is open source, runs on everything including Linux hosts without any fuss, has an extensive API, and the community is large. Performance is noticeably lower than VMware for disk I/O intensive workloads which Elastic definitely is but for this lab it's perfectly usable. If you're on Linux and don't want to deal with Broadcom's licensing portal, VirtualBox is the pragmatic choice.
 
 For this guide I'll reference VMware Workstation Pro, but I'll note the VirtualBox equivalent wherever the steps differ meaningfully.
 
@@ -56,7 +58,7 @@ For this guide I'll reference VMware Workstation Pro, but I'll note the VirtualB
 
 ## Network Architecture: Why Segmentation Matters from Day One
 
-Before you create a single VM, think about how they're going to talk to each other — and more importantly, what they're *not* going to be allowed to reach.
+Before you create a single VM, think about how they're going to talk to each other and more importantly, what they're *not* going to be allowed to reach.
 
 The reason you want network segmentation in a home lab isn't paranoia about your own home network getting infected (though that's a real concern if you're running live malware). It's that segmentation teaches you to think the way enterprise environments are designed, which makes your detection logic more realistic and your understanding of attacker techniques deeper.
 
@@ -69,8 +71,8 @@ Here's the basic topology we're building:
     |       └── Used for initial setup, updates, pulling packages
     |
     └── Host-Only Network (Lab-Internal): 10.10.10.0/24
-            ├── Windows Server 2022 (DC)   — 10.10.10.10
-            ├── Windows 10 Victim VM       — 10.10.10.20
+            ├── Windows Server 2022 (DC)   10.10.10.10
+            ├── Windows 10 Victim VM       10.10.10.20
             └── [Host Machine reaches Elastic via 10.10.10.1]
 ```
 
@@ -86,7 +88,7 @@ The Elastic stack runs on your host machine in Docker. The victim VMs live on th
 
 You don't strictly need Active Directory for log ingestion, but you want it because:
 
-1. Event logs are dramatically more interesting in a domain environment — Kerberos events, Group Policy processing, LDAP queries, all the good stuff
+1. Event logs are dramatically more interesting in a domain environment Kerberos events, Group Policy processing, LDAP queries, all the good stuff
 2. Real enterprise environments run AD, so your detection content should be built against AD telemetry
 3. It lets you practice Group Policy-based Sysmon deployment, which is how you'll actually roll it out at work
 
@@ -100,11 +102,11 @@ In VMware Workstation:
 4. Name it something sensible: `LAB-DC01`
 5. Processors: 2 cores
 6. RAM: 4096 MB
-7. Network: Host-only (VMnet1 — your 10.10.10.0/24 network)
+7. Network: Host-only (VMnet1 your 10.10.10.0/24 network)
 8. Disk: 60 GB, single file
-9. After creation, add a second network adapter set to NAT — you need this to pull Windows updates and the software you're about to install
+9. After creation, add a second network adapter set to NAT you need this to pull Windows updates and the software you're about to install
 
-Mount the Windows Server 2022 ISO and boot. Go through the installation wizard, pick "Windows Server 2022 Standard (Desktop Experience)" — you want the GUI for lab work. Set a strong Administrator password you won't forget. Something like `LabAdmin@2024!` works fine for a local lab.
+Mount the Windows Server 2022 ISO and boot. Go through the installation wizard, pick "Windows Server 2022 Standard (Desktop Experience)" you want the GUI for lab work. Set a strong Administrator password you won't forget. Something like `LabAdmin@2024!` works fine for a local lab.
 
 ### Basic Post-Install Configuration
 
@@ -136,7 +138,7 @@ Install-ADDSForest `
     -Force:$true
 ```
 
-The server will reboot. After it comes back up, you have a functioning domain controller. Create a few test user accounts — you'll need them for realistic log generation:
+The server will reboot. After it comes back up, you have a functioning domain controller. Create a few test user accounts you'll need them for realistic log generation:
 
 ```powershell
 # Create some test users
@@ -157,7 +159,7 @@ New-ADOrganizationalUnit -Name "Servers" -Path "DC=lab,DC=local"
 
 ## Deploying Sysmon: The Telemetry Foundation
 
-Sysmon is the single most important piece of the lab from a detection perspective. Windows' native event logging is useful but sparse. Sysmon gives you process creation with full command lines and parent process info, network connections with the process that made them, file creation with hashes, registry modifications, DNS queries, pipe creation — the full picture that makes detection actually possible.
+Sysmon is the single most important piece of the lab from a detection perspective. Windows' native event logging is useful but sparse. Sysmon gives you process creation with full command lines and parent process info, network connections with the process that made them, file creation with hashes, registry modifications, DNS queries, pipe creation the full picture that makes detection actually possible.
 
 ### Why the Config Matters
 
@@ -165,8 +167,8 @@ Sysmon with default settings generates so much noise it becomes useless. You nee
 
 Two configs are widely used:
 
-- **SwiftOnSecurity sysmonconfig.xml** — conservative, well-maintained, good starting point
-- **Olaf Hartong's modular config** — more comprehensive, better organized, tuned for ATT&CK coverage
+- **SwiftOnSecurity sysmonconfig.xml** conservative, well-maintained, good starting point
+- **Olaf Hartong's modular config** more comprehensive, better organized, tuned for ATT&CK coverage
 
 For this lab, we'll use the SwiftOnSecurity config as the base:
 
@@ -204,7 +206,7 @@ Get-WinEvent -LogName "Microsoft-Windows-Sysmon/Operational" -MaxEvents 10 |
     Select-Object TimeCreated, Id, Message | Format-List
 ```
 
-If you see events coming in, Sysmon is working. Event ID 1 is process creation — you should see a flood of them just from normal system activity.
+If you see events coming in, Sysmon is working. Event ID 1 is process creation you should see a flood of them just from normal system activity.
 
 ### What the Key Event IDs Mean
 
@@ -214,7 +216,7 @@ You'll be building detection around these:
 |----------|-----------------|----------------|
 | 1 | Process Create | Command lines, parent-child relationships, hashes |
 | 3 | Network Connect | Outbound connections with originating process |
-| 7 | Image Loaded | DLL loads — catches reflective DLL injection |
+| 7 | Image Loaded | DLL loads catches reflective DLL injection |
 | 8 | CreateRemoteThread | Classic injection technique indicator |
 | 10 | ProcessAccess | LSASS dumps, process hollowing detection |
 | 11 | FileCreate | Dropped payloads, persistence artifacts |
@@ -226,7 +228,7 @@ You'll be building detection around these:
 
 ## Setting Up the Windows 10 Victim VM
 
-This is your primary hunting target — the endpoint you'll simulate attacks against. Keep it separate from the DC.
+This is your primary hunting target the endpoint you'll simulate attacks against. Keep it separate from the DC.
 
 ### VM Creation
 
@@ -257,7 +259,7 @@ Add-Computer -DomainName "lab.local" `
 
 ### Install Sysmon on the Workstation
 
-Same process as the DC — copy the Sysmon installer and config over (share a folder in VMware or use a Python HTTP server on the host), install with the same config.
+Same process as the DC copy the Sysmon installer and config over (share a folder in VMware or use a Python HTTP server on the host), install with the same config.
 
 ### Enable Additional Windows Audit Policy
 
@@ -305,7 +307,7 @@ The Elastic Stack (Elasticsearch + Kibana + Logstash, or just Elasticsearch + Ki
 
 - The free tier (Basic) is generous enough for everything you'll do
 - It's what many enterprise SIEMs are built on or are adjacent to
-- The query language (KQL and EQL) is worth learning — EQL in particular maps well to attacker behavior sequencing
+- The query language (KQL and EQL) is worth learning EQL in particular maps well to attacker behavior sequencing
 - Elastic Security (the SIEM layer) has built-in detection rules mapped to MITRE ATT&CK
 
 We're running this in Docker because it's the cleanest way to get a reproducible stack that doesn't fight with your host OS's libraries.
@@ -657,7 +659,7 @@ output {
     ilm_policy => "lab-default-policy"
   }
 
-  # Uncomment for debugging — prints events to Logstash stdout
+  # Uncomment for debugging prints events to Logstash stdout
   # stdout {
   #   codec => rubydebug
   # }
@@ -712,10 +714,10 @@ Rename-Item "C:\Tools\winlogbeat-8.13.4-windows-x86_64" "C:\Tools\winlogbeat"
 Create the Winlogbeat configuration file at `C:\Tools\winlogbeat\winlogbeat.yml`:
 
 ```yaml
-# winlogbeat.yml — Save at C:\Tools\winlogbeat\winlogbeat.yml
+# winlogbeat.yml Save at C:\Tools\winlogbeat\winlogbeat.yml
 
 winlogbeat.event_logs:
-  # Windows Security log — authentication, account management, policy changes
+  # Windows Security log authentication, account management, policy changes
   - name: Security
     event_id: 1100, 1102, 4624, 4625, 4634, 4647, 4648, 4657, 4663, 4688,
               4697, 4698, 4699, 4700, 4701, 4702, 4706, 4720, 4722, 4723,
@@ -728,7 +730,7 @@ winlogbeat.event_logs:
           fields:
             log.source: 'windows-security'
 
-  # System log — service installs, driver loads, scheduled task activity
+  # System log service installs, driver loads, scheduled task activity
   - name: System
     event_id: 7034, 7035, 7036, 7040, 7045
     ignore_older: 72h
@@ -738,7 +740,7 @@ winlogbeat.event_logs:
     ignore_older: 72h
     level: error, critical
 
-  # Sysmon — the good stuff
+  # Sysmon the good stuff
   - name: Microsoft-Windows-Sysmon/Operational
     ignore_older: 72h
     processors:
@@ -828,7 +830,7 @@ In Kibana, go to Management → Dev Tools and run:
 GET _cat/indices/lab-winlogbeat*?v&s=index
 ```
 
-You should see indices appearing with growing document counts. If they're not there yet, wait 60 seconds and try again — there's a small delay before the first batch of events is indexed.
+You should see indices appearing with growing document counts. If they're not there yet, wait 60 seconds and try again there's a small delay before the first batch of events is indexed.
 
 ### Create an Index Pattern
 
@@ -860,7 +862,7 @@ You should see events with `winlog.event_data.Image`, `winlog.event_data.Command
 Let's verify the pipeline end-to-end with a known-detectable activity. On your Windows 10 VM, open PowerShell and run:
 
 ```powershell
-# This mimics a common attacker technique — running encoded PowerShell
+# This mimics a common attacker technique running encoded PowerShell
 # This is completely harmless but will generate a very detectable Sysmon event
 $encoded = [Convert]::ToBase64String([Text.Encoding]::Unicode.GetBytes("Write-Host 'Lab pipeline test - detection working'"))
 powershell.exe -EncodedCommand $encoded
@@ -872,7 +874,7 @@ Now go back to Kibana and search:
 KQL: tags: "process_create" AND winlog.event_data.CommandLine: "-EncodedCommand"
 ```
 
-If you see your event, the pipeline is fully working — from Sysmon on the endpoint, through Winlogbeat, into Logstash, and into Elasticsearch, queryable in Kibana. That's your complete detection pipeline.
+If you see your event, the pipeline is fully working from Sysmon on the endpoint, through Winlogbeat, into Logstash, and into Elasticsearch, queryable in Kibana. That's your complete detection pipeline.
 
 ---
 
@@ -880,7 +882,7 @@ If you see your event, the pipeline is fully working — from Sysmon on the endp
 
 Now that everything is working, here's a practical exercise to confirm your lab can detect real attacker behavior patterns.
 
-On the Windows 10 VM, simulate a classic "living off the land" technique — using legitimate Windows binaries to run code:
+On the Windows 10 VM, simulate a classic "living off the land" technique using legitimate Windows binaries to run code:
 
 ```powershell
 # Simulate a suspicious process chain commonly seen in phishing/macro execution
@@ -899,7 +901,7 @@ sequence by host.name
     and process.args : ("-NoProfile", "-NonInteractive", "-WindowStyle", "-Command")]
 ```
 
-This is a basic process chain correlation — exactly how production detection rules work. If your lab is functioning, you'll get a hit.
+This is a basic process chain correlation exactly how production detection rules work. If your lab is functioning, you'll get a hit.
 
 ---
 
@@ -938,7 +940,7 @@ Once the basic pipeline is working, here's what to layer on next:
 
 **Elastic Agent:** Once you're comfortable with the Beats-based setup, try replacing Winlogbeat with Elastic Agent for a more integrated experience. Elastic Agent includes endpoint detection capabilities that Winlogbeat doesn't.
 
-**Network visibility:** Add a pfSense VM as your lab gateway with Suricata running on it. Ship Suricata alerts to Elastic alongside your endpoint logs and practice correlating network and endpoint telemetry — that's where the interesting detection logic lives.
+**Network visibility:** Add a pfSense VM as your lab gateway with Suricata running on it. Ship Suricata alerts to Elastic alongside your endpoint logs and practice correlating network and endpoint telemetry that's where the interesting detection logic lives.
 
 **Purple team exercises:** Pull down a retired HTB machine or use FLARE VM as a dedicated malware analysis platform. Run samples in the lab and hunt for them in Elastic.
 
@@ -948,9 +950,9 @@ Once the basic pipeline is working, here's what to layer on next:
 
 Building this lab took me a weekend the first time. The second time I built it (after accidentally deleting a snapshot that I really shouldn't have deleted), it took about three hours because I knew the failure points. The third time, I had a script for most of it.
 
-The value isn't just in having the environment — it's in the process of building it. When you watch Sysmon Event ID 1 fire for a PowerShell process spawned by cmd.exe, and you see exactly which fields contain the parent process info and command line, and you write the KQL query that finds it, you've built intuition that no certification exam can give you. You understand why the detection works, which means you understand how an attacker would evade it, which means you can make a better detection.
+The value isn't just in having the environment it's in the process of building it. When you watch Sysmon Event ID 1 fire for a PowerShell process spawned by cmd.exe, and you see exactly which fields contain the parent process info and command line, and you write the KQL query that finds it, you've built intuition that no certification exam can give you. You understand why the detection works, which means you understand how an attacker would evade it, which means you can make a better detection.
 
-That loop — attack, detect, understand, improve — is the whole game. This lab gives you somewhere to play it.
+That loop attack, detect, understand, improve is the whole game. This lab gives you somewhere to play it.
 
 ---
 
