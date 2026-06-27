@@ -47,7 +47,7 @@ nav:
      - Solarwind Supply Chain Attack: case-studies/hunting-the-SolarWinds-supply-chain-attack.md
 
   - Resources:
-     - Documents & Reports: Resources/threat-hunting-related-document-references.md
+     - Download Section: Downloads/threat-hunting-related-document-references.md
 
   - Learn Cyber Attacks:
       - Attacks: learn-known-cyber-attacks/index.html
