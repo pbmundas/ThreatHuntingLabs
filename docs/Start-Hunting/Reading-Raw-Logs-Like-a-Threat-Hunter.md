@@ -12,25 +12,6 @@ This guide exists to close that gap. Not by giving you a cheat sheet of log form
 
 We'll go field by field, vendor by vendor, log type by log type. We'll look at real raw logs from Fortinet, Palo Alto, Cisco, Windows, Sysmon, Zeek, Suricata, CrowdStrike, AWS, and Azure. We'll build a repeatable methodology you can apply to a log source you've literally never encountered before. And we'll practice on real exercises, because reading about log analysis and actually doing it are very different skills.
 
-This is long. It's meant to be. Bookmark it, work through it in pieces, and come back to specific sections when you hit a log type you don't recognize in the wild.
-
----
-
-## Table of Contents
-
-1. [Why Every Threat Hunter Must Understand Raw Logs](#part-1)
-2. [What Is Actually a Log?](#part-2)
-3. [Anatomy of Every Log Field](#part-3)
-4. [Device Categories Every Hunter Must Understand](#part-4)
-5. [Understanding Real Vendor Logs](#part-5)
-6. [How Threat Hunters Read Logs](#part-6)
-7. [Log Visualization](#part-7)
-8. [Thinking Like a Threat Hunter](#part-8)
-9. [Building a Hunting Workflow](#part-9)
-10. [Beginner Exercises](#part-10)
-11. [Advanced Exercises](#part-11)
-12. [Best Practices](#part-12)
-
 ---
 
 <a id="part-1"></a>
