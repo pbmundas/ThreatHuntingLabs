@@ -42,6 +42,7 @@ nav:
 
   - Start Hunting:
       - Lab Setup: Start-Hunting/threat-hunting-lab.md
+      - Reading Logs: Reading-Raw-Logs-Like-a-Threat-Hunter.md
 
   - Hunting Case Studies:
      - Solarwind Supply Chain Attack: case-studies/hunting-the-SolarWinds-supply-chain-attack.md
