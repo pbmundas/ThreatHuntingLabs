@@ -15,7 +15,7 @@ info "Library Updates"
 | Document | Category | Level | Last Updated | Download |
 |----------|----------|--------|--------------|----------|
 | Threat Hunting Report Template | Report | Beginner | Jun 2026 | [Threat Hunting Report Template Docx](https://raw.githubusercontent.com/pbmundas/ThreatHuntingLabs/refs/heads/main/docs/Downloads/Threat_Hunting_Report_Template.docx) |
-| Sysmon Event Guide | Windows | Intermediate | Jun 2026 | [:material-download: PDF](https://github.com/yourrepo/docs/sysmon.pdf) |
+| SOC - Security Devices Monitoring Use Cases List | All Data Source | Intermediate | Jun 2026 | [Use Cases List](https://raw.githubusercontent.com/pbmundas/ThreatHuntingLabs/refs/heads/main/docs/Downloads/SOC%20-%20Security%20Device%20Monitoring%20Use%20Cases%20List.pdf) |
 | Sigma Rule Writing | Detection Engineering | Intermediate | Jun 2026 | [:material-download: PDF](https://github.com/yourrepo/docs/sigma.pdf) |
 | YARA Rule Guide | Malware Analysis | Intermediate | Jun 2026 | [:material-download: PDF](https://github.com/yourrepo/docs/yara.pdf) |
 | Zeek Log Reference | Network | Intermediate | Jun 2026 | [:material-download: PDF](https://github.com/yourrepo/docs/zeek.pdf) |
