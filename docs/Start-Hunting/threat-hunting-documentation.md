@@ -132,4 +132,4 @@ Notice how it's the exact same hunt, but each version serves a completely differ
 
 Documentation isn't the boring afterthought of threat hunting — it's what makes hunting actually valuable to an organization. A brilliant find that lives only in your head helps nobody. The same find written up clearly, with the right IOCs, the right TLP marking, and the right version for the right audience? That's what turns a good hunter into a good hunting *program*.
 
-Write it down. Future-you (and everyone else on the team) will thank you.
+Write it down. Future-you (and everyone else on the team) will thank you and here is the link to [Threat Hunting Report template](Downloads/threat-hunting-related-document-references.md).
