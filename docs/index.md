@@ -1,5 +1,11 @@
 ---
-title: Threat Hunt Labs
+title: Threathuntlabs Intel Feed | Cyber Threat Telemetry Exchange
+description: Standalone open-source threat intelligence data, adversary playbooks, and structural intrusion telemetry.
+meta:
+  - name: robots
+    content: index, follow, max-image-preview:large
+  - name: keywords
+    content: threathuntlabs, threat hunting, threat intel feed, malware telemetry, adversary playbooks
 ---
 
 # Threat Hunt Labs
