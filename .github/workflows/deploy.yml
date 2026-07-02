@@ -1,4 +1,14 @@
 name: Deploy MkDocs
+# Add this at the top level of your YAML file
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Add this to prevent multiple deployments from overlapping
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
 
 on:
   push:
