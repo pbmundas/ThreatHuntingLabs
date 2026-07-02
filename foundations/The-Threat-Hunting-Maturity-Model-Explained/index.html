@@ -1,0 +1,2098 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="An independent repository for live cyber threat Hunting, intelligence, playbooks, and raw telemetry.">
+      
+      
+        <meta name="author" content="Threathuntlabs Team">
+      
+      
+        <link rel="canonical" href="https://threathuntlabs.com/foundations/The-Threat-Hunting-Maturity-Model-Explained/">
+      
+      
+        <link rel="prev" href="../The-Threat-Hunting-Mindset-Thinking-Like-an-Attacker/">
+      
+      
+        <link rel="next" href="../../Start-Hunting/threat-hunting-lab/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Maturity Model - Threathuntlabs Intel Portal</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#the-threat-hunting-maturity-model-explained" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Threathuntlabs Intel Portal" class="md-header__button md-logo" aria-label="Threathuntlabs Intel Portal" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Threathuntlabs Intel Portal
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Maturity Model
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Threathuntlabs Intel Portal" class="md-nav__button md-logo" aria-label="Threathuntlabs Intel Portal" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Threathuntlabs Intel Portal
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Foundations
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Foundations
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../10-Common-Mistakes-Every-Beginner-Makes-When-Learning-Threat-Hunting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    10 Common Mistakes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Cybersecurity-Fundamentals-The-Foundation-Every-Threat-Hunter-Needs-part-1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cybersecurity Fundamentals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Why-Every-Organization-Needs-Threat-Hunting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Why and Where Threat Hunting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Threat-Hunting-Explained-Beyond-Alerts-Dashboards-and-SIEM-Queries/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Threat Hunting Explained
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Threat-Hunting-Data-Pipeline/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data Pipeline
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Inside-a-Threat-Hunt-Understanding-the-Threat-Hunting-Lifecycle/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Life Cycle
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Types-of-Threat-Hunting-Choosing-the-Right-Hunting-Strategy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Types
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Threat-Hunting-Data-Analysis-Techniques/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data Analysis Techniques
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Hypothesis-Development-Thinking-Like-a-Threat-Hunter-Before-Writing-a-Single-Query/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Hypothesis Development
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Threat-Hunting-Methodologies-Choosing-the-Right-Hunting-Approach/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Methodologies
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../The-Threat-Hunting-Mindset-Thinking-Like-an-Attacker/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mindset
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Maturity Model
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Maturity Model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#introduction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Introduction
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#why-a-maturity-model-matters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why a Maturity Model Matters
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-is-the-threat-hunting-maturity-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What Is the Threat Hunting Maturity Model?
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#level-0-no-hunting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Level 0 – No Hunting
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Level 0 – No Hunting">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#major-risks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Major Risks
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#level-1-initial-hunting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Level 1 – Initial Hunting
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#level-2-structured-hunting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Level 2 – Structured Hunting
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#level-3-advanced-hunting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Level 3 – Advanced Hunting
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#level-4-optimized-hunting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Level 4 – Optimized Hunting
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#understanding-the-sqrrl-threat-hunting-maturity-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Understanding the Sqrrl Threat Hunting Maturity Model
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#identifying-capability-gaps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Identifying Capability Gaps
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#building-a-threat-hunting-roadmap" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Building a Threat Hunting Roadmap
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#practical-exercise" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Practical Exercise**
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-1-evaluate-against-each-level" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1 – Evaluate Against Each Level
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-2-determine-maturity-level" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2 – Determine Maturity Level
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-3-recommend-next-improvements" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 3 – Recommend Next Improvements
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#deliverable-threat-hunting-maturity-assessment-scorecard" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Deliverable – Threat Hunting Maturity Assessment Scorecard
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key-takeaways" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Takeaways
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Start Hunting
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Start Hunting
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Start-Hunting/threat-hunting-lab/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab Setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Start-Hunting/Reading-Raw-Logs-Like-a-Threat-Hunter/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reading Logs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Start-Hunting/threat-hunting-program-models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Solo Hunter to Enterprise
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Start-Hunting/threat-hunting-documentation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reporting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Hunting Case Studies
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Hunting Case Studies
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../case-studies/hunting-the-SolarWinds-supply-chain-attack.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Solarwind Supply Chain Attack
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Resources
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Resources
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Downloads/threat-hunting-related-document-references/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Download Section
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    🔥Learn Cyber Attacks
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    🔥Learn Cyber Attacks
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../learn-known-cyber-attacks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Attacks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://intel.threathuntlabs.com" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    🎯Live Threat Intel
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#introduction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Introduction
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#why-a-maturity-model-matters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why a Maturity Model Matters
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-is-the-threat-hunting-maturity-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What Is the Threat Hunting Maturity Model?
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#level-0-no-hunting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Level 0 – No Hunting
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Level 0 – No Hunting">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#major-risks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Major Risks
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#level-1-initial-hunting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Level 1 – Initial Hunting
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#level-2-structured-hunting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Level 2 – Structured Hunting
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#level-3-advanced-hunting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Level 3 – Advanced Hunting
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#level-4-optimized-hunting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Level 4 – Optimized Hunting
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#understanding-the-sqrrl-threat-hunting-maturity-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Understanding the Sqrrl Threat Hunting Maturity Model
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#identifying-capability-gaps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Identifying Capability Gaps
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#building-a-threat-hunting-roadmap" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Building a Threat Hunting Roadmap
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#practical-exercise" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Practical Exercise**
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-1-evaluate-against-each-level" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1 – Evaluate Against Each Level
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-2-determine-maturity-level" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2 – Determine Maturity Level
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-3-recommend-next-improvements" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 3 – Recommend Next Improvements
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#deliverable-threat-hunting-maturity-assessment-scorecard" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Deliverable – Threat Hunting Maturity Assessment Scorecard
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key-takeaways" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Takeaways
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="the-threat-hunting-maturity-model-explained">The Threat Hunting Maturity Model Explained</h1>
+<blockquote>
+<p><em>Not every Security Operations Center (SOC) is ready to conduct advanced threat hunting—and that's perfectly normal. Threat hunting is a capability that evolves over time. The key is understanding where your organization stands today, identifying what's missing, and building a roadmap toward a mature hunting program.</em></p>
+</blockquote>
+<hr />
+<h2 id="introduction">Introduction</h2>
+<p>Organizations often ask a deceptively simple question:</p>
+<blockquote>
+<p><strong>"Are we doing threat hunting?"</strong></p>
+</blockquote>
+<p>The answer is usually more complicated than a simple yes or no.</p>
+<p>Many SOCs believe they are hunting because analysts occasionally search logs after reading a threat intelligence report. Others assume buying an EDR solution automatically makes them capable of threat hunting. In reality, effective threat hunting is not defined by the tools you own—it's defined by the maturity of your people, processes, and capabilities.</p>
+<p>A mature hunting program is proactive, hypothesis-driven, data-informed, and continuously improving. An immature one is reactive, ad hoc, and dependent on alerts.</p>
+<p>Understanding your current maturity level is the first step toward improving it.</p>
+<hr />
+<h2 id="why-a-maturity-model-matters">Why a Maturity Model Matters</h2>
+<p>Imagine asking someone to "become fit" without measuring their current fitness level.</p>
+<p>The same applies to threat hunting.</p>
+<p>Without understanding your current capabilities, it's impossible to answer questions like:</p>
+<ul>
+<li>Are we collecting the right telemetry?</li>
+<li>Do we have enough visibility?</li>
+<li>Are our hunts repeatable?</li>
+<li>Are we measuring success?</li>
+<li>What should we improve next?</li>
+</ul>
+<p>A maturity model provides a structured way to answer these questions and create a realistic improvement roadmap.</p>
+<p>Rather than comparing your SOC with world-class security teams, a maturity model helps you compare today's capabilities with where you want to be tomorrow.</p>
+<hr />
+<h2 id="what-is-the-threat-hunting-maturity-model">What Is the Threat Hunting Maturity Model?</h2>
+<p>The Threat Hunting Maturity Model (HMM) describes how organizations evolve from relying entirely on automated detections to performing highly proactive, intelligence-driven threat hunting.</p>
+<p><img alt="Threat Hunting Maturity Model" src="../../images/Threat-Hunting-Maturity-Model.png" /></p>
+<p>One of the most widely referenced models was introduced by Sqrrl (later acquired by Splunk). Although different organizations use slightly different terminology, the underlying progression remains the same:</p>
+<ul>
+<li>Level 0 – No Hunting</li>
+<li>Level 1 – Initial Hunting</li>
+<li>Level 2 – Structured Hunting</li>
+<li>Level 3 – Advanced Hunting</li>
+<li>Level 4 – Optimized Hunting</li>
+</ul>
+<p>The goal is <strong>not</strong> to reach Level 4 as quickly as possible. Instead, the objective is to continually improve your ability to detect threats that automated systems miss.</p>
+<hr />
+<h2 id="level-0-no-hunting">Level 0 – No Hunting</h2>
+<p><strong>Characteristics</strong></p>
+<p>At this stage, the SOC is entirely reactive.</p>
+<p>Analysts investigate alerts generated by security tools but never proactively search for unknown threats.</p>
+<p>Typical characteristics include:</p>
+<ul>
+<li>No dedicated hunting process</li>
+<li>Heavy reliance on SIEM and EDR alerts</li>
+<li>Limited endpoint or network visibility</li>
+<li>No documented hunting methodology</li>
+<li>Success measured by alert closure</li>
+</ul>
+<p>The team waits for technology to identify malicious activity.</p>
+<p><strong>Common Statement</strong></p>
+<blockquote>
+<p>"If something bad happens, our SIEM will alert us."</p>
+</blockquote>
+<h3 id="major-risks">Major Risks</h3>
+<ul>
+<li>Unknown attackers remain undetected.</li>
+<li>Advanced threats evade signature-based detections.</li>
+<li>False confidence in security tooling.</li>
+</ul>
+<hr />
+<h2 id="level-1-initial-hunting">Level 1 – Initial Hunting</h2>
+<p><strong>Characteristics</strong></p>
+<p>Organizations begin performing occasional hunts, usually triggered by external events such as:</p>
+<ul>
+<li>Threat intelligence reports</li>
+<li>Newly disclosed vulnerabilities</li>
+<li>Industry-specific attacks</li>
+<li>Security advisories</li>
+</ul>
+<p>Hunting activities are informal and analyst-driven.</p>
+<p>Examples include:</p>
+<ul>
+<li>Searching for indicators of compromise</li>
+<li>Looking for malicious hashes</li>
+<li>Investigating suspicious IP addresses</li>
+<li>Reviewing authentication logs</li>
+</ul>
+<p>Although hunting exists, it is inconsistent and difficult to repeat.</p>
+<p><strong>Strengths</strong></p>
+<ul>
+<li>Analysts begin thinking proactively.</li>
+<li>Threat intelligence is incorporated into investigations.</li>
+</ul>
+<p><strong>Limitations</strong></p>
+<ul>
+<li>No standardized methodology</li>
+<li>Limited documentation</li>
+<li>Success depends on individual expertise</li>
+</ul>
+<hr />
+<h2 id="level-2-structured-hunting">Level 2 – Structured Hunting</h2>
+<p><strong>Characteristics</strong></p>
+<p>At this stage, hunting becomes a formal SOC capability rather than an occasional activity.</p>
+<p>The organization develops:</p>
+<ul>
+<li>Repeatable hunting procedures</li>
+<li>Standardized playbooks</li>
+<li>Defined hypotheses</li>
+<li>Scheduled hunting cycles</li>
+<li>Documented findings</li>
+</ul>
+<p>Rather than asking:</p>
+<blockquote>
+<p>"What should we search today?"</p>
+</blockquote>
+<p>Hunters ask:</p>
+<blockquote>
+<p>"What hypothesis are we testing?"</p>
+</blockquote>
+<p>For example:</p>
+<blockquote>
+<p>"If an attacker abused PowerShell for reconnaissance, what evidence would appear in our endpoint telemetry?"</p>
+</blockquote>
+<p>Every hunt has a defined objective, required data sources, expected outcomes, and lessons learned.</p>
+<p><strong>Strengths</strong></p>
+<ul>
+<li>Consistent hunting process</li>
+<li>Better knowledge sharing</li>
+<li>Repeatable investigations</li>
+<li>Improved documentation</li>
+</ul>
+<p><strong>Limitations</strong></p>
+<ul>
+<li>Manual analysis remains time-consuming.</li>
+<li>Limited automation.</li>
+</ul>
+<hr />
+<h2 id="level-3-advanced-hunting">Level 3 – Advanced Hunting</h2>
+<p><strong>Characteristics</strong></p>
+<p>The SOC begins leveraging richer data and analytics to uncover sophisticated threats.</p>
+<p>Hunters use:</p>
+<ul>
+<li>Endpoint telemetry</li>
+<li>Network metadata</li>
+<li>Identity logs</li>
+<li>Cloud activity</li>
+<li>Threat intelligence</li>
+<li>Behavioral analytics</li>
+</ul>
+<p>Instead of searching for known indicators, analysts hunt for attacker behaviors.</p>
+<p>Examples include:</p>
+<ul>
+<li>Office applications spawning PowerShell</li>
+<li>Unusual service account usage</li>
+<li>Lateral movement patterns</li>
+<li>Privilege escalation attempts</li>
+<li>Suspicious cloud identity activity</li>
+</ul>
+<p>Automation assists with repetitive tasks, allowing hunters to focus on analysis and hypothesis refinement.</p>
+<p><strong>Strengths</strong></p>
+<ul>
+<li>Behavioral detection</li>
+<li>Multiple telemetry sources</li>
+<li>Faster investigations</li>
+<li>Improved detection engineering</li>
+</ul>
+<p><strong>Limitations</strong></p>
+<ul>
+<li>Requires skilled analysts</li>
+<li>Greater infrastructure complexity</li>
+<li>Higher operational costs</li>
+</ul>
+<hr />
+<h2 id="level-4-optimized-hunting">Level 4 – Optimized Hunting</h2>
+<p><strong>Characteristics</strong></p>
+<p>Threat hunting becomes an integral part of the organization's security strategy.</p>
+<p>Continuous improvement is embedded into daily operations.</p>
+<p>The SOC:</p>
+<ul>
+<li>Continuously develops new hunting hypotheses</li>
+<li>Converts successful hunts into automated detections</li>
+<li>Measures hunting effectiveness</li>
+<li>Integrates threat intelligence into planning</li>
+<li>Shares findings across security teams</li>
+</ul>
+<p>Rather than treating hunting as a separate activity, it becomes part of an ongoing detection engineering lifecycle.</p>
+<p>Each successful hunt strengthens future detection capabilities.</p>
+<p><strong>Indicators of a Mature Program</strong></p>
+<ul>
+<li>Metrics-driven improvement</li>
+<li>Continuous telemetry optimization</li>
+<li>Dedicated hunting specialists</li>
+<li>Threat-informed detection engineering</li>
+<li>Executive support and investment</li>
+</ul>
+<p>At this level, hunting doesn't replace automation—it improves it.</p>
+<hr />
+<h2 id="understanding-the-sqrrl-threat-hunting-maturity-model">Understanding the Sqrrl Threat Hunting Maturity Model</h2>
+<p>The original Sqrrl model emphasizes that maturity is driven primarily by <strong>data quality</strong> and <strong>analytical capability</strong>, not simply by technology purchases.</p>
+<p><img alt="Sqrrl Threat Hunting Maturity Model" src="../../images/Sqrrl-Maturity-Model.png" /></p>
+<p>Organizations typically progress through three major dimensions:</p>
+<p><strong>Data Collection</strong></p>
+<p>Can analysts access the telemetry they need?</p>
+<p>Examples include:</p>
+<ul>
+<li>Endpoint events</li>
+<li>Authentication logs</li>
+<li>Network telemetry</li>
+<li>Cloud logs</li>
+<li>Identity events</li>
+</ul>
+<p>Without sufficient visibility, advanced hunting is impossible.</p>
+<hr />
+<p><strong>Analytical Capability</strong></p>
+<p>Can analysts transform raw data into meaningful hypotheses?</p>
+<p>This includes:</p>
+<ul>
+<li>Behavioral analysis</li>
+<li>Statistical reasoning</li>
+<li>Threat intelligence integration</li>
+<li>MITRE ATT&amp;CK mapping</li>
+<li>Root cause analysis</li>
+</ul>
+<p>Technology assists—but human expertise drives mature hunting.</p>
+<hr />
+<p><strong>Operational Process</strong></p>
+<p>Can the organization consistently execute, document, improve, and repeat hunts?</p>
+<p>Questions include:</p>
+<ul>
+<li>Are hunts documented?</li>
+<li>Are findings shared?</li>
+<li>Are successful hunts converted into detections?</li>
+<li>Are lessons learned incorporated into future hunts?</li>
+</ul>
+<p>The highest maturity organizations excel across all three dimensions.</p>
+<hr />
+<h2 id="identifying-capability-gaps">Identifying Capability Gaps</h2>
+<p>Many organizations assume they need better tools when the real issue is process or visibility.</p>
+<p>Consider these examples:</p>
+<table>
+<thead>
+<tr>
+<th>Capability Gap</th>
+<th>Symptoms</th>
+<th>Potential Improvement</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Limited endpoint visibility</td>
+<td>Unable to investigate process execution</td>
+<td>Deploy richer endpoint telemetry</td>
+</tr>
+<tr>
+<td>No hunt methodology</td>
+<td>Hunts depend on individual analysts</td>
+<td>Develop standardized hunt playbooks</td>
+</tr>
+<tr>
+<td>Poor documentation</td>
+<td>Findings are lost after investigations</td>
+<td>Create hunt reports and knowledge base</td>
+</tr>
+<tr>
+<td>Lack of threat intelligence</td>
+<td>Hunts lack direction</td>
+<td>Integrate industry and adversary intelligence</td>
+</tr>
+<tr>
+<td>Manual investigations</td>
+<td>Analysts spend excessive time gathering data</td>
+<td>Automate data collection and enrichment</td>
+</tr>
+<tr>
+<td>No metrics</td>
+<td>Unable to demonstrate hunting value</td>
+<td>Track hunt outcomes and detection improvements</td>
+</tr>
+</tbody>
+</table>
+<p>Understanding these gaps helps prioritize investments that have the greatest operational impact.</p>
+<hr />
+<h2 id="building-a-threat-hunting-roadmap">Building a Threat Hunting Roadmap</h2>
+<p>Improvement doesn't happen overnight. A practical roadmap focuses on incremental progress rather than jumping directly to advanced hunting.</p>
+<p><strong>Phase 1 – Establish Visibility</strong></p>
+<ul>
+<li>Collect endpoint telemetry</li>
+<li>Improve log retention</li>
+<li>Ensure identity logging</li>
+<li>Inventory critical assets</li>
+</ul>
+<hr />
+<p><strong>Phase 2 – Standardize Hunting</strong></p>
+<ul>
+<li>Create hunting playbooks</li>
+<li>Develop hypotheses</li>
+<li>Schedule recurring hunts</li>
+<li>Document findings</li>
+</ul>
+<hr />
+<p><strong>Phase 3 – Expand Data Sources</strong></p>
+<ul>
+<li>Integrate cloud telemetry</li>
+<li>Collect network metadata</li>
+<li>Enhance endpoint visibility</li>
+<li>Include threat intelligence</li>
+</ul>
+<hr />
+<p><strong>Phase 4 – Automate and Improve</strong></p>
+<ul>
+<li>Convert successful hunts into detections</li>
+<li>Automate repetitive analysis</li>
+<li>Measure hunt effectiveness</li>
+<li>Continuously refine hypotheses</li>
+</ul>
+<p>A roadmap should always be tailored to the organization's resources, risk profile, and business priorities.</p>
+<hr />
+<h2 id="practical-exercise">Practical Exercise**</h2>
+<p>Let's assess the maturity of a fictional SOC.</p>
+<p><strong>Company Profile</strong></p>
+<p><strong>RetailOne Security Operations Center</strong></p>
+<p>Environment:</p>
+<ul>
+<li>12 SOC analysts</li>
+<li>Microsoft Sentinel SIEM</li>
+<li>Microsoft Defender for Endpoint</li>
+<li>Microsoft 365</li>
+<li>AWS cloud workloads</li>
+<li>Active Directory</li>
+<li>Weekly vulnerability scanning</li>
+</ul>
+<p>Current practices:</p>
+<ul>
+<li>Analysts investigate SIEM alerts.</li>
+<li>Quarterly threat intelligence reviews.</li>
+<li>Occasional manual hunts after major ransomware news.</li>
+<li>No documented hunting methodology.</li>
+<li>Findings are shared informally.</li>
+<li>Successful hunts are rarely converted into detection rules.</li>
+<li>Metrics focus on alert response time rather than hunting effectiveness.</li>
+</ul>
+<hr />
+<h2 id="step-1-evaluate-against-each-level">Step 1 – Evaluate Against Each Level</h2>
+<table>
+<thead>
+<tr>
+<th>Capability</th>
+<th>Observation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Dedicated hunting team</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Repeatable hunt methodology</td>
+<td>Partial</td>
+</tr>
+<tr>
+<td>Documented hypotheses</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Threat intelligence integration</td>
+<td>Limited</td>
+</tr>
+<tr>
+<td>Behavioral hunting</td>
+<td>Limited</td>
+</tr>
+<tr>
+<td>Automation</td>
+<td>Low</td>
+</tr>
+<tr>
+<td>Metrics</td>
+<td>Alert-focused only</td>
+</tr>
+<tr>
+<td>Continuous improvement</td>
+<td>Minimal</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="step-2-determine-maturity-level">Step 2 – Determine Maturity Level</h2>
+<p>RetailOne has progressed beyond Level 0 because analysts perform occasional proactive hunts.</p>
+<p>However:</p>
+<ul>
+<li>Hunts are inconsistent.</li>
+<li>There are no standardized procedures.</li>
+<li>Results are not operationalized.</li>
+<li>Automation is limited.</li>
+</ul>
+<p><strong>Assessment:</strong> <strong>Level 1 – Initial Hunting</strong></p>
+<p>The SOC demonstrates proactive intent but lacks the structure required for Level 2.</p>
+<hr />
+<h2 id="step-3-recommend-next-improvements">Step 3 – Recommend Next Improvements</h2>
+<p>To reach Level 2, RetailOne should:</p>
+<ul>
+<li>Create standardized hunting playbooks.</li>
+<li>Document hypotheses before each hunt.</li>
+<li>Record findings in a central repository.</li>
+<li>Schedule recurring hunting sessions.</li>
+<li>Convert successful hunts into detection rules.</li>
+<li>Track hunting metrics separately from incident response metrics.</li>
+</ul>
+<p>These changes improve consistency without requiring significant new technology investments.</p>
+<hr />
+<h2 id="deliverable-threat-hunting-maturity-assessment-scorecard">Deliverable – Threat Hunting Maturity Assessment Scorecard</h2>
+<p>Use the following scorecard to evaluate your own SOC or a fictional organization.</p>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Score (0–4)</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Endpoint Visibility</td>
+<td>☐ 0 ☐ 1 ☐ 2 ☐ 3 ☐ 4</td>
+<td></td>
+</tr>
+<tr>
+<td>Network Visibility</td>
+<td>☐ 0 ☐ 1 ☐ 2 ☐ 3 ☐ 4</td>
+<td></td>
+</tr>
+<tr>
+<td>Cloud Telemetry</td>
+<td>☐ 0 ☐ 1 ☐ 2 ☐ 3 ☐ 4</td>
+<td></td>
+</tr>
+<tr>
+<td>Identity Monitoring</td>
+<td>☐ 0 ☐ 1 ☐ 2 ☐ 3 ☐ 4</td>
+<td></td>
+</tr>
+<tr>
+<td>Threat Intelligence Integration</td>
+<td>☐ 0 ☐ 1 ☐ 2 ☐ 3 ☐ 4</td>
+<td></td>
+</tr>
+<tr>
+<td>Hunting Methodology</td>
+<td>☐ 0 ☐ 1 ☐ 2 ☐ 3 ☐ 4</td>
+<td></td>
+</tr>
+<tr>
+<td>Hypothesis Development</td>
+<td>☐ 0 ☐ 1 ☐ 2 ☐ 3 ☐ 4</td>
+<td></td>
+</tr>
+<tr>
+<td>Documentation</td>
+<td>☐ 0 ☐ 1 ☐ 2 ☐ 3 ☐ 4</td>
+<td></td>
+</tr>
+<tr>
+<td>Automation</td>
+<td>☐ 0 ☐ 1 ☐ 2 ☐ 3 ☐ 4</td>
+<td></td>
+</tr>
+<tr>
+<td>Detection Engineering Feedback</td>
+<td>☐ 0 ☐ 1 ☐ 2 ☐ 3 ☐ 4</td>
+<td></td>
+</tr>
+<tr>
+<td>Metrics &amp; Continuous Improvement</td>
+<td>☐ 0 ☐ 1 ☐ 2 ☐ 3 ☐ 4</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Scoring Guide</strong></p>
+<ul>
+<li><strong>0–10:</strong> Level 0 – No Hunting</li>
+<li><strong>11–20:</strong> Level 1 – Initial Hunting</li>
+<li><strong>21–30:</strong> Level 2 – Structured Hunting</li>
+<li><strong>31–38:</strong> Level 3 – Advanced Hunting</li>
+<li><strong>39–44:</strong> Level 4 – Optimized Hunting</li>
+</ul>
+<p>Use the scorecard annually or after major capability improvements to measure progress over time.</p>
+<hr />
+<h2 id="key-takeaways">Key Takeaways</h2>
+<p>Threat hunting maturity is not measured by the number of security tools deployed or the size of the SOC. It is measured by the organization's ability to proactively search for threats, develop repeatable hunting methodologies, learn from each investigation, and continuously improve detection capabilities. The journey from reactive alert handling to intelligence-driven hunting is gradual, requiring investments in telemetry, analyst skills, operational processes, and documentation.</p>
+<p>Rather than striving for perfection, focus on the next achievable step. A Level 1 SOC with disciplined processes will often outperform a poorly organized Level 3 environment. Maturity is less about technology and more about building a culture of curiosity, structured investigation, and continuous learning.</p>
+<hr />
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

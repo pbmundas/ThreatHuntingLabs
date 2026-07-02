@@ -1,0 +1,467 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maersk (NotPetya Impact) (2017) MITRE ATT&CK Navigator</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.18.9/babel.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis-network.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 font-sans">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const attacksData = {
+            "Maersk (NotPetya Impact) (2017)": {
+                "name": "Maersk (NotPetya Impact) (2017) MITRE ATT&CK Mapping",
+                "versions": { "attack": "14", "navigator": "4.9.1", "layer": "4.5" },
+                "domain": "enterprise-attack",
+                "techniques": [
+                    {
+                        "techniqueID": "T1190",
+                        "tactic": "initial-access",
+                        "color": "#ff9999",
+                        "comment": "Exploited EternalBlue vulnerability (CVE-2017-0144) via compromised M.E.Doc software update",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Vulnerability", "value": "CVE-2017-0144 (EternalBlue SMB exploit)" },
+                            { "name": "Assets", "value": "Maersk network, M.E.Doc software" },
+                            { "name": "IOCs", "value": "Malicious M.E.Doc update installation" },
+                            { "name": "Threat Actors", "value": "Sandworm (APT44, Russian military intelligence)" },
+                            { "name": "Parameters", "value": "Software update logs, patch management" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1059.001",
+                        "tactic": "execution",
+                        "color": "#ffcc99",
+                        "comment": "Executed NotPetya malware via PowerShell and SMB propagation",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "Windows systems across Maersk network" },
+                            { "name": "IOCs", "value": "NotPetya executable (perfc.dat, SHA256: 4b4e...)" },
+                            { "name": "Parameters", "value": "Process execution logs, EDR telemetry" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1547",
+                        "tactic": "persistence",
+                        "color": "#ffcc99",
+                        "comment": "Established persistence through registry modifications and boot services",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "Windows registry, boot processes" },
+                            { "name": "IOCs", "value": "Registry keys for NotPetya persistence" },
+                            { "name": "Parameters", "value": "Registry monitoring, boot log analysis" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1027",
+                        "tactic": "defense-evasion",
+                        "color": "#ffcc99",
+                        "comment": "Masqueraded as legitimate update process and disabled antivirus software",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "Software update mechanisms, AV software" },
+                            { "name": "IOCs", "value": "Disabled AV processes, masqueraded executables" },
+                            { "name": "Parameters", "value": "Behavioral analytics, file signature verification" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1021.002",
+                        "tactic": "lateral-movement",
+                        "color": "#ffcc99",
+                        "comment": "Propagated via SMB using EternalBlue across Maersk's global network",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "Global IT infrastructure, ports, offices" },
+                            { "name": "IOCs", "value": "SMB traffic exploiting MS17-010" },
+                            { "name": "Parameters", "value": "Network traffic analysis, SMB logs" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1071.001",
+                        "tactic": "command-and-control",
+                        "color": "#ffcc99",
+                        "comment": "Used HTTPS-based C2 with domain generation algorithm for coordination",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "Compromised systems" },
+                            { "name": "IOCs", "value": "HTTPS traffic to DGA domains" },
+                            { "name": "Parameters", "value": "Network traffic analysis, DNS queries" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1041",
+                        "tactic": "exfiltration",
+                        "color": "#ffcc99",
+                        "comment": "Minimal exfiltration of data for C2 coordination, secondary to NotPetya’s destructive focus",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "Networked systems" },
+                            { "name": "IOCs", "value": "Outbound connections to C2 servers" },
+                            { "name": "Parameters", "value": "Network egress filtering, DLP alerts" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1486",
+                        "tactic": "impact",
+                        "color": "#ff6666",
+                        "comment": "Encrypted files and master boot records, halting Maersk operations",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "File systems, MBR on 45,000 computers, 4,000 servers" },
+                            { "name": "IOCs", "value": "Encrypted files, MBR corruption" },
+                            { "name": "Parameters", "value": "File integrity monitoring, boot failure logs" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1490",
+                        "tactic": "impact",
+                        "color": "#ff6666",
+                        "comment": "Deleted shadow copies and backups to inhibit system recovery",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "Backup systems, shadow copies" },
+                            { "name": "IOCs", "value": "Deleted Volume Shadow Copies" },
+                            { "name": "Parameters", "value": "Backup logs, VSS integrity checks" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1485",
+                        "tactic": "impact",
+                        "color": "#ff6666",
+                        "comment": "Wiped data via wiper functionality, rendering systems inoperable",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "Critical systems, shipping operations" },
+                            { "name": "IOCs", "value": "Wiper malware execution" },
+                            { "name": "Parameters", "value": "Disk integrity checks, forensic analysis" }
+                        ]
+                    }
+                ]
+            }
+        };
+
+        const App = () => {
+            const flowchartRef = React.useRef(null);
+            const selectedAttack = "Maersk (NotPetya Impact) (2017)";
+            const [selectedTechnique, setSelectedTechnique] = React.useState(null);
+
+            React.useEffect(() => {
+                const mitreData = attacksData[selectedAttack];
+                const nodes = mitreData.techniques.map((tech, index) => ({
+                    id: index + 1,
+                    label: `${tech.techniqueID}: ${tech.tactic}`,
+                    shape: "box",
+                    color: tech.color
+                }));
+
+                const edges = [];
+                const tacticOrder = [
+                    "initial-access", "execution", "persistence", "defense-evasion",
+                    "lateral-movement", "command-and-control", "exfiltration", "impact"
+                ];
+
+                const tacticNodes = {};
+                mitreData.techniques.forEach((tech, index) => {
+                    const nodeId = index + 1;
+                    const tacticIndex = tacticOrder.indexOf(tech.tactic);
+                    if (!tacticNodes[tech.tactic]) {
+                        tacticNodes[tech.tactic] = [nodeId];
+                    } else {
+                        tacticNodes[tech.tactic].push(nodeId);
+                    }
+                    if (tacticIndex > 0) {
+                        const prevTactic = tacticOrder[tacticIndex - 1];
+                        if (tacticNodes[prevTactic]) {
+                            tacticNodes[prevTactic].forEach(prevNodeId => {
+                                edges.push({ from: prevNodeId, to: nodeId, arrows: "to" });
+                            });
+                        }
+                    }
+                });
+
+                // Custom manual edges to ensure full connectivity
+                const initialAccessNode = mitreData.techniques.findIndex(t => t.tactic === "initial-access") + 1;
+                const executionNode = mitreData.techniques.findIndex(t => t.tactic === "execution") + 1;
+                const persistenceNode = mitreData.techniques.findIndex(t => t.tactic === "persistence") + 1;
+                const defenseEvasionNode = mitreData.techniques.findIndex(t => t.tactic === "defense-evasion") + 1;
+                const lateralMovementNode = mitreData.techniques.findIndex(t => t.tactic === "lateral-movement") + 1;
+                const commandAndControlNode = mitreData.techniques.findIndex(t => t.tactic === "command-and-control") + 1;
+                const exfiltrationNode = mitreData.techniques.findIndex(t => t.tactic === "exfiltration") + 1;
+                const impactNodes = mitreData.techniques
+                    .map((tech, index) => tech.tactic === "impact" ? index + 1 : null)
+                    .filter(id => id !== null);
+
+                // Initial Access → Execution
+                if (initialAccessNode > 0 && executionNode > 0) {
+                    edges.push({ from: initialAccessNode, to: executionNode, arrows: "to", color: { color: "blue" }, width: 2 });
+                }
+
+                // Execution → Persistence
+                if (executionNode > 0 && persistenceNode > 0) {
+                    edges.push({ from: executionNode, to: persistenceNode, arrows: "to", color: { color: "blue" }, width: 2 });
+                }
+
+                // Persistence → Defense Evasion
+                if (persistenceNode > 0 && defenseEvasionNode > 0) {
+                    edges.push({ from: persistenceNode, to: defenseEvasionNode, arrows: "to", color: { color: "blue" }, width: 2 });
+                }
+
+                // Defense Evasion → Lateral Movement
+                if (defenseEvasionNode > 0 && lateralMovementNode > 0) {
+                    edges.push({ from: defenseEvasionNode, to: lateralMovementNode, arrows: "to", color: { color: "red" }, dashes: true });
+                }
+
+                // Lateral Movement → Command and Control
+                if (lateralMovementNode > 0 && commandAndControlNode > 0) {
+                    edges.push({ from: lateralMovementNode, to: commandAndControlNode, arrows: "to", color: { color: "blue" }, width: 2 });
+                }
+
+                // Command and Control → Exfiltration
+                if (commandAndControlNode > 0 && exfiltrationNode > 0) {
+                    edges.push({ from: commandAndControlNode, to: exfiltrationNode, arrows: "to", color: { color: "green" }, width: 2 });
+                }
+
+                // Exfiltration → Impact
+                if (exfiltrationNode > 0 && impactNodes.length > 0) {
+                    impactNodes.forEach(impactNode => {
+                        edges.push({ from: exfiltrationNode, to: impactNode, arrows: "to", color: { color: "purple" }, width: 2 });
+                    });
+                }
+
+                const container = flowchartRef.current;
+                const data = { nodes: new vis.DataSet(nodes), edges: new vis.DataSet(edges) };
+                const options = {
+                    physics: { enabled: true },
+                    nodes: { font: { size: 12 }, shape: 'box', shapeProperties: { borderRadius: 5 } },
+                    edges: { arrows: 'to', smooth: false },
+                    interaction: { dragNodes: true, dragView: true, zoomView: true }
+                };
+                const network = new vis.Network(container, data, options);
+
+                network.on("click", (params) => {
+                    if (params.nodes.length > 0) {
+                        const nodeId = params.nodes[0];
+                        setSelectedTechnique(mitreData.techniques[nodeId - 1]);
+                    }
+                });
+
+                network.fit();
+
+                const handleResize = () => {
+                    network.fit();
+                };
+                window.addEventListener('resize', handleResize);
+
+                return () => {
+                    window.removeEventListener('resize', handleResize);
+                    network.destroy();
+                };
+            }, []);
+
+            return (
+                <div className="container mx-auto p-4">
+                    <a href="index.html" className="text-blue-600 hover:underline absolute top-4 right-4">Back to Index</a>
+                    <h2 className="text-2xl font-bold mb-4">Maersk (NotPetya Impact) (2017) MITRE ATT&CK Navigator</h2>
+                    <div className="flex gap-4">
+                        <div ref={flowchartRef} className="flex-[3] border border-gray-300 bg-white" style={{ height: '600px' }}></div>
+                        <div className="flex-1 p-4 bg-gray-200 rounded-md overflow-y-auto" style={{ height: '600px' }}>
+                            <h3 className="text-lg font-semibold">Technique Details</h3>
+                            {selectedTechnique ? (
+                                <pre className="whitespace-pre-wrap text-sm">
+                                    <strong>Technique ID:</strong> {selectedTechnique.techniqueID}<br/>
+                                    <strong>Tactic:</strong> {selectedTechnique.tactic}<br/>
+                                    <strong>Comment:</strong> {selectedTechnique.comment}<br/>
+                                    <strong>Metadata:</strong><br/>
+                                    {selectedTechnique.metadata.map((meta, idx) => (
+                                        <div key={idx}>
+                                            <strong>{meta.name}:</strong> {meta.value}<br/>
+                                        </div>
+                                    ))}
+                                </pre>
+                            ) : (
+                                <p>Click a node to view technique details, MITRE TTPs, IOCs, and technical information. Drag nodes to move them.</p>
+                            )}
+                            <br/><strong>Background:</strong><br/>
+                            <p>The Maersk (NotPetya Impact) attack in June 2017, attributed to Sandworm (APT44, Russian military intelligence), was a destructive wiper malware campaign. It began with a supply chain compromise of Ukrainian accounting software (M.E.Doc), exploiting EternalBlue (CVE-2017-0144) to propagate via SMB across Maersk's global network. Affecting ~45,000 computers and 4,000 servers in 130 countries, it encrypted files, destroyed master boot records, and deleted backups/shadow copies, halting shipping operations and costing $300 million. Maersk recovered in 10 days using air-gapped systems and a preserved Active Directory server, underscoring supply chain and patching vulnerabilities.</p>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+        <div class="mt-8 p-4 bg-white rounded-md shadow space-y-6">
+
+  <!-- Attack Timeline -->
+  <section>
+        <h2 class="text-2xl font-semibold mb-4">Attack Timeline</h2>
+        <div class="overflow-x-auto mb-8">
+            <table class="min-w-full bg-white border border-gray-300">
+                <thead>
+                    <tr class="bg-gray-200">
+                        <th class="py-2 px-4 border-b">Date/Time</th>
+                        <th class="py-2 px-4 border-b">Action</th>
+                        <th class="py-2 px-4 border-b">Actor/Details</th>
+                        <th class="py-2 px-4 border-b">Evidence/Impact</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="py-2 px-4 border-b">June 27, 2017, Morning</td>
+                        <td class="py-2 px-4 border-b">Initial infection: NotPetya infiltrates Maersk via a compromised M.E.Doc update in Ukraine office (Odessa).</td>
+                        <td class="py-2 px-4 border-b">Russian state-sponsored (Sandworm)</td>
+                        <td class="py-2 px-4 border-b">Exploited EternalBlue and Mimikatz; spread via SMB protocol.</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border-b">June 27, 2017, Afternoon</td>
+                        <td class="py-2 px-4 border-b">Malware spread: Encrypts 45,000 PCs, 4,000 servers across 600 sites; wipes 147 domain controllers.</td>
+                        <td class="py-2 px-4 border-b">NotPetya</td>
+                        <td class="py-2 px-4 border-b">Operations halted at 76 ports, including Los Angeles, Rotterdam; 56,000 endpoints affected.</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border-b">June 27, 2017, Evening</td>
+                        <td class="py-2 px-4 border-b">Containment: Maersk shuts down global IT systems to stop malware spread.</td>
+                        <td class="py-2 px-4 border-b">Maersk IT Team</td>
+                        <td class="py-2 px-4 border-b">Tracking, logistics offline; manual operations (paper, WhatsApp) used.</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border-b">June 28, 2017</td>
+                        <td class="py-2 px-4 border-b">Response: Maersk confirms Petya attack, works with IT partners and cybersecurity agencies.</td>
+                        <td class="py-2 px-4 border-b">Maersk</td>
+                        <td class="py-2 px-4 border-b">Public statement issued; no operational impact on Maersk Oil, Drilling, Tankers.</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border-b">June 29, 2017</td>
+                        <td class="py-2 px-4 border-b">Partial recovery: Maersk Line accepts bookings via INTTRA; some APM Terminals resume.</td>
+                        <td class="py-2 px-4 border-b">Maersk</td>
+                        <td class="py-2 px-4 border-b">80% of critical functionality restored via manual processes.</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border-b">July 4–9, 2017</td>
+                        <td class="py-2 px-4 border-b">Network rebuild: IT team uses Ghana domain controller backup to restore Active Directory.</td>
+                        <td class="py-2 px-4 border-b">Maersk IT Team</td>
+                        <td class="py-2 px-4 border-b">First-class flight for server; 10-day rebuild of IT infrastructure.</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border-b">July 9–15, 2017</td>
+                        <td class="py-2 px-4 border-b">Full recovery: Maersk Line, Damco, APM Terminals return to normal operations.</td>
+                        <td class="py-2 px-4 border-b">Maersk</td>
+                        <td class="py-2 px-4 border-b">Two-week disruption; $200–300M loss reported.</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border-b">August 16, 2017</td>
+                        <td class="py-2 px-4 border-b">Financial disclosure: Maersk reports $200–300M loss in Q2 earnings; no third-party data breach.</td>
+                        <td class="py-2 px-4 border-b">Maersk CEO Søren Skou</td>
+                        <td class="py-2 px-4 border-b">Reputational damage; cybersecurity overhaul announced.</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border-b">Post-July 2017</td>
+                        <td class="py-2 px-4 border-b">Long-term measures: Maersk implements cyber insurance, rebuilds IT with enhanced security.</td>
+                        <td class="py-2 px-4 border-b">Maersk</td>
+                        <td class="py-2 px-4 border-b">Cybersecurity prioritized as competitive advantage.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Dwell Time Analysis -->
+        <h2 class="text-2xl font-semibold mb-4">Dwell Time Analysis</h2>
+        <p class="mb-4">Dwell time was approximately hours (June 27, 2017, morning to evening), as NotPetya spread rapidly but was contained same-day by system shutdowns.</p>
+        <div class="overflow-x-auto mb-8">
+            <table class="min-w-full bg-white border border-gray-300">
+                <thead>
+                    <tr class="bg-gray-200">
+                        <th class="py-2 px-4 border-b">Step 1: Initial Access (Jun 27, AM)</th>
+                        <th class="py-2 px-4 border-b">Step 2: Collection/Spread (Jun 27, AM–PM)</th>
+                        <th class="py-2 px-4 border-b">Step 3: Detection/Containment (Jun 27, PM)</th>
+                        <th class="py-2 px-4 border-b">Step 4: Recovery (Jun 29–Jul 15)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="py-2 px-4 border-b">M.E.Doc update infects Odessa office. <br><strong>What went wrong</strong>: Unpatched Windows, no supply-chain checks.</td>
+                        <td class="py-2 px-4 border-b">Encrypts 45,000 PCs, 4,000 servers via EternalBlue. <br><strong>Factor</strong>: No network segmentation, no EDR.</td>
+                        <td class="py-2 px-4 border-b">Detected via black screens; systems shut down. <br><strong>Factor</strong>: Rapid response, no SIEM initially.</td>
+                        <td class="py-2 px-4 border-b">Rebuilt using Ghana backup; new IT systems. <br><strong>Total time</strong>: $200–300M loss, global supply chain impact.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <p class="mb-4"><strong>Dwell Time Insight</strong>: The dwell time was like a wildfire, spreading in hours due to unpatched systems. Industry reports note 2017 median dwell times were ~100 days; Maersk’s rapid spread and containment reflect NotPetya’s aggressive design, mitigated by swift action.</p>
+
+        <!-- Learnings -->
+        <h2 class="text-2xl font-semibold mb-4">Learnings</h2>
+        <div class="overflow-x-auto">
+            <table class="min-w-full bg-white border border-gray-300">
+                <thead>
+                    <tr class="bg-gray-200">
+                        <th class="py-2 px-4 border-b">Root Cause Analysis</th>
+                        <th class="py-2 px-4 border-b">Impact Assessment</th>
+                        <th class="py-2 px-4 border-b">Detection Opportunities</th>
+                        <th class="py-2 px-4 border-b">Response and Remediation</th>
+                        <th class="py-2 px-4 border-b">Attribution Analysis</th>
+                        <th class="py-2 px-4 border-b">Lessons Learned</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="py-2 px-4 border-b"><strong>Using 5 Whys</strong>: Why breached? M.E.Doc update. Why infected? Unpatched Windows. Why unpatched? Slow patch management. Why slow? Prioritized operations. Why prioritized? Cost focus. <br> <strong>Other causes</strong>: No EDR, no supply-chain checks. <br> <strong>Beginners</strong>: Root causes trace to unpatched systems. <br> <strong>Experts</strong>: Fishbone factors: Process (patch delays), Technology (no EDR), Supply Chain (M.E.Doc).</td>
+                        <td class="py-2 px-4 border-b"><strong>Data</strong>: No third-party data loss; 45,000 PCs, 4,000 servers encrypted. <br> <strong>Financial</strong>: $200–300M loss. <br> <strong>Reputational</strong>: Trust erosion in shipping. <br> <strong>Beginners</strong>: Impacts hit operations, finances. <br> <strong>Experts</strong>: BIA metrics: RTO delayed 2 weeks.</td>
+                        <td class="py-2 px-4 border-b"><strong>Missed</strong>: M.E.Doc update via SIEM; spread via IDS; encryption via EDR. <br> <strong>Opportunities</strong>: Patch management, supply-chain audits, EDR. <br> <strong>Failures</strong>: No monitoring, unpatched systems. <br> <strong>Beginners</strong>: Detection is like antivirus. <br> <strong>Experts</strong>: Sigma rule: <code>detection: logsource: category: network | selection: protocol: smb AND exploit: eternalblue</code>.</td>
+                        <td class="py-2 px-4 border-b"><strong>Immediate</strong>: Shut down systems, used manual processes. <br> <strong>Long-term</strong>: Rebuilt IT, added cyber insurance, EDR. <br> <strong>Beginners</strong>: Response restores operations. <br> <strong>Experts</strong>: NIST IR followed: Identification (Jun 27), Containment (Jun 27), Eradication (Jul).</td>
+                        <td class="py-2 px-4 border-b"><strong>Confirmed</strong>: Russian state-sponsored (Sandworm). <br> <strong>TTPs</strong>: NotPetya, EternalBlue align with APT28. <br> <strong>Beginners</strong>: Attribution identifies hackers. <br> <strong>Experts</strong>: IOCs include M.E.Doc update, C2 IPs.</td>
+                        <td class="py-2 px-4 border-b">Patch systems promptly. <br> Audit supply chain. <br> Deploy EDR, SIEM, DLP. <br> Prioritize cybersecurity. <br> <strong>Beginners</strong>: Update software, secure vendors. <br> <strong>Experts</strong>: Adopt MITRE ATT&CK, supply-chain security.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+</body>
+</html>

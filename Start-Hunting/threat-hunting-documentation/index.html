@@ -1,0 +1,1588 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="An independent repository for live cyber threat Hunting, intelligence, playbooks, and raw telemetry.">
+      
+      
+        <meta name="author" content="Threathuntlabs Team">
+      
+      
+        <link rel="canonical" href="https://threathuntlabs.com/Start-Hunting/threat-hunting-documentation/">
+      
+      
+        <link rel="prev" href="../threat-hunting-program-models/">
+      
+      
+        <link rel="next" href="../../Downloads/threat-hunting-related-document-references/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Reporting - Threathuntlabs Intel Portal</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#threat-hunting-documentation-hunt-logs-reports-and-findings" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Threathuntlabs Intel Portal" class="md-header__button md-logo" aria-label="Threathuntlabs Intel Portal" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Threathuntlabs Intel Portal
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Reporting
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Threathuntlabs Intel Portal" class="md-nav__button md-logo" aria-label="Threathuntlabs Intel Portal" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Threathuntlabs Intel Portal
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Foundations
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Foundations
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../foundations/10-Common-Mistakes-Every-Beginner-Makes-When-Learning-Threat-Hunting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    10 Common Mistakes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../foundations/Cybersecurity-Fundamentals-The-Foundation-Every-Threat-Hunter-Needs-part-1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cybersecurity Fundamentals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../foundations/Why-Every-Organization-Needs-Threat-Hunting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Why and Where Threat Hunting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../foundations/Threat-Hunting-Explained-Beyond-Alerts-Dashboards-and-SIEM-Queries/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Threat Hunting Explained
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../foundations/Threat-Hunting-Data-Pipeline/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data Pipeline
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../foundations/Inside-a-Threat-Hunt-Understanding-the-Threat-Hunting-Lifecycle/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Life Cycle
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../foundations/Types-of-Threat-Hunting-Choosing-the-Right-Hunting-Strategy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Types
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../foundations/Threat-Hunting-Data-Analysis-Techniques/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data Analysis Techniques
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../foundations/Hypothesis-Development-Thinking-Like-a-Threat-Hunter-Before-Writing-a-Single-Query/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Hypothesis Development
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../foundations/Threat-Hunting-Methodologies-Choosing-the-Right-Hunting-Approach/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Methodologies
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../foundations/The-Threat-Hunting-Mindset-Thinking-Like-an-Attacker/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mindset
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../foundations/The-Threat-Hunting-Maturity-Model-Explained/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Maturity Model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Start Hunting
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Start Hunting
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../threat-hunting-lab/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab Setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Reading-Raw-Logs-Like-a-Threat-Hunter/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reading Logs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../threat-hunting-program-models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Solo Hunter to Enterprise
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reporting
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reporting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#why-documentation-gets-skipped-and-why-thats-a-problem" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why Documentation Gets Skipped (and Why That's a Problem)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-hunt-log-your-working-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Hunt Log: Your Working Notes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#from-hunt-log-to-actual-report" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        From Hunt Log to Actual Report
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="From Hunt Log to Actual Report">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#executive-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Executive Summary
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#technical-report" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Technical Report
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tlp-how-to-mark-who-can-see-what" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TLP: How to Mark Who Can See What
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#documenting-iocs-properly" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Documenting IOCs Properly
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#practical-exercise-document-the-day-8-hunt-three-ways" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Practical Exercise: Document the Day 8 Hunt, Three Ways
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Practical Exercise: Document the Day 8 Hunt, Three Ways">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-the-hunt-log-raw-working-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. The Hunt Log (raw working notes)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-executive-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Executive Summary
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-technical-report" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Technical Report
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-bottom-line" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Bottom Line
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Hunting Case Studies
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Hunting Case Studies
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../case-studies/hunting-the-SolarWinds-supply-chain-attack.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Solarwind Supply Chain Attack
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Resources
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Resources
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Downloads/threat-hunting-related-document-references/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Download Section
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    🔥Learn Cyber Attacks
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    🔥Learn Cyber Attacks
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../learn-known-cyber-attacks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Attacks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://intel.threathuntlabs.com" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    🎯Live Threat Intel
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#why-documentation-gets-skipped-and-why-thats-a-problem" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why Documentation Gets Skipped (and Why That's a Problem)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-hunt-log-your-working-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Hunt Log: Your Working Notes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#from-hunt-log-to-actual-report" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        From Hunt Log to Actual Report
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="From Hunt Log to Actual Report">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#executive-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Executive Summary
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#technical-report" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Technical Report
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tlp-how-to-mark-who-can-see-what" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TLP: How to Mark Who Can See What
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#documenting-iocs-properly" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Documenting IOCs Properly
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#practical-exercise-document-the-day-8-hunt-three-ways" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Practical Exercise: Document the Day 8 Hunt, Three Ways
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Practical Exercise: Document the Day 8 Hunt, Three Ways">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-the-hunt-log-raw-working-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. The Hunt Log (raw working notes)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-executive-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Executive Summary
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-technical-report" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Technical Report
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-bottom-line" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Bottom Line
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="threat-hunting-documentation-hunt-logs-reports-and-findings">Threat Hunting Documentation: Hunt Logs, Reports, and Findings</h1>
+<p>Here's an uncomfortable truth about threat hunting: if you found something amazing but nobody else can understand what you found, it basically didn't happen. Documentation is where hunts actually become useful to the rest of the organization. Without it, all that time spent digging through logs just disappears into someone's memory and memories fade, people change roles, and knowledge walks out the door.</p>
+<p>So let's talk about how to document hunts properly, in a way people will actually read and use.</p>
+<h2 id="why-documentation-gets-skipped-and-why-thats-a-problem">Why Documentation Gets Skipped (and Why That's a Problem)</h2>
+<p>Let's be honest writing things up is nobody's favorite part of hunting. The fun part is digging through data, spotting something weird, and chasing it down. Writing a report afterward feels like homework.</p>
+<p>But here's the thing: a hunt without documentation can't be repeated, can't be handed off, can't be used as evidence, and can't help the next person who runs into something similar. If you don't write it down, you basically have to rediscover it every time.</p>
+<p>Good documentation turns a one-time discovery into permanent organizational knowledge.</p>
+<h2 id="the-hunt-log-your-working-notes">The Hunt Log: Your Working Notes</h2>
+<p>Before you get to any polished report, there's the hunt log your raw, in-the-moment notes while you're actually hunting. Think of it like a lab notebook, not a final product.</p>
+<p>A solid hunt log usually captures:</p>
+<ul>
+<li><strong>The hypothesis</strong> what you were looking for and why (e.g., "checking for lateral movement using PsExec after the recent phishing campaign")</li>
+<li><strong>Date and time range covered</strong> so anyone reading it later knows exactly what window was examined</li>
+<li><strong>Queries and commands run</strong> the actual searches you used, so someone else can rerun them</li>
+<li><strong>What you found at each step</strong> even the dead ends. Especially the dead ends, honestly, because they tell the next hunter what NOT to waste time on</li>
+<li><strong>Screenshots or data snippets</strong> visual proof, not just your word for it</li>
+<li><strong>Your reasoning</strong> why you pivoted from one lead to another</li>
+</ul>
+<p>The hunt log doesn't need to be pretty. It needs to be complete and time-stamped. Think "detailed diary," not "final report."</p>
+<h2 id="from-hunt-log-to-actual-report">From Hunt Log to Actual Report</h2>
+<p>Once the hunt log exists, it needs to be turned into something other people can actually use. And here's a key idea: <strong>different audiences need different reports from the same hunt.</strong></p>
+<p>A CISO doesn't want your raw SPL queries. A SOC analyst doesn't want three paragraphs about business risk. So good hunting programs usually produce more than one version of the same findings.</p>
+<h3 id="executive-summary">Executive Summary</h3>
+<p>This is short usually half a page to one page. No jargon, no query syntax, no acronym soup. It answers three questions:
+1. What did we look for and why?
+2. What did we find?
+3. What's the business impact, and what needs to happen next?</p>
+<p>Executives care about risk, cost, and decisions they need to make not technical mechanics.</p>
+<h3 id="technical-report">Technical Report</h3>
+<p>This is the detailed version for other analysts, SOC teams, or incident responders. It includes the actual queries, the IOCs, the timeline of activity, affected systems, and enough detail that someone could reproduce the hunt or take direct action from it (like writing a new detection rule).</p>
+<p>Same hunt, same findings just written for a completely different reader.</p>
+<h2 id="tlp-how-to-mark-who-can-see-what">TLP: How to Mark Who Can See What</h2>
+<p>You'll often hear "TLP" thrown around in threat intel and hunting circles. TLP stands for <strong>Traffic Light Protocol</strong>, and it's basically a simple color-coded system for how far information is allowed to travel.</p>
+<ul>
+<li><strong>TLP:RED</strong> for the eyes in the room only. Don't share this beyond the people it was directly given to.</li>
+<li><strong>TLP:AMBER</strong> can be shared within your organization, and sometimes with partners who need it, but not publicly.</li>
+<li><strong>TLP:GREEN</strong> can be shared within your community or industry, just not posted publicly on the internet.</li>
+<li><strong>TLP:CLEAR</strong> (previously called TLP:WHITE) no real restrictions, safe for public release.</li>
+</ul>
+<p>Every hunt report should carry a TLP label right at the top. It sounds like a small thing, but it prevents sensitive findings like details of an active compromise from accidentally ending up somewhere they shouldn't.</p>
+<h2 id="documenting-iocs-properly">Documenting IOCs Properly</h2>
+<p>IOCs (Indicators of Compromise) are often the most valuable output of a hunt the actual IPs, hashes, domains, or file names tied to malicious activity. But a list of IOCs with no context is nearly useless.</p>
+<p>Good IOC documentation includes:</p>
+<ul>
+<li><strong>The indicator itself</strong> (hash, IP, domain, etc.)</li>
+<li><strong>What type it is</strong> (file hash, network indicator, registry key, etc.)</li>
+<li><strong>Where it was seen</strong> (which system, which log source)</li>
+<li><strong>When it was seen</strong> (timestamp)</li>
+<li><strong>Confidence level</strong> are you certain this is malicious, or is it a "worth watching" indicator?</li>
+<li><strong>Context</strong> what campaign or activity is this tied to?</li>
+</ul>
+<p>Without that context, an IOC list is just... a list. With context, it becomes something a SOC can actually act on like building a detection rule or blocking traffic with confidence.</p>
+<h2 id="practical-exercise-document-the-day-8-hunt-three-ways">Practical Exercise: Document the Day 8 Hunt, Three Ways</h2>
+<p>Let's make this real. Say you just wrapped up a hunt on Day 8 of your program, and here's roughly what happened:</p>
+<p><em>You hypothesized that an attacker might be using scheduled tasks for persistence, based on a threat intel report about a new campaign. You searched Windows Event Logs across 40 endpoints for suspicious <code>schtasks.exe</code> activity. You found 3 endpoints with a scheduled task disguised as a legitimate Windows update process, pointing to a suspicious PowerShell script that beacons out every 6 hours to an external IP.</em></p>
+<p>Now let's document that same hunt three different ways.</p>
+<h3 id="1-the-hunt-log-raw-working-notes">1. The Hunt Log (raw working notes)</h3>
+<div class="highlight"><pre><span></span><code>Date: Day 8, 09:14–13:40
+Hypothesis: Adversary using scheduled tasks for persistence (ref: TI report #2026-114)
+Scope: 40 endpoints, Windows Event Log ID 4698 (task creation)
+
+09:14 - Query: EventID=4698 across endpoint fleet, last 30 days
+09:40 - 6 unusual task names found, cross-referenced against baseline
+10:15 - 3 tasks named &quot;WindowsUpdateHealthCheck&quot; - not a real MS task name
+10:22 - Task action points to powershell.exe -enc &lt;base64&gt;
+10:35 - Decoded payload - beacons to 185.x.x.x every 6 hours
+11:00 - Checked network logs, confirmed outbound traffic matches pattern
+11:45 - Affected hosts: WKS-114, WKS-220, WKS-341
+12:30 - No lateral movement observed from these hosts (checked auth logs)
+13:40 - Hunt concluded, escalating to IR
+</code></pre></div>
+<h3 id="2-executive-summary">2. Executive Summary</h3>
+<blockquote>
+<p><strong>TLP:AMBER</strong>
+<strong>Subject: Persistence Mechanism Found on 3 Endpoints</strong></p>
+<p>During a proactive hunt this week, our team identified malicious software disguised as a Windows system process on three employee computers. This software was designed to maintain hidden access and was periodically contacting an external server, though no evidence of further spread was found.</p>
+<p>The affected machines have been isolated and are being cleaned up by our response team. We recommend approving a quick fleet-wide scan to confirm no other machines are affected. No customer data or critical systems were involved.</p>
+</blockquote>
+<h3 id="3-technical-report">3. Technical Report</h3>
+<blockquote>
+<p><strong>TLP:AMBER</strong>
+<strong>Hunt Report: Scheduled Task Persistence Day 8</strong></p>
+<p><strong>Hypothesis:</strong> Based on TI report #2026-114, hunted for adversarial use of Windows scheduled tasks for persistence.</p>
+<p><strong>Scope:</strong> 40 endpoints, Event ID 4698, 30-day lookback.</p>
+<p><strong>Findings:</strong> 3 endpoints (WKS-114, WKS-220, WKS-341) had a scheduled task named <code>WindowsUpdateHealthCheck</code> not a legitimate Microsoft task. Task action executes a base64-encoded PowerShell payload that beacons to <code>185.x.x.x</code> every 6 hours.</p>
+<p><strong>IOCs:</strong>
+| Indicator | Type | Confidence | First Seen |
+|---|---|---|---|
+| 185.x.x.x | C2 IP | High | Day 8, 10:35 |
+| WindowsUpdateHealthCheck | Scheduled task name | High | Day 8, 10:15 |
+| (hash of decoded payload) | File hash | High | Day 8, 10:35 |</p>
+<p><strong>Lateral movement:</strong> None observed in authentication logs.</p>
+<p><strong>Recommended actions:</strong> Block C2 IP at perimeter firewall. Deploy detection rule for task name pattern. Run fleet-wide scan for the same IOC set. Escalate to IR for endpoint remediation.</p>
+</blockquote>
+<p>Notice how it's the exact same hunt, but each version serves a completely different reader. The exec summary takes 30 seconds to read and tells leadership what they need to know. The technical report gives another analyst everything they'd need to act on it immediately.</p>
+<h2 id="the-bottom-line">The Bottom Line</h2>
+<p>Documentation isn't the boring afterthought of threat hunting it's what makes hunting actually valuable to an organization. A brilliant find that lives only in your head helps nobody. The same find written up clearly, with the right IOCs, the right TLP marking, and the right version for the right audience? That's what turns a good hunter into a good hunting <em>program</em>.</p>
+<p>Write it down. Future-you (and everyone else on the team) will thank you and here is the link to <a href="../../Downloads/threat-hunting-related-document-references/">Threat Hunting Report template</a>.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

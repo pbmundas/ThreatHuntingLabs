@@ -1,0 +1,519 @@
+Anthem — 2015
+OPM (U.S. Office of Personnel Management) — 2015
+Adobe — 2013
+Heartland Payment Systems — 2008
+TJX (TJ Maxx) — 2007
+Mt. Gox — 2014
+Home Depot — 2014
+Dropbox — 2012
+Operation Aurora (Google) — 2009
+Dyn / Mirai DDoS — 2016
+Maersk (NotPetya impact) — 2017
+FedEx / TNT (NotPetya impact) — 2017
+PlayStation Network (Sony) — 2011
+Hacking Team leak — 2015
+Vault 7 (CIA leaks) — 2017
+Shadow Brokers leak — 2016
+
+
+Bitfinex — 2016
+
+
+Binance — 2019
+
+
+Crypto.com — 2022
+
+
+Garmin (WastedLocker) — 2020
+
+
+Travelex (Sodinokibi) — 2020
+
+
+Microsoft Exchange (Hafnium) — 2021
+
+
+Facebook / Cambridge Analytica — 2018
+
+
+Operation Shady RAT — 2006
+
+
+Conficker — 2008
+
+
+Mirai botnet (IoT) — 2016
+
+
+MGM Resorts — 2020
+
+
+Acer (REvil ransom demand) — 2021
+
+
+JBS (meatpacker) — 2021
+
+
+CNA Financial — 2021
+
+
+Norsk Hydro — 2019
+
+
+University of California, San Francisco (ransomware) — 2020
+
+
+Cryptolocker — 2013
+
+
+Locky ransomware campaigns — 2016
+
+
+Bitly credential breach — 2014
+
+
+Zynga breach — 2019
+
+
+Ashley Madison — 2015
+
+
+Bitly’s 2014 breach (duplicate removed—see list continuity) — 2014
+
+
+US Office of Personnel Management (additional incidents noted) — 2014–2015
+
+
+Dropbox (2016 disclosure of 2012 breach) — 2016
+
+
+Microsoft / SolarWinds related follow-ons — 2020–2021
+
+
+Equifax-related follow-on incidents / disclosures — 2017–2019
+
+
+Shopify merchant data incidents (various) — 2020–2021
+
+
+Several major healthcare ransomware waves (widespread) — 2016–2021
+
+Morris Worm — 1988
+
+
+Michelangelo Virus — 1992
+
+
+Citibank Hack — 1994
+
+
+Melissa Virus — 1999
+
+
+ILOVEYOU Worm — 2000
+
+
+Mafiaboy DDoS Attacks — 2000
+
+
+Code Red Worm — 2001
+
+
+Nimda Worm — 2001
+
+
+SQL Slammer — 2003
+
+
+Blaster Worm — 2003
+
+
+Sasser Worm — 2004
+
+
+CardSystems Breach — 2005
+
+
+TJX Breach — 2007
+
+
+Monster.com Breach — 2007
+
+
+Estonia Cyberattacks — 2007
+
+
+Hannaford Brothers Breach — 2008
+
+
+Conficker Worm — 2008
+
+
+Heartland Payment Systems — 2008
+
+
+Aurora Attacks (Google) — 2009
+
+
+RockYou Breach — 2009
+
+
+Zeus Botnet — 2009
+
+
+Stuxnet — 2010 (already listed earlier, keeping for continuity)
+
+
+Operation Payback (Anonymous) — 2010
+
+
+WikiLeaks DDoS Attacks — 2010
+
+
+Sony PlayStation Network — 2011
+
+
+RSA SecurID — 2011
+
+
+Epsilon Data Breach — 2011
+
+
+Stratfor Hack — 2011
+
+
+Operation AntiSec — 2011
+
+
+DigiNotar Certificate Hack — 2011
+
+
+Global Payments Breach — 2012
+
+
+South Carolina Dept. of Revenue Breach — 2012
+
+
+LinkedIn Breach — 2012
+
+
+Dropbox Breach — 2012
+
+
+Adobe Breach — 2013
+
+
+Target Breach — 2013
+
+
+Snapchat Breach — 2013
+
+
+Yahoo — 2013
+
+
+Yahoo — 2014
+
+
+Home Depot Breach — 2014
+
+
+JPMorgan Chase Breach — 2014
+
+
+Sony Pictures Hack — 2014
+
+
+Ashley Madison Hack — 2015
+
+
+Anthem Healthcare Breach — 2015
+
+
+OPM Breach — 2015
+
+Hacking Team Breach — 2015
+
+
+Adult FriendFinder Breach — 2016
+
+
+SWIFT Banking Attacks (Bangladesh Bank) — 2016
+
+
+Dyn DDoS (Mirai Botnet) — 2016
+
+
+Uber Breach — 2016
+
+
+WannaCry Ransomware — 2017
+
+
+NotPetya — 2017
+
+
+Equifax Breach — 2017
+
+
+CCleaner Supply Chain Attack — 2017
+
+
+Bad Rabbit Ransomware — 2017
+
+
+Cloudflare “Cloudbleed” — 2017
+
+
+Deloitte Breach — 2017
+
+
+Vevo Hack — 2017
+
+
+HBO Hack — 2017
+
+
+MyHeritage Breach — 2018
+
+
+Cathay Pacific Breach — 2018
+
+
+
+Quora Breach — 2018
+
+
+Facebook / Cambridge Analytica — 2018
+
+
+Under Armour (MyFitnessPal) Breach — 2018
+
+
+Ticketmaster Breach — 2018
+
+
+Exactis Data Leak — 2018
+
+
+Marriott / Starwood — 2018
+
+
+SingHealth Breach (Singapore) — 2018
+
+
+Airbus Supplier Breach — 2019
+
+Wipro Breach — 2019
+
+
+Evite Breach — 2019
+
+
+Canva Breach — 2019
+
+
+Desjardins Breach — 2019
+
+
+Suprema Biostar Breach — 2019
+
+
+Zynga Breach — 2019
+
+Garmin Ransomware — 2020
+
+
+University of California, San Francisco Ransomware — 2020
+
+Nintendo Breach — 2020
+
+
+EasyJet Breach — 2020
+
+
+Travelex Ransomware — 2020
+
+FireEye Breach — 2020
+
+
+Accellion FTA Breach — 2021
+
+
+Facebook 533M Data Leak — 2021
+
+JBS Meatpacker Ransomware — 2021
+
+Acer Ransomware — 2021
+
+
+CNA Financial Ransomware — 2021
+
+
+Robinhood Data Breach — 2021
+
+
+Twitch Data Leak — 2021
+
+Red Cross Data Breach — 2022
+
+
+Crypto.com Breach — 2022
+
+
+Nvidia Breach — 2022
+
+
+Okta Breach — 2022
+
+
+Ronin Network (Axie Infinity) Hack — 2022
+
+
+Costa Rica Government Ransomware — 2022
+
+
+Medibank Breach — 2022
+
+
+LastPass Breach — 2022
+
+
+Rackspace Ransomware — 2022
+
+
+T-Mobile Breach — 2023
+
+
+JD Sports Breach — 2023
+
+
+Latitude Financial Breach — 2023
+
+
+MOVEit Transfer Exploits — 2023
+
+
+Capita Breach (UK) — 2023
+
+
+23andMe Data Breach — 2023
+
+
+ICBC Ransomware (China’s biggest bank) — 2023
+
+
+Air Canada Breach — 2023
+
+
+Boeing Ransomware (LockBit) — 2023
+
+
+British Library Ransomware — 2023
+
+
+Hyundai Motor Breach — 2023
+
+
+Changpeng Zhao / Binance-related Breach — 2023
+
+
+Australian Courts Ransomware — 2023
+
+
+U-Haul Data Breach — 2023
+
+
+Microsoft Storm-0558 Email Hack — 2023
+
+
+DarkBeam Exposure — 2023
+
+
+Indian Council of Medical Research Breach — 2023
+
+
+China Ministry of State Security Hacks (multiple) — 2023
+
+
+Okta Source Code Leak — 2023
+
+
+Mercedes-Benz Breach — 2023
+
+
+Duolingo Data Leak — 2023
+
+
+National Student Clearinghouse Breach — 2023
+
+
+iOttie Breach — 2023
+
+
+Bombardier Breach — 2023
+
+
+Cloudflare Okta-related Incident — 2023
+
+
+Toyota Supplier Breach — 2023
+
+
+Discord.io Breach — 2023
+
+
+Discord Data Leak — 2023
+
+
+Facebook Marketplace Scam Attacks — 2023
+
+
+Boeing Subsidiary Jeppesen Breach — 2023
+
+
+Boeing Jeppesen Flight Data Hack — 2023
+
+
+MOVEit Mass Exploit Fallout — 2023
+
+
+Indigo Airlines Breach — 2023
+
+
+Discord Nitro Token Leak — 2023
+
+
+GitHub Credentials Breach — 2023
+
+
+Dell Data Leak — 2023
+
+
+Microsoft Bing Data Leak — 2023
+
+
+Dropbox Sign Breach — 2024
+
+
+UnitedHealth / Change Healthcare Ransomware — 2024
+
+
+Johnson Controls Breach — 2024
+
+
+23andMe Follow-up Leak — 2024
+
+
+Sysco Breach — 2024
+
+
+Reddit Breach — 2024
+
+
+Ticketmaster Data Breach — 2024
+
+
+
+
