@@ -50,6 +50,7 @@ nav:
       - Reading Logs: Start-Hunting/Reading-Raw-Logs-Like-a-Threat-Hunter.md
       - Solo Hunter to Enterprise: Start-Hunting/threat-hunting-program-models.md
       - Reporting: Start-Hunting/threat-hunting-documentation.md
+      - Telemetry & Logs to collect: Start-Hunting/threat-hunting-device-logs-telemetry-details.html
 
   - Hunting Case Studies:
      - Solarwind Supply Chain Attack: case-studies/hunting-the-SolarWinds-supply-chain-attack.md
