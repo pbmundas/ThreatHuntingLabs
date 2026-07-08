@@ -18,3 +18,12 @@ info "Library Updates"
 | SOC - Security Devices Monitoring Use Cases List | All Data Source | Intermediate | Jun 2026 | [Use Cases List](https://raw.githubusercontent.com/pbmundas/ThreatHuntingLabs/refs/heads/main/docs/Downloads/SOC%20-%20Security%20Device%20Monitoring%20Use%20Cases%20List.pdf) |
 
 ---
+
+# 📁 OpenSource Interesting Security Projects
+
+| Repo Name | Category | Download |
+|----------|----------|----------|
+| Analyst AI Pack | Malware Analysis, Reverse Engineering, Threat Hunting | [Analyst AI Pack](https://github.com/meltedinhex/analyst-ai-pack) |
+
+
+---
