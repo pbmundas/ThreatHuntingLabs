@@ -26,6 +26,6 @@ info "Library Updates"
 | Analyst AI Pack | Malware Analysis, Reverse Engineering, Threat Hunting | [Analyst AI Pack](https://github.com/meltedinhex/analyst-ai-pack) |
 | Vigil  - AI SOC | Incident Response, Full Investigation, Threat Hunting, Forensic Analysis | [Vigil  - AI SOC](https://github.com/Vigil-SOC/vigil) |
 | Phidata  - Build multi-modal Agents with memory, knowledge, tools and reasoning. | General Multi-Agentic Model   | [Phidata](https://github.com/agno-agi/phidata) |
-| EVTX-ATTACK-SAMPLES | Security Evtx logs collections for analysis, detection and forensic  | [Phidata](https://github.com/sbousseaden/evtx-attack-samples) |
+| EVTX-ATTACK-SAMPLES | Security Evtx logs collections for analysis, detection and forensic  | [EVTX-ATTACK-SAMPLES](https://github.com/sbousseaden/evtx-attack-samples) |
 
 ---
