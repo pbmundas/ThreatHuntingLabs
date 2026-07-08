@@ -24,6 +24,6 @@ info "Library Updates"
 | Repo Name | Category | Download |
 |----------|----------|----------|
 | Analyst AI Pack | Malware Analysis, Reverse Engineering, Threat Hunting | [Analyst AI Pack](https://github.com/meltedinhex/analyst-ai-pack) |
-
+| Vigil  - AI SOC | Incident Response, Full Investigation, Threat Hunting, Forensic Analysis | [Vigil  - AI SOC](https://github.com/Vigil-SOC/vigil) |
 
 ---
