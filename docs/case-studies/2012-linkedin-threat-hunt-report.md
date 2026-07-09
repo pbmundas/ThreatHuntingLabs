@@ -1,9 +1,7 @@
-# Retrospective Threat Hunting Report
-## Engagement: Hunt for Unauthorized Access to Member Credential Store — LinkedIn Corporation
+# LinkedIn Breach Retrospective Threat Hunting Report
+### Engagement: Hunt for Unauthorized Access to Member Credential Store — LinkedIn Corporation
 
 ---
-
-## Cover Page
 
 | Field | Value |
 |---|---|
@@ -16,7 +14,7 @@
 | **Threat Severity** | **Critical** |
 | **Hunt Status** | Closed — Hypothesis Validated (Retrospective) |
 
-### Executive Summary
+## Executive Summary
 
 > This report reconstructs, as a professional retrospective hunt, how a SOC embedded inside LinkedIn Corporation in early-to-mid 2012 could plausibly have detected the intrusion that led to the theft of member password data — publicly surfaced on June 6, 2012, when roughly 6.5 million unsalted SHA-1 password hashes were posted to a Russian-language password-cracking forum. A second wave of exposure in 2016 revealed the true scope was approximately 117 million credentials.
 
@@ -25,39 +23,6 @@
 > LinkedIn never publicly released a full internal forensic timeline, so this report clearly distinguishes **(a)** facts drawn from court records and public reporting, from **(b)** plausible reconstructed hunt logic — the queries, log sources, and analytic steps a hunter would have run against that scenario. It is written as a **training and reference document**, not as an authoritative postmortem.
 
 > **This engagement scope has been deliberately adapted.** The source template for this hunt was originally written for an industrial-control-systems (ICS) intrusion involving removable media and PLCs. That scenario does not match this attack. This report replaces ICS/PLC/USB-worm assumptions with the actual environment relevant to a 2012 SaaS/web company: corporate engineering endpoints, source control, internal service tiers, and a member-authentication database. Sections that would only make sense for an ICS environment are marked **N/A — Not Applicable to this Environment** rather than fabricated.
-
----
-
-## Table of Contents
-
-1. Threat Intelligence Summary
-2. Hunt Objective
-3. Hunt Scope
-4. Hunt Assumptions
-5. Threat Hunting Hypotheses
-6. Environment Overview
-7. Available Data Sources
-8. Hunt Methodology
-9. Hunt Execution Timeline
-10. Log Sources Collected
-11. Detailed Log Analysis
-12. Data Analysis Techniques Used
-13. Hunting Queries
-14. Sigma Detection Opportunities
-15. MITRE ATT&CK Mapping
-16. Alerts Reviewed
-17. Indicators of Compromise
-18. Indicators of Attack (IOAs)
-19. Timeline Reconstruction
-20. Kill Chain Reconstruction
-21. Root Cause Analysis
-22. Detection Gaps
-23. Detection Engineering Opportunities
-24. Purple Team Opportunities
-25. Threat Hunting Lessons Learned
-26. Recommendations
-27. Final Hunt Assessment
-28. Appendix
 
 ---
 
@@ -269,18 +234,8 @@ graph LR
 
 ### Architecture (Simplified, Era-Appropriate)
 
-```mermaid
-graph TD
-    Internet((Internet)) --> DMZ[DMZ / Reverse Proxy]
-    DMZ --> AppTier[Application / API Tier]
-    AppTier --> DataTier[(Member Auth DB - password hashes)]
-    Corp[Corporate LAN] --> VPN[VPN Gateway]
-    VPN --> Corp
-    Corp --> EngWS[Engineering Workstations]
-    EngWS -->|source control, internal tooling| InternalSvc[Internal Services / SCM]
-    InternalSvc -->|privileged jump/bastion| DataTier
-    Corp --> AD[(Active Directory / LDAP)]
-```
+<img width="50%" alt="Architecture" src="https://github.com/user-attachments/assets/b8f58988-cd62-4a64-874a-185bfa37118d" />
+
 
 ### AD Layout
 
