@@ -3,8 +3,6 @@ title: "Threat Hunt Report — Operation QUIET LEDGER"
 subtitle: "Retrospective Enterprise Threat Hunt: Targeted Spear-Phishing Intrusion Against a Security-Product Vendor (RSA SecurID-Class Activity, 2011)"
 ---
 
-# Cover Page
-
 | Field | Value |
 |---|---|
 | **Hunt Name** | Operation QUIET LEDGER |
@@ -26,7 +24,7 @@ The hunt validated four of five hypotheses, recovered the original phishing emai
 
 ---
 
-# Table of Contents
+## Table of Contents
 
 1. Threat Intelligence Summary
 2. Hunt Objective
@@ -59,54 +57,54 @@ The hunt validated four of five hypotheses, recovered the original phishing emai
 
 ---
 
-# 1. Threat Intelligence Summary
+## 1. Threat Intelligence Summary
 
-## Background
+**Background**
 
 The hunt was triggered by a partner-shared advisory noting that a small number of organizations in the authentication/identity-security product space had received targeted phishing emails using an HR/recruiting-themed lure, and that at least one recipient organization had confirmed compromise leading to theft of product-related data. The advisory did not name the victim, provide file hashes, or specify infrastructure — it described a *pattern*: small, hand-picked distribution lists (not mass phishing), a document-based lure, and a stated interest in reaching personnel adjacent to token seed provisioning or credential-management systems.
 
-## Threat Actor
+**Threat Actor**
 
 No attribution was provided at intake. The hunt was conducted actor-agnostic. The targeting precision (small distribution list, role-specific lure content) was treated as a behavioral signal of a well-resourced, patient actor rather than opportunistic crimeware — this shaped hypothesis priority but was not treated as proof of any specific group.
 
-## Campaign
+**Campaign**
 
 The advisory described this as an ongoing, low-volume campaign against a narrow set of organizations in the identity/authentication product sector, spanning at least several weeks prior to the advisory's release.
 
-## Objectives (Hypothesized)
+**Objectives (Hypothesized)**
 
 * Theft of intellectual property and/or sensitive product data — specifically, anything related to token seed generation, provisioning, or the credential systems that underpin the organization's authentication products.
 * Espionage-motivated, not financially motivated — no ransomware or extortion indicators were referenced in the advisory.
 
-## Initial Intelligence
+**Initial Intelligence**
 
 * Partner/sector advisory only — no file hashes, no IOCs, no named C2 infrastructure.
 * Lure theme: HR/recruiting-related document (e.g., "recruitment plan" or similarly innocuous business document).
 * Delivery: email to a small, specifically chosen group of recipients, not a broad spray.
 * No CVE numbers were supplied by the source; the hunt team had to independently determine the likely exploitation vector.
 
-## Known TTPs at the Time (as understood by the hunt team pre-investigation)
+**Known TTPs at the Time (as understood by the hunt team pre-investigation)**
 
 * Suspected spear-phishing with a malicious document attachment (format unconfirmed at hunt start — Office document with embedded active content was the leading hypothesis).
 * Suspected use of a remote access tool for C2 following successful exploitation.
 * Suspected internal reconnaissance and lateral movement toward systems with access to sensitive credential/seed data, rather than immediate smash-and-grab exfiltration.
 
-## Confidence
+**Confidence**
 
 **Moderate** at hunt initiation (single-source sector advisory, no technical indicators); confidence increased to **High** once the original phishing email was recovered from mail archive during the hunt.
 
-## Intelligence Sources
+**Intelligence Sources**
 
 * Partner/sector advisory (primary trigger)
 * Internal email security gateway logs and archive
 * Internal EDR, SIEM, and DNS/proxy telemetry
 * Public reporting patterns on document-based exploitation known to the team at the time (used only to shape hypotheses, not assumed as fact)
 
-## ATT&CK Overview
+**ATT&CK Overview**
 
 Initial-hypothesis technique coverage spanned Initial Access (Spearphishing Attachment), Execution (User Execution: Malicious File, Exploitation for Client Execution), Command and Control (Application Layer Protocol), Discovery (Network/Account Discovery), Credential Access (Credential Dumping), Lateral Movement (Remote Services, Pass-the-Hash), Collection (Data Staged), and Exfiltration (Exfiltration Over Alternative Protocol).
 
-## Diamond Model
+**Diamond Model**
 
 ```mermaid
 graph LR
@@ -116,7 +114,7 @@ graph LR
     I --- V
 ```
 
-## Cyber Kill Chain (Hypothesized, Pre-Hunt)
+**Cyber Kill Chain (Hypothesized, Pre-Hunt)**
 
 | Stage | Hypothesized Activity |
 |---|---|
@@ -130,7 +128,7 @@ graph LR
 
 ---
 
-# 2. Hunt Objective
+## 2. Hunt Objective
 
 **Mission:** Determine whether the organization's email, endpoint, and network environment shows evidence of the targeted spear-phishing activity described in the sector advisory, and if so, establish the full scope, timeline, and whether any sensitive credential/seed-provisioning system was reached.
 
@@ -147,7 +145,7 @@ graph LR
 
 ---
 
-# 3. Hunt Scope
+## 3. Hunt Scope
 
 | Category | In Scope |
 |---|---|
@@ -166,7 +164,7 @@ graph LR
 
 ---
 
-# 4. Hunt Assumptions
+## 4. Hunt Assumptions
 
 * The adversary, if present, has already achieved initial access; the hunt does not assume a clean environment.
 * Initial compromise vector is unconfirmed at hunt start — a malicious document delivered by email is the leading hypothesis based on intelligence, not a proven fact.
@@ -177,9 +175,9 @@ graph LR
 
 ---
 
-# 5. Threat Hunting Hypotheses
+## 5. Threat Hunting Hypotheses
 
-### HYP-001 — Targeted Spear-Phishing Delivery with Document-Based Exploit
+**HYP-001 — Targeted Spear-Phishing Delivery with Document-Based Exploit**
 
 **Statement:** If a small, targeted group of employees received a document-lure phishing email, then mail archive search should reveal a low-volume email wave with a shared sender identity or infrastructure, and at least one recipient's endpoint should show a client application (e.g., Office, Adobe Reader/Flash) spawning an unusual child process shortly after the attachment was opened.
 
@@ -201,7 +199,7 @@ graph LR
 
 ---
 
-### HYP-002 — Remote Access Tool Installation and Outbound C2
+**HYP-002 — Remote Access Tool Installation and Outbound C2**
 
 **Statement:** If a remote access tool was installed following successful exploitation, then the affected host should show a new, previously unseen process establishing outbound network connections to external infrastructure on a low-frequency, persistent basis, along with new persistence artifacts (Run key, service, or scheduled task) tied to that process.
 
@@ -223,13 +221,13 @@ graph LR
 
 ---
 
-### HYP-003 — Credential Harvesting and Lateral Movement Toward the Product Security VLAN
+**HYP-003 — Credential Harvesting and Lateral Movement Toward the Product Security VLAN**
 
 **Statement:** If the adversary's objective is theft of seed-provisioning data, then authentication logs should show credential use (interactive or pass-the-hash-style) from the initially compromised host or its pivot points against systems in the Product Security VLAN, outside the normal access pattern of the compromised user's role.
 
 **Why created:** This is the "actions on objectives" hypothesis — the one that determines whether the intrusion reached the organization's most sensitive systems. The advisory's specific framing (interest in provisioning-adjacent personnel) made this the highest-priority hypothesis to test directly.
 
-**Priority:** P1 (Critical) — highest business impact of all hypotheses
+**Priority:** P1 (Critical) — highest business impact of all hypotheses**
 
 **MITRE ATT&CK Mapping:** T1003 (OS Credential Dumping), T1021 (Remote Services), T1078 (Valid Accounts)
 
@@ -245,7 +243,7 @@ graph LR
 
 ---
 
-### HYP-004 — Data Staging and Exfiltration
+**HYP-004 — Data Staging and Exfiltration**
 
 **Statement:** If the adversary successfully reached sensitive data, then endpoint and network logs should show large archive files (e.g., `.rar`, `.zip`) staged on a compromised host shortly before an unusual outbound transfer, using a protocol not normally used for legitimate business purposes on that host.
 
@@ -267,7 +265,7 @@ graph LR
 
 ---
 
-### HYP-005 — Broader Reconnaissance Across the Fleet Beyond the Initial Victim
+**HYP-005 — Broader Reconnaissance Across the Fleet Beyond the Initial Victim**
 
 **Statement:** If the adversary conducted internal reconnaissance beyond the initially compromised host, then Discovery-related command execution (network enumeration, account enumeration) should appear on additional hosts beyond the original victim, indicating the intrusion was not contained to a single endpoint.
 
@@ -289,7 +287,7 @@ graph LR
 
 ---
 
-# 6. Environment Overview
+## 6. Environment Overview
 
 **Architecture:** Single-forest Windows Active Directory environment (`corp.local`) with a segmented "Product Security" VLAN housing the seed-generation and provisioning staging servers, separated from the general corporate LAN by an internal firewall with a documented, role-based access-control list.
 
@@ -309,7 +307,7 @@ graph LR
 
 ---
 
-# 7. Available Data Sources
+## 7. Available Data Sources
 
 | Source | Purpose | Retention | Quality | Coverage |
 |---|---|---|---|---|
@@ -348,7 +346,7 @@ graph LR
 
 ---
 
-# 8. Hunt Methodology
+## 8. Hunt Methodology
 
 This hunt combined multiple hunting doctrines rather than relying on one:
 
@@ -366,7 +364,7 @@ This hunt combined multiple hunting doctrines rather than relying on one:
 
 ---
 
-# 9. Hunt Execution Timeline
+## 9. Hunt Execution Timeline
 
 | Day | Action | Reason | Evidence | Decision | Next Step |
 |---|---|---|---|---|---|
@@ -385,7 +383,7 @@ This hunt combined multiple hunting doctrines rather than relying on one:
 
 ---
 
-# 10. Log Sources Collected
+## 10. Log Sources Collected
 
 **How collected:** Mail archive data was pulled from the compliance journaling system (7-year retention), which proved essential since the SIEM's 90-day retention alone would not reliably have covered the full suspected campaign window without the advisory's timely trigger. Endpoint telemetry was pulled from Splunk (Sysmon-covered hosts) and supplemented with live forensic collection (Prefetch, Shimcache, MFT, registry) on `CORP-ENG-118` and `PSVLAN-STG-02` specifically, since Sysmon coverage on the former was only partial and native OS artifacts filled the gap.
 
@@ -401,9 +399,9 @@ This hunt combined multiple hunting doctrines rather than relying on one:
 
 ---
 
-# 11. Detailed Log Analysis
+## 11. Detailed Log Analysis
 
-## 11.1 Email / Delivery Analysis (HYP-001)
+**11.1 Email / Delivery Analysis (HYP-001)**
 
 **Purpose:** Determine whether a targeted phishing wave matching the advisory's description was delivered, and to whom.
 
@@ -432,7 +430,7 @@ Attachment: 2011_Recruitment_plan.xls (Size: 112,640 bytes)
 
 **Confidence:** High
 
-## 11.2 Endpoint Exploitation and C2 Analysis (HYP-002)
+**11.2 Endpoint Exploitation and C2 Analysis (HYP-002)
 
 **Purpose:** Confirm exploitation occurred and identify the resulting implant's persistence and C2 pattern.
 
@@ -462,7 +460,7 @@ CommandLine: "wuauclt.exe"
 
 **Confidence:** High
 
-## 11.3 Authentication / Lateral Movement Analysis (HYP-003)
+**11.3 Authentication / Lateral Movement Analysis (HYP-003)**
 
 **Purpose:** Determine whether the intrusion reached the Product Security VLAN.
 
@@ -492,7 +490,7 @@ Time: 2011-xx-xx (9 days after initial compromise)
 
 **Confidence:** High
 
-## 11.4 Data Staging and Exfiltration Analysis (HYP-004)
+**11.4 Data Staging and Exfiltration Analysis (HYP-004)**
 
 **Purpose:** Determine whether data was actually removed from the environment.
 
@@ -520,7 +518,7 @@ FileSize: 41,822,211 bytes
 
 **Confidence:** High (that exfiltration occurred); Medium (on exact scope of data taken, pending IR follow-up)
 
-## 11.5 Fleet-Wide Discovery / Scope Analysis (HYP-005)
+**11.5 Fleet-Wide Discovery / Scope Analysis (HYP-005)**
 
 **Purpose:** Determine whether the intrusion spread beyond the two confirmed hosts.
 
@@ -538,7 +536,7 @@ FileSize: 41,822,211 bytes
 
 ---
 
-# 12. Data Analysis Techniques Used
+## 12. Data Analysis Techniques Used
 
 **Frequency Analysis** — used to narrow 340 candidate mail-archive messages down to 6 by recipient-count and role-targeting filters (Section 11.1).
 
@@ -594,9 +592,9 @@ FileSize: 41,822,211 bytes
 
 ---
 
-# 13. Hunting Queries
+## 13. Hunting Queries
 
-### Splunk — Low-Recipient External Message with Office/PDF Attachment (HYP-001)
+**Splunk — Low-Recipient External Message with Office/PDF Attachment (HYP-001)**
 
 ```spl
 index=mail_archive direction=inbound
@@ -609,7 +607,7 @@ index=mail_archive direction=inbound
 | table _time, sender, recipient, subject, attachment_name, recipient_count
 ```
 
-### Splunk — New External Destination vs. 60-Day Host Baseline (HYP-002)
+**Splunk — New External Destination vs. 60-Day Host Baseline (HYP-002)**
 
 ```spl
 (index=netflow earliest=-1d dst_ip!=10.0.0.0/8)
@@ -621,7 +619,7 @@ index=mail_archive direction=inbound
 | where isnull(historical_count)
 ```
 
-### Microsoft Sentinel KQL — Unauthorized VLAN Authentication (HYP-003)
+**Microsoft Sentinel KQL — Unauthorized VLAN Authentication (HYP-003)**
 
 ```kql
 SecurityEvent
@@ -634,7 +632,7 @@ SecurityEvent
 | project TimeGenerated, TargetUserName, Computer, IpAddress, LogonType
 ```
 
-### Elastic (EQL) — Archive Creation Followed by Outbound Transfer (HYP-004)
+**Elastic (EQL) — Archive Creation Followed by Outbound Transfer (HYP-004)**
 
 ```eql
 sequence by host.name with maxspan=3h
@@ -642,7 +640,7 @@ sequence by host.name with maxspan=3h
   [network where destination.bytes > 10000000 and network.protocol in ("ftp","ftp-data")]
 ```
 
-### SQL — Product Security VLAN Access Audit
+**SQL — Product Security VLAN Access Audit**
 
 ```sql
 SELECT s.TargetUserName, s.Computer, s.IpAddress, s.LogonTime
@@ -654,7 +652,7 @@ WHERE a.Account IS NULL
 ORDER BY s.LogonTime;
 ```
 
-### Sigma — Office Application Spawning Process from Temp Directory
+**Sigma — Office Application Spawning Process from Temp Directory**
 
 ```yaml
 title: Office Application Spawning Executable from Temp Directory
@@ -676,7 +674,7 @@ falsepositives:
 level: high
 ```
 
-### YARA — Implant Binary (Generic, Post-Discovery)
+**YARA — Implant Binary (Generic, Post-Discovery)**
 
 ```yara
 rule Suspected_QuietLedger_Implant
@@ -692,7 +690,7 @@ rule Suspected_QuietLedger_Implant
 }
 ```
 
-### Sysmon Filter — Run Key Modification from Temp Path
+**Sysmon Filter — Run Key Modification from Temp Path**
 
 ```xml
 <RuleGroup name="Suspicious_RunKey_TempPath" groupRelation="or">
@@ -703,7 +701,7 @@ rule Suspected_QuietLedger_Implant
 </RuleGroup>
 ```
 
-### PowerShell — Manual Run-Key Sweep
+**PowerShell — Manual Run-Key Sweep**
 
 ```powershell
 Get-ItemProperty 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Run' |
@@ -714,7 +712,7 @@ Get-ItemProperty 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Run' |
   }
 ```
 
-### Windows Event Filter — Explicit Credential Logon to Sensitive Server
+**Windows Event Filter — Explicit Credential Logon to Sensitive Server**
 
 ```
 Log: Security
@@ -724,13 +722,13 @@ Filter: TargetServerName IN ("PSVLAN-STG-01","PSVLAN-STG-02")
 
 ---
 
-# 14. Sigma Detection Opportunities
+## 14. Sigma Detection Opportunities
 
-### DET-001 — Office Application Spawning Process from Temp Directory
+**DET-001 — Office Application Spawning Process from Temp Directory**
 
 * Full rule provided in Section 13. **ATT&CK:** T1203, T1204.002. **Severity:** High.
 
-### DET-002 — New External Destination from a Host with No Prior History to That Destination
+**DET-002 — New External Destination from a Host with No Prior History to That Destination**
 
 * **Description:** Flags a host's first-ever connection to an external IP/domain, weighted by absence from a rolling 60-day baseline.
 * **Log Source:** NetFlow, DNS
@@ -738,7 +736,7 @@ Filter: TargetServerName IN ("PSVLAN-STG-01","PSVLAN-STG-02")
 * **ATT&CK Mapping:** T1071
 * **Severity:** Medium (High if the destination also has low reputation/recent registration)
 
-### DET-003 — Authentication to Restricted VLAN Outside Access-Control List
+**DET-003 — Authentication to Restricted VLAN Outside Access-Control List**
 
 * **Description:** Flags any successful authentication to a Product Security VLAN system by an account not present on the documented access-control list.
 * **Log Source:** Windows Security Event Log, VLAN ACL reference table
@@ -746,11 +744,11 @@ Filter: TargetServerName IN ("PSVLAN-STG-01","PSVLAN-STG-02")
 * **ATT&CK Mapping:** T1078, T1021
 * **Severity:** Critical
 
-### DET-004 — Large Password-Protected Archive Creation Followed by Outbound Transfer
+**DET-004 — Large Password-Protected Archive Creation Followed by Outbound Transfer**
 
 * Full rule provided in Section 13 (EQL sequence). **ATT&CK:** T1560.001, T1048. **Severity:** Critical.
 
-### DET-005 — Low-Recipient External Email with Attachment to High-Value Role Group
+**DET-005 — Low-Recipient External Email with Attachment to High-Value Role Group**
 
 * **Description:** Flags inbound external email with fewer than 20 recipients, containing an Office/PDF attachment, where at least one recipient belongs to a defined high-value role group (engineering, provisioning, executive).
 * **Log Source:** Mail gateway/archive
@@ -758,7 +756,7 @@ Filter: TargetServerName IN ("PSVLAN-STG-01","PSVLAN-STG-02")
 * **ATT&CK Mapping:** T1566.001
 * **Severity:** Medium (feeds analyst triage queue, not auto-block)
 
-### DET-006 — Unsigned Binary Execution from User-Writable Directory
+**DET-006 — Unsigned Binary Execution from User-Writable Directory**
 
 * **Description:** Flags execution of unsigned binaries from `%TEMP%`, `%APPDATA%`, or similar user-writable paths.
 * **Log Source:** Sysmon EID 1, EDR
@@ -766,11 +764,11 @@ Filter: TargetServerName IN ("PSVLAN-STG-01","PSVLAN-STG-02")
 * **ATT&CK Mapping:** T1204.002
 * **Severity:** Medium
 
-### DET-007 — Registry Run Key Pointing to Temp/AppData Path
+**DET-007 — Registry Run Key Pointing to Temp/AppData Path**
 
 * Full rule provided in Section 13. **ATT&CK:** T1547.001. **Severity:** High.
 
-### DET-008 — Discovery Command Sequence Shortly After Suspicious Process Creation
+**DET-008 — Discovery Command Sequence Shortly After Suspicious Process Creation**
 
 * **Description:** Flags execution of `ipconfig /all`, `net group`, `whoami /all`, or similar discovery commands within 10 minutes of a DET-001/DET-006 match on the same host.
 * **Log Source:** Sysmon command-line logging (requires fleet-wide command-line logging — see Section 22)
@@ -778,7 +776,7 @@ Filter: TargetServerName IN ("PSVLAN-STG-01","PSVLAN-STG-02")
 * **ATT&CK Mapping:** T1018, T1087
 * **Severity:** Medium
 
-### DET-009 — Legacy OS or Partial-Sysmon-Coverage Host in High-Value Role Group
+**DET-009 — Legacy OS or Partial-Sysmon-Coverage Host in High-Value Role Group**
 
 * **Description:** Compliance detection flagging any host in the engineering/provisioning role group without full Sysmon event-ID coverage (process, network, registry, command-line).
 * **Log Source:** EDR/Sysmon deployment inventory
@@ -788,7 +786,7 @@ Filter: TargetServerName IN ("PSVLAN-STG-01","PSVLAN-STG-02")
 
 ---
 
-# 15. MITRE ATT&CK Mapping
+## 15. MITRE ATT&CK Mapping
 
 | Technique | Sub-technique | Description | Evidence | Confidence | Detection | Mitigation |
 |---|---|---|---|---|---|---|
@@ -806,7 +804,7 @@ Filter: TargetServerName IN ("PSVLAN-STG-01","PSVLAN-STG-02")
 
 ---
 
-# 16. Alerts Reviewed
+## 16. Alerts Reviewed
 
 | Alert Name | Source | Time | Severity | Reason | Disposition | Evidence | Analyst Notes |
 |---|---|---|---|---|---|---|---|
@@ -816,7 +814,7 @@ Filter: TargetServerName IN ("PSVLAN-STG-01","PSVLAN-STG-02")
 
 ---
 
-# 17. Indicators of Compromise
+## 17. Indicators of Compromise
 
 **Host IOCs**
 
@@ -852,7 +850,7 @@ Filter: TargetServerName IN ("PSVLAN-STG-01","PSVLAN-STG-02")
 
 ---
 
-# 18. Indicators of Attack (IOAs)
+## 18. Indicators of Attack (IOAs)
 
 * An external email with an unusually small recipient list, containing an Office or PDF attachment, delivered to at least one member of a defined high-value role group.
 * An Office or PDF-reader application spawning a child process located in a user-writable temp directory within seconds of a document being opened.
@@ -864,7 +862,7 @@ Filter: TargetServerName IN ("PSVLAN-STG-01","PSVLAN-STG-02")
 
 ---
 
-# 19. Timeline Reconstruction
+## 19. Timeline Reconstruction
 
 | Timestamp | Event | Host |
 |---|---|---|
@@ -884,7 +882,7 @@ Filter: TargetServerName IN ("PSVLAN-STG-01","PSVLAN-STG-02")
 
 ---
 
-# 20. Kill Chain Reconstruction
+## 20. Kill Chain Reconstruction
 
 | Stage | Observed Evidence | Logs | Detection (Pre-Hunt) | MITRE Mapping |
 |---|---|---|---|---|
@@ -897,7 +895,7 @@ Filter: TargetServerName IN ("PSVLAN-STG-01","PSVLAN-STG-02")
 
 ---
 
-# 21. Root Cause Analysis
+## 21. Root Cause Analysis
 
 **How compromise occurred:** A small, carefully targeted phishing email bypassed signature-based email and endpoint defenses because the implant and delivery mechanism were novel to this environment's detection content at the time. One of four targeted recipients opened the attachment, triggering silent client-side exploitation and installation of a low-footprint implant that relied on simple persistence and patient, low-frequency C2 to avoid volumetric detection.
 
@@ -909,7 +907,7 @@ Filter: TargetServerName IN ("PSVLAN-STG-01","PSVLAN-STG-02")
 
 ---
 
-# 22. Detection Gaps
+## 22. Detection Gaps
 
 * **Missing logs:** No command-line logging fleet-wide at hunt start; no email-attachment sandbox/detonation logging; no application-level audit trail readily available for the seed-provisioning application beyond the staging server's OS-level logs.
 * **Missing analytics:** No correlation rule linking mail-gateway delivery events to downstream endpoint process-creation anomalies; no elevated-sensitivity detection tier for the Product Security VLAN distinct from general fleet thresholds.
@@ -919,7 +917,7 @@ Filter: TargetServerName IN ("PSVLAN-STG-01","PSVLAN-STG-02")
 
 ---
 
-# 23. Detection Engineering Opportunities
+## 23. Detection Engineering Opportunities
 
 * New correlation rule: mail-gateway attachment-delivery event + downstream Office-process-to-temp-directory child process on the recipient's host within 5 minutes → auto-escalate to Critical (directly closes the Section 21 root-cause gap).
 * Sigma rules DET-001 through DET-009 (Section 14) formally submitted to the detection engineering backlog.
@@ -929,7 +927,7 @@ Filter: TargetServerName IN ("PSVLAN-STG-01","PSVLAN-STG-02")
 
 ---
 
-# 24. Purple Team Opportunities
+## 24. Purple Team Opportunities
 
 * **ATT&CK simulation:** Simulate T1566.001 → T1203 → T1547.001 → T1071 → T1078/T1021 → T1560.001/T1048 end-to-end against a lab-replica environment to validate DET-001 through DET-008 fire as designed.
 * **Atomic Red Team:** Applicable atomics exist for T1547.001 (Run key persistence), T1018/T1087 (discovery), and T1560.001 (archive collection) and should be run against the corporate fleet baseline to validate detection coverage at scale.
@@ -939,7 +937,7 @@ Filter: TargetServerName IN ("PSVLAN-STG-01","PSVLAN-STG-02")
 
 ---
 
-# 25. Threat Hunting Lessons Learned
+## 25. Threat Hunting Lessons Learned
 
 **Analytical mistakes:** The team initially searched the mail archive using only subject-line keyword matching related to the advisory's lure theme, which returned zero results — the actual subject line used slightly different phrasing than the advisory's paraphrase. Pivoting to a structural filter (recipient count + attachment type + recipient role) rather than a content-keyword filter is what actually surfaced the message, and should be the default first approach in future email-based hunts rather than a fallback.
 
@@ -951,7 +949,7 @@ Filter: TargetServerName IN ("PSVLAN-STG-01","PSVLAN-STG-02")
 
 ---
 
-# 26. Recommendations
+## 26. Recommendations
 
 **Immediate**
 * Formally hand off `CORP-ENG-118` and `PSVLAN-STG-02` to Incident Response for full remediation (rebuild from known-good media).
@@ -990,7 +988,7 @@ Filter: TargetServerName IN ("PSVLAN-STG-01","PSVLAN-STG-02")
 
 ---
 
-# 27. Final Hunt Assessment
+## 27. Final Hunt Assessment
 
 **Was the hypothesis validated?** Yes — HYP-001, HYP-002, HYP-003, and HYP-004 were validated with High confidence. HYP-005 was partially validated (confirmed on the two directly-implicated hosts, with a Medium-High-confidence negative finding for the broader fleet, bounded by partial Sysmon coverage).
 
@@ -1010,9 +1008,9 @@ Filter: TargetServerName IN ("PSVLAN-STG-01","PSVLAN-STG-02")
 
 ---
 
-# 28. Appendix
+## 28. Appendix
 
-## 28.1 Complete ATT&CK Matrix Coverage
+**28.1 Complete ATT&CK Matrix Coverage
 
 | Tactic | Technique(s) Observed |
 |---|---|
@@ -1026,36 +1024,36 @@ Filter: TargetServerName IN ("PSVLAN-STG-01","PSVLAN-STG-02")
 | Collection | T1560.001 |
 | Exfiltration | T1048 |
 
-## 28.2 IOC Reference Table
+**28.2 IOC Reference Table**
 
 *(Full hash, domain, and IP values retained under IR-restricted access; summary table provided in Section 17. Full values available to authorized incident responders via the case management system, case ref: SOC-IR-QUIETLEDGER-01.)*
 
-## 28.3 Sigma Rules
+**28.3 Sigma Rules**
 
 See Section 14 for full rule bodies (DET-001 through DET-009).
 
-## 28.4 KQL / Splunk / Elastic Queries
+**28.4 KQL / Splunk / Elastic Queries**
 
 See Section 13 for full query bodies.
 
-## 28.5 PowerShell Reference
+**28.5 PowerShell Reference**
 
 See Section 13.
 
-## 28.6 References
+**28.6 References**
 
 * Partner/sector advisory (internal reference, hunt trigger document)
 * Internal mail archive/compliance journaling system export
 * MITRE ATT&CK for Enterprise matrix (technique mapping)
 * Internal HR-verified role-group and VLAN access-control-list export
 
-## 28.7 Threat Intelligence Sources
+**28.7 Threat Intelligence Sources**
 
 * Partner/sector advisory (primary)
 * Internal mail archive
 * Internal asset/role inventory
 
-## 28.8 Glossary
+**28.8 Glossary**
 
 | Term | Definition |
 |---|---|
