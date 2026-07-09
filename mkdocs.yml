@@ -55,7 +55,7 @@ nav:
   - Blog: https://blog.threathuntlabs.com
   
   - Hunting Case Studies:
-     - Solarwind Supply Chain Attack: case-studies/hunting-the-SolarWinds-supply-chain-attack.md
+     - Stuxnet (2010): case-studies/2010-Stuxnet-Retrospective-Threat-Hunt-Report.md
 
   - Resources: Downloads/threat-hunting-related-document-references.md
 
