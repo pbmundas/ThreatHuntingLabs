@@ -1,6 +1,6 @@
-# Retrospective Threat Hunting Report
-## Engagement: Hunt for Unauthorized Access to Source Code Repositories and Customer Credential/Payment Data — Adobe Systems Inc.
-
+---
+title: "Adobe Breach 2013 Retrospective Threat Hunting Report"
+subtitle: "Engagement: Hunt for Unauthorized Access to Source Code Repositories and Customer Credential/Payment Data- Adobe Systems Inc."
 ---
 
 | Field | Value |
