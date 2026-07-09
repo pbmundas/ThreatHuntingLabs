@@ -1,6 +1,6 @@
-# LinkedIn Breach Retrospective Threat Hunting Report
-### Engagement: Hunt for Unauthorized Access to Member Credential Store — LinkedIn Corporation
-
+---
+title: "LinkedIn Breach Retrospective Threat Hunting Report"
+subtitle: "Hunt for Unauthorized Access to Member Credential Store — LinkedIn Corporation"
 ---
 
 | Field | Value |
