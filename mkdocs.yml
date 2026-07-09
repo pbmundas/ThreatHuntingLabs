@@ -57,6 +57,8 @@ nav:
   - Hunting Case Studies:
      - Stuxnet (2010): case-studies/2010-Stuxnet-Retrospective-Threat-Hunt-Report.md
      - RSA-SecurID (2011): case-studies/2011-RSA-SecurID-Retrospective-Threat-Hunt-Report.md
+     - Linkedin (2012): case-studies/2012-linkedin-threat-hunt-report.md
+     - Adobe (2013): case-studies/2013-adobe-threat-hunt-report.md
 
   - Resources: Downloads/threat-hunting-related-document-references.md
 
