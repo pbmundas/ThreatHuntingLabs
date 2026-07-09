@@ -73,13 +73,8 @@ Initial-hypothesis technique coverage spanned Initial Access (Spearphishing Atta
 
 **Diamond Model**
 
-```mermaid
-graph LR
-    A[Adversary: Unknown / Advanced,<br>espionage-motivated] --- C[Capability: Document exploit,<br>RAT implant,<br>credential harvesting tools]
-    A --- I[Infrastructure: Small set of<br>low-reputation C2 domains,<br>external FTP drop host]
-    C --- V[Victim: Authentication-product<br>vendor, engineering &<br>provisioning-adjacent staff]
-    I --- V
-```
+<img width="50%" alt="Diamond Model" src="https://github.com/user-attachments/assets/bbf59aa8-e1a8-41d6-91b4-4f5af140d255" />
+
 
 **Cyber Kill Chain (Hypothesized, Pre-Hunt)**
 
