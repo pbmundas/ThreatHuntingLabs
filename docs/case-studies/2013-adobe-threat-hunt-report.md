@@ -3,8 +3,6 @@
 
 ---
 
-## Cover Page
-
 | Field | Value |
 |---|---|
 | **Hunt Name** | HUNT-2013-ADBE-SRCCRED |
@@ -16,7 +14,7 @@
 | **Threat Severity** | **Critical** |
 | **Hunt Status** | Closed — Hypothesis Validated (Retrospective) |
 
-### Executive Summary
+## Executive Summary
 
 > This report reconstructs, as a professional retrospective hunt, how a SOC embedded inside Adobe Systems in mid-to-late 2013 could plausibly have detected the intrusion that led to (a) theft of source code for Acrobat, Reader, ColdFusion, ColdFusion Builder, and a portion of Photoshop, and (b) theft of customer data — Adobe IDs, encrypted (not hashed) passwords, password hints, and encrypted payment card records — ultimately affecting tens of millions of active users and, per later analysis, up to roughly 150 million total accounts. Adobe first estimated 2.9 million affected accounts on October 3, 2013, then revised that to approximately 38 million active users, with a further 2016-era retrospective count reaching ~150 million registered accounts once inactive/legacy accounts were included.
 
@@ -28,38 +26,6 @@
 
 ---
 
-## Table of Contents
-
-1. Threat Intelligence Summary
-2. Hunt Objective
-3. Hunt Scope
-4. Hunt Assumptions
-5. Threat Hunting Hypotheses
-6. Environment Overview
-7. Available Data Sources
-8. Hunt Methodology
-9. Hunt Execution Timeline
-10. Log Sources Collected
-11. Detailed Log Analysis
-12. Data Analysis Techniques Used
-13. Hunting Queries
-14. Sigma Detection Opportunities
-15. MITRE ATT&CK Mapping
-16. Alerts Reviewed
-17. Indicators of Compromise
-18. Indicators of Attack (IOAs)
-19. Timeline Reconstruction
-20. Kill Chain Reconstruction
-21. Root Cause Analysis
-22. Detection Gaps
-23. Detection Engineering Opportunities
-24. Purple Team Opportunities
-25. Threat Hunting Lessons Learned
-26. Recommendations
-27. Final Hunt Assessment
-28. Appendix
-
----
 
 ## 1. Threat Intelligence Summary
 
@@ -116,13 +82,8 @@ For this simulated hunt, the SOC's trigger is a **generic threat intelligence ad
 
 ### Diamond Model
 
-```mermaid
-graph LR
-    A[Adversary: Data-aggregator/NW3C-linked criminal group] --> B[Capability: ColdFusion exploitation, web shells]
-    A --> C[Infrastructure: Shared trophy server hosting multi-victim stolen data]
-    B --> D[Victim: Adobe internet-facing app tier -> Source Control + Customer DB]
-    C --> D
-```
+<img width="50%" alt="Diamond Model" src="https://github.com/user-attachments/assets/26d48e8f-7c80-448f-a20d-a7af059a0999" />
+
 
 ### Cyber Kill Chain (Campaign-Level)
 
