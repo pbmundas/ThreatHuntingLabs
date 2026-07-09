@@ -72,13 +72,8 @@ Initial-hypothesis technique coverage spanned Initial Access (Replication Throug
 
 **Diamond Model**
 
-```mermaid
-graph LR
-    A[Adversary: Unknown / Advanced,<br>ICS-capable] --- C[Capability: USB worm,<br>rootkit driver,<br>PLC logic injector]
-    A --- I[Infrastructure: Peer-to-peer<br>USB propagation,<br>minimal external C2]
-    C --- V[Victim: ICS Operator —<br>Step7/WinCC environment,<br>centrifuge/motor process]
-    I --- V
-```
+<img width="50%" alt="Diamond Model" src="https://github.com/user-attachments/assets/b839c523-b738-434e-873d-8f742d8028b9" />
+
 
 **Cyber Kill Chain (Hypothesized, Pre-Hunt)**
 
