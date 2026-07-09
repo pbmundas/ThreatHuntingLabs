@@ -3,8 +3,6 @@ title: "Threat Hunt Report Operation SILENT CENTRIFUGE"
 subtitle: "Retrospective Enterprise Threat Hunt: ICS-Targeting Removable-Media Worm (Stuxnet-Class Activity)"
 ---
 
-# Cover Page
-
 | Field | Value |
 |---|---|
 | **Hunt Name** | Operation SILENT CENTRIFUGE |
@@ -26,7 +24,7 @@ The hunt validated four of five hypotheses, discovered eleven previously unknown
 
 ---
 
-# Table of Contents
+## Table of Contents
 
 1. Threat Intelligence Summary
 2. Hunt Objective
@@ -59,53 +57,53 @@ The hunt validated four of five hypotheses, discovered eleven previously unknown
 
 ---
 
-# 1. Threat Intelligence Summary
+## 1. Threat Intelligence Summary
 
-## Background
+**Background**
 
 The hunt was triggered by an ISAC advisory (sector: industrial manufacturing / critical infrastructure) describing a campaign against organizations that operate Siemens S7-300/S7-400 series PLCs managed via Step7 project software, with WinCC or PCS 7 as the SCADA layer. The advisory noted that affected organizations were not directly internet-facing on the OT side, implying the intrusion vector bridged the IT/OT air gap physically most plausibly via removable media.
 
-## Threat Actor
+**Threat Actor**
 
 No attribution was provided at intake. The hunt was conducted actor-agnostic, focused entirely on behavior rather than attribution, consistent with hypothesis-driven and behavior-driven hunting doctrine.
 
-## Campaign
+**Campaign**
 
 Advisory indicated a multi-month campaign against ICS operators using engineering software from a single named vendor family, with emphasis on facilities running centrifugal or motor-driven industrial processes.
 
-## Objectives (Hypothesized)
+**Objectives (Hypothesized)**
 
 * Espionage against ICS engineering data (Step7 project files, PLC logic, plant configuration).
 * Potential process manipulation / sabotage capability, given the specificity of the targeting.
 
-## Initial Intelligence
+**Initial Intelligence**
 
 * Sector advisory only no file hashes, no IOCs, no C2 infrastructure provided.
 * Advisory referenced "removable media" and "engineering workstation" as likely vectors.
 * No CVE numbers were provided by the source; the hunt team had to independently hypothesize exploitation of unpatched local privilege escalation and code-execution flaws.
 
-## Known TTPs at the Time (as understood by the hunt team pre-investigation)
+**Known TTPs at the Time (as understood by the hunt team pre-investigation)**
 
 * Suspected LNK-file auto-execution from USB media (no CVE confirmed at hunt start).
 * Suspected use of legitimate-looking, potentially stolen code-signing certificates for driver persistence.
 * Suspected targeting of engineering workstations with direct write access to PLC logic.
 
-## Confidence
+**Confidence**
 
 **Moderate** at hunt initiation (single-source sector advisory); confidence increased to **High** as the hunt progressed and independently corroborating host evidence was discovered.
 
-## Intelligence Sources
+**Intelligence Sources**
 
 * Sector ISAC advisory (primary trigger)
 * Internal asset inventory (ICS/OT CMDB)
 * Vendor security bulletins (Siemens ProductCERT feed, reviewed retroactively)
 * Internal EDR, SIEM, and Historian telemetry
 
-## ATT&CK Overview
+**ATT&CK Overview**
 
 Initial-hypothesis technique coverage spanned Initial Access (Replication Through Removable Media), Execution (User Execution: Malicious File), Persistence (Boot or Logon Autostart Execution; Driver-based), Defense Evasion (Signed Binary Proxy Execution, Rootkit), Discovery (System Information Discovery, targeting engineering software), Lateral Movement (Removable Media, SMB), and Impact (ICS: Manipulation of Control / Damage to Property, mapped via the ATT&CK for ICS matrix).
 
-## Diamond Model
+**Diamond Model**
 
 ```mermaid
 graph LR
@@ -115,7 +113,7 @@ graph LR
     I --- V
 ```
 
-## Cyber Kill Chain (Hypothesized, Pre-Hunt)
+**Cyber Kill Chain (Hypothesized, Pre-Hunt)**
 
 | Stage | Hypothesized Activity |
 |---|---|
@@ -129,7 +127,7 @@ graph LR
 
 ---
 
-# 2. Hunt Objective
+## 2. Hunt Objective
 
 **Mission:** Determine whether the organization's ICS-adjacent environment shows evidence of the removable-media-borne, engineering-software-targeting activity described in the sector advisory, and if so, establish full scope, timeline, and impact.
 
@@ -145,7 +143,7 @@ graph LR
 
 ---
 
-# 3. Hunt Scope
+## 3. Hunt Scope
 
 | Category | In Scope |
 |---|---|
@@ -164,7 +162,7 @@ graph LR
 
 ---
 
-# 4. Hunt Assumptions
+## 4. Hunt Assumptions
 
 * The adversary, if present, has already achieved initial access; the hunt does not assume a clean environment.
 * Initial compromise vector is unconfirmed at hunt start USB is the leading hypothesis based on intelligence, not a proven fact.
@@ -175,9 +173,9 @@ graph LR
 
 ---
 
-# 5. Threat Hunting Hypotheses
+## 5. Threat Hunting Hypotheses
 
-### HYP-001 USB-Borne Auto-Execution
+**HYP-001 USB-Borne Auto-Execution**
 
 **Statement:** If an advanced worm is spreading via removable media, then Windows systems should show unusual USB insertion events followed by execution of previously unseen binaries or shortcut (`.LNK`) files, without corresponding user-initiated file-open activity.
 
@@ -199,7 +197,7 @@ graph LR
 
 ---
 
-### HYP-002 Driver-Based Persistence via Anomalous Code Signing
+**HYP-002 Driver-Based Persistence via Anomalous Code Signing**
 
 **Statement:** If the adversary uses a rootkit-style persistence mechanism, then previously unseen kernel drivers will load with code-signing certificates that are inconsistent with the driver's claimed vendor/purpose, or that are otherwise anomalous for this environment.
 
@@ -221,7 +219,7 @@ graph LR
 
 ---
 
-### HYP-003 Unauthorized Step7 Project File / PLC Block Modification
+**HYP-003 Unauthorized Step7 Project File / PLC Block Modification**
 
 **Statement:** If the adversary's objective is process manipulation, then Step7 project files (`.s7p`) or PLC organization blocks will show modification timestamps or content changes outside documented change-control windows, on engineering workstations.
 
@@ -243,7 +241,7 @@ graph LR
 
 ---
 
-### HYP-004 WinCC/SCADA Database Credential Abuse
+**HYP-004 WinCC/SCADA Database Credential Abuse**
 
 **Statement:** If the adversary is leveraging known ICS software weaknesses, then WinCC SQL Server authentication logs will show logon activity using default or hardcoded service credentials from source processes other than the legitimate WinCC application.
 
@@ -265,7 +263,7 @@ graph LR
 
 ---
 
-### HYP-005 Peer-to-Peer / Minimal External C2
+**HYP-005 Peer-to-Peer / Minimal External C2**
 
 **Statement:** If the adversary avoids conventional external C2 (consistent with an air-gap-aware operation), then command-and-control activity, if present, will manifest as LAN-local peer-to-peer communication between infected hosts (e.g., RPC over named pipes) rather than sustained external beaconing.
 
@@ -287,7 +285,7 @@ graph LR
 
 ---
 
-# 6. Environment Overview
+## 6. Environment Overview
 
 **Architecture:** Purdue Model-aligned network with Level 4/5 corporate IT, Level 3 site operations (Historian, WinCC servers), Level 2 supervisory control (engineering workstations, HMI), and Level 0/1 process/PLC layer. A firewall enforces one-way data diode logging from Level 3 to Level 4; however, physical media transfer between IT and engineering workstations is not technically restricted a known, accepted business risk prior to this hunt.
 
@@ -309,7 +307,7 @@ graph LR
 
 ---
 
-# 7. Available Data Sources
+## 7. Available Data Sources
 
 | Source | Purpose | Retention | Quality | Coverage |
 |---|---|---|---|---|
@@ -348,7 +346,7 @@ graph LR
 
 ---
 
-# 8. Hunt Methodology
+## 8. Hunt Methodology
 
 This hunt combined multiple hunting doctrines rather than relying on one:
 
@@ -366,7 +364,7 @@ This hunt combined multiple hunting doctrines rather than relying on one:
 
 ---
 
-# 9. Hunt Execution Timeline
+## 9. Hunt Execution Timeline
 
 | Day | Action | Reason | Evidence | Decision | Next Step |
 |---|---|---|---|---|---|
@@ -385,7 +383,7 @@ This hunt combined multiple hunting doctrines rather than relying on one:
 
 ---
 
-# 10. Log Sources Collected
+## 10. Log Sources Collected
 
 **How collected:** IT-side Sysmon/Windows Event data was pulled directly from Splunk via scheduled searches. OT-side data required manual collection via a jump-host due to the siloed Elastic instance not being forwarding-enabled to the primary SIEM (a gap noted in Section 22). Forensic artifacts (MFT, USN Journal, Amcache, registry hives) were collected live from `ENG-WS-04` and `ENG-WS-06` using standard forensic acquisition tooling, with OT engineering supervision given the sensitivity of touching live engineering endpoints.
 
@@ -401,9 +399,9 @@ This hunt combined multiple hunting doctrines rather than relying on one:
 
 ---
 
-# 11. Detailed Log Analysis
+## 11. Detailed Log Analysis
 
-## 11.1 USB / Removable Media Analysis (HYP-001)
+**11.1 USB / Removable Media Analysis (HYP-001)**
 
 **Purpose:** Determine whether removable media introduced malicious content to any in-scope endpoint.
 
@@ -431,7 +429,7 @@ CreationUtcTime: 2026-04-02 09:14:07.219
 
 **Confidence:** High
 
-## 11.2 Driver / Code-Signing Analysis (HYP-002)
+**11.2 Driver / Code-Signing Analysis (HYP-002)**
 
 **Purpose:** Identify unauthorized kernel-mode persistence.
 
@@ -461,7 +459,7 @@ Hashes: SHA256=3F2A...C91B
 
 **Confidence:** High
 
-## 11.3 Step7 Project File / PLC Block Analysis (HYP-003)
+**11.3 Step7 Project File / PLC Block Analysis (HYP-003)**
 
 **Purpose:** Determine whether engineering/PLC logic was modified outside authorized change control.
 
@@ -487,7 +485,7 @@ Hashes: SHA256=3F2A...C91B
 
 **Confidence:** High
 
-## 11.4 WinCC / SQL Credential Analysis (HYP-004)
+**11.4 WinCC / SQL Credential Analysis (HYP-004)**
 
 **Purpose:** Determine whether the WinCC database layer was abused for access or persistence.
 
@@ -503,7 +501,7 @@ Hashes: SHA256=3F2A...C91B
 
 **Confidence:** Medium (limited by 90-day retention window on part of the OT SQL audit configuration, discovered during this analysis see Section 22)
 
-## 11.5 Peer-to-Peer / Internal Communication Analysis (HYP-005)
+**11.5 Peer-to-Peer / Internal Communication Analysis (HYP-005)**
 
 **Purpose:** Determine the C2/coordination model, if any, between compromised hosts.
 
@@ -531,7 +529,7 @@ EventType: PipeConnected
 
 ---
 
-# 12. Data Analysis Techniques Used
+## 12. Data Analysis Techniques Used
 
 **Frequency Analysis** used to identify the driver-signer anomaly (Section 11.2): the flagged publisher appeared exactly twice in a 4,800-host fleet, versus hundreds of occurrences for every legitimate vendor.
 
@@ -579,9 +577,9 @@ EventType: PipeConnected
 
 ---
 
-# 13. Hunting Queries
+## 13. Hunting Queries
 
-### Splunk USB Mount-to-Execution Correlation (HYP-001)
+**Splunk USB Mount-to-Execution Correlation (HYP-001)**
 
 ```spl
 (index=sysmon EventCode=11 TargetFilename="*.lnk")
@@ -595,7 +593,7 @@ EventType: PipeConnected
 | table host, usb_time, mount_time, TargetFilename
 ```
 
-### Splunk Driver Signer Allowlist Deviation (HYP-002)
+**Splunk Driver Signer Allowlist Deviation (HYP-002)**
 
 ```spl
 index=sysmon EventCode=6
@@ -605,7 +603,7 @@ index=sysmon EventCode=6
 | where count < 3
 ```
 
-### Microsoft Sentinel KQL Named Pipe Peer-to-Peer Detection (HYP-005)
+**Microsoft Sentinel KQL Named Pipe Peer-to-Peer Detection (HYP-005)**
 
 ```kql
 Sysmon
@@ -620,7 +618,7 @@ Sysmon
 | where Computer != Computer1
 ```
 
-### Elastic (EQL) `.s7p` Modification Without Change Ticket (HYP-003)
+**Elastic (EQL) `.s7p` Modification Without Change Ticket (HYP-003)**
 
 ```eql
 file where file.extension in ("s7p","awl","db") and
@@ -628,7 +626,7 @@ file where file.extension in ("s7p","awl","db") and
   not file.path : "C:\\S7Proj\\*\\Backup\\*"
 ```
 
-### SQL WinCC Service Account Source Baseline (HYP-004)
+**SQL WinCC Service Account Source Baseline (HYP-004)
 
 ```sql
 SELECT login_name, client_host_name, application_name, COUNT(*) AS logon_count
@@ -638,7 +636,7 @@ GROUP BY login_name, client_host_name, application_name
 ORDER BY logon_count ASC;
 ```
 
-### Sigma Anomalous Kernel Driver Load
+**Sigma Anomalous Kernel Driver Load**
 
 ```yaml
 title: Kernel Driver Load with Non-Allowlisted Signer
@@ -661,7 +659,7 @@ falsepositives:
 level: high
 ```
 
-### Sysmon Filter LNK Auto-Execution Staging
+**Sysmon Filter LNK Auto-Execution Staging**
 
 ```xml
 <RuleGroup name="USB_LNK_Staging" groupRelation="or">
@@ -674,7 +672,7 @@ level: high
 </RuleGroup>
 ```
 
-### PowerShell Manual USB History Pull
+**PowerShell Manual USB History Pull**
 
 ```powershell
 Get-ItemProperty HKLM:\SYSTEM\CurrentControlSet\Enum\USBSTOR\*\* |
@@ -683,7 +681,7 @@ Get-ItemProperty HKLM:\SYSTEM\CurrentControlSet\Enum\USBSTOR\*\* |
   }}
 ```
 
-### Windows Event Filter Driver Service Creation
+**Windows Event Filter Driver Service Creation**
 
 ```
 Log: System
@@ -694,9 +692,9 @@ Filter: ImagePath NOT IN (approved_driver_paths.csv)
 
 ---
 
-# 14. Sigma Detection Opportunities
+## 14. Sigma Detection Opportunities
 
-### DET-001 USB Mount Followed by Rapid Execution
+**DET-001 USB Mount Followed by Rapid Execution**
 
 * **Description:** Detects execution of a process within 60 seconds of a removable-media mount event.
 * **Detection Logic:** Correlate `DeviceInsert` (EID 6416) with `ProcessCreate` (Sysmon EID 1) within a short time window, parent process `explorer.exe`.
@@ -705,11 +703,11 @@ Filter: ImagePath NOT IN (approved_driver_paths.csv)
 * **ATT&CK Mapping:** T1091, T1204.002
 * **Severity:** High
 
-### DET-002 Non-Allowlisted Kernel Driver Signer
+**DET-002 Non-Allowlisted Kernel Driver Signer**
 
 * Full rule provided in Section 13. **ATT&CK:** T1014, T1553.002. **Severity:** High.
 
-### DET-003 Engineering Project File Modification Outside Change Window
+**DET-003 Engineering Project File Modification Outside Change Window
 
 * **Description:** Flags `.s7p`/`.awl`/`.db` write events not correlated to an open change-management ticket (requires SOAR/ticketing integration).
 * **Log Source:** File integrity monitoring on engineering workstations
@@ -717,7 +715,7 @@ Filter: ImagePath NOT IN (approved_driver_paths.csv)
 * **ATT&CK Mapping:** T0889 (ICS), T0836 (ICS)
 * **Severity:** Critical
 
-### DET-004 New Named-Pipe Communication Edge Between Engineering Hosts
+**DET-004 New Named-Pipe Communication Edge Between Engineering Hosts**
 
 * **Description:** Baseline deviation alert when two engineering workstations establish named-pipe RPC communication for the first time in the observed history window.
 * **Log Source:** Sysmon EID 17/18
@@ -725,7 +723,7 @@ Filter: ImagePath NOT IN (approved_driver_paths.csv)
 * **ATT&CK Mapping:** T1021.003
 * **Severity:** Medium
 
-### DET-005 Rare File Extension Masquerade in Driver Staging Path
+**DET-005 Rare File Extension Masquerade in Driver Staging Path**
 
 * **Description:** Flags files with non-standard extensions (`.pnf`, `.dat`, `.tmp` disguised as driver-related) written to `%WINDIR%\inf\`.
 * **Log Source:** Sysmon EID 11
@@ -733,7 +731,7 @@ Filter: ImagePath NOT IN (approved_driver_paths.csv)
 * **ATT&CK Mapping:** T1036.005 (Masquerading)
 * **Severity:** Medium
 
-### DET-006 WinCC Service Account Authentication from New Source
+**DET-006 WinCC Service Account Authentication from New Source**
 
 * **Description:** Alerts when the WinCC service account authenticates from a `(host, application)` pair not seen in the 180-day baseline.
 * **Log Source:** SQL Server audit log
@@ -741,7 +739,7 @@ Filter: ImagePath NOT IN (approved_driver_paths.csv)
 * **ATT&CK Mapping:** T1078.001
 * **Severity:** High
 
-### DET-007 Removable Media Enabled on Engineering Workstation
+**DET-007 Removable Media Enabled on Engineering Workstation**
 
 * **Description:** Policy-compliance detection alerts if USB mass storage is not disabled via GPO on any host in the engineering-workstation asset group.
 * **Log Source:** GPO/Endpoint configuration state
@@ -749,7 +747,7 @@ Filter: ImagePath NOT IN (approved_driver_paths.csv)
 * **ATT&CK Mapping:** N/A (preventive control)
 * **Severity:** Medium
 
-### DET-008 PLC Block Checksum Drift
+**DET-008 PLC Block Checksum Drift**
 
 * **Description:** Periodic automated checksum comparison of deployed PLC organization blocks against the last known-good, vendor-tooling baseline.
 * **Log Source:** PLC export/checksum job (new capability, see Section 22)
@@ -757,7 +755,7 @@ Filter: ImagePath NOT IN (approved_driver_paths.csv)
 * **ATT&CK Mapping:** T0889 (ICS)
 * **Severity:** Critical
 
-### DET-009 Legacy OS in Engineering Asset Group Missing EDR Coverage
+**DET-009 Legacy OS in Engineering Asset Group Missing EDR Coverage**
 
 * **Description:** Compliance detection flagging any engineering-workstation asset without full EDR/Sysmon coverage.
 * **Log Source:** EDR deployment inventory
@@ -767,7 +765,7 @@ Filter: ImagePath NOT IN (approved_driver_paths.csv)
 
 ---
 
-# 15. MITRE ATT&CK Mapping
+## 15. MITRE ATT&CK Mapping
 
 | Technique | Sub-technique | Description | Evidence | Confidence | Detection | Mitigation |
 |---|---|---|---|---|---|---|
@@ -784,7 +782,7 @@ Filter: ImagePath NOT IN (approved_driver_paths.csv)
 
 ---
 
-# 16. Alerts Reviewed
+## 16. Alerts Reviewed
 
 | Alert Name | Source | Time | Severity | Reason | Disposition | Evidence | Analyst Notes |
 |---|---|---|---|---|---|---|---|
@@ -795,7 +793,7 @@ Filter: ImagePath NOT IN (approved_driver_paths.csv)
 
 ---
 
-# 17. Indicators of Compromise
+## 17. Indicators of Compromise
 
 **Host IOCs**
 
@@ -847,7 +845,7 @@ Filter: ImagePath NOT IN (approved_driver_paths.csv)
 
 ---
 
-# 18. Indicators of Attack (IOAs)
+## 18. Indicators of Attack (IOAs)
 
 Rather than static artifacts, these behavioral patterns are the durable takeaway from this hunt:
 
@@ -859,7 +857,7 @@ Rather than static artifacts, these behavioral patterns are the durable takeaway
 
 ---
 
-# 19. Timeline Reconstruction
+## 19. Timeline Reconstruction
 
 | Timestamp (UTC) | Event | Host |
 |---|---|---|
@@ -880,7 +878,7 @@ Rather than static artifacts, these behavioral patterns are the durable takeaway
 
 ---
 
-# 20. Kill Chain Reconstruction
+## 20. Kill Chain Reconstruction
 
 | Stage | Observed Evidence | Logs | Detection (Pre-Hunt) | MITRE Mapping |
 |---|---|---|---|---|
@@ -892,7 +890,7 @@ Rather than static artifacts, these behavioral patterns are the durable takeaway
 
 ---
 
-# 21. Root Cause Analysis
+## 21. Root Cause Analysis
 
 **How compromise occurred:** A removable media device, introduced to an engineering workstation with USB mass storage enabled (no policy restriction in place), triggered auto-execution of a staged payload. The workstation's local administrative rights (standard configuration for engineering staff needing to interact with PLC hardware) allowed kernel driver installation without additional privilege escalation being required.
 
@@ -904,7 +902,7 @@ Rather than static artifacts, these behavioral patterns are the durable takeaway
 
 ---
 
-# 22. Detection Gaps
+## 22. Detection Gaps
 
 * **Missing logs:** No PLC-level diagnostic/audit logging existed prior to this hunt; no centralized USB device-history logging; OT-side SQL audit retention was shorter (90 days) than the IT-side standard (180 days).
 * **Missing analytics:** No correlation rule linking EDR driver-load alerts to same-host USB-execution alerts within a short time window this single correlation rule would likely have caught this intrusion at Day 1.
@@ -914,7 +912,7 @@ Rather than static artifacts, these behavioral patterns are the durable takeaway
 
 ---
 
-# 23. Detection Engineering Opportunities
+## 23. Detection Engineering Opportunities
 
 * New correlation rule: EDR driver-load alert + USB-execution alert on the same host within 10 minutes → auto-escalate to Critical (directly closes the Section 21 root-cause gap).
 * Sigma rules DET-001 through DET-009 (Section 14) formally submitted to the detection engineering backlog.
@@ -924,7 +922,7 @@ Rather than static artifacts, these behavioral patterns are the durable takeaway
 
 ---
 
-# 24. Purple Team Opportunities
+## 24. Purple Team Opportunities
 
 * **ATT&CK simulation:** Simulate T1091 → T1014 → T0889 chain end-to-end in a lab-replica engineering environment (never against production PLCs) to validate DET-001 through DET-008 actually fire as designed.
 * **Atomic Red Team:** Applicable atomics exist for T1091 (removable media) and T1553.002 (code signing abuse) and should be run against the corporate IT fleet baseline; ICS-specific stages require a dedicated lab environment rather than atomics against live OT.
@@ -934,7 +932,7 @@ Rather than static artifacts, these behavioral patterns are the durable takeaway
 
 ---
 
-# 25. Threat Hunting Lessons Learned
+## 25. Threat Hunting Lessons Learned
 
 **Analytical mistakes:** Early in the hunt, the team treated HYP-001 through HYP-005 as fully independent tracks; the strongest evidence only emerged once the team began actively cross-pivoting findings between hypotheses (Day 6 onward), rather than waiting to finish each hypothesis in isolation before starting the next.
 
@@ -946,7 +944,7 @@ Rather than static artifacts, these behavioral patterns are the durable takeaway
 
 ---
 
-# 26. Recommendations
+## 26. Recommendations
 
 **Immediate**
 * Formally hand off `ENG-WS-04` and `ENG-WS-06` to Incident Response for full remediation (rebuild from known-good media; do not simply remove the identified drivers).
@@ -985,7 +983,7 @@ Rather than static artifacts, these behavioral patterns are the durable takeaway
 
 ---
 
-# 27. Final Hunt Assessment
+## 27. Final Hunt Assessment
 
 **Was the hypothesis validated?** Yes HYP-001, HYP-002, HYP-003, and HYP-005 (partially) were validated with High confidence. HYP-004 was tested and formally closed as not validated.
 
@@ -1005,9 +1003,9 @@ Rather than static artifacts, these behavioral patterns are the durable takeaway
 
 ---
 
-# 28. Appendix
+## 28. Appendix
 
-## 28.1 Complete ATT&CK Matrix Coverage (Enterprise + ICS)
+**28.1 Complete ATT&CK Matrix Coverage (Enterprise + ICS)**
 
 | Tactic | Technique(s) Observed |
 |---|---|
@@ -1018,36 +1016,36 @@ Rather than static artifacts, these behavioral patterns are the durable takeaway
 | Lateral Movement | T1021.003 |
 | Collection / Impact (ICS) | T0889, T0836 |
 
-## 28.2 IOC Reference Table
+**28.2 IOC Reference Table**
 
 *(Full hash and certificate-thumbprint values retained under IR-restricted access; summary table provided in Section 17. Full values available to authorized incident responders via the case management system, case ref: SOC-IR-STUXNET-RETRO-01.)*
 
-## 28.3 Sigma Rules
+**28.3 Sigma Rules**
 
 See Section 14 for full rule bodies (DET-001 through DET-009).
 
-## 28.4 KQL / Splunk / Elastic Queries
+**28.4 KQL / Splunk / Elastic Queries**
 
 See Section 13 for full query bodies.
 
-## 28.5 PowerShell Reference
+**28.5 PowerShell Reference**
 
 See Section 13.
 
-## 28.6 References
+**28.6 References**
 
 * Sector ISAC advisory (internal reference, hunt trigger document)
 * Siemens ProductCERT security bulletins (reviewed for context on Step7/WinCC software behavior)
 * MITRE ATT&CK for Enterprise and MITRE ATT&CK for ICS matrices (technique mapping)
 * Internal change-management ticketing system export (engineering change log, 180-day window)
 
-## 28.7 Threat Intelligence Sources
+**28.7 Threat Intelligence Sources**
 
 * Sector ISAC advisory (primary)
 * Internal asset/CMDB inventory
 * Vendor security bulletins
 
-## 28.8 Glossary
+**28.8 Glossary**
 
 | Term | Definition |
 |---|---|
