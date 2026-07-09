@@ -51,14 +51,14 @@ nav:
       - Solo Hunter to Enterprise: Start-Hunting/threat-hunting-program-models.md
       - Reporting: Start-Hunting/threat-hunting-documentation.md
       - Telemetry & Logs to collect: Start-Hunting/threat-hunting-device-logs-telemetry-details.html
-
+      
+  - Blog: https://blog.threathuntlabs.com
+  
   - Hunting Case Studies:
      - Solarwind Supply Chain Attack: case-studies/hunting-the-SolarWinds-supply-chain-attack.md
 
-  - Resources:
-     - Download Section: Downloads/threat-hunting-related-document-references.md
+  - Resources: Downloads/threat-hunting-related-document-references.md
 
-  - 🔥Learn Cyber Attacks:
-      - Attacks: learn-known-cyber-attacks/index.html
+  - 🔥Learn Cyber Attacks: learn-known-cyber-attacks/index.html
       
   - 🎯Live Threat Intel: https://intel.threathuntlabs.com
