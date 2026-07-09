@@ -24,39 +24,6 @@ The hunt validated four of five hypotheses, discovered eleven previously unknown
 
 ---
 
-## Table of Contents
-
-1. Threat Intelligence Summary
-2. Hunt Objective
-3. Hunt Scope
-4. Hunt Assumptions
-5. Threat Hunting Hypotheses
-6. Environment Overview
-7. Available Data Sources
-8. Hunt Methodology
-9. Hunt Execution Timeline
-10. Log Sources Collected
-11. Detailed Log Analysis
-12. Data Analysis Techniques Used
-13. Hunting Queries
-14. Sigma Detection Opportunities
-15. MITRE ATT&CK Mapping
-16. Alerts Reviewed
-17. Indicators of Compromise
-18. Indicators of Attack (IOAs)
-19. Timeline Reconstruction
-20. Kill Chain Reconstruction
-21. Root Cause Analysis
-22. Detection Gaps
-23. Detection Engineering Opportunities
-24. Purple Team Opportunities
-25. Threat Hunting Lessons Learned
-26. Recommendations
-27. Final Hunt Assessment
-28. Appendix
-
----
-
 ## 1. Threat Intelligence Summary
 
 **Background**
