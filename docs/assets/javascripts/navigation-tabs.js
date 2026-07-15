@@ -4,12 +4,19 @@ document.addEventListener("DOMContentLoaded", () => {
   );
 
   menuLinks.forEach((link) => {
-    const href = link.getAttribute("href");
+    const url = new URL(link.href, window.location.href);
+    const path = url.pathname.replace(/\/$/, "");
+    const opensInNewTab =
+      url.hostname === "blog.threathuntlabs.com" ||
+      url.hostname === "intel.threathuntlabs.com" ||
+      path === "/learn-known-cyber-attacks";
 
-    // Keep section toggles and same-page anchors in the current tab.
-    if (!href || href.startsWith("#") || href.startsWith("javascript:")) return;
-
-    link.setAttribute("target", "_blank");
-    link.setAttribute("rel", "noopener noreferrer");
+    if (opensInNewTab) {
+      link.setAttribute("target", "_blank");
+      link.setAttribute("rel", "noopener noreferrer");
+    } else {
+      link.removeAttribute("target");
+      link.removeAttribute("rel");
+    }
   });
 });
