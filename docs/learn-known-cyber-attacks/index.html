@@ -1,95 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Known Attacks Navigator - Prasannakumar B Mundas</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.18.9/babel.min.js"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        .card-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            padding: 20px;
-        }
-        .card {
-            background: #fff;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            padding: 15px;
-            text-align: center;
-            transition: transform 0.2s;
-        }
-        .card:hover {
-            transform: scale(1.05);
-        }
-        .red-box {
-            border: 2px solid red;
-            padding: 20px;
-            margin: 20px 0;
-            background-color: #ffebee;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Explore major cyberattacks through MITRE ATT&CK mappings, attack timelines, IOCs, and technical context.">
+  <title>Known Attacks | Threat Hunt Labs</title>
+  <link rel="stylesheet" href="site.css">
+  <style>
+    .landing { width: min(100% - 2rem, 1200px); margin: 0 auto; padding: 1.25rem 0 4rem; }
+    .topbar { display:flex; align-items:center; justify-content:space-between; gap:1rem; min-height:64px; border-bottom:1px solid var(--border); }
+    .brand { display:flex; align-items:center; gap:.7rem; color:var(--text); font-weight:800; letter-spacing:-.02em; text-decoration:none; }
+    .mark { display:grid; place-items:center; width:32px; height:32px; border:1px solid #7b2727; border-radius:7px; background:var(--accent-soft); color:var(--accent); font-size:.75rem; }
+    .topbar span:last-child { color:var(--muted); font-size:.78rem; letter-spacing:.08em; text-transform:uppercase; }
+    .hero { padding:clamp(4rem, 10vw, 8rem) 0 3.5rem; border-bottom:1px solid var(--border); }
+    .eyebrow { margin:0 0 1rem; color:var(--accent); font-size:.75rem; font-weight:800; letter-spacing:.14em; text-transform:uppercase; }
+    h1 { max-width:850px; margin:0; font-size:clamp(2.7rem, 7vw, 5.8rem); line-height:.94; letter-spacing:-.065em; }
+    .intro { max-width:720px; margin:1.75rem 0 0; color:var(--muted); font-size:clamp(1rem, 2vw, 1.18rem); }
+    .notice { display:flex; gap:.8rem; max-width:880px; margin-top:2rem; padding:1rem 1.1rem; border-left:2px solid var(--accent); background:var(--accent-soft); color:#c5ccd7; font-size:.88rem; }
+    .notice strong { color:var(--text); white-space:nowrap; }
+    .section-head { display:flex; align-items:end; justify-content:space-between; gap:1rem; padding:3.5rem 0 1.5rem; }
+    .section-head h2 { margin:0; font-size:clamp(1.55rem, 3vw, 2.25rem); letter-spacing:-.035em; }
+    .section-head p { margin:0; color:var(--muted); font-size:.9rem; }
+    .grid { display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); border-top:1px solid var(--border); border-left:1px solid var(--border); }
+    .card { position:relative; min-height:150px; padding:1.25rem; border-right:1px solid var(--border); border-bottom:1px solid var(--border); background:rgba(12,15,20,.68); color:var(--text); text-decoration:none; transition:background .18s ease, transform .18s ease; }
+    .card:hover { z-index:1; background:var(--surface-2); color:var(--text); transform:translateY(-3px); box-shadow:0 16px 30px rgba(0,0,0,.32); }
+    .year { display:block; color:var(--accent); font-size:.72rem; font-weight:800; letter-spacing:.12em; }
+    .name { display:block; margin-top:1.7rem; font-size:1.12rem; font-weight:750; line-height:1.2; }
+    .arrow { position:absolute; right:1.15rem; bottom:1rem; color:#606b7a; }
+    footer { display:flex; justify-content:space-between; gap:1rem; padding:2rem 0 0; color:#768090; font-size:.78rem; }
+    @media(max-width:800px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.topbar span:last-child{display:none}}
+    @media(max-width:520px){.landing{width:min(100% - 1.25rem,1200px)}.hero{padding-top:3.75rem}.section-head{align-items:start;flex-direction:column}.grid{grid-template-columns:1fr}.card{min-height:124px}.name{margin-top:1.25rem}.notice{flex-direction:column}.notice strong{white-space:normal}footer{flex-direction:column}}
+  </style>
 </head>
-<body class="bg-gray-100 font-sans">
-    <div id="root"></div>
-
-    <script type="text/babel">
-        const App = () => {
-            const attacks = [
-                "Stuxnet (2010)", "RSA SecurID (2011)", "LinkedIn (2012)", "Adobe (2013)", "Target (2013)", "Yahoo (2013-2014)", "Colonial Pipeline (2014)", 
-                "Sony Pictures (2014)", "Ukrainian Power Grid (2015)", "Bangladesh Bank (2016)", "DNC Hack (2016)", "Uber (2016)", "CCleaner (2017)", "Deloitte (2017)", "Equifax (2017)", "Maersk (2017)", 
-                "WannaCry (2017)", "NotPetya (2017)",  "British Airways (2018)", "Marriott (2018)", "Capital One (2019)", "FireEye Breach (2020)", "MGM Resorts (2020)",
-                "SolarWinds (2020)", "Twitter Celebrity Hacks (2020)", "Kaseya-REvil (2021)", "Log4Shell Exploits (2021)", "Change Healthcare (2024)", "Dropbox (2024)", "Synnovis-NHS (2024)" 
-            ];
-
-            return (
-                <div className="container mx-auto p-4">
-                    <a href="../." className="text-blue-600 hover:underline absolute top-4 right-4">Back to ThreatHuntLabs</a>
-                    <h1 className="text-3xl font-bold text-center mb-6">Attack Navigator</h1>
-                    <div className="red-box">
-                        <p>This web application is an invaluable resource for cybersecurity enthusiasts seeking to deepen their understanding of historical cyber attacks, such as famous attack stuxnet in 2010, by mapping them to MITRE ATT&CK tactics, techniques, and procedures (TTPs). It provides a technical breakdown of what happened, where vulnerabilities were exploited, and how threat actors executed their campaigns, from initial access to exfiltration.</p>
-                        <p>Through an interactive flowchart, users can explore the attack flow, visualize the sequence of techniques, and dive into detailed metadata, including indicators of compromise (IOCs) and affected assets. As the application grows with more attack scenarios, it offers a dynamic platform for learning the start-to-end progression of cyber threats, enabling enthusiasts to analyze TTPs, understand adversary behavior, and enhance their defensive strategies.</p>
-                        <p>Note: This is based on gathered information and data might not be accurrate but this is just to help people who are interested to learn real-world attack patterns.</p>
-                    </div>
-                    <div className="card-grid">
-                        {attacks.map((attack, index) => (
-                            <a href={`${attack.toLowerCase().replace(/ /g, '-')}.html`} key={index} className="card">
-                                <h2 className="text-xl font-semibold">{attack}</h2>
-                            </a>
-                        ))}
-                    </div>
-                </div>
-            );
-        };
-
-        const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<App />);
-    </script>
+<body>
+  <main class="landing">
+    <header class="topbar"><a class="brand" href="index.html"><span class="mark">THL</span> Threat Hunt Labs</a><span>Known Attacks Archive</span></header>
+    <section class="hero">
+      <p class="eyebrow">Adversary intelligence / case archive</p>
+      <h1>Study the attacks that changed security.</h1>
+      <p class="intro">Explore major cyber incidents through interactive MITRE ATT&amp;CK flows, technical timelines, indicators of compromise, and defensive lessons.</p>
+      <div class="notice"><strong>Research note</strong><span>This educational archive is compiled from publicly available reporting. Details may be incomplete or disputed; validate findings before using them in operational decisions.</span></div>
+    </section>
+    <section aria-labelledby="archive-title">
+      <div class="section-head"><h2 id="archive-title">Attack index</h2><p>30 documented incidents · 2010—2024</p></div>
+      <div class="grid" id="attack-grid"></div>
+    </section>
+    <footer><span>Threat Hunt Labs</span><span>Built for defenders, analysts, and curious minds.</span></footer>
+  </main>
+  <script>
+    const attacks = [
+      ["Stuxnet","2010","stuxnet-(2010).html"],["RSA SecurID","2011","rsa-securid-(2011).html"],["LinkedIn","2012","linkedin-(2012).html"],["Adobe","2013","adobe-(2013).html"],["Target","2013","target-(2013).html"],["Yahoo","2013–2014","yahoo-(2013-2014).html"],["Colonial Pipeline","2014","colonial-pipeline-(2014).html"],["Sony Pictures","2014","sony-pictures-(2014).html"],["Ukrainian Power Grid","2015","ukrainian-power-grid-(2015).html"],["Bangladesh Bank","2016","bangladesh-bank-(2016).html"],["DNC Hack","2016","dnc-hack-(2016).html"],["Uber","2016","uber-(2016).html"],["CCleaner","2017","ccleaner-(2017).html"],["Deloitte","2017","deloitte-(2017).html"],["Equifax","2017","equifax-(2017).html"],["Maersk","2017","maersk-(2017).html"],["WannaCry","2017","wannacry-(2017).html"],["NotPetya","2017","notpetya-(2017).html"],["British Airways","2018","british-airways-(2018).html"],["Marriott","2018","marriott-(2018).html"],["Capital One","2019","capital-one-(2019).html"],["FireEye Breach","2020","fireeye-breach-(2020).html"],["MGM Resorts","2020","mgm-resorts-(2020).html"],["SolarWinds","2020","solarwinds-(2020).html"],["Twitter Celebrity Hacks","2020","twitter-celebrity-hacks-(2020).html"],["Kaseya / REvil","2021","kaseya-revil-(2021).html"],["Log4Shell Exploits","2021","log4shell-exploits-(2021).html"],["Change Healthcare","2024","change-healthcare-(2024).html"],["Dropbox","2024","dropbox-(2024).html"],["Synnovis / NHS","2024","synnovis-nhs-(2024).html"]
+    ];
+    document.getElementById('attack-grid').innerHTML = attacks.map(([name,year,href]) => `<a class="card" href="${href}"><span class="year">${year}</span><span class="name">${name}</span><span class="arrow" aria-hidden="true">↗</span></a>`).join('');
+  </script>
 </body>
-
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

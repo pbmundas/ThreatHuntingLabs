@@ -10,7 +10,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis-network.min.css" rel="stylesheet" type="text/css" />
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="site.css">
 </head>
 <body class="bg-gray-100 font-sans">
     <div id="root"></div>
@@ -188,21 +187,6 @@
                     }
                 });
 
-				// --- Custom manual edge: Lateral Movement → Collection ---
-				const latMoveNode = mitreData.techniques.findIndex(t => t.tactic === "lateral-movement") + 1;
-				const collNode    = mitreData.techniques.findIndex(t => t.tactic === "collection") + 1;
-
-				if (latMoveNode > 0 && collNode > 0) {
-					edges.push({
-						from: latMoveNode,
-						to: collNode,
-						arrows: "to",
-						color: { color: "green" },
-						width: 2
-					});
-				}
-
-
                 const container = flowchartRef.current;
                 const data = { nodes: new vis.DataSet(nodes), edges: new vis.DataSet(edges) };
                 const options = {
@@ -271,134 +255,5 @@
         const root = ReactDOM.createRoot(document.getElementById('root'));
         root.render(<App />);
     </script>
-	<div class="mt-8 p-4 bg-white rounded-md shadow space-y-6">
-
-  <!-- Attack Timeline -->
-  <section>
-	<!-- Attack Timeline -->
-        <h2 class="text-2xl font-semibold mb-4">Attack Timeline</h2>
-        <div class="overflow-x-auto mb-8">
-            <table class="min-w-full bg-white border border-gray-300">
-                <thead>
-                    <tr class="bg-gray-200">
-                        <th class="py-2 px-4 border-b">Date/Time</th>
-                        <th class="py-2 px-4 border-b">Action</th>
-                        <th class="py-2 px-4 border-b">Actor/Details</th>
-                        <th class="py-2 px-4 border-b">Evidence/Impact</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td class="py-2 px-4 border-b">September 2013</td>
-                        <td class="py-2 px-4 border-b">Initial access: Phishing email compromises Fazio Mechanical’s credentials.</td>
-                        <td class="py-2 px-4 border-b">Russian cybercriminals</td>
-                        <td class="py-2 px-4 border-b">Stolen vendor credentials used to access Target’s network.</td>
-                    </tr>
-                    <tr>
-                        <td class="py-2 px-4 border-b">November 12, 2013</td>
-                        <td class="py-2 px-4 border-b">Malware deployment: BlackPOS installed on Target’s POS systems.</td>
-                        <td class="py-2 px-4 border-b">Attackers</td>
-                        <td class="py-2 px-4 border-b">Malware scraped card data from POS memory.</td>
-                    </tr>
-                    <tr>
-                        <td class="py-2 px-4 border-b">November 27, 2013</td>
-                        <td class="py-2 px-4 border-b">Data collection begins: BlackPOS captures 40 million card records.</td>
-                        <td class="py-2 px-4 border-b">Attackers</td>
-                        <td class="py-2 px-4 border-b">Captured track data, CVV, PINs during holiday shopping season.</td>
-                    </tr>
-                    <tr>
-                        <td class="py-2 px-4 border-b">November 30, 2013</td>
-                        <td class="py-2 px-4 border-b">FireEye alerts detect malware activity; alerts ignored by Target.</td>
-                        <td class="py-2 px-4 border-b">FireEye/Target</td>
-                        <td class="py-2 px-4 border-b">Missed opportunity to stop breach early.</td>
-                    </tr>
-                    <tr>
-                        <td class="py-2 px-4 border-b">December 2, 2013</td>
-                        <td class="py-2 px-4 border-b">Data exfiltration: Card data moved to internal staging server, then to external FTP servers.</td>
-                        <td class="py-2 px-4 border-b">Attackers</td>
-                        <td class="py-2 px-4 border-b">Data sent to Russian servers; 70 million customer records stolen.</td>
-                    </tr>
-                    <tr>
-                        <td class="py-2 px-4 border-b">December 12, 2013</td>
-                        <td class="py-2 px-4 border-b">U.S. Department of Justice notifies Target of breach after card data appears on black market.</td>
-                        <td class="py-2 px-4 border-b">DOJ/Target</td>
-                        <td class="py-2 px-4 border-b">Investigation confirms compromise; POS systems targeted.</td>
-                    </tr>
-                    <tr>
-                        <td class="py-2 px-4 border-b">December 15, 2013</td>
-                        <td class="py-2 px-4 border-b">Malware removed from most POS systems; breach contained.</td>
-                        <td class="py-2 px-4 border-b">Target</td>
-                        <td class="py-2 px-4 border-b">Data collection halted; remediation begins.</td>
-                    </tr>
-                    <tr>
-                        <td class="py-2 px-4 border-b">December 19, 2013</td>
-                        <td class="py-2 px-4 border-b">Target publicly announces breach, confirming 40 million cards affected.</td>
-                        <td class="py-2 px-4 border-b">Target</td>
-                        <td class="py-2 px-4 border-b">Password resets, customer notifications, credit monitoring offered.</td>
-                    </tr>
-                    <tr>
-                        <td class="py-2 px-4 border-b">January 10, 2014</td>
-                        <td class="py-2 px-4 border-b">Scope expanded: 70 million customer records also stolen.</td>
-                        <td class="py-2 px-4 border-b">Target</td>
-                        <td class="py-2 px-4 border-b">Total impact: $252M in costs, $18.5M settlement in 2017.</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <!-- Dwell Time Analysis -->
-        <h2 class="text-2xl font-semibold mb-4">Dwell Time Analysis</h2>
-        <p class="mb-4">Dwell time was approximately 60-90 days (September to December 12, 2013), the period attackers operated undetected in Target’s network, allowing credential theft, malware deployment, and data exfiltration.</p>
-        <div class="overflow-x-auto mb-8">
-            <table class="min-w-full bg-white border border-gray-300">
-                <thead>
-                    <tr class="bg-gray-200">
-                        <th class="py-2 px-4 border-b">Step 1: Initial Access (September)</th>
-                        <th class="py-2 px-4 border-b">Step 2: Lateral Movement (November)</th>
-                        <th class="py-2 px-4 border-b">Step 3: Collection (Nov-Dec)</th>
-                        <th class="py-2 px-4 border-b">Step 4: Exfiltration (December)</th>
-                        <th class="py-2 px-4 border-b">Step 5: Detection (December 12)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td class="py-2 px-4 border-b">Phishing email compromised vendor credentials. <br><strong>What went wrong</strong>: No two-factor authentication for vendors.</td>
-                        <td class="py-2 px-4 border-b">Used credentials to access POS systems via network. <br><strong>Factor</strong>: No network segmentation.</td>
-                        <td class="py-2 px-4 border-b">BlackPOS scraped 40 million card records from POS. <br><strong>Factor</strong>: No real-time malware detection.</td>
-                        <td class="py-2 px-4 border-b">Exfiltrated data via FTP to Russian servers. <br><strong>Factor</strong>: No egress filtering or DLP.</td>
-                        <td class="py-2 px-4 border-b">DOJ alert after card data appeared on black market. <br><strong>Total time</strong>: Enabled theft of 110 million records.</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <p class="mb-4"><strong>Dwell Time Insight</strong>: The dwell time was like a thief operating in a store’s backroom, unnoticed due to ignored alerts. Experts: Median dwell time in 2013 was ~150 days (per Mandiant); Target’s 60-90 days was typical but costly due to POS targeting and lack of response to alerts.</p>
-
-        <!-- Learnings -->
-        <h2 class="text-2xl font-semibold mb-4">Learnings</h2>
-        <div class="overflow-x-auto">
-            <table class="min-w-full bg-white border border-gray-300">
-                <thead>
-                    <tr class="bg-gray-200">
-                        <th class="py-2 px-4 border-b">Root Cause Analysis</th>
-                        <th class="py-2 px-4 border-b">Impact Assessment</th>
-                        <th class="py-2 px-4 border-b">Detection Opportunities</th>
-                        <th class="py-2 px-4 border-b">Response and Remediation</th>
-                        <th class="py-2 px-4 border-b">Attribution Analysis</th>
-                        <th class="py-2 px-4 border-b">Lessons Learned</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td class="py-2 px-4 border-b"><strong>Using 5 Whys</strong>: Why breached? Vendor credential theft. Why stolen? Phishing with no 2FA. Why no 2FA? Weak vendor security policies. Why weak? No supply chain audits. Why no audits? Prioritized operations over security. <br> <strong>Other causes</strong>: No network segmentation, ignored FireEye alerts, no DLP for exfiltration. <br> <strong>Beginners</strong>: Root causes find failure points. <br> <strong>Experts</strong>: Fishbone factors: People (vendor oversight), Process (no 2FA), Technology (no DLP).</td>
-                        <td class="py-2 px-4 border-b"><strong>Data</strong>: 40 million cards, 70 million customer records. <br> <strong>Financial</strong>: $252M in costs, $18.5M settlement. <br> <strong>Reputational</strong>: Trust erosion; CEO resignation. <br> <strong>Regulatory</strong>: Increased scrutiny; PCI DSS violations. <br> <strong>Beginners</strong>: Impacts hit wallets and trust. <br> <strong>Experts</strong>: BIA metrics: RTO/RPO violated due to delayed response.</td>
-                        <td class="py-2 px-4 border-b"><strong>Missed</strong>: FireEye alerts ignored; phishing could have been caught with email filters; exfiltration with DLP. <br> <strong>Opportunities</strong>: Deploy 2FA for vendors, monitor POS with EDR, use DLP for egress. <br> <strong>Failures</strong>: No alert triage, no network segmentation. <br> <strong>Beginners</strong>: Detection is like a security guard. <br> <strong>Experts</strong>: Sigma rule example: <code>detection: logsource: category: pos | selection: event: memory_scrape AND Process: BlackPOS</code>.</td>
-                        <td class="py-2 px-4 border-b"><strong>Immediate</strong>: Removed malware, notified customers, offered credit monitoring. <br> <strong>Long-term</strong>: Implemented 2FA, network segmentation, DLP, enhanced alert response. <br> <strong>Beginners</strong>: Response is cleanup. <br> <strong>Experts</strong>: Followed NIST IR: Identification (December), Containment (December), Eradication (2014).</td>
-                        <td class="py-2 px-4 border-b"><strong>Confirmed</strong>: Russian cybercriminals (per FireEye). <br> <strong>TTPs</strong>: Phishing, BlackPOS, FTP exfiltration align with cybercrime groups. <br> <strong>Beginners</strong>: Attribution is identifying culprits. <br> <strong>Experts</strong>: TTPs match Carbanak-like groups; IOCs include BlackPOS hashes.</td>
-                        <td class="py-2 px-4 border-b">Enforce 2FA for vendors. <br> Segment networks. <br> Deploy DLP and EDR. <br> Prioritize alert response. <br> Audit supply chain. <br> <strong>Beginners</strong>: Secure third-party access. <br> <strong>Experts</strong>: Adopt MITRE ATT&CK for retail defense.</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
 </body>
 </html>
-

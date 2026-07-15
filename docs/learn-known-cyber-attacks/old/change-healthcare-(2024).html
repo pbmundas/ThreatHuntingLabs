@@ -10,7 +10,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis-network.min.css" rel="stylesheet" type="text/css" />
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="site.css">
 </head>
 <body class="bg-gray-100 font-sans">
     <div id="root"></div>
@@ -176,22 +175,6 @@
                     }
                 });
 
-				// Add explicit cross-tactic links: execution -> privilege-escalation and discovery -> collection
-				const addCrossTacticLinks = (fromTactic, toTactic) => {
-					if (!tacticNodes[fromTactic] || !tacticNodes[toTactic]) return;
-					tacticNodes[fromTactic].forEach(fromId => {
-						tacticNodes[toTactic].forEach(toId => {
-							// avoid duplicate edges
-							const exists = edges.some(e => e.from === fromId && e.to === toId);
-							if (!exists) edges.push({ from: fromId, to: toId, arrows: "to" });
-						});
-					});
-				};
-
-				addCrossTacticLinks("execution", "privilege-escalation");
-				addCrossTacticLinks("discovery", "collection");
-
-
                 const container = flowchartRef.current;
                 const data = { nodes: new vis.DataSet(nodes), edges: new vis.DataSet(edges) };
                 const options = {
@@ -260,141 +243,5 @@
         const root = ReactDOM.createRoot(document.getElementById('root'));
         root.render(<App />);
     </script>
-	<div class="mt-8 p-4 bg-white rounded-md shadow space-y-6">
-
-  <!-- Attack Timeline -->
-  <section>
-	  <h2 class="text-2xl font-semibold mb-4">Attack Timeline</h2>
-        <div class="overflow-x-auto mb-8">
-            <table class="min-w-full bg-white border border-gray-300">
-                <thead>
-                    <tr class="bg-gray-200">
-                        <th class="py-2 px-4 border-b">Date/Time</th>
-                        <th class="py-2 px-4 border-b">Action</th>
-                        <th class="py-2 px-4 border-b">Actor/Details</th>
-                        <th class="py-2 px-4 border-b">Evidence/Impact</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td class="py-2 px-4 border-b">February 12–20, 2024</td>
-                        <td class="py-2 px-4 border-b">Initial Access: Attackers gain access to Change Healthcare’s systems via a Citrix portal without MFA.</td>
-                        <td class="py-2 px-4 border-b">ALPHV/BlackCat ransomware group</td>
-                        <td class="py-2 px-4 border-b">Compromised credentials used; data exfiltrated from February 17–20.</td>
-                    </tr>
-                    <tr>
-                        <td class="py-2 px-4 border-b">February 21, 2024</td>
-                        <td class="py-2 px-4 border-b">Ransomware Deployment: BlackCat deploys ransomware, encrypting systems.</td>
-                        <td class="py-2 px-4 border-b">ALPHV/BlackCat</td>
-                        <td class="py-2 px-4 border-b">Disrupted claims processing, billing, and prescriptions; affected ~1/3 of U.S. population.</td>
-                    </tr>
-                    <tr>
-                        <td class="py-2 px-4 border-b">February 21, 2024</td>
-                        <td class="py-2 px-4 border-b">Detection: Change Healthcare identifies cyberattack, shuts down systems.</td>
-                        <td class="py-2 px-4 border-b">Change Healthcare</td>
-                        <td class="py-2 px-4 border-b">Outage reported; pharmacies, hospitals impacted nationwide.</td>
-                    </tr>
-                    <tr>
-                        <td class="py-2 px-4 border-b">March 1, 2024</td>
-                        <td class="py-2 px-4 border-b">Ransom Payment: UnitedHealth pays $22M in Bitcoin to BlackCat.</td>
-                        <td class="py-2 px-4 border-b">UnitedHealth Group</td>
-                        <td class="py-2 px-4 border-b">Payment confirmed by CEO; BlackCat performs exit scam.</td>
-                    </tr>
-                    <tr>
-                        <td class="py-2 px-4 border-b">March 7–18, 2024</td>
-                        <td class="py-2 px-4 border-b">Partial Recovery: Pharmacy services, claims submission restored; full medical claims recovery expected.</td>
-                        <td class="py-2 px-4 border-b">Change Healthcare</td>
-                        <td class="py-2 px-4 border-b">UnitedHealth advances $2B+ to providers; recovery efforts ongoing.</td>
-                    </tr>
-                    <tr>
-                        <td class="py-2 px-4 border-b">April 22, 2024</td>
-                        <td class="py-2 px-4 border-b">Breach Scope Confirmed: Change Healthcare confirms data breach affecting a substantial proportion of Americans.</td>
-                        <td class="py-2 px-4 border-b">Change Healthcare</td>
-                        <td class="py-2 px-4 border-b">Estimated 100M individuals impacted; largest healthcare breach in U.S. history.</td>
-                    </tr>
-                    <tr>
-                        <td class="py-2 px-4 border-b">July 19, 2024</td>
-                        <td class="py-2 px-4 border-b">Breach Report: Change Healthcare files initial report with HHS-OCR, estimating 500 affected individuals.</td>
-                        <td class="py-2 px-4 border-b">Change Healthcare</td>
-                        <td class="py-2 px-4 border-b">Placeholder estimate criticized; actual impact much larger.</td>
-                    </tr>
-                    <tr>
-                        <td class="py-2 px-4 border-b">October 22, 2024</td>
-                        <td class="py-2 px-4 border-b">Notification Update: Change Healthcare notifies OCR of ~100M individual notices sent.</td>
-                        <td class="py-2 px-4 border-b">Change Healthcare</td>
-                        <td class="py-2 px-4 border-b">Updated to 190M affected by January 2025, 192.7M by July 2025.</td>
-                    </tr>
-                    <tr>
-                        <td class="py-2 px-4 border-b">December 16, 2024</td>
-                        <td class="py-2 px-4 border-b">Lawsuit Filed: Nebraska AG sues Change Healthcare, Optum, UnitedHealth.</td>
-                        <td class="py-2 px-4 border-b">Nebraska AG</td>
-                        <td class="py-2 px-4 border-b">Alleges negligence, violation of consumer protection laws; seeks damages.</td>
-                    </tr>
-                    <tr>
-                        <td class="py-2 px-4 border-b">January–August 2025</td>
-                        <td class="py-2 px-4 border-b">Ongoing Fallout: OCR investigation, lawsuits, and recovery costs escalate.</td>
-                        <td class="py-2 px-4 border-b">OCR, UnitedHealth</td>
-                        <td class="py-2 px-4 border-b">Costs reach $3.1B; 49 lawsuits centralized in Minnesota.</td>
-                    </tr>
-                </tbody>
-            </table>
-			</br><a href="https://github.com/pbmundas/Threat-Hunting/blob/main/Learning%20through%20known%20attacks/Change%20Healthcare%20(2024).md" target="_blank" className="text-blue-600 hover:underline absolute top-4 right-4" style="color:blue;">Understand how to hunt such attacks</a>
-        </div>
-
-        <!-- Dwell Time Analysis -->
-        <h2 class="text-2xl font-semibold mb-4">Dwell Time Analysis</h2>
-        <p class="mb-4">Dwell time was approximately 9 days (February 12–21, 2024), from initial access to detection, due to lack of MFA and delayed anomaly detection.</p>
-        <div class="overflow-x-auto mb-8">
-            <table class="min-w-full bg-white border border-gray-300">
-                <thead>
-                    <tr class="bg-gray-200">
-                        <th class="py-2 px-4 border-b">Step 1: Initial Access (Feb 12)</th>
-                        <th class="py-2 px-4 border-b">Step 2: Data Exfiltration (Feb 17–20)</th>
-                        <th class="py-2 px-4 border-b">Step 3: Ransomware/Disruption (Feb 21)</th>
-                        <th class="py-2 px-4 border-b">Step 4: Detection/Containment (Feb 21)</th>
-                        <th class="py-2 px-4 border-b">Step 5: Recovery (Mar 2024–)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td class="py-2 px-4 border-b">Citrix portal without MFA exploited. <br><strong>What went wrong</strong>: No MFA, outdated systems.</td>
-                        <td class="py-2 px-4 border-b">Exfiltrated PHI of ~192.7M individuals. <br><strong>Factor</strong>: No DLP, no network monitoring.</td>
-                        <td class="py-2 px-4 border-b">Ransomware encrypted systems, disrupted operations. <br><strong>Factor</strong>: No EDR, poor segmentation.</td>
-                        <td class="py-2 px-4 border-b">Systems shut down, attack contained. <br><strong>Factor</strong>: Rapid response, no initial SIEM.</td>
-                        <td class="py-2 px-4 border-b">$3.1B in recovery costs; lawsuits ongoing. <br><strong>Total time</strong>: Months for full recovery.</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <p class="mb-4"><strong>Dwell Time Insight</strong>: The dwell time (~9 days vs. 2024 median ~21 days) was relatively short due to ransomware’s immediate impact, but lack of MFA and monitoring allowed undetected access. Swift system shutdown contained further damage, but recovery took months due to scale.</p>
-
-        <!-- Learnings -->
-        <h2 class="text-2xl font-semibold mb-4">Learnings</h2>
-        <div class="overflow-x-auto">
-            <table class="min-w-full bg-white border border-gray-300">
-                <thead>
-                    <tr class="bg-gray-200">
-                        <th class="py-2 px-4 border-b">Root Cause Analysis</th>
-                        <th class="py-2 px-4 border-b">Impact Assessment</th>
-                        <th class="py-2 px-4 border-b">Detection Opportunities</th>
-                        <th class="py-2 px-4 border-b">Response and Remediation</th>
-                        <th class="py-2 px-4 border-b">Attribution Analysis</th>
-                        <th class="py-2 px-4 border-b">Lessons Learned</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td class="py-2 px-4 border-b"><strong>Using 5 Whys</strong>: Why breached? Citrix portal exploited. Why exploited? No MFA. Why no MFA? Policy lapse. Why lapse? Prioritized operations. Why prioritized? Cost focus. <br> <strong>Other causes</strong>: Outdated systems, no DLP. <br> <strong>Beginners</strong>: Root causes trace to weak authentication. <br> <strong>Experts</strong>: Fishbone factors: Technology (no MFA), Process (no audits), People (lax policy).</td>
-                        <td class="py-2 px-4 border-b"><strong>Data</strong>: PHI of 192.7M stolen. <br> <strong>Financial</strong>: $3.1B recovery cost, $6.3B claims drop. <br> <strong>Operational</strong>: Nationwide healthcare disruptions. <br> <strong>Beginners</strong>: Impacts hit data, finances, operations. <br> <strong>Experts</strong>: BIA metrics: RTO months, RPO days.</td>
-                        <td class="py-2 px-4 border-b"><strong>Missed</strong>: Citrix access via SIEM; exfiltration via DLP. <br> <strong>Opportunities</strong>: MFA, EDR, network monitoring. <br> <strong>Failures</strong>: No MFA, no anomaly detection. <br> <strong>Beginners</strong>: Detection is like alarms. <br> <strong>Experts</strong>: Sigma rule: <code>detection: logsource: category: citrix | selection: access: unauthorized AND mfa: none</code>.</td>
-                        <td class="py-2 px-4 border-b"><strong>Immediate</strong>: Shut down systems, contained attack. <br> <strong>Long-term</strong>: Implemented MFA, enhanced monitoring. <br> <strong>Beginners</strong>: Response stops damage. <br> <strong>Experts</strong>: NIST IR followed: Identification (Feb 21), Containment (Feb 21), Eradication (Mar–).</td>
-                        <td class="py-2 px-4 border-b"><strong>Confirmed</strong>: ALPHV/BlackCat (RaaS). <br> <strong>TTPs</strong>: Credential theft, ransomware align with RaaS. <br> <strong>Beginners</strong>: Attribution identifies hackers. <br> <strong>Experts</strong>: IOCs include Citrix logs, Bitcoin wallet.</td>
-                        <td class="py-2 px-4 border-b">Enforce MFA. <br> Deploy EDR, DLP, SIEM. <br> Segment IT systems. <br> Audit vendors. <br> <strong>Beginners</strong>: Secure logins, monitor systems. <br> <strong>Experts</strong>: Adopt MITRE ATT&CK, enforce HIPAA compliance.</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
 </body>
 </html>
-
-

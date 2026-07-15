@@ -10,7 +10,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis-network.min.css" rel="stylesheet" type="text/css" />
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="site.css">
 </head>
 <body class="bg-gray-100 font-sans">
     <div id="root"></div>
@@ -260,13 +259,6 @@
                     }
                 });
 
-				const firstDiscovery = mitreData.techniques.findIndex(t => t.tactic === "discovery") + 1;
-				const c2Node = mitreData.techniques.findIndex(t => t.tactic === "command-and-control") + 1;
-				if (firstDiscovery > 0 && c2Node > 0) {
-				  edges.push({ from: firstDiscovery, to: c2Node, arrows: "to", color: { color: "#22c55e" }, dashes: true });
-				}
-
-
                 const container = flowchartRef.current;
                 const data = { nodes: new vis.DataSet(nodes), edges: new vis.DataSet(edges) };
                 const options = {
@@ -325,179 +317,15 @@
                                 <p>Click a node to view technique details, MITRE TTPs, IOCs, and technical information. Drag nodes to move them.</p>
                             )}
 							<br></br><strong>Background:</strong><br/>
-							<p>Equifax (2017): Equifax, one of the three major U.S. credit bureaus, collects and analyzes consumer financial data to generate credit reports and scores. Its systems hold vast PII, making it a prime target for nation-state actors or cybercriminals. The breach targeted the ACIS portal, an online dispute resolution system running on outdated Sun/Solaris servers with custom code. Environmental factors included a siloed organizational structure (CSO reporting to legal, not IT), over 324 expired certificates, and no comprehensive software inventory, which prevented identifying vulnerable Apache Struts instances. What went wrong: Despite alerts from US-CERT on March 8, 2017, Equifax failed to patch within its 48-hour policy, exposing the system for 145 days. Beginners: PII is like your personal ID card—losing it can lead to fraud. Experts: Map to MITRE ATT&CK: Initial Access (T1190 - Exploit Public-Facing Application), Persistence (T1505 - Server Software Component).</p>
+							<p>Equifax (2017): The Equifax data breach in 2017 exposed the personal information of 147 million people due to an unpatched vulnerability in Apache Struts. Attackers exploited this weakness, gaining unauthorized access and exfiltrating sensitive data over months, highlighting the risks of delayed software updates.</p>
                         </div>
                     </div>
                 </div>
-
             );
         };
 
         const root = ReactDOM.createRoot(document.getElementById('root'));
         root.render(<App />);
     </script>
-	<div class="mt-8 p-4 bg-white rounded-md shadow space-y-6">
-
-  <!-- Attack Timeline -->
-  <section>
-    <h3 class="text-lg font-semibold text-gray-800">Attack Timeline</h3>
-    <div class="overflow-x-auto mt-2">
-      <table class="min-w-full text-sm text-gray-700 border border-gray-200">
-        <thead class="bg-gray-50">
-          <tr>
-            <th class="px-3 py-2 text-left font-semibold border-b"><strong>Date/Time</strong></th>
-            <th class="px-3 py-2 text-left font-semibold border-b"><strong>Action</strong></th>
-            <th class="px-3 py-2 text-left font-semibold border-b"><strong>Actor/Details</strong></th>
-            <th class="px-3 py-2 text-left font-semibold border-b"><strong>Evidence/Impact</strong></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr class="border-b">
-            <td class="px-3 py-2">March 7, 2017</td>
-            <td class="px-3 py-2">Vulnerability announced and patch released for CVE-2017-5638 in Apache Struts.</td>
-            <td class="px-3 py-2">Apache Project</td>
-            <td class="px-3 py-2">Critical remote code execution flaw.</td>
-          </tr>
-          <tr class="border-b">
-            <td class="px-3 py-2">March 8-9, 2017</td>
-            <td class="px-3 py-2">US-CERT alerts Equifax; internal email sent to 430+ staff to patch within 48 hours.</td>
-            <td class="px-3 py-2">US-CERT/Equifax GTVM Team</td>
-            <td class="px-3 py-2">Patch not applied to ACIS due to oversight.</td>
-          </tr>
-          <tr class="border-b">
-            <td class="px-3 py-2">March 10, 2017</td>
-            <td class="px-3 py-2">Initial reconnaissance/exploit attempts detected (e.g., "whoami" commands).</td>
-            <td class="px-3 py-2">Attackers</td>
-            <td class="px-3 py-2">Early indicators missed.</td>
-          </tr>
-          <tr class="border-b">
-            <td class="px-3 py-2">May 13, 2017</td>
-            <td class="px-3 py-2">Breach entry: Exploit of unpatched Apache Struts in ACIS portal; web shells dropped for remote control.</td>
-            <td class="px-3 py-2">Attackers</td>
-            <td class="px-3 py-2">Gained foothold; began lateral movement.</td>
-          </tr>
-          <tr class="border-b">
-            <td class="px-3 py-2">May 13 - July 30, 2017</td>
-            <td class="px-3 py-2">Persistence and exfiltration: ~9,000 database queries, 265 PII accesses; data stolen via encrypted channels using Wget.</td>
-            <td class="px-3 py-2">Attackers</td>
-            <td class="px-3 py-2">30 unique web shells; accessed 48 databases with unencrypted credentials.</td>
-          </tr>
-          <tr class="border-b">
-            <td class="px-3 py-2">July 29, 2017</td>
-            <td class="px-3 py-2">Expired SSL certificate renewed (after 19 months); suspicious traffic from Chinese IP detected and blocked.</td>
-            <td class="px-3 py-2">Equifax Security</td>
-            <td class="px-3 py-2">First detection of anomaly.</td>
-          </tr>
-          <tr class="border-b">
-            <td class="px-3 py-2">July 30, 2017</td>
-            <td class="px-3 py-2">Additional suspicious traffic identified; ACIS taken offline, ending active breach.</td>
-            <td class="px-3 py-2">Equifax</td>
-            <td class="px-3 py-2">CIO informed; Project Sierra initiated for response.</td>
-          </tr>
-          <tr class="border-b">
-            <td class="px-3 py-2">July 31 - August 2, 2017</td>
-            <td class="px-3 py-2">Confirmation of PII exfiltration; Mandiant engaged, FBI notified.</td>
-            <td class="px-3 py-2">Equifax/Mandiant</td>
-            <td class="px-3 py-2">Forensic investigation begins.</td>
-          </tr>
-          <tr class="border-b">
-            <td class="px-3 py-2">August 11-24, 2017</td>
-            <td class="px-3 py-2">Mandiant confirms scope: Large PII volumes accessed; victim list compiled.</td>
-            <td class="px-3 py-2">Mandiant</td>
-            <td class="px-3 py-2">Board informed.</td>
-          </tr>
-          <tr>
-            <td class="px-3 py-2">September 7, 2017</td>
-            <td class="px-3 py-2">Public announcement of breach affecting 143 million (later revised to 148 million).</td>
-            <td class="px-3 py-2">Equifax</td>
-            <td class="px-3 py-2">Initial disclosure.</td>
-          </tr>
-		  <tr>
-            <td class="px-3 py-2">October 2, 2017 - March 1, 2018</td>
-            <td class="px-3 py-2">Investigation completes; additional 2.5-2.4 million victims identified.</td>
-            <td class="px-3 py-2">Mandiant/Equifax</td>
-            <td class="px-3 py-2">Total impact finalized.</td>
-          </tr>
-        </tbody>
-      </table>
-		</br><a href="https://github.com/pbmundas/Threat-Hunting/blob/main/Learning%20through%20known%20attacks/Equifax%20(2017).md" target="_blank" className="text-blue-600 hover:underline absolute top-4 right-4" style="color:blue;">Understand how to hunt such attacks</a> and <a href="https://oversight.house.gov/wp-content/uploads/2018/12/Equifax-Report.pdf" target="_blank" className="text-blue-600 hover:underline absolute top-4 right-4" style="color:blue;">Read full official report here</a>
-    </div>
-  </section>
-
-  <!-- Dwell Time Analysis -->
-<section>
-    <h3 class="text-lg font-semibold text-gray-800">Dwell Time Analysis</h3>
-    <div class="overflow-x-auto mt-2">
-	<p>Dwell time was 76-79 days (May 13 to July 29/30, 2017), the period attackers resided undetected. This allowed extensive reconnaissance and exfiltration.</p>
-      <table class="min-w-full text-sm text-gray-700 border border-gray-200">
-        <thead class="bg-gray-50">
-          <tr>
-            <th class="px-3 py-2 text-left font-semibold border-b"><strong>Step 1: Initial Access (May 13)</strong></th>
-            <th class="px-3 py-2 text-left font-semibold border-b"><strong>Step 2: Discovery (May-June)</strong></th>
-            <th class="px-3 py-2 text-left font-semibold border-b"><strong>Step 3: Privilege Escalation (Ongoing)</strong></th>
-            <th class="px-3 py-2 text-left font-semibold border-b"><strong>Step 4: Exfiltration (May-July)</strong></th>
-			<th class="px-3 py-2 text-left font-semibold border-b"><strong>Step 5: Detection Trigger (July 29)</strong></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr class="border-b">
-            <td class="px-3 py-2">Exploit CVE-2017-5638; drop web shells. What went wrong: Unpatched system despite alerts.</td>
-            <td class="px-3 py-2">Scan network, find plaintext credentials in config files. Factor: No segmentation allowed lateral movement.</td>
-            <td class="px-3 py-2">Use creds to access databases. Factor: Legacy systems with weak access controls.</td>
-            <td class="px-3 py-2">Run queries, compress/encrypt data, send via HTTPS. Factor: Expired SSL cert blinded monitoring tools.</td>
-			<td class="px-3 py-2">Cert renewal reveals traffic. Total time enabled ~265 data dumps.</td>
-        </tbody>
-      </table>
-	  </br><p>Dwell time is like a spy hiding in your house—longer stays mean more damage. Experts: Median dwell time in 2017 was 101 days (per Mandiant); Equifax's was shorter but still costly due to no EDR/FIM.</p>
-    </div>
-  </section>
-
-  <!-- Lessons Learned -->
-<section>
-    <h3 class="text-lg font-semibold text-gray-800">Learnings</h3>
-    <div class="overflow-x-auto mt-2">
-	  <table class="min-w-full text-sm text-gray-700 border border-gray-200">
-        <thead class="bg-gray-50">
-          <tr>
-            <th class="px-3 py-2 text-left font-semibold border-b"><strong>Root Cause Analysis</strong></th>
-            <th class="px-3 py-2 text-left font-semibold border-b"><strong>Impact Assessment</strong></th>
-			<th class="px-3 py-2 text-left font-semibold border-b"><strong>Detection Opportunities</strong></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr class="border-b">
-            <td class="px-3 py-2"><strong>Using 5 Whys:</strong> Why breached? Unpatched vulnerability. Why unpatched? No inventory of Apache Struts. Why no inventory? Siloed IT/security teams. Why siloed? CSO under legal, not CIO. Why? Organizational misalignment prioritizing growth over security. </br><strong>Other causes:</strong> Plaintext storage of creds, short log retention (14-30 days), 324 expired certs, legacy ACIS complexity. </br><strong>Beginners:</strong> Root causes are the "why" behind failures. </br><strong>Experts: Fishbone diagram factors:</strong> People (human error), Process (patch policy gaps), Technology (legacy systems).</td>
-						<td class="px-3 py-2"><strong>Data:</strong> 148M affected; 209K credit cards, 182K dispute docs.</br>
-												<strong>Financial:</strong> $1.4B in costs (2019); $1.38B FTC settlement; stock drop 31%.</br>
-												<strong>Reputational:</strong> Trust erosion; CEO/CIO resignations.</br>
-												<strong>Regulatory:</strong> Fines, consent orders for audits.</br>Beginners: Impacts hit wallets and privacy. <strong>Experts:</strong> BIA metrics: RTO exceeded due to legacy systems.</td>
-            <td class="px-3 py-2"><p><strong>Missed:</strong> March scans could have caught Struts if inventory existed; FIM would detect web shells; longer logs (vs. 14 days) for forensics; network segmentation to block lateral moves. </br><strong>Opportunities:</strong> Renew certs routinely; SIEM rules for query spikes; EDR on endpoints. </br><strong>Failures:</strong> 19-month cert expiration; no redundancy in patch alerts. </br><strong>Beginners:</strong> Detection is like alarms—set them right. <strong>Experts:</strong> Sigma rule example: <strong>detection:</strong> logsource: category: database | selection: event: query_count > 1000 in 1h.</p></td>
-        </tbody>
-      </table>
-    </div>
-    <div class="overflow-x-auto mt-2">
-	  <table class="min-w-full text-sm text-gray-700 border border-gray-200">
-        <thead class="bg-gray-50">
-          <tr>
-            <th class="px-3 py-2 text-left font-semibold border-b"><strong>Response and Remediation</strong></th>
-            <th class="px-3 py-2 text-left font-semibold border-b"><strong>Attribution Analysis</strong></th>
-			<th class="px-3 py-2 text-left font-semibold border-b"><strong>Lessons Learned</strong></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr class="border-b">
-            <td class="px-3 py-2"><strong>Immediate:</strong> Blocked IPs, offline ACIS, engaged Mandiant/FBI.</br> <strong>Long-term:</strong> Enhanced patching, asset inventory, network segmentation, FIM deployment, privileged access management, extended logging.</br> <strong>By 2018:</strong> $221M spent; consent order for risk assessments, audits. </br> Response is cleanup. Follow NIST IR: Identification (July), Containment (July 30), Eradication (Oct).</td>
-			<td class="px-3 py-2">Not definitively attributed, but suspicious IPs linked to Chinese providers suggest possible nation-state (e.g., APT). Limitations: IP spoofing, no public IOCs confirming groups like APT41. Beginners: Attribution is whodunit. Experts: TTP overlaps with known APTs (e.g., web shell persistence).</br></td>
-            <td class="px-3 py-2"><p>Patch promptly and maintain inventories.</br> Segment networks, encrypt data, renew certs.</br> Align security with IT; invest in modern systems.</br> Train on alerts; implement redundancies.</br>Beginners: Learn from mistakes. Experts: Adopt Cybersafety method for proactive reviews.</p></td>
-        </tbody>
-      </table>
-    </div>
-  </section>
-
-
-</div>
-
 </body>
 </html>
-
-

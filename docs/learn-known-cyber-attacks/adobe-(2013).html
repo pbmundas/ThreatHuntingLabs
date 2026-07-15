@@ -1,43 +1,4 @@
-<script type="text/javascript">
-        var gk_isXlsx = false;
-        var gk_xlsxFileLookup = {};
-        var gk_fileData = {};
-        function filledCell(cell) {
-          return cell !== '' && cell != null;
-        }
-        function loadFileData(filename) {
-        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
-            try {
-                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
-                var firstSheetName = workbook.SheetNames[0];
-                var worksheet = workbook.Sheets[firstSheetName];
-
-                // Convert sheet to JSON to filter blank rows
-                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
-                // Filter out blank rows (rows where all cells are empty, null, or undefined)
-                var filteredData = jsonData.filter(row => row.some(filledCell));
-
-                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
-                var headerRowIndex = filteredData.findIndex((row, index) =>
-                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
-                );
-                // Fallback
-                if (headerRowIndex === -1 || headerRowIndex > 25) {
-                  headerRowIndex = 0;
-                }
-
-                // Convert filtered JSON back to CSV
-                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
-                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
-                return csv;
-            } catch (e) {
-                console.error(e);
-                return "";
-            }
-        }
-        return gk_fileData[filename] || "";
-        }
-        </script><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -49,6 +10,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis-network.min.css" rel="stylesheet" type="text/css" />
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="site.css">
 </head>
 <body class="bg-gray-100 font-sans">
     <div id="root"></div>
@@ -352,7 +314,7 @@
   <!-- Attack Timeline -->
   <section>
         <!-- Attack Timeline -->
-        <h2 class="text-2xl font-semibold mb-4">Attack Timeline</h2> 
+        <h2 class="text-2xl font-semibold mb-4">Attack Timeline</h2>
         <div class="overflow-x-auto mb-8">
             <table class="min-w-full bg-white border border-gray-300">
                 <thead>
@@ -413,7 +375,7 @@
                     </tr>
                 </tbody>
             </table>
-               </br><a href="https://github.com/pbmundas/Threat-Hunting/blob/main/Learning%20through%20known%20attacks/Adobe%20-%202013.md" target="_blank" className="text-blue-600 hover:underline absolute top-4 right-4" style="color:blue;">Understand how to hunt such attacks</a> 
+               </br><a href="https://github.com/pbmundas/Threat-Hunting/blob/main/Learning%20through%20known%20attacks/Adobe%20-%202013.md" target="_blank" className="text-blue-600 hover:underline absolute top-4 right-4" style="color:blue;">Understand how to hunt such attacks</a>
         </div>
 
         <!-- Dwell Time Analysis -->

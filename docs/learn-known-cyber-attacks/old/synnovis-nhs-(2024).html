@@ -10,7 +10,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis-network.min.css" rel="stylesheet" type="text/css" />
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="site.css">
 </head>
 <body class="bg-gray-100 font-sans">
     <div id="root"></div>
@@ -176,22 +175,6 @@
                     }
                 });
 
-				// Add explicit cross-tactic links: execution -> privilege-escalation and discovery -> collection
-				const addCrossTacticLinks = (fromTactic, toTactic) => {
-					if (!tacticNodes[fromTactic] || !tacticNodes[toTactic]) return;
-					tacticNodes[fromTactic].forEach(fromId => {
-						tacticNodes[toTactic].forEach(toId => {
-							// avoid duplicate edges
-							const exists = edges.some(e => e.from === fromId && e.to === toId);
-							if (!exists) edges.push({ from: fromId, to: toId, arrows: "to" });
-						});
-					});
-				};
-
-				addCrossTacticLinks("execution", "privilege-escalation");
-				addCrossTacticLinks("discovery", "collection");
-
-
                 const container = flowchartRef.current;
                 const data = { nodes: new vis.DataSet(nodes), edges: new vis.DataSet(edges) };
                 const options = {
@@ -260,134 +243,5 @@
         const root = ReactDOM.createRoot(document.getElementById('root'));
         root.render(<App />);
     </script>
-	<div class="mt-8 p-4 bg-white rounded-md shadow space-y-6">
-
-        <!-- Attack Timeline -->
-        <section>
-            <h2 class="text-2xl font-semibold mb-4">Attack Timeline</h2>
-            <div class="overflow-x-auto mb-8">
-                <table class="min-w-full bg-white border border-gray-300">
-                    <thead>
-                        <tr class="bg-gray-200">
-                            <th class="py-2 px-4 border-b">Date/Time</th>
-                            <th class="py-2 px-4 border-b">Action</th>
-                            <th class="py-2 px-4 border-b">Actor/Details</th>
-                            <th class="py-2 px-4 border-b">Evidence/Impact</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td class="py-2 px-4 border-b">April 2024</td>
-                            <td class="py-2 px-4 border-b">Initial access: Spear-phishing emails with malicious attachments sent to Synnovis employees.</td>
-                            <td class="py-2 px-4 border-b">Qilin Ransomware Group</td>
-                            <td class="py-2 px-4 border-b">Employee opened attachment, installing ransomware payload.</td>
-                        </tr>
-                        <tr>
-                            <td class="py-2 px-4 border-b">April–May 2024</td>
-                            <td class="py-2 px-4 border-b">Lateral movement: Attackers map network, escalate privileges to admin accounts.</td>
-                            <td class="py-2 px-4 border-b">Qilin Ransomware Group</td>
-                            <td class="py-2 px-4 border-b">Undetected due to lack of network segmentation and monitoring.</td>
-                        </tr>
-                        <tr>
-                            <td class="py-2 px-4 border-b">May 20, 2024</td>
-                            <td class="py-2 px-4 border-b">Data exfiltration: Sensitive patient data stolen from Synnovis systems.</td>
-                            <td class="py-2 px-4 border-b">Qilin Ransomware Group</td>
-                            <td class="py-2 px-4 border-b">4.3TB of patient records exfiltrated; no alerts triggered.</td>
-                        </tr>
-                        <tr>
-                            <td class="py-2 px-4 border-b">June 3, 2024, 12:30 AM (GMT)</td>
-                            <td class="py-2 px-4 border-b">Ransomware deployment: Systems encrypted, ransom note delivered.</td>
-                            <td class="py-2 px-4 border-b">Qilin Ransomware Group</td>
-                            <td class="py-2 px-4 border-b">Pathology services disrupted; NHS hospitals impacted.</td>
-                        </tr>
-                        <tr>
-                            <td class="py-2 px-4 border-b">June 3, 2024, 8:00 AM (GMT)</td>
-                            <td class="py-2 px-4 border-b">Detection: System outages and ransom note identified.</td>
-                            <td class="py-2 px-4 border-b">Synnovis IT Staff</td>
-                            <td class="py-2 px-4 border-b">Reported to NHS; critical services at Guy’s and St Thomas’ affected.</td>
-                        </tr>
-                        <tr>
-                            <td class="py-2 px-4 border-b">June 4, 2024</td>
-                            <td class="py-2 px-4 border-b">Response initiated: Cybersecurity firms and NCSC engaged.</td>
-                            <td class="py-2 px-4 border-b">NHS, Synnovis, NCSC</td>
-                            <td class="py-2 px-4 border-b">Incident response activated; public notified of breach.</td>
-                        </tr>
-                        <tr>
-                            <td class="py-2 px-4 border-b">June 10, 2024</td>
-                            <td class="py-2 px-4 border-b">Data leak: Stolen data published on dark web.</td>
-                            <td class="py-2 px-4 border-b">Qilin Ransomware Group</td>
-                            <td class="py-2 px-4 border-b">Patient data exposed after ransom non-payment; reputational harm.</td>
-                        </tr>
-                        <tr>
-                            <td class="py-2 px-4 border-b">July 2024</td>
-                            <td class="py-2 px-4 border-b">Investigation: Attack attributed to Qilin group.</td>
-                            <td class="py-2 px-4 border-b">UK NCSC, Law Enforcement</td>
-                            <td class="py-2 px-4 border-b">Linked to Qilin via ransomware signatures and TTPs.</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </section>
-
-        <!-- Dwell Time Analysis -->
-        <section>
-            <h2 class="text-2xl font-semibold mb-4">Dwell Time Analysis</h2>
-            <p class="mb-4">Dwell time was approximately 2 months (April 2024 to June 3, 2024), allowing attackers to infiltrate, exfiltrate data, and deploy ransomware undetected.</p>
-            <div class="overflow-x-auto mb-8">
-                <table class="min-w-full bg-white border border-gray-300">
-                    <thead>
-                        <tr class="bg-gray-200">
-                            <th class="py-2 px-4 border-b">Step 1: Initial Access (April 2024)</th>
-                            <th class="py-2 px-4 border-b">Step 2: Lateral Movement (April–May 2024)</th>
-                            <th class="py-2 px-4 border-b">Step 3: Collection/Exfiltration (May 20, 2024)</th>
-                            <th class="py-2 px-4 border-b">Step 4: Ransomware Deployment (June 3, 2024)</th>
-                            <th class="py-2 px-4 border-b">Step 5: Detection (June 3, 2024)</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td class="py-2 px-4 border-b">Spear-phishing with malicious attachment.<br><strong>What went wrong</strong>: No email filtering, weak user training.</td>
-                            <td class="py-2 px-4 border-b">Navigated network, escalated to admin accounts.<br><strong>Factor</strong>: No network segmentation, no IDS/IPS.</td>
-                            <td class="py-2 px-4 border-b">Exfiltrated 4.3TB of patient data.<br><strong>Factor</strong>: No data loss prevention (DLP) tools.</td>
-                            <td class="py-2 px-4 border-b">Deployed ransomware, encrypted systems.<br><strong>Factor</strong>: No real-time endpoint monitoring.</td>
-                            <td class="py-2 px-4 border-b">Detected after systems offline, ransom note found.<br><strong>Total time</strong>: Enabled data theft and service disruption.</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <p class="mb-4"><strong>Dwell Time Insight</strong>: The dwell time was like a thief hiding in a hospital for weeks, unnoticed due to weak security controls. Industry reports suggest median dwell times in 2024 were ~21 days; Synnovis’ 2 months was above average, enabling extensive data theft and disruption.</p>
-        </section>
-
-        <!-- Learnings -->
-        <section>
-            <h2 class="text-2xl font-semibold mb-4">Learnings</h2>
-            <div class="overflow-x-auto">
-                <table class="min-w-full bg-white border border-gray-300">
-                    <thead>
-                        <tr class="bg-gray-200">
-                            <th class="py-2 px-4 border-b">Root Cause Analysis</th>
-                            <th class="py-2 px-4 border-b">Impact Assessment</th>
-                            <th class="py-2 px-4 border-b">Detection Opportunities</th>
-                            <th class="py-2 px-4 border-b">Response and Remediation</th>
-                            <th class="py-2 px-4 border-b">Attribution Analysis</th>
-                            <th class="py-2 px-4 border-b">Lessons Learned</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td class="py-2 px-4 border-b"><strong>Using 5 Whys</strong>: Why breached? Phishing delivered ransomware. Why successful? No email filters, weak training. Why weak? Underfunded security. Why underfunded? Healthcare budget constraints. Why constrained? NHS funding priorities.<br><strong>Other causes</strong>: No MFA, weak endpoint security.<br><strong>Beginners</strong>: Root causes trace to poor defenses.<br><strong>Experts</strong>: Fishbone factors: People (untrained staff), Process (no MFA), Technology (no EDR).</td>
-                            <td class="py-2 px-4 border-b"><strong>Operational</strong>: Pathology services disrupted, delaying patient care.<br><strong>Reputational</strong>: Loss of trust in NHS data security.<br><strong>Data</strong>: 4.3TB patient data exposed.<br><strong>Beginners</strong>: Impacts hit operations, trust.<br><strong>Experts</strong>: BIA metrics: RTO violated due to prolonged outages.</td>
-                            <td class="py-2 px-4 border-b"><strong>Missed</strong>: Phishing via email filters; lateral movement via IDS; exfiltration via DLP.<br><strong>Opportunities</strong>: Deploy MFA, EDR, SIEM; audit admin access.<br><strong>Failures</strong>: No real-time monitoring, ignored early anomalies.<br><strong>Beginners</strong>: Detection is like a hospital alarm.<br><strong>Experts</strong>: Sigma rule: <code>detection: logsource: category: ransomware | selection: encryption: unauthorized</code>.</td>
-                            <td class="py-2 px-4 border-b"><strong>Immediate</strong>: Isolated systems, engaged NCSC, notified patients.<br><strong>Long-term</strong>: Deployed MFA, EDR; enhanced staff training.<br><strong>Beginners</strong>: Response limits damage.<br><strong>Experts</strong>: NIST IR followed: Identification (June 3), Containment (June 4), Recovery (ongoing).</td>
-                            <td class="py-2 px-4 border-b"><strong>Confirmed</strong>: Qilin Ransomware Group.<br><strong>TTPs</strong>: Phishing, data exfiltration, ransomware align with Qilin’s methods.<br><strong>Beginners</strong>: Attribution identifies hackers.<br><strong>Experts</strong>: TTPs match Qilin; IOCs include ransomware signatures, C2 domains.</td>
-                            <td class="py-2 px-4 border-b">Enforce MFA, email filtering.<br>Segment networks, secure endpoints.<br>Deploy SIEM, DLP, EDR.<br>Train staff on phishing.<br>Enhance incident response plans.<br><strong>Beginners</strong>: Secure systems, educate employees.<br><strong>Experts</strong>: Adopt MITRE ATT&CK, NHS Cyber Security Framework.</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </section>
-
-    </div>
 </body>
 </html>
-

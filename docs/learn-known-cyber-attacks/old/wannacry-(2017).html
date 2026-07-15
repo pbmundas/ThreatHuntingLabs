@@ -10,7 +10,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis-network.min.css" rel="stylesheet" type="text/css" />
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="site.css">
 </head>
 <body class="bg-gray-100 font-sans">
     <div id="root"></div>
@@ -188,15 +187,6 @@
                     }
                 });
 
-				// ✅ Manually connect Execution → Privilege Escalation
-					const executionNode = mitreData.techniques.findIndex(t => t.tactic === "execution") + 1;
-					const privEscNode = mitreData.techniques.findIndex(t => t.tactic === "privilege-escalation") + 1;
-
-					if (executionNode > 0 && privEscNode > 0) {
-						edges.push({ from: executionNode, to: privEscNode, arrows: "to", color: { color: "red" } });
-					}
-
-
                 const container = flowchartRef.current;
                 const data = { nodes: new vis.DataSet(nodes), edges: new vis.DataSet(edges) };
                 const options = {
@@ -265,131 +255,5 @@
         const root = ReactDOM.createRoot(document.getElementById('root'));
         root.render(<App />);
     </script>
-	<div class="mt-8 p-4 bg-white rounded-md shadow space-y-6">
-
-  <!-- Attack Timeline -->
-  <section>
-	<h2 class="text-2xl font-semibold mb-4">Attack Timeline</h2>
-        <div class="overflow-x-auto mb-8">
-            <table class="min-w-full bg-white border border-gray-300">
-                <thead>
-                    <tr class="bg-gray-200">
-                        <th class="py-2 px-4 border-b">Date/Time</th>
-                        <th class="py-2 px-4 border-b">Action</th>
-                        <th class="py-2 px-4 border-b">Actor/Details</th>
-                        <th class="py-2 px-4 border-b">Evidence/Impact</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td class="py-2 px-4 border-b">February 2017</td>
-                        <td class="py-2 px-4 border-b">Initial access preparation: Lazarus Group gains EternalBlue exploit, likely from Shadow Brokers’ NSA leak (April 2017).</td>
-                        <td class="py-2 px-4 border-b">Lazarus Group (North Korea)</td>
-                        <td class="py-2 px-4 border-b">Exploit targets SMBv1; used in WannaCry’s worm-like spread.</td>
-                    </tr>
-                    <tr>
-                        <td class="py-2 px-4 border-b">May 12, 2017, Morning</td>
-                        <td class="py-2 px-4 border-b">Attack launch: WannaCry ransomware spreads via EternalBlue, infecting unpatched Windows systems globally.</td>
-                        <td class="py-2 px-4 border-b">Lazarus Group</td>
-                        <td class="py-2 px-4 border-b">230,000+ systems hit; encrypts files, demands $300–$600 Bitcoin.</td>
-                    </tr>
-                    <tr>
-                        <td class="py-2 px-4 border-b">May 12, 2017, Afternoon</td>
-                        <td class="py-2 px-4 border-b">NHS impact: UK hospitals (e.g., London, Blackpool) crippled; 70,000 devices encrypted.</td>
-                        <td class="py-2 px-4 border-b">WannaCry</td>
-                        <td class="py-2 px-4 border-b">Non-emergency patients turned away; NHS loses £92M.</td>
-                    </tr>
-                    <tr>
-                        <td class="py-2 px-4 border-b">May 12, 2017, Evening</td>
-                        <td class="py-2 px-4 border-b">Kill switch discovery: Marcus Hutchins registers sinkhole domain, halting WannaCry’s spread.</td>
-                        <td class="py-2 px-4 border-b">Marcus Hutchins (@MalwareTech)</td>
-                        <td class="py-2 px-4 border-b">Domain in malware code; stops propagation but not decryption.</td>
-                    </tr>
-                    <tr>
-                        <td class="py-2 px-4 border-b">May 13, 2017</td>
-                        <td class="py-2 px-4 border-b">Response: Microsoft releases emergency patches for unsupported systems (e.g., Windows XP).</td>
-                        <td class="py-2 px-4 border-b">Microsoft</td>
-                        <td class="py-2 px-4 border-b">Patches SMBv1 vulnerability; urges updates.</td>
-                    </tr>
-                    <tr>
-                        <td class="py-2 px-4 border-b">May 14–15, 2017</td>
-                        <td class="py-2 px-4 border-b">Containment: Organizations globally apply patches, disable SMBv1, isolate systems.</td>
-                        <td class="py-2 px-4 border-b">Global IT teams</td>
-                        <td class="py-2 px-4 border-b">Reduces further infections; some systems remain locked.</td>
-                    </tr>
-                    <tr>
-                        <td class="py-2 px-4 border-b">May 19, 2017</td>
-                        <td class="py-2 px-4 border-b">Attribution: Symantec and Kaspersky link WannaCry to Lazarus Group.</td>
-                        <td class="py-2 px-4 border-b">Cybersecurity firms</td>
-                        <td class="py-2 px-4 border-b">Code similarities with Lazarus’s 2014 Sony attack.</td>
-                    </tr>
-                    <tr>
-                        <td class="py-2 px-4 border-b">December 19, 2017</td>
-                        <td class="py-2 px-4 border-b">U.S. confirmation: White House attributes WannaCry to North Korea.</td>
-                        <td class="py-2 px-4 border-b">U.S. Government</td>
-                        <td class="py-2 px-4 border-b">Cites Lazarus Group TTPs; no indictments issued.</td>
-                    </tr>
-                    <tr>
-                        <td class="py-2 px-4 border-b">Post-May 2017</td>
-                        <td class="py-2 px-4 border-b">Recovery: Affected organizations rebuild systems; minimal ransom payments ($140K).</td>
-                        <td class="py-2 px-4 border-b">Victims</td>
-                        <td class="py-2 px-4 border-b">$4–8B in global damages; NHS restores services in weeks.</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <!-- Dwell Time Analysis -->
-        <h2 class="text-2xl font-semibold mb-4">Dwell Time Analysis</h2>
-        <p class="mb-4">Dwell time was effectively hours (May 12, 2017, morning to evening), as WannaCry’s worm-like propagation was rapid, but the kill switch and patches curtailed further spread.</p>
-        <div class="overflow-x-auto mb-8">
-            <table class="min-w-full bg-white border border-gray-300">
-                <thead>
-                    <tr class="bg-gray-200">
-                        <th class="py-2 px-4 border-b">Step 1: Initial Access (May 12, AM)</th>
-                        <th class="py-2 px-4 border-b">Step 2: Spread/Encryption (May 12, AM–PM)</th>
-                        <th class="py-2 px-4 border-b">Step 3: Detection/Containment (May 12, PM)</th>
-                        <th class="py-2 px-4 border-b">Step 4: Recovery (May 13–Post-May)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td class="py-2 px-4 border-b">EternalBlue exploits unpatched SMBv1. <br><strong>What went wrong</strong>: No patches, SMBv1 enabled.</td>
-                        <td class="py-2 px-4 border-b">Encrypts files on 230,000+ systems. <br><strong>Factor</strong>: No network segmentation, no EDR.</td>
-                        <td class="py-2 px-4 border-b">Kill switch halts spread; patches applied. <br><strong>Factor</strong>: Rapid response, no initial SIEM.</td>
-                        <td class="py-2 px-4 border-b">Patches applied, systems rebuilt; minimal ransoms paid. <br><strong>Total time</strong>: $4–8B global impact.</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <p class="mb-4"><strong>Dwell Time Insight</strong>: The dwell time was like a flash flood, spreading in hours due to unpatched systems and no network defenses. Industry reports note 2017 median dwell times were ~100 days; WannaCry’s ultra-short dwell reflects its aggressive worm design, mitigated by a kill switch and rapid patching.</p>
-
-        <!-- Learnings -->
-        <h2 class="text-2xl font-semibold mb-4">Learnings</h2>
-        <div class="overflow-x-auto">
-            <table class="min-w-full bg-white border border-gray-300">
-                <thead>
-                    <tr class="bg-gray-200">
-                        <th class="py-2 px-4 border-b">Root Cause Analysis</th>
-                        <th class="py-2 px-4 border-b">Impact Assessment</th>
-                        <th class="py-2 px-4 border-b">Detection Opportunities</th>
-                        <th class="py-2 px-4 border-b">Response and Remediation</th>
-                        <th class="py-2 px-4 border-b">Attribution Analysis</th>
-                        <th class="py-2 px-4 border-b">Lessons Learned</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td class="py-2 px-4 border-b"><strong>Using 5 Whys</strong>: Why breached? EternalBlue exploit. Why exploited? Unpatched Windows. Why unpatched? Poor patch management. Why poor? Prioritized operations. Why prioritized? Cost focus. <br> <strong>Other causes</strong>: SMBv1 enabled, no EDR. <br> <strong>Beginners</strong>: Root causes trace to outdated systems. <br> <strong>Experts</strong>: Fishbone factors: Process (patch delays), Technology (no EDR), Network (SMBv1).</td>
-                        <td class="py-2 px-4 border-b"><strong>Data</strong>: Files encrypted on 230,000+ systems; no exfiltration. <br> <strong>Financial</strong>: $4–8B global losses; NHS £92M. <br> <strong>Operational</strong>: NHS hospitals disrupted. <br> <strong>Beginners</strong>: Impacts hit operations, finances. <br> <strong>Experts</strong>: BIA metrics: RTO delayed weeks for NHS.</td>
-                        <td class="py-2 px-4 border-b"><strong>Missed</strong>: SMBv1 traffic via IDS; encryption via EDR. <br> <strong>Opportunities</strong>: Patch management, disable SMBv1, deploy EDR. <br> <strong>Failures</strong>: No monitoring, unpatched systems. <br> <strong>Beginners</strong>: Detection is like antivirus. <br> <strong>Experts</strong>: Sigma rule: <code>detection: logsource: category: network | selection: protocol: smb AND exploit: eternalblue</code>.</td>
-                        <td class="py-2 px-4 border-b"><strong>Immediate</strong>: Kill switch, Microsoft patches, system isolation. <br> <strong>Long-term</strong>: Disabled SMBv1, enhanced EDR, patch policies. <br> <strong>Beginners</strong>: Response restores systems. <br> <strong>Experts</strong>: NIST IR followed: Identification (May 12), Containment (May 12), Eradication (May 13–).</td>
-                        <td class="py-2 px-4 border-b"><strong>Confirmed</strong>: Lazarus Group (North Korea). <br> <strong>TTPs</strong>: EternalBlue, ransomware align with APT38. <br> <strong>Beginners</strong>: Attribution identifies hackers. <br> <strong>Experts</strong>: IOCs include WannaCry hashes, C2 IPs.</td>
-                        <td class="py-2 px-4 border-b">Patch systems promptly. <br> Disable legacy protocols. <br> Deploy EDR, SIEM, DLP. <br> Prioritize patch management. <br> <strong>Beginners</strong>: Update systems, secure networks. <br> <strong>Experts</strong>: Adopt MITRE ATT&CK, zero-trust architecture.</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
 </body>
 </html>
-

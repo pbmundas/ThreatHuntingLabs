@@ -10,7 +10,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis-network.min.css" rel="stylesheet" type="text/css" />
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="site.css">
 </head>
 <body class="bg-gray-100 font-sans">
     <div id="root"></div>
@@ -200,26 +199,6 @@
                     }
                 });
 
-				// --- Custom manual path: Execution -> Privilege Escalation -> Defense Evasion -> Credential Access ---
-
-				// Find node IDs by tactic
-				const execNode = mitreData.techniques.findIndex(t => t.tactic === "execution") + 1;
-				const peNode = mitreData.techniques.findIndex(t => t.tactic === "privilege-escalation") + 1;
-				const deNode = mitreData.techniques.findIndex(t => t.tactic === "defense-evasion") + 1;
-				const caNode = mitreData.techniques.findIndex(t => t.tactic === "credential-access") + 1;
-
-				// Add custom edges if all nodes exist
-				if (execNode > 0 && peNode > 0) {
-				  edges.push({ from: execNode, to: peNode, arrows: "to", color: { color: "#2563eb" }, width: 2 });
-				}
-				if (peNode > 0 && deNode > 0) {
-				  edges.push({ from: peNode, to: deNode, arrows: "to", color: { color: "#2563eb" }, dashes: true, width: 2 });
-				}
-				if (deNode > 0 && caNode > 0) {
-				  edges.push({ from: deNode, to: caNode, arrows: "to", color: { color: "#2563eb" }, width: 2 });
-				}
-
-
                 const container = flowchartRef.current;
                 const data = { nodes: new vis.DataSet(nodes), edges: new vis.DataSet(edges) };
                 const options = {
@@ -288,125 +267,5 @@
         const root = ReactDOM.createRoot(document.getElementById('root'));
         root.render(<App />);
     </script>
-	<div class="mt-8 p-4 bg-white rounded-md shadow space-y-6">
-
-  <!-- Attack Timeline -->
-  <section>
-	  <h2 class="text-2xl font-semibold mb-4">Attack Timeline</h2>
-        <div class="overflow-x-auto mb-8">
-            <table class="min-w-full bg-white border border-gray-300">
-                <thead>
-                    <tr class="bg-gray-200">
-                        <th class="py-2 px-4 border-b">Date/Time</th>
-                        <th class="py-2 px-4 border-b">Action</th>
-                        <th class="py-2 px-4 border-b">Actor/Details</th>
-                        <th class="py-2 px-4 border-b">Evidence/Impact</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td class="py-2 px-4 border-b">Pre-June 2017</td>
-                        <td class="py-2 px-4 border-b">Preparation: Sandworm compromises M.E.Doc software update server, likely using stolen credentials.</td>
-                        <td class="py-2 px-4 border-b">Sandworm (Russian state-sponsored)</td>
-                        <td class="py-2 px-4 border-b">Backdoor added to M.E.Doc; linked to prior Ukrainian attacks.</td>
-                    </tr>
-                    <tr>
-                        <td class="py-2 px-4 border-b">June 27, 2017, Morning</td>
-                        <td class="py-2 px-4 border-b">Initial infection: NotPetya spreads via malicious M.E.Doc update in Ukraine.</td>
-                        <td class="py-2 px-4 border-b">Sandworm</td>
-                        <td class="py-2 px-4 border-b">Exploits EternalBlue/EternalRomance; infects Ukrainian businesses, banks.</td>
-                    </tr>
-                    <tr>
-                        <td class="py-2 px-4 border-b">June 27, 2017, Afternoon</td>
-                        <td class="py-2 px-4 border-b">Global spread: NotPetya propagates to 65+ countries, hitting Maersk, Merck, FedEx, Mondelez.</td>
-                        <td class="py-2 px-4 border-b">NotPetya</td>
-                        <td class="py-2 px-4 border-b">Encrypts MBR on 50,000+ systems; $10B in damages; Maersk loses 45,000 PCs, 4,000 servers.</td>
-                    </tr>
-                    <tr>
-                        <td class="py-2 px-4 border-b">June 27, 2017, Evening</td>
-                        <td class="py-2 px-4 border-b">Containment efforts: Victims (e.g., Maersk) shut down systems to halt spread.</td>
-                        <td class="py-2 px-4 border-b">Victim IT teams</td>
-                        <td class="py-2 px-4 border-b">Manual operations used; global supply chains disrupted (e.g., Maersk ports).</td>
-                    </tr>
-                    <tr>
-                        <td class="py-2 px-4 border-b">June 28, 2017</td>
-                        <td class="py-2 px-4 border-b">Response: Microsoft releases guidance; organizations isolate networks, apply patches.</td>
-                        <td class="py-2 px-4 border-b">Microsoft/Victims</td>
-                        <td class="py-2 px-4 border-b">No kill switch; SMBv1 patches critical.</td>
-                    </tr>
-                    <tr>
-                        <td class="py-2 px-4 border-b">July 2017</td>
-                        <td class="py-2 px-4 border-b">Recovery: Companies rebuild systems; Maersk uses Ghana domain controller backup.</td>
-                        <td class="py-2 px-4 border-b">Victims</td>
-                        <td class="py-2 px-4 border-b">Maersk recovers in 10 days; others face weeks of downtime.</td>
-                    </tr>
-                    <tr>
-                        <td class="py-2 px-4 border-b">August 2017</td>
-                        <td class="py-2 px-4 border-b">Financial impact reported: Maersk ($200–300M), Merck ($870M), FedEx ($400M).</td>
-                        <td class="py-2 px-4 border-b">Victims</td>
-                        <td class="py-2 px-4 border-b">No ransoms paid; wiper intent confirmed.</td>
-                    </tr>
-                    <tr>
-                        <td class="py-2 px-4 border-b">February 15, 2018</td>
-                        <td class="py-2 px-4 border-b">Attribution: U.S., UK, Canada, Australia attribute NotPetya to Russia.</td>
-                        <td class="py-2 px-4 border-b">Western governments</td>
-                        <td class="py-2 px-4 border-b">Linked to Sandworm; aimed at Ukrainian destabilization.</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <!-- Dwell Time Analysis -->
-        <h2 class="text-2xl font-semibold mb-4">Dwell Time Analysis</h2>
-        <p class="mb-4">Dwell time was approximately hours (June 27, 2017, morning to evening), as NotPetya’s worm-like propagation was rapid, but system shutdowns contained further spread.</p>
-        <div class="overflow-x-auto mb-8">
-            <table class="min-w-full bg-white border border-gray-300">
-                <thead>
-                    <tr class="bg-gray-200">
-                        <th class="py-2 px-4 border-b">Step 1: Initial Access (Jun 27, AM)</th>
-                        <th class="py-2 px-4 border-b">Step 2: Spread/Encryption (Jun 27, AM–PM)</th>
-                        <th class="py-2 px-4 border-b">Step 3: Detection/Containment (Jun 27, PM)</th>
-                        <th class="py-2 px-4 border-b">Step 4: Recovery (Jun 28–Jul)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td class="py-2 px-4 border-b">Malicious M.E.Doc update. <br><strong>What went wrong</strong>: No supply-chain checks, unpatched Windows.</td>
-                        <td class="py-2 px-4 border-b">Encrypts MBR via EternalBlue; spreads globally. <br><strong>Factor</strong>: No segmentation, no EDR.</td>
-                        <td class="py-2 px-4 border-b">Black screens trigger shutdowns. <br><strong>Factor</strong>: Rapid response, no initial SIEM.</td>
-                        <td class="py-2 px-4 border-b">Systems rebuilt; patches applied. <br><strong>Total time</strong>: $10B global impact.</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <p class="mb-4"><strong>Dwell Time Insight</strong>: The dwell time was like a blitzkrieg, spreading in hours due to unpatched systems and supply-chain compromise. Industry reports note 2017 median dwell times were ~100 days; NotPetya’s rapid spread reflects its destructive design, mitigated by swift containment.</p>
-
-        <!-- Learnings -->
-        <h2 class="text-2xl font-semibold mb-4">Learnings</h2>
-        <div class="overflow-x-auto">
-            <table class="min-w-full bg-white border border-gray-300">
-                <thead>
-                    <tr class="bg-gray-200">
-                        <th class="py-2 px-4 border-b">Root Cause Analysis</th>
-                        <th class="py-2 px-4 border-b">Impact Assessment</th>
-                        <th class="py-2 px-4 border-b">Detection Opportunities</th>
-                        <th class="py-2 px-4 border-b">Response and Remediation</th>
-                        <th class="py-2 px-4 border-b">Attribution Analysis</th>
-                        <th class="py-2 px-4 border-b">Lessons Learned</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td class="py-2 px-4 border-b"><strong>Using 5 Whys</strong>: Why breached? M.E.Doc update. Why infected? Unpatched Windows. Why unpatched? Slow patch management. Why slow? Operational priorities. Why prioritized? Cost focus. <br> <strong>Other causes</strong>: No EDR, no supply-chain audits. <br> <strong>Beginners</strong>: Root causes trace to unpatched systems, vendor trust. <br> <strong>Experts</strong>: Fishbone factors: Process (patch delays), Technology (no EDR), Supply Chain (M.E.Doc).</td>
-                        <td class="py-2 px-4 border-b"><strong>Data</strong>: 50,000+ systems’ MBR encrypted; no exfiltration. <br> <strong>Financial</strong>: $10B global losses; Maersk ($200–300M). <br> <strong>Operational</strong>: Global supply chain disruption. <br> <strong>Beginners</strong>: Impacts hit operations, finances. <br> <strong>Experts</strong>: BIA metrics: RTO delayed weeks for victims.</td>
-                        <td class="py-2 px-4 border-b"><strong>Missed</strong>: M.E.Doc update via SIEM; spread via IDS; encryption via EDR. <br> <strong>Opportunities</strong>: Patch management, supply-chain audits, EDR. <br> <strong>Failures</strong>: No monitoring, unpatched systems. <br> <strong>Beginners</strong>: Detection is like antivirus. <br> <strong>Experts</strong>: Sigma rule: <code>detection: logsource: category: network | selection: protocol: smb AND exploit: eternalblue</code>.</td>
-                        <td class="py-2 px-4 border-b"><strong>Immediate</strong>: System shutdowns, manual operations. <br> <strong>Long-term</strong>: Patched SMBv1, deployed EDR, audited vendors. <br> <strong>Beginners</strong>: Response restores systems. <br> <strong>Experts</strong>: NIST IR followed: Identification (Jun 27), Containment (Jun 27), Eradication (Jul).</td>
-                        <td class="py-2 px-4 border-b"><strong>Confirmed</strong>: Sandworm (Russia). <br> <strong>TTPs</strong>: NotPetya, EternalBlue align with APT28. <br> <strong>Beginners</strong>: Attribution identifies hackers. <br> <strong>Experts</strong>: IOCs include M.E.Doc backdoor, C2 IPs.</td>
-                        <td class="py-2 px-4 border-b">Patch systems promptly. <br> Audit supply chain. <br> Deploy EDR, SIEM, DLP. <br> Adopt zero-trust. <br> <strong>Beginners</strong>: Update software, verify vendors. <br> <strong>Experts</strong>: Adopt MITRE ATT&CK, supply-chain security.</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
 </body>
 </html>
-
