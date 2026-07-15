@@ -75,6 +75,7 @@ nav:
       - Solo Hunter to Enterprise: Start-Hunting/threat-hunting-program-models.md
       - Reporting: Start-Hunting/threat-hunting-documentation.md
       - Telemetry & Logs to collect: Start-Hunting/threat-hunting-device-logs-telemetry-details.html
+      - Low Hanging Fruits: Start-Hunting/low-hanging-fruits-threat-hunting.md
       
   - Blog: https://blog.threathuntlabs.com
   
