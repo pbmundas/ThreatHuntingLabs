@@ -12,11 +12,59 @@ body { background: radial-gradient(circle at 80% -10%,rgba(20,109,130,.16),trans
 .md-header { background:rgba(6,14,20,.9); border-bottom:1px solid var(--thl-border); backdrop-filter:blur(14px); box-shadow:none; }
 .md-tabs { background:rgba(7,16,23,.94); border-bottom:1px solid var(--thl-border); }
 .md-tabs__link { font-size:.68rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase; }
-.md-tabs__item--active .md-tabs__link,.md-tabs__link:hover,.md-nav__link--active,.md-nav__link:hover { color:var(--thl-cyan); }
+.md-tabs__link,
+.md-tabs__link:visited {
+  color:#b9cdd6;
+  opacity:1;
+}
+.md-tabs__item--active .md-tabs__link,
+.md-tabs__item--active .md-tabs__link:visited {
+  color:#071017;
+  opacity:1;
+  background:var(--thl-cyan);
+  border-radius:.3rem .3rem 0 0;
+  padding-inline:.7rem;
+}
+.md-tabs__link:hover,
+.md-tabs__link:focus-visible {
+  color:#f2fcff;
+  opacity:1;
+  background:rgba(77,227,255,.12);
+  border-radius:.3rem;
+}
+.md-nav__link,
+.md-nav__link:visited {
+  color:#aebfc8;
+  opacity:1;
+}
+.md-nav__link--active,
+.md-nav__link--active:visited,
+.md-nav__item .md-nav__link--active {
+  color:#06151c;
+  opacity:1;
+  background:linear-gradient(90deg,var(--thl-cyan),#83edff);
+  border-radius:.25rem;
+  font-weight:700;
+  padding:.38rem .55rem;
+}
+.md-nav__link:hover,
+.md-nav__link:focus-visible {
+  color:var(--thl-cyan);
+  opacity:1;
+}
 .md-search__form { background:rgba(137,183,203,.08); border:1px solid var(--thl-border); border-radius:.4rem; }
 .md-sidebar__scrollwrap { scrollbar-color:#274250 transparent; }
-.md-nav__link--active { border-left:2px solid var(--thl-cyan); padding-left:.65rem; }
+.md-nav__link:focus-visible,
+.md-tabs__link:focus-visible {
+  outline:2px solid var(--thl-cyan);
+  outline-offset:2px;
+}
 .md-content { min-width:0; }
+.md-typeset a,
+.md-typeset a:visited { color:#61dff5; text-decoration-color:rgba(97,223,245,.45); }
+.md-typeset a:hover,
+.md-typeset a:focus-visible { color:#b7f5ff; text-decoration-color:currentColor; }
+.md-typeset a:focus-visible { outline:2px solid var(--thl-cyan); outline-offset:3px; border-radius:.15rem; }
 .md-typeset h1 { color:#f2fbff; font-weight:750; letter-spacing:-.035em; }
 .md-typeset h2 { color:#e7f6fb; border-bottom:1px solid var(--thl-border); padding-bottom:.45rem; }
 .md-typeset h3 { color:#c8e9f2; }
