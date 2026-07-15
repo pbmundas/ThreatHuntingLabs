@@ -1,112 +1,93 @@
 ---
-title: Threathuntlabs Intel Feed | Cyber Threat Telemetry Exchange
-description: Standalone open-source threat intelligence data, adversary playbooks, and structural intrusion telemetry.
+title: Threat Hunt Labs | Practical Knowledge for Defenders
+description: Open threat-hunting knowledge, adversary case studies, detection methods, and hands-on labs for modern defenders.
+hide:
+  - toc
 meta:
   - name: robots
     content: index, follow, max-image-preview:large
   - name: keywords
-    content: threathuntlabs, threat hunting, threat intel feed, malware telemetry, adversary playbooks
+    content: threat hunting, detection engineering, DFIR, threat intelligence, SOC, cybersecurity labs
 ---
 
-# Threat Hunt Labs
+<section class="thl-hero">
+  <div class="thl-eyebrow">// OPEN DEFENDER KNOWLEDGE BASE</div>
+  <h1>Hunt what alerts leave behind.</h1>
+  <p>Build the analytical mindset, telemetry fluency, and repeatable methods needed to uncover adversary behavior before it becomes an incident.</p>
+  <div class="thl-actions">
+    <a class="thl-button thl-button--primary" href="foundations/Threat-Hunting-Explained-Beyond-Alerts-Dashboards-and-SIEM-Queries/">Start with the foundations</a>
+    <a class="thl-button" href="Start-Hunting/threat-hunting-lab/">Open the hunting lab</a>
+  </div>
+</section>
 
-## Practical Cybersecurity Knowledge for Modern Defenders
+<div class="thl-metrics">
+  <div class="thl-metric"><strong>Hypothesis driven</strong><span>THINK BEFORE YOU QUERY</span></div>
+  <div class="thl-metric"><strong>Telemetry focused</strong><span>FOLLOW THE EVIDENCE</span></div>
+  <div class="thl-metric"><strong>Defender built</strong><span>PRACTICAL, NOT PROMOTIONAL</span></div>
+</div>
 
-> A cybersecurity knowledge hub dedicated to **Threat Hunting**, **Detection Engineering**, **Digital Forensics**, **Malware Analysis**, **Windows Security**, **Threat Intelligence**, and **SOC Operations**.
-
-Whether you're beginning your journey in cybersecurity or already working as a SOC Analyst, Threat Hunt Labs aims to simplify complex security concepts through practical, research-driven technical articles.
-
----
-
-## What You'll Find Here
+## Choose your hunting path
 
 <div class="grid cards" markdown>
 
-- ### 🔍 Threat Hunting
+- <span class="thl-card-id">PATH_01 / ORIENT</span>
 
-    Learn how defenders proactively identify malicious activity using logs, telemetry, behavioral analysis, and attacker tradecraft.
+    ### Learn the foundations
 
-- ### 🛡️ Detection Engineering
+    Understand the hunting lifecycle, attacker mindset, maturity models, and the difference between reactive alerting and proactive investigation.
 
-    Understand how effective detections are designed using Sigma, YARA, KQL, Splunk SPL, and detection logic.
+    [Build your mental model →](foundations/Threat-Hunting-Explained-Beyond-Alerts-Dashboards-and-SIEM-Queries/){ .thl-card-link }
 
-- ### 🖥️ Windows Security
+- <span class="thl-card-id">PATH_02 / OBSERVE</span>
 
-    Explore Windows internals, Event Logs, Sysmon, Registry artifacts, PowerShell, Scheduled Tasks, and other valuable forensic data sources.
+    ### Read the telemetry
 
-- ### 🔬 Digital Forensics (DFIR)
+    Turn noisy raw logs into timelines, behavioral patterns, and testable evidence. Learn what endpoints and security controls can actually tell you.
 
-    Discover forensic artifacts, incident response techniques, timeline analysis, and investigative methodologies.
+    [Learn to read logs →](Start-Hunting/Reading-Raw-Logs-Like-a-Threat-Hunter/){ .thl-card-link }
 
-- ### 🦠 Malware Analysis
+- <span class="thl-card-id">PATH_03 / INVESTIGATE</span>
 
-    Learn how malware behaves, persists, communicates, and leaves evidence that defenders can use during investigations.
+    ### Run a threat hunt
 
-- ### 🎯 MITRE ATT&CK
+    Move from a clear hypothesis to collection, analysis, validation, and documentation through an applied lab workflow.
 
-    Understand adversary tactics, techniques, and procedures (TTPs) and how they map to real-world detections.
+    [Enter the lab →](Start-Hunting/threat-hunting-lab/){ .thl-card-link }
+
+- <span class="thl-card-id">PATH_04 / REASON</span>
+
+    ### Study real intrusions
+
+    Revisit Stuxnet, RSA SecurID, LinkedIn, Adobe, and other incidents through the lens of evidence and retrospective hunting.
+
+    [Explore case studies →](case-studies/2010-Stuxnet-Retrospective-Threat-Hunt-Report/){ .thl-card-link }
+
+- <span class="thl-card-id">PATH_05 / ENGINEER</span>
+
+    ### Develop detections
+
+    Connect attacker behavior to Sigma, YARA, KQL, SPL, Windows events, and durable detection logic your SOC can operationalize.
+
+    [Explore analysis techniques →](foundations/Threat-Hunting-Data-Analysis-Techniques/){ .thl-card-link }
+
+- <span class="thl-card-id">PATH_06 / REPORT</span>
+
+    ### Communicate findings
+
+    Turn technical evidence into a defensible hunt record with scope, observations, conclusions, and clear next actions.
+
+    [Document a hunt →](Start-Hunting/threat-hunting-documentation/){ .thl-card-link }
 
 </div>
 
----
+## A field guide for modern defenders
 
-## Our Approach
+Threat Hunt Labs is an independent cybersecurity publication for threat hunters, SOC analysts, detection engineers, DFIR practitioners, incident responders, and students. The material connects attacker tradecraft to the logs and forensic artifacts defenders use every day.
 
-Cybersecurity is constantly evolving, and understanding **why** something happens is just as important as knowing **how** to detect it.
+!!! info "The operating principle"
 
-Threat Hunt Labs focuses on:
+    Start with a question, not a dashboard. Collect the right evidence, challenge your assumptions, and leave behind a detection or a documented gap.
 
-- Breaking down complex security concepts into understandable explanations.
-- Explaining attacker techniques from a defender's perspective.
-- Connecting theory with practical investigation methods.
-- Sharing detection strategies and defensive best practices.
-- Encouraging continuous learning through detailed technical content.
+## Learn · Investigate · Detect · Defend
 
----
-
-## Who Is This For?
-
-This site is intended for:
-
-- SOC Analysts
-- Threat Hunters
-- Detection Engineers
-- DFIR Professionals
-- Security Engineers
-- Incident Responders
-- Cybersecurity Students
-- Blue Team Enthusiasts
-
----
-
-## Why Threat Hunt Labs?
-
-!!! info "Practical, Not Promotional"
-
-    Every article is written to share practical cybersecurity knowledge—not to sell products or courses.
-
-!!! tip "Research-Driven"
-
-    Topics are based on real attack techniques, defensive strategies, public research, and industry best practices.
-
-!!! success "Built for Continuous Learning"
-
-    New technical articles and research will be published regularly.
-
----
-
-## About
-
-Threat Hunt Labs is an independent cybersecurity publication created to help defenders better understand threats, investigations, and detection techniques.
-
-The mission is simple:
-
-> **Make practical cybersecurity knowledge accessible, understandable, and useful for the global security community.**
-
-Whether you're researching Windows artifacts, exploring MITRE ATT&CK techniques, or learning threat hunting methodologies, the goal is to provide practical content that strengthens analytical skills and defensive thinking.
-
----
-
-# Learn • Investigate • Detect • Defend
-
-> Building a community of security professionals through practical knowledge and continuous learning.
+New to threat hunting? Begin with the [hunting mindset](foundations/The-Threat-Hunting-Mindset-Thinking-Like-an-Attacker/) and then learn how to [develop a useful hypothesis](foundations/Hypothesis-Development-Thinking-Like-a-Threat-Hunter-Before-Writing-a-Single-Query/).
