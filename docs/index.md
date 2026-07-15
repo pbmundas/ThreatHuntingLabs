@@ -16,7 +16,7 @@ meta:
   <p>Build the analytical mindset, telemetry fluency, and repeatable methods needed to uncover adversary behavior before it becomes an incident.</p>
   <div class="thl-actions">
     <a class="thl-button thl-button--primary" href="foundations/Threat-Hunting-Explained-Beyond-Alerts-Dashboards-and-SIEM-Queries/">Start with the foundations</a>
-    <a class="thl-button" href="Start-Hunting/threat-hunting-lab/">Open the hunting lab</a>
+    <a class="thl-button" href="Start-Hunting/threat-hunting-lab/">Guide to creating your local hunting lab</a>
   </div>
 </section>
 
