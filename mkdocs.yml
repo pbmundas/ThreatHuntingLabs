@@ -57,6 +57,7 @@ nav:
   - Home: index.md
 
   - Foundations:
+      - Unknown Facts: foundations/2025-07-20-unknown-facts-about-threat-hunting.md
       - 10 Common Mistakes: foundations/10-Common-Mistakes-Every-Beginner-Makes-When-Learning-Threat-Hunting.md
       - Cybersecurity Fundamentals: foundations/Cybersecurity-Fundamentals-The-Foundation-Every-Threat-Hunter-Needs-part-1.md
       - Why and Where Threat Hunting: foundations/Why-Every-Organization-Needs-Threat-Hunting.md
@@ -75,19 +76,21 @@ nav:
       - Reporting: Start-Hunting/threat-hunting-documentation.md
       - Telemetry & Logs to collect: Start-Hunting/threat-hunting-device-logs-telemetry-details.html
       - Low Hanging Fruits: Start-Hunting/low-hanging-fruits-threat-hunting.md
-      
-  - Blog: https://blog.threathuntlabs.com
   
+  - Learn Attacks: 
+     - Attacks in History: learn-known-cyber-attacks/index.html
+     - Attacks Encyclopedia: attack-encyclopedia/index.html
+
+  - Reports: threat-hunting-reports/index.html
+
   - Case Studies:
      - Stuxnet (2010): case-studies/2010-Stuxnet-Retrospective-Threat-Hunt-Report.md
      - RSA-SecurID (2011): case-studies/2011-RSA-SecurID-Retrospective-Threat-Hunt-Report.md
      - Linkedin (2012): case-studies/2012-linkedin-threat-hunt-report.md
      - Adobe (2013): case-studies/2013-adobe-threat-hunt-report.md
-
-  - Resources: Downloads/threat-hunting-related-document-references.md
-
-  - Learn Attacks: 
-     - Attacks in History: learn-known-cyber-attacks/index.html
-     - Attacks Encyclopedia: attack-encyclopedia/index.html
       
   - 🎯Daily Intel: https://intel.threathuntlabs.com
+
+  - Blog: https://blog.threathuntlabs.com
+
+  - Resources: Downloads/threat-hunting-related-document-references.md
