@@ -68,8 +68,6 @@ nav:
       - Methodologies: foundations/Threat-Hunting-Methodologies-Choosing-the-Right-Hunting-Approach.md
       - Mindset: foundations/The-Threat-Hunting-Mindset-Thinking-Like-an-Attacker.md
       - Maturity Model: foundations/The-Threat-Hunting-Maturity-Model-Explained.md
-
-  - Start Hunting:
       - Lab Setup: Start-Hunting/threat-hunting-lab.md
       - Reading Logs: Start-Hunting/Reading-Raw-Logs-Like-a-Threat-Hunter.md
       - Solo Hunter to Enterprise: Start-Hunting/threat-hunting-program-models.md
@@ -79,7 +77,7 @@ nav:
       
   - Blog: https://blog.threathuntlabs.com
   
-  - Hunting Case Studies:
+  - Case Studies:
      - Stuxnet (2010): case-studies/2010-Stuxnet-Retrospective-Threat-Hunt-Report.md
      - RSA-SecurID (2011): case-studies/2011-RSA-SecurID-Retrospective-Threat-Hunt-Report.md
      - Linkedin (2012): case-studies/2012-linkedin-threat-hunt-report.md
@@ -87,8 +85,7 @@ nav:
 
   - Resources: Downloads/threat-hunting-related-document-references.md
 
-  - 🔥Learn Attacks: 
-     - Attacks in the History: learn-known-cyber-attacks/index.html
-     - Attacks Encyclopedia: attack-encyclopedia/index.html
+  - Learn Attacks: learn-known-cyber-attacks/index.html
+  - Attacks Encyclopedia: attack-encyclopedia/index.html
       
-  - 🎯Live Threat Intel: https://intel.threathuntlabs.com
+  - 🎯Daily Intel: https://intel.threathuntlabs.com
