@@ -85,7 +85,8 @@ nav:
 
   - Resources: Downloads/threat-hunting-related-document-references.md
 
-  - Learn Attacks: learn-known-cyber-attacks/index.html
-  - Attacks Encyclopedia: attack-encyclopedia/index.html
+  - Learn Attacks: 
+     - Attacks in History: learn-known-cyber-attacks/index.html
+     - Attacks Encyclopedia: attack-encyclopedia/index.html
       
   - 🎯Daily Intel: https://intel.threathuntlabs.com
