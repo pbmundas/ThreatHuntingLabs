@@ -61,7 +61,8 @@ body { background: radial-gradient(circle at 80% -10%,rgba(20,109,130,.16),trans
   transition:opacity .15s ease,transform .15s ease,visibility .15s;
 }
 .md-tabs__item--has-dropdown:hover > .thl-tab-dropdown,
-.md-tabs__item--has-dropdown:focus-within > .thl-tab-dropdown {
+.md-tabs__item--has-dropdown:focus-within > .thl-tab-dropdown,
+.md-tabs__item--dropdown-open > .thl-tab-dropdown {
   visibility:visible;
   opacity:1;
   transform:translateY(0);

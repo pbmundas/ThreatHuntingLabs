@@ -4,37 +4,38 @@ function normalizeLabel(element) {
 
 function addTabDropdowns() {
   const tabs = document.querySelectorAll(".md-tabs__item");
-  const primaryItems = document.querySelectorAll(
-    ".md-nav--primary > .md-nav__list > .md-nav__item"
-  );
+  const navigation = Array.isArray(window.thlNavigation)
+    ? window.thlNavigation
+    : [];
 
   tabs.forEach((tab) => {
     const tabLink = tab.querySelector(":scope > .md-tabs__link");
     if (!tabLink || tab.querySelector(":scope > .thl-tab-dropdown")) return;
 
-    const matchingItem = Array.from(primaryItems).find((item) => {
-      const link = item.querySelector(":scope > .md-nav__link");
-      return normalizeLabel(link) === normalizeLabel(tabLink);
-    });
-    const childNav = matchingItem?.querySelector(":scope > .md-nav");
-    const childLinks = childNav?.querySelectorAll(".md-nav__link[href]");
+    const navigationItem = navigation.find(
+      (item) => item.title === normalizeLabel(tabLink)
+    );
+    const children = navigationItem?.children || [];
 
-    if (!childLinks?.length) return;
+    if (!children.length) return;
 
     tab.classList.add("md-tabs__item--has-dropdown");
     tabLink.setAttribute("aria-haspopup", "true");
+    tabLink.setAttribute("aria-expanded", "false");
 
     const dropdown = document.createElement("div");
     dropdown.className = "thl-tab-dropdown";
     dropdown.setAttribute("aria-label", `${normalizeLabel(tabLink)} submenu`);
 
-    childLinks.forEach((childLink) => {
+    children.forEach((child) => {
+      if (!child.url) return;
+
       const link = document.createElement("a");
       link.className = "thl-tab-dropdown__link";
-      link.href = childLink.href;
-      link.textContent = normalizeLabel(childLink);
+      link.href = child.url;
+      link.textContent = child.title;
 
-      if (childLink.classList.contains("md-nav__link--active")) {
+      if (child.active) {
         link.classList.add("thl-tab-dropdown__link--active");
         link.setAttribute("aria-current", "page");
       }
@@ -43,6 +44,23 @@ function addTabDropdowns() {
     });
 
     tab.appendChild(dropdown);
+
+    tabLink.addEventListener("click", (event) => {
+      event.preventDefault();
+      const willOpen = !tab.classList.contains("md-tabs__item--dropdown-open");
+
+      document
+        .querySelectorAll(".md-tabs__item--dropdown-open")
+        .forEach((openTab) => {
+          openTab.classList.remove("md-tabs__item--dropdown-open");
+          openTab
+            .querySelector(":scope > .md-tabs__link")
+            ?.setAttribute("aria-expanded", "false");
+        });
+
+      tab.classList.toggle("md-tabs__item--dropdown-open", willOpen);
+      tabLink.setAttribute("aria-expanded", String(willOpen));
+    });
   });
 }
 
@@ -72,6 +90,30 @@ function configureNavigation() {
 }
 
 document.addEventListener("DOMContentLoaded", configureNavigation);
+document.addEventListener("click", (event) => {
+  if (event.target.closest(".md-tabs__item--has-dropdown")) return;
+
+  document
+    .querySelectorAll(".md-tabs__item--dropdown-open")
+    .forEach((tab) => {
+      tab.classList.remove("md-tabs__item--dropdown-open");
+      tab
+        .querySelector(":scope > .md-tabs__link")
+        ?.setAttribute("aria-expanded", "false");
+    });
+});
+document.addEventListener("keydown", (event) => {
+  if (event.key !== "Escape") return;
+
+  document
+    .querySelectorAll(".md-tabs__item--dropdown-open")
+    .forEach((tab) => {
+      tab.classList.remove("md-tabs__item--dropdown-open");
+      const link = tab.querySelector(":scope > .md-tabs__link");
+      link?.setAttribute("aria-expanded", "false");
+      link?.focus();
+    });
+});
 
 // Re-run after Material for MkDocs instant navigation replaces the page content.
 if (typeof document$ !== "undefined") {

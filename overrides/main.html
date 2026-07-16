@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% macro serialize_navigation(items) -%}
+[
+  {%- for item in items %}
+  {
+    "title": {{ item.title | tojson }},
+    "url": {% if item.url %}{{ (item.url | url) | tojson }}{% else %}null{% endif %},
+    "active": {{ "true" if item.active else "false" }},
+    "children": {% if item.children %}{{ serialize_navigation(item.children) }}{% else %}[]{% endif %}
+  }{% if not loop.last %},{% endif %}
+  {%- endfor %}
+]
+{%- endmacro %}
+
+{% block extrahead %}
+  {{ super() }}
+  <script>
+    window.thlNavigation = {{ serialize_navigation(nav) }};
+  </script>
+{% endblock %}
