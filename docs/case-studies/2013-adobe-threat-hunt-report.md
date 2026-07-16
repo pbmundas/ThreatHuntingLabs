@@ -9,20 +9,20 @@ subtitle: "Engagement: Hunt for Unauthorized Access to Source Code Repositories 
 | **Threat Name** | Unauthorized Access to Source Code Repositories and Customer Data ("2013 Adobe Breach") |
 | **Report Version** | 1.0 (Retrospective Reconstruction) |
 | **Date** | Hunt window simulated: June 2013 – October 2013 |
-| **Analyst** | SOC Threat Hunt Team — Lead Hunter (Tier 3) |
-| **Classification** | TLP:AMBER — Internal Use / Training Reconstruction |
+| **Analyst** | SOC Threat Hunt Team - Lead Hunter (Tier 3) |
+| **Classification** | TLP:AMBER - Internal Use / Training Reconstruction |
 | **Threat Severity** | **Critical** |
-| **Hunt Status** | Closed — Hypothesis Validated (Retrospective) |
+| **Hunt Status** | Closed - Hypothesis Validated (Retrospective) |
 
 ## Executive Summary
 
-> This report reconstructs, as a professional retrospective hunt, how a SOC embedded inside Adobe Systems in mid-to-late 2013 could plausibly have detected the intrusion that led to (a) theft of source code for Acrobat, Reader, ColdFusion, ColdFusion Builder, and a portion of Photoshop, and (b) theft of customer data — Adobe IDs, encrypted (not hashed) passwords, password hints, and encrypted payment card records — ultimately affecting tens of millions of active users and, per later analysis, up to roughly 150 million total accounts. Adobe first estimated 2.9 million affected accounts on October 3, 2013, then revised that to approximately 38 million active users, with a further 2016-era retrospective count reaching ~150 million registered accounts once inactive/legacy accounts were included.
+> This report reconstructs, as a professional retrospective hunt, how a SOC embedded inside Adobe Systems in mid-to-late 2013 could plausibly have detected the intrusion that led to (a) theft of source code for Acrobat, Reader, ColdFusion, ColdFusion Builder, and a portion of Photoshop, and (b) theft of customer data - Adobe IDs, encrypted (not hashed) passwords, password hints, and encrypted payment card records - ultimately affecting tens of millions of active users and, per later analysis, up to roughly 150 million total accounts. Adobe first estimated 2.9 million affected accounts on October 3, 2013, then revised that to approximately 38 million active users, with a further 2016-era retrospective count reaching ~150 million registered accounts once inactive/legacy accounts were included.
 
-> The hunt is built around facts publicly established by Adobe's own disclosures and independent research by Brian Krebs and Alex Holden (Hold Security), who first found the stolen 40GB source-code trove on infrastructure used by the same criminal group implicated in earlier-2013 breaches of data aggregators (LexisNexis, Dun & Bradstreet, Kroll) and of the National White Collar Crime Center (NW3C) — the latter confirmed to have been compromised via unpatched **Adobe ColdFusion** web application server vulnerabilities. Adobe itself stated it could not, at the time, confirm or rule out ColdFusion as the initial vector into its own network, and separately indicated the source-code repository access followed an intrusion that touched Adobe's **credit card transaction environment**.
+> The hunt is built around facts publicly established by Adobe's own disclosures and independent research by Brian Krebs and Alex Holden (Hold Security), who first found the stolen 40GB source-code trove on infrastructure used by the same criminal group implicated in earlier-2013 breaches of data aggregators (LexisNexis, Dun & Bradstreet, Kroll) and of the National White Collar Crime Center (NW3C) - the latter confirmed to have been compromised via unpatched **Adobe ColdFusion** web application server vulnerabilities. Adobe itself stated it could not, at the time, confirm or rule out ColdFusion as the initial vector into its own network, and separately indicated the source-code repository access followed an intrusion that touched Adobe's **credit card transaction environment**.
 
-> Where the public record does not specify exact internal technical detail — precise hostnames, exact lateral-movement path, exact persistence mechanism — this report clearly labels that content as **plausible reconstruction**, not confirmed fact. It is written as a **training and reference document**.
+> Where the public record does not specify exact internal technical detail - precise hostnames, exact lateral-movement path, exact persistence mechanism - this report clearly labels that content as **plausible reconstruction**, not confirmed fact. It is written as a **training and reference document**.
 
-> **This engagement scope has been deliberately adapted** from the ICS/PLC/USB-worm template it was generated against. Adobe in 2013 was a software/SaaS company with no industrial control environment. ICS, PLC, and USB-propagation sections are marked **N/A — Not Applicable to this Environment** rather than fabricated, and "Engineering Workstations" is correctly interpreted as **software engineering developer workstations with source-control access**, not ICS engineering stations.
+> **This engagement scope has been deliberately adapted** from the ICS/PLC/USB-worm template it was generated against. Adobe in 2013 was a software/SaaS company with no industrial control environment. ICS, PLC, and USB-propagation sections are marked **N/A - Not Applicable to this Environment** rather than fabricated, and "Engineering Workstations" is correctly interpreted as **software engineering developer workstations with source-control access**, not ICS engineering stations.
 
 ---
 
@@ -31,7 +31,7 @@ subtitle: "Engagement: Hunt for Unauthorized Access to Source Code Repositories 
 
 ### Background
 
-Beginning no later than mid-August 2013 (Adobe's own estimate) and possibly earlier per Hold Security's analysis, an intrusion into Adobe's network resulted in exfiltration of source code for several flagship products and a very large volume of customer account data. Adobe identified the incident internally on September 17, 2013, and publicly disclosed it on October 3, 2013 — after being alerted by independent researchers, not through its own detection.
+Beginning no later than mid-August 2013 (Adobe's own estimate) and possibly earlier per Hold Security's analysis, an intrusion into Adobe's network resulted in exfiltration of source code for several flagship products and a very large volume of customer account data. Adobe identified the incident internally on September 17, 2013, and publicly disclosed it on October 3, 2013 - after being alerted by independent researchers, not through its own detection.
 
 ### Threat Actor
 
@@ -39,7 +39,7 @@ Not formally, publicly attributed to a named individual or group by Adobe or by 
 
 ### Campaign
 
-The group appears to have run a sustained campaign through 2013 against organizations running outdated, internet-facing ColdFusion instances, using that access as a foothold to move toward higher-value internal systems (source code, customer databases) — a pattern consistent with, though not proven identical to, what happened inside Adobe.
+The group appears to have run a sustained campaign through 2013 against organizations running outdated, internet-facing ColdFusion instances, using that access as a foothold to move toward higher-value internal systems (source code, customer databases) - a pattern consistent with, though not proven identical to, what happened inside Adobe.
 
 ### Objectives
 
@@ -54,7 +54,7 @@ For this simulated hunt, the SOC's trigger is a **generic threat intelligence ad
 - Exploitation of known, unpatched ColdFusion vulnerabilities (e.g., authentication bypass / arbitrary file upload classes of bugs prevalent in ColdFusion advisories from 2013) against internet-facing application servers
 - Use of that foothold to pivot toward adjacent internal networks, including payment-processing-adjacent segments and source-control systems
 - Long-dwell, quiet data staging (weeks to months) prior to bulk exfiltration
-- Storage of stolen data on shared "trophy" infrastructure reused across multiple victim organizations — itself a detection opportunity if that infrastructure is later identified
+- Storage of stolen data on shared "trophy" infrastructure reused across multiple victim organizations - itself a detection opportunity if that infrastructure is later identified
 
 ### Confidence
 
@@ -101,7 +101,7 @@ For this simulated hunt, the SOC's trigger is a **generic threat intelligence ad
 
 ## 2. Hunt Objective
 
-**Mission:** Proactively determine whether Adobe's internet-facing application infrastructure — specifically any ColdFusion-based systems — has been compromised and used as a pivot point toward source-control systems and customer data stores, in response to a sector-level advisory about active ColdFusion exploitation campaigns.
+**Mission:** Proactively determine whether Adobe's internet-facing application infrastructure - specifically any ColdFusion-based systems - has been compromised and used as a pivot point toward source-control systems and customer data stores, in response to a sector-level advisory about active ColdFusion exploitation campaigns.
 
 **Expected Outcome:** Either (a) validate the hypothesis with concrete evidence of compromise and characterize scope across source code and customer data exposure, or (b) formally document a negative finding with residual confidence and monitoring recommendations.
 
@@ -111,7 +111,7 @@ For this simulated hunt, the SOC's trigger is a **generic threat intelligence ad
 - Determination of whether source code repositories and/or the customer credential/payment store were accessed or exfiltrated
 - Actionable IOCs and at least one deployable detection per confirmed technique
 
-**Business Impact:** Compromise of source code directly threatens every customer running Adobe software (increased zero-day risk against the installed base), while compromise of the customer data store affects tens of millions of account holders' credentials and payment data — both categories represent maximal reputational, legal, and regulatory exposure.
+**Business Impact:** Compromise of source code directly threatens every customer running Adobe software (increased zero-day risk against the installed base), while compromise of the customer data store affects tens of millions of account holders' credentials and payment data - both categories represent maximal reputational, legal, and regulatory exposure.
 
 ---
 
@@ -134,7 +134,7 @@ For this simulated hunt, the SOC's trigger is a **generic threat intelligence ad
 
 ### Out of Scope / Not Applicable to This Environment
 
-> **N/A — Not Applicable.** The original hunt template referenced ICS assets, PLC systems, industrial engineering workstations, and USB-borne worm propagation. Adobe in 2013 was a commercial software/SaaS company with no industrial control systems, PLCs, or OT network. Those asset classes, and any USB-autorun-worm hypothesis, are explicitly **excluded from scope**. "Engineering Workstations" in this report refers to **software developer endpoints**, consistent with Adobe's actual business.
+> **N/A - Not Applicable.** The original hunt template referenced ICS assets, PLC systems, industrial engineering workstations, and USB-borne worm propagation. Adobe in 2013 was a commercial software/SaaS company with no industrial control systems, PLCs, or OT network. Those asset classes, and any USB-autorun-worm hypothesis, are explicitly **excluded from scope**. "Engineering Workstations" in this report refers to **software developer endpoints**, consistent with Adobe's actual business.
 
 ### Excluded Systems
 
@@ -147,7 +147,7 @@ For this simulated hunt, the SOC's trigger is a **generic threat intelligence ad
 ## 4. Hunt Assumptions
 
 - The adversary may already be inside the environment; initial compromise is not yet confirmed at hunt start.
-- Initial access vector is unconfirmed at hunt start — leading hypothesis is exploitation of an internet-facing ColdFusion instance, given the group's confirmed MO against NW3C, but Adobe itself could not confirm or rule this out even after its own investigation, so the hunt treats this as a strong-but-unproven lead, not a certainty.
+- Initial access vector is unconfirmed at hunt start - leading hypothesis is exploitation of an internet-facing ColdFusion instance, given the group's confirmed MO against NW3C, but Adobe itself could not confirm or rule this out even after its own investigation, so the hunt treats this as a strong-but-unproven lead, not a certainty.
 - Malware/web-shell persistence mechanism on any compromised host is unknown at hunt start.
 - Lateral movement from the application tier toward source control and/or the customer database is suspected but unconfirmed.
 - No indication of insider involvement; hunt does not assume malicious insider unless evidence emerges.
@@ -158,7 +158,7 @@ For this simulated hunt, the SOC's trigger is a **generic threat intelligence ad
 
 ## 5. Threat Hunting Hypotheses
 
-### HYP-001 — Exploitation of Internet-Facing ColdFusion Instance
+### HYP-001 - Exploitation of Internet-Facing ColdFusion Instance
 
 **Statement:** If the adversary gained initial access by exploiting an unpatched ColdFusion vulnerability, then web server access/error logs for internet-facing ColdFusion hosts should show requests matching known 2013 ColdFusion exploit patterns (e.g., requests to administrative or file-upload endpoints from external IPs), followed by creation of new, unexpected files in the web root consistent with a web shell.
 
@@ -172,7 +172,7 @@ For this simulated hunt, the SOC's trigger is a **generic threat intelligence ad
 **Confidence:** Medium-High at creation
 **Status:** Supported (see Section 11)
 
-### HYP-002 — Web Shell Persistence and Internal Pivoting
+### HYP-002 - Web Shell Persistence and Internal Pivoting
 
 **Statement:** If a web shell was installed on a compromised application server, then that host should show interactive, script-driven command execution inconsistent with normal application behavior, followed by outbound authenticated connections to internal systems (source control, database hosts) that the application server does not normally initiate connections to.
 
@@ -184,7 +184,7 @@ For this simulated hunt, the SOC's trigger is a **generic threat intelligence ad
 **Confidence:** Medium at creation
 **Status:** Supported (see Section 11)
 
-### HYP-003 — Access to Source Code Repository
+### HYP-003 - Access to Source Code Repository
 
 **Statement:** If the adversary reached source-control systems, then source-control access logs should show bulk clone/checkout/export operations for Acrobat, Reader, ColdFusion, ColdFusion Builder, or Photoshop repositories from an account or host inconsistent with that repository's normal access pattern (e.g., a service account or an unrelated team's credentials).
 
@@ -196,7 +196,7 @@ For this simulated hunt, the SOC's trigger is a **generic threat intelligence ad
 **Confidence:** Medium-High at creation
 **Status:** Supported (see Section 11)
 
-### HYP-004 — Access to Payment-Adjacent Environment and Customer Credential Store
+### HYP-004 - Access to Payment-Adjacent Environment and Customer Credential Store
 
 **Statement:** If the adversary's access extended into systems adjacent to credit card transaction processing, then network/authentication logs for the payment-adjacent segment should show connections or authentications originating from the compromised application server or its pivot hosts, and database logs for the customer credential store (Adobe ID, encrypted password, password hint) should show anomalous bulk query activity.
 
@@ -206,9 +206,9 @@ For this simulated hunt, the SOC's trigger is a **generic threat intelligence ad
 **Data Required:** Internal NetFlow/firewall logs between network zones, database query/audit logs (if enabled)
 **Validation Method:** Cross-zone connection-graph analysis; volumetric query baselining
 **Confidence:** Medium at creation
-**Status:** Partially Supported — direct database audit evidence unavailable, supported only indirectly (see Section 22, Detection Gaps)
+**Status:** Partially Supported - direct database audit evidence unavailable, supported only indirectly (see Section 22, Detection Gaps)
 
-### HYP-005 — Staged, Long-Dwell Exfiltration to Shared Actor Infrastructure
+### HYP-005 - Staged, Long-Dwell Exfiltration to Shared Actor Infrastructure
 
 **Statement:** If stolen source code and customer data were exfiltrated over an extended period, then proxy/firewall logs should show large or repeated outbound transfers from the compromised hosts to a small number of external destinations over multiple weeks, consistent with staged exfiltration rather than a single smash-and-grab transfer.
 
@@ -240,19 +240,19 @@ graph TD
 
 ### AD Layout
 
-Single primary corporate identity environment; engineering/product teams organized by product line (Acrobat, ColdFusion, Creative Suite/Photoshop, etc.), each with access scoped — nominally — to their own repositories, though cross-team access existed for shared build infrastructure.
+Single primary corporate identity environment; engineering/product teams organized by product line (Acrobat, ColdFusion, Creative Suite/Photoshop, etc.), each with access scoped - nominally - to their own repositories, though cross-team access existed for shared build infrastructure.
 
 ### Network Zones
 
-- **DMZ / Internet-facing application tier** — includes ColdFusion-based services
-- **Corporate/Engineering LAN** — developer workstations, internal tooling
-- **Source-Control VLAN** — SCM systems
-- **Payment-Adjacent Segment** — systems near, though not necessarily fully isolated from, credit card transaction processing
-- **Customer Database Tier** — Adobe ID/credential/payment-adjacent data stores
+- **DMZ / Internet-facing application tier** - includes ColdFusion-based services
+- **Corporate/Engineering LAN** - developer workstations, internal tooling
+- **Source-Control VLAN** - SCM systems
+- **Payment-Adjacent Segment** - systems near, though not necessarily fully isolated from, credit card transaction processing
+- **Customer Database Tier** - Adobe ID/credential/payment-adjacent data stores
 
 ### ICS Network
 
-**N/A — Not Applicable to this environment** (see Section 3).
+**N/A - Not Applicable to this environment** (see Section 3).
 
 ### Trust Relationships
 
@@ -264,13 +264,13 @@ Centralized web server access logs for the DMZ tier; SCM audit logging present b
 
 ### Security Controls
 
-Perimeter firewall/WAF, patch management program that — per public reporting — had not been fully applied to all internet-facing ColdFusion instances at the time of compromise, basic IDS at the perimeter.
+Perimeter firewall/WAF, patch management program that - per public reporting - had not been fully applied to all internet-facing ColdFusion instances at the time of compromise, basic IDS at the perimeter.
 
 ### Existing Detections
 
-Signature-based WAF/IDS rules for known exploit patterns (imperfect coverage — the group's later-disclosed techniques evidently were not fully caught), basic SCM access logging without behavioral alerting.
+Signature-based WAF/IDS rules for known exploit patterns (imperfect coverage - the group's later-disclosed techniques evidently were not fully caught), basic SCM access logging without behavioral alerting.
 
-### Detection Gaps (Preview — full detail in Section 22)
+### Detection Gaps (Preview - full detail in Section 22)
 
 No fleet-wide file-integrity monitoring on the DMZ application tier, no database audit logging on the customer credential store, weak cross-zone NetFlow visibility, no SCM behavioral/volumetric anomaly detection, unclear ColdFusion patch compliance visibility.
 
@@ -287,12 +287,12 @@ No fleet-wide file-integrity monitoring on the DMZ application tier, no database
 | Firewall Logs | Perimeter and inter-zone allow/deny | 90 days | Medium | Full at perimeter; partial inter-zone |
 | Proxy Logs | Outbound web traffic, bytes transferred | 60 days | Medium-High | Full for proxied traffic |
 | DNS Logs | Resolution requests | 30 days | Medium | Full for internal resolvers |
-| NetFlow | Traffic volume/metadata between zones | 45 days | Medium | Partial — payment-adjacent segment flow logging limited |
+| NetFlow | Traffic volume/metadata between zones | 45 days | Medium | Partial - payment-adjacent segment flow logging limited |
 | Active Directory / Auth Logs | Domain authentication | 90 days | High | Full for domain-joined systems |
 | Database Audit Logs (Customer Credential Store) | Query-level auditing | **Not enabled** | N/A | **Gap** |
-| Payment-Adjacent Segment Logs | Access/authentication near card-processing systems | Partial | Low-Medium | **Gap** — limited dedicated monitoring |
+| Payment-Adjacent Segment Logs | Access/authentication near card-processing systems | Partial | Low-Medium | **Gap** - limited dedicated monitoring |
 | Email/Gateway Logs | Inbound phishing detection (secondary vector) | 30 days | Low-Medium | Partial |
-| Windows/Unix Host Event Logs | Process/logon activity on engineering and server fleet | 30 days (local, mostly) | Low-Medium | Partial — no fleet-wide central collection |
+| Windows/Unix Host Event Logs | Process/logon activity on engineering and server fleet | 30 days (local, mostly) | Low-Medium | Partial - no fleet-wide central collection |
 
 > **Note on era accuracy:** Centralized EDR and fleet-wide file-integrity monitoring were not yet standard in most 2013 enterprises. This hunt reflects **what a realistic 2013 SOC actually had**, while Section 22 notes what *should* have existed.
 
@@ -300,10 +300,10 @@ No fleet-wide file-integrity monitoring on the DMZ application tier, no database
 
 ## 8. Hunt Methodology
 
-- **Intelligence-driven hunting:** Started from the (simulated) sector advisory about active ColdFusion exploitation campaigns — not from Adobe-specific IOCs, which did not yet exist.
+- **Intelligence-driven hunting:** Started from the (simulated) sector advisory about active ColdFusion exploitation campaigns - not from Adobe-specific IOCs, which did not yet exist.
 - **Hypothesis-driven hunting:** Formalized into HYP-001 through HYP-005, each independently tested.
 - **IOC hunting:** Limited value at hunt start; became more useful once the connection to the NW3C/data-aggregator group's known infrastructure patterns was considered.
-- **Behavior hunting:** Primary method — anomalous SCM access patterns, anomalous cross-zone connections, anomalous outbound volume.
+- **Behavior hunting:** Primary method - anomalous SCM access patterns, anomalous cross-zone connections, anomalous outbound volume.
 - **Analytics-driven hunting:** Volumetric baselining of SCM export size and outbound transfer size.
 - **Anomaly hunting:** Cross-zone connection-graph analysis (DMZ → internal → payment-adjacent → customer DB).
 - **Iterative hunting:** Findings from HYP-001 (compromised ColdFusion host) directly scoped which host to pivot on for HYP-002 through HYP-005.
@@ -336,7 +336,7 @@ No fleet-wide file-integrity monitoring on the DMZ application tier, no database
 
 **Quality issues:** No file-integrity baseline existed prior to the hunt, so "new" files on the DMZ host had to be identified by manual timestamp/hash comparison against a reconstructed known-good baseline from configuration management records, not a purpose-built FIM tool.
 
-**Coverage:** Strong for the DMZ/application tier and SCM layer. Weak for the payment-adjacent segment and customer database layer — the two most sensitive systems in scope had the thinnest logging.
+**Coverage:** Strong for the DMZ/application tier and SCM layer. Weak for the payment-adjacent segment and customer database layer - the two most sensitive systems in scope had the thinnest logging.
 
 **Missing logs:** Database audit logs on the customer credential store, comprehensive payment-adjacent segment monitoring, fleet-wide file-integrity monitoring, fleet-wide endpoint process telemetry.
 
@@ -355,8 +355,8 @@ No fleet-wide file-integrity monitoring on the DMZ application tier, no database
 ```
 **Indicators searched:** Requests to known-sensitive ColdFusion administrative paths from external IPs; successful (200/302) responses to those requests, indicating the requests were not simply blocked.
 **Analysis performed:** Compared request patterns against public 2013-era ColdFusion vulnerability advisories describing administrative-access-bypass and arbitrary-file-upload issues.
-**Findings:** A short burst of requests to administrative endpoints from a single external IP on August 9, followed by successful status codes rather than the expected 403/401 pattern — consistent with a successful exploitation attempt against an unpatched instance.
-**False positives considered:** Legitimate vulnerability-scanning traffic (internal or authorized third-party) — checked against the organization's own scanning schedule; no match.
+**Findings:** A short burst of requests to administrative endpoints from a single external IP on August 9, followed by successful status codes rather than the expected 403/401 pattern - consistent with a successful exploitation attempt against an unpatched instance.
+**False positives considered:** Legitimate vulnerability-scanning traffic (internal or authorized third-party) - checked against the organization's own scanning schedule; no match.
 **Interpretation:** Strong support for HYP-001. This is consistent with Adobe's own public statement that it could not confirm or exclude ColdFusion as the entry vector, and with the same actor group's confirmed use of ColdFusion exploitation against NW3C.
 **Confidence:** Raised from Medium-High to High.
 
@@ -372,9 +372,9 @@ Not present in configuration-management baseline for this host.
 ```
 **Indicators searched:** New, unbaselined files in web-accessible paths, particularly with generic/innocuous-sounding names.
 **Analysis performed:** Manual diff against the last known-good configuration snapshot.
-**Findings:** A single new `.cfm` file appeared in a web-accessible utility directory two minutes after the exploit-pattern requests — consistent with a web shell dropped via the exploited vulnerability.
-**False positives:** Checked against recent legitimate deployments/change tickets for this host — no matching change record.
-**Interpretation:** Strong support for HYP-002 — persistence established immediately following exploitation.
+**Findings:** A single new `.cfm` file appeared in a web-accessible utility directory two minutes after the exploit-pattern requests - consistent with a web shell dropped via the exploited vulnerability.
+**False positives:** Checked against recent legitimate deployments/change tickets for this host - no matching change record.
+**Interpretation:** Strong support for HYP-002 - persistence established immediately following exploitation.
 **Confidence:** High.
 
 ### 11.3 Internal Firewall / NetFlow (Lateral Pivot)
@@ -389,7 +389,7 @@ Not present in configuration-management baseline for this host.
 **Indicators searched:** New (`first_seen`) internal connections from the DMZ host to internal segments it had no prior history of contacting.
 **Analysis performed:** Built a 90-day connection-history baseline for `dmz-cf-03` prior to August 9; flagged any post-compromise destination not in that baseline.
 **Findings:** Two new internal destinations appeared after the compromise date: an SCM-adjacent host on August 11, and a payment-adjacent gateway on August 19. Both are `first_seen` for this host in the available flow history.
-**False positives:** Considered legitimate infrastructure changes/new authorized integrations — checked against (simulated) change-management records; no corresponding authorized change found for either new connection.
+**False positives:** Considered legitimate infrastructure changes/new authorized integrations - checked against (simulated) change-management records; no corresponding authorized change found for either new connection.
 **Interpretation:** Supports HYP-002 (internal pivot confirmed) and provides the strongest available evidence for HYP-004 (reach toward the payment-adjacent segment), though this is network-flow evidence only, not proof of successful data access at the payment-adjacent host itself.
 **Confidence:** High for pivot occurring; Medium for confirming what, if anything, was accessed at the payment-adjacent destination (see 11.5 gap).
 
@@ -406,8 +406,8 @@ repository=coldfusion-core operation=full_export object_count=31006
 ```
 **Indicators searched:** Full-repository export/clone operations outside the normal, incremental CI/build access pattern; access from a host or account combination not typical for that repository.
 **Analysis performed:** Compared against the normal build-system access pattern for these repositories (typically small, incremental checkouts tied to build jobs, not full exports).
-**Findings:** Two full-repository export operations against the Acrobat and ColdFusion core repositories, both originating from `scm-internal-02` — the same host identified as a pivot destination in 11.3 — under a legacy build service account not associated with either product team's normal CI pipeline.
-**False positives:** Checked against scheduled maintenance/migration activity — no corresponding change record for a legitimate full export during this window.
+**Findings:** Two full-repository export operations against the Acrobat and ColdFusion core repositories, both originating from `scm-internal-02` - the same host identified as a pivot destination in 11.3 - under a legacy build service account not associated with either product team's normal CI pipeline.
+**False positives:** Checked against scheduled maintenance/migration activity - no corresponding change record for a legitimate full export during this window.
 **Interpretation:** Strong, near-direct evidence supporting HYP-003. This is one of the clearest findings in the hunt: an unexpected account, on the pivot host identified via network evidence, performing exactly the kind of bulk operation the hypothesis predicted.
 **Confidence:** High.
 
@@ -415,8 +415,8 @@ repository=coldfusion-core operation=full_export object_count=31006
 
 **Purpose:** Directly confirm access to the customer credential/payment-adjacent data store (HYP-004).
 **Findings:** **No database query-level audit logging existed** on the customer credential store, and payment-adjacent segment monitoring was limited to basic connection logging (already captured in 11.3) without content-level visibility.
-**Interpretation:** HYP-004 cannot be directly validated at the data-access level; the hunt team must rely on the network-flow evidence in 11.3 as circumstantial support, consistent with what was later publicly confirmed (that customer ID/password/payment data was in fact stolen), but this hunt — operating without that hindsight — can only flag it as a strong, unconfirmed lead at the time.
-**Confidence:** Medium (indirect only). **Formally logged as a Detection Gap — Section 22.**
+**Interpretation:** HYP-004 cannot be directly validated at the data-access level; the hunt team must rely on the network-flow evidence in 11.3 as circumstantial support, consistent with what was later publicly confirmed (that customer ID/password/payment data was in fact stolen), but this hunt - operating without that hindsight - can only flag it as a strong, unconfirmed lead at the time.
+**Confidence:** Medium (indirect only). **Formally logged as a Detection Gap - Section 22.**
 
 ### 11.6 Proxy / Firewall Logs (Staged Exfiltration)
 
@@ -431,8 +431,8 @@ repository=coldfusion-core operation=full_export object_count=31006
 **Indicators searched:** Repeated large outbound transfers to a small, consistent set of external destinations over an extended window.
 **Analysis performed:** Time-series volumetric analysis per destination IP from `scm-internal-02` and `dmz-cf-03`.
 **Findings:** Three large, growing-volume outbound transfers to the same external destination over roughly three weeks in August–September, temporally consistent with the SCM export events in 11.4 (source code) and plausibly consistent with the later-confirmed theft of tens of millions of customer records (payment/credential data volume).
-**False positives:** Checked against legitimate large-data business transfers (e.g., authorized cloud backup) — destination had no legitimate business categorization in proxy logs.
-**Interpretation:** Strong support for HYP-005 — this matches the publicly reported total data volume order-of-magnitude (source reporting described a ~40GB source code trove alone, consistent with multiple multi-gigabyte transfers).
+**False positives:** Checked against legitimate large-data business transfers (e.g., authorized cloud backup) - destination had no legitimate business categorization in proxy logs.
+**Interpretation:** Strong support for HYP-005 - this matches the publicly reported total data volume order-of-magnitude (source reporting described a ~40GB source code trove alone, consistent with multiple multi-gigabyte transfers).
 **Confidence:** High.
 
 ---
@@ -454,7 +454,7 @@ repository=coldfusion-core operation=full_export object_count=31006
 | Network Beacon/Connection-Graph Analysis | New internal connections from the DMZ host (11.3) |
 | Statistical/Volumetric Analysis | Growing-transfer-size pattern in 11.6 |
 
-> Techniques in the original template not applicable here (PLC Communication Analysis, ICS Protocol Analysis, USB Device Correlation, Kernel Driver Analysis) are omitted as **N/A — Not Applicable**, consistent with Section 3 scoping.
+> Techniques in the original template not applicable here (PLC Communication Analysis, ICS Protocol Analysis, USB Device Correlation, Kernel Driver Analysis) are omitted as **N/A - Not Applicable**, consistent with Section 3 scoping.
 
 ---
 
@@ -462,7 +462,7 @@ repository=coldfusion-core operation=full_export object_count=31006
 
 > All queries below are illustrative of what a hunter would run against this scenario, using realistic syntax and generic field/host names, since Adobe's actual internal schema is not publicly documented.
 
-### Splunk (SPL) — ColdFusion Admin-Path Exploit Attempt
+### Splunk (SPL) - ColdFusion Admin-Path Exploit Attempt
 ```spl
 index=web_dmz sourcetype=access_combined
   uri_path IN ("/CFIDE/administrator/*", "/CFIDE/adminapi/*", "/CFIDE/scripts/ajax/*")
@@ -471,7 +471,7 @@ index=web_dmz sourcetype=access_combined
 | sort - _time
 ```
 
-### Splunk — New File in Web Root vs. Baseline
+### Splunk - New File in Web Root vs. Baseline
 ```spl
 index=fim OR index=change_mgmt
 | where file_path LIKE "/cf_webroot/%"
@@ -479,7 +479,7 @@ index=fim OR index=change_mgmt
 | where isnull(baseline_hash)
 ```
 
-### Microsoft Sentinel (KQL) — First-Seen Internal Connection from DMZ Host
+### Microsoft Sentinel (KQL) - First-Seen Internal Connection from DMZ Host
 ```kql
 NetworkFlows
 | where SrcHost == "dmz-cf-03"
@@ -493,7 +493,7 @@ NetworkFlows
 | project TimeGenerated, SrcHost, DstHost, DstPort, Bytes
 ```
 
-### KQL — SCM Bulk Export Anomaly
+### KQL - SCM Bulk Export Anomaly
 ```kql
 SCMAuditLogs
 | where Operation == "full_export" or ObjectCount > 5000
@@ -501,7 +501,7 @@ SCMAuditLogs
 | where Account !in (KnownCIServiceAccounts)
 ```
 
-### Elastic (DSL) — Outbound Volume Time Series by Destination
+### Elastic (DSL) - Outbound Volume Time Series by Destination
 ```json
 GET proxy-*/_search
 {
@@ -521,7 +521,7 @@ GET proxy-*/_search
 }
 ```
 
-### SQL — (Illustrative) Anomalous Row-Count Query, if Audit Logging Existed
+### SQL - (Illustrative) Anomalous Row-Count Query, if Audit Logging Existed
 ```sql
 SELECT query_id, executed_by, source_host, table_name, rows_returned, query_time
 FROM db_audit_log
@@ -529,9 +529,9 @@ WHERE table_name IN ('customer_credentials', 'payment_records')
   AND rows_returned > 1000
 ORDER BY query_time;
 ```
-*(Included to show what HYP-004 validation would have looked like had this control existed — see Section 22.)*
+*(Included to show what HYP-004 validation would have looked like had this control existed - see Section 22.)*
 
-### Sysmon Filter (Config Snippet) — Web Service Process Spawning Command Shell
+### Sysmon Filter (Config Snippet) - Web Service Process Spawning Command Shell
 ```xml
 <Sysmon schemaversion="4.0">
   <EventFiltering>
@@ -543,14 +543,14 @@ ORDER BY query_time;
 </Sysmon>
 ```
 
-### PowerShell — Manual Baseline Diff of Web Root (Era-Appropriate, Pre-FIM)
+### PowerShell - Manual Baseline Diff of Web Root (Era-Appropriate, Pre-FIM)
 ```powershell
 Get-ChildItem -Path "D:\cf_webroot" -Recurse -File |
   Select-Object FullName, LastWriteTime, @{N='Hash';E={(Get-FileHash $_.FullName).Hash}} |
   Compare-Object -ReferenceObject (Import-Csv baseline_hashes.csv) -Property FullName, Hash
 ```
 
-### Windows Event Filter — Unexpected Local Admin/Service Account Use
+### Windows Event Filter - Unexpected Local Admin/Service Account Use
 ```
 Log: Security
 EventID: 4624
@@ -561,7 +561,7 @@ Filter: TargetUserName == "svc-build-legacy" AND LogonType == 3 AND IpAddress NO
 
 ## 14. Sigma Detection Opportunities
 
-### SIG-001 — ColdFusion Administrative Endpoint Access from External Source
+### SIG-001 - ColdFusion Administrative Endpoint Access from External Source
 ```yaml
 title: Successful Request to ColdFusion Administrative Path from External IP
 id: 7d2b2f1f-0001-4c3c-9a4b-000000000001
@@ -585,7 +585,7 @@ tags:
   - attack.t1190
 ```
 
-### SIG-002 — New Unbaselined File in Web-Accessible Directory
+### SIG-002 - New Unbaselined File in Web-Accessible Directory
 ```yaml
 title: New File Created in Web Root Not Present in Configuration Baseline
 id: 7d2b2f1f-0002-4c3c-9a4b-000000000002
@@ -607,7 +607,7 @@ tags:
   - attack.t1505.003
 ```
 
-### SIG-003 — First-Seen Internal Connection from Internet-Facing Host
+### SIG-003 - First-Seen Internal Connection from Internet-Facing Host
 ```yaml
 title: DMZ Host Initiates Connection to Previously Unseen Internal Destination
 id: 7d2b2f1f-0003-4c3c-9a4b-000000000003
@@ -628,7 +628,7 @@ tags:
   - attack.t1021
 ```
 
-### SIG-004 — Full Repository Export by Non-CI Account
+### SIG-004 - Full Repository Export by Non-CI Account
 ```yaml
 title: Full Source Repository Export Outside Normal CI Pattern
 id: 7d2b2f1f-0004-4c3c-9a4b-000000000004
@@ -649,7 +649,7 @@ tags:
   - attack.t1213
 ```
 
-### SIG-005 — Recurring Large Outbound Transfer to Consistent External Destination
+### SIG-005 - Recurring Large Outbound Transfer to Consistent External Destination
 ```yaml
 title: Growing Recurrent Outbound Transfer Consistent with Staged Exfiltration
 id: 7d2b2f1f-0005-4c3c-9a4b-000000000005
@@ -675,13 +675,13 @@ tags:
 
 | Technique | Sub-technique | Description | Evidence | Confidence | Detection | Mitigation |
 |---|---|---|---|---|---|---|
-| T1190 Exploit Public-Facing Application | — | Exploitation of unpatched ColdFusion instance | Section 11.1 | High | SIG-001 | Patch management, WAF tuning |
-| T1505.003 Web Shell | — | Persistence via dropped `.cfm` file | Section 11.2 | High | SIG-002 | File-integrity monitoring, web root hardening |
-| T1021 Remote Services | — | Pivot from DMZ host to internal SCM/payment-adjacent hosts | Section 11.3 | High | SIG-003 | Network segmentation, zero-trust internal access |
-| T1213 Data from Information Repositories | — | Bulk export of source code repositories | Section 11.4 | High | SIG-004 | Least privilege, SCM export alerting |
-| T1552 / T1555 Credential Access (hypothesized) | — | Possible use of the legacy build service account's credentials | Circumstantial | Low-Medium | Credential rotation, service-account monitoring | Vaulted/rotated service credentials |
-| T1041 Exfiltration Over C2 Channel | — | Staged multi-week outbound transfers | Section 11.6 | High | SIG-005 | Egress filtering, volumetric DLP |
-| T1213 (Data Store, Customer DB) | — | Suspected but unconfirmed direct access to customer credential/payment store | Indirect (11.5 gap) | Medium | Database audit logging (absent) | Enable DB audit logging, least privilege, tokenization of payment data |
+| T1190 Exploit Public-Facing Application | - | Exploitation of unpatched ColdFusion instance | Section 11.1 | High | SIG-001 | Patch management, WAF tuning |
+| T1505.003 Web Shell | - | Persistence via dropped `.cfm` file | Section 11.2 | High | SIG-002 | File-integrity monitoring, web root hardening |
+| T1021 Remote Services | - | Pivot from DMZ host to internal SCM/payment-adjacent hosts | Section 11.3 | High | SIG-003 | Network segmentation, zero-trust internal access |
+| T1213 Data from Information Repositories | - | Bulk export of source code repositories | Section 11.4 | High | SIG-004 | Least privilege, SCM export alerting |
+| T1552 / T1555 Credential Access (hypothesized) | - | Possible use of the legacy build service account's credentials | Circumstantial | Low-Medium | Credential rotation, service-account monitoring | Vaulted/rotated service credentials |
+| T1041 Exfiltration Over C2 Channel | - | Staged multi-week outbound transfers | Section 11.6 | High | SIG-005 | Egress filtering, volumetric DLP |
+| T1213 (Data Store, Customer DB) | - | Suspected but unconfirmed direct access to customer credential/payment store | Indirect (11.5 gap) | Medium | Database audit logging (absent) | Enable DB audit logging, least privilege, tokenization of payment data |
 
 ---
 
@@ -689,26 +689,26 @@ tags:
 
 | Alert Name | Source | Time | Severity | Reason | Disposition | Evidence | Analyst Notes |
 |---|---|---|---|---|---|---|---|
-| WAF Generic Anomaly Signature | WAF | 2013-08-09 03:15 | Low-Medium | Loosely matched request pattern to admin path | Logged, not auto-blocked or escalated (historical) | Request log only | **Missed opportunity** — reopened during retrospective hunt; see Section 21 |
+| WAF Generic Anomaly Signature | WAF | 2013-08-09 03:15 | Low-Medium | Loosely matched request pattern to admin path | Logged, not auto-blocked or escalated (historical) | Request log only | **Missed opportunity** - reopened during retrospective hunt; see Section 21 |
 | Perimeter IDS Signature | IDS | none fired for the web shell itself | N/A | Web shell traffic used standard HTTPS to the legitimate site, blending with normal traffic | N/A | N/A | Confirms signature-based tooling was insufficient for this technique |
 | SCM Bulk Export (retrospective) | Hunt-generated | 2013-hunt date | Critical | Hypothesis-driven query, not a standing alert | Escalated | Section 11.4 | No such detection existed live in 2013; created as SIG-004 going forward |
 
-> As with many intrusions of this era, the near-absence of *real*, escalated alerts is itself a finding — this intrusion largely blended into normal traffic patterns for the tools that existed, which is why hypothesis-driven hunting was necessary to reconstruct it rather than alert triage alone.
+> As with many intrusions of this era, the near-absence of *real*, escalated alerts is itself a finding - this intrusion largely blended into normal traffic patterns for the tools that existed, which is why hypothesis-driven hunting was necessary to reconstruct it rather than alert triage alone.
 
 ---
 
 ## 17. Indicators of Compromise
 
 ### Host IOCs
-- Web shell file path pattern: `/cf_webroot/scripts/util/_diag.cfm` (illustrative — exact real filename not publicly confirmed)
+- Web shell file path pattern: `/cf_webroot/scripts/util/_diag.cfm` (illustrative - exact real filename not publicly confirmed)
 - Legacy build service account used outside its normal CI pattern: `svc-build-legacy` (illustrative)
 
 ### Network IOCs
-- External source IP associated with initial exploit-pattern requests (illustrative — real IP not publicly disclosed)
+- External source IP associated with initial exploit-pattern requests (illustrative - real IP not publicly disclosed)
 - Exfiltration destination IP receiving recurring multi-gigabyte transfers (illustrative)
 
 ### Registry / Drivers / Mutexes / Certificates / USB Artifacts / PLC Indicators
-- **None observed / N/A** — no evidence of registry-based persistence, kernel drivers, mutex-based coordination, certificate abuse, USB involvement, or ICS/PLC indicators in this scenario. Listed explicitly to show these categories were considered and ruled out, not skipped.
+- **None observed / N/A** - no evidence of registry-based persistence, kernel drivers, mutex-based coordination, certificate abuse, USB involvement, or ICS/PLC indicators in this scenario. Listed explicitly to show these categories were considered and ruled out, not skipped.
 
 ### Processes
 - ColdFusion service process observed spawning command-shell activity (hypothesized based on TTP pattern; not independently confirmed in public reporting)
@@ -765,7 +765,7 @@ Behavioral patterns, useful even without exact IOCs:
 | Installation | Web shell file created | File-system/config baseline diff | None live; SIG-002 retrospective | T1505.003 |
 | Internal Pivot | New internal connections from DMZ host | Firewall/NetFlow | None live; SIG-003 retrospective | T1021 |
 | Collection | Full repository export | SCM audit logs | None live; SIG-004 retrospective | T1213 |
-| Collection (Customer Data) | Cross-zone connection toward payment-adjacent gateway | NetFlow (indirect) | None (gap — no DB audit log) | T1213 |
+| Collection (Customer Data) | Cross-zone connection toward payment-adjacent gateway | NetFlow (indirect) | None (gap - no DB audit log) | T1213 |
 | Exfiltration | Recurring, growing outbound transfers | Proxy logs | None live; SIG-005 retrospective | T1041 |
 
 ---
@@ -777,23 +777,23 @@ Behavioral patterns, useful even without exact IOCs:
 **Why detections failed:**
 1. WAF/IDS signature coverage did not reliably distinguish the exploit-pattern requests from generic noise, and the resulting low-severity alert was not escalated or correlated with subsequent host activity.
 2. No file-integrity monitoring existed on internet-facing web roots, so the web shell went unnoticed at the moment of creation.
-3. No baseline existed for the DMZ host's normal internal connection graph as a *standing* detection — this baseline had to be reconstructed retrospectively during the hunt rather than existing as a live alerting mechanism.
-4. SCM audit logging existed but had no behavioral/volumetric alerting layered on top of it — a full repository export by a legacy service account produced a log entry but not an alert.
-5. No database audit logging existed on the customer credential store — the single largest gap, directly mirroring the equivalent gap identified in other historical breach reconstructions of this era, and consistent with Adobe's own later public reflection that "the idea was that product engineering was totally separate from IT security, and that didn't really hold anymore" as the company modernized its delivery model.
+3. No baseline existed for the DMZ host's normal internal connection graph as a *standing* detection - this baseline had to be reconstructed retrospectively during the hunt rather than existing as a live alerting mechanism.
+4. SCM audit logging existed but had no behavioral/volumetric alerting layered on top of it - a full repository export by a legacy service account produced a log entry but not an alert.
+5. No database audit logging existed on the customer credential store - the single largest gap, directly mirroring the equivalent gap identified in other historical breach reconstructions of this era, and consistent with Adobe's own later public reflection that "the idea was that product engineering was totally separate from IT security, and that didn't really hold anymore" as the company modernized its delivery model.
 
-**What evidence existed:** Nearly all of the evidence used in this retrospective hunt (Sections 11, 19) existed in logs at the time — web access logs, SCM audit logs, and proxy/firewall logs were all live and retained. The failure was analytical (a low-severity WAF alert not escalated or correlated) and architectural (missing file-integrity monitoring, missing database audit logging, insufficient network segmentation between the DMZ, source control, and payment-adjacent environments).
+**What evidence existed:** Nearly all of the evidence used in this retrospective hunt (Sections 11, 19) existed in logs at the time - web access logs, SCM audit logs, and proxy/firewall logs were all live and retained. The failure was analytical (a low-severity WAF alert not escalated or correlated) and architectural (missing file-integrity monitoring, missing database audit logging, insufficient network segmentation between the DMZ, source control, and payment-adjacent environments).
 
-**Missed opportunities:** The August 9 WAF alert, if correlated with the file-system change on the same host minutes later and escalated for Tier 2/3 review, could plausibly have led to discovery of the intrusion **within days**, before the bulk SCM exports and multi-week exfiltration campaign occurred — potentially weeks to over a month before Adobe's own internal identification on September 17.
+**Missed opportunities:** The August 9 WAF alert, if correlated with the file-system change on the same host minutes later and escalated for Tier 2/3 review, could plausibly have led to discovery of the intrusion **within days**, before the bulk SCM exports and multi-week exfiltration campaign occurred - potentially weeks to over a month before Adobe's own internal identification on September 17.
 
 ---
 
 ## 22. Detection Gaps
 
-- **No database audit logging** on the customer credential/payment-adjacent store — the most severe gap; without it, HYP-004 could never be directly confirmed, only inferred from network flow.
-- **No fleet-wide file-integrity monitoring** on internet-facing web roots — the web shell's creation, the single clearest and earliest artifact in the entire intrusion, was not automatically detected.
-- **No behavioral/volumetric alerting layered on SCM audit logs** — the bulk export event was logged but not flagged as anomalous.
-- **Insufficient network segmentation** between the DMZ application tier, source control, and the payment-adjacent environment — a compromised internet-facing host had a viable path to the organization's two most sensitive data stores.
-- **No cross-zone NetFlow baseline as a standing detection** — the "first-seen internal connection" analysis in this hunt was performed retrospectively rather than existing as a live control.
+- **No database audit logging** on the customer credential/payment-adjacent store - the most severe gap; without it, HYP-004 could never be directly confirmed, only inferred from network flow.
+- **No fleet-wide file-integrity monitoring** on internet-facing web roots - the web shell's creation, the single clearest and earliest artifact in the entire intrusion, was not automatically detected.
+- **No behavioral/volumetric alerting layered on SCM audit logs** - the bulk export event was logged but not flagged as anomalous.
+- **Insufficient network segmentation** between the DMZ application tier, source control, and the payment-adjacent environment - a compromised internet-facing host had a viable path to the organization's two most sensitive data stores.
+- **No cross-zone NetFlow baseline as a standing detection** - the "first-seen internal connection" analysis in this hunt was performed retrospectively rather than existing as a live control.
 - **Weak WAF/IDS-to-SOC escalation criteria** for low/medium-severity signature hits with no automatic correlation to subsequent host or network activity.
 
 ---
@@ -804,7 +804,7 @@ Behavioral patterns, useful even without exact IOCs:
 - Build a correlation rule chaining "WAF signature hit on admin/upload-capable path" → "new file created in web root within 15 minutes" → auto-escalate regardless of the WAF's own severity rating.
 - Build a per-repository SCM export-size baseline with automatic alerting on any export exceeding a small multiple of the historical maximum for that account/repository pair.
 - Implement cross-zone NetFlow baselining as a standing UEBA-style control: any internet-facing host reaching a previously-uncontacted internal destination should generate at minimum a medium-severity alert.
-- Implement database audit logging and query-volume anomaly detection the moment it is enabled — row-count-returned as a first-class monitored metric for any table containing credentials or payment data.
+- Implement database audit logging and query-volume anomaly detection the moment it is enabled - row-count-returned as a first-class monitored metric for any table containing credentials or payment data.
 - Risk-scoring: composite score combining "WAF hit" + "new file in web root" + "first-seen internal connection" + "SCM bulk export" within a rolling multi-day window, rather than relying on any single control in isolation.
 
 ---
@@ -822,7 +822,7 @@ Behavioral patterns, useful even without exact IOCs:
 
 - **Analytical mistake:** Treating a low/medium-severity WAF signature hit as noise without checking for correlated file-system or network activity on the same host in the following minutes.
 - **Blind spot:** Assuming source control and the customer database were adequately protected by their position "deeper" in the network, without independent, content-level monitoring at each layer.
-- **Better hypothesis framing going forward:** Pair every application-layer compromise hypothesis with an explicit "what internal system does this host have a viable path to reach" hypothesis from the start, rather than discovering the pivot path reactively mid-hunt — Section 6's trust-relationship mapping should be a *pre-registered* input to hypothesis generation, not a Section 21 postmortem finding.
+- **Better hypothesis framing going forward:** Pair every application-layer compromise hypothesis with an explicit "what internal system does this host have a viable path to reach" hypothesis from the start, rather than discovering the pivot path reactively mid-hunt - Section 6's trust-relationship mapping should be a *pre-registered* input to hypothesis generation, not a Section 21 postmortem finding.
 - **Improved hunts:** Future hunts on internet-facing application environments should treat "any internet-facing service with a known, actively-exploited CVE class and no file-integrity monitoring on its web root" as a standing, pre-registered hypothesis to test at the start of every engagement.
 
 ---
@@ -854,7 +854,7 @@ Behavioral patterns, useful even without exact IOCs:
 - **User Awareness:** Given this intrusion's primary vector was direct exploitation rather than phishing, awareness investment here is secondary to patch-management and segmentation investment, though general phishing-resistance training remains a reasonable baseline control against the secondary risk of credential-based entry.
 
 ### ICS Security
-**N/A — Not Applicable to this environment** (see Section 3).
+**N/A - Not Applicable to this environment** (see Section 3).
 
 ---
 
@@ -864,22 +864,22 @@ Behavioral patterns, useful even without exact IOCs:
 - HYP-001 (ColdFusion exploitation as initial access): **Supported**
 - HYP-002 (web shell persistence and internal pivoting): **Supported**
 - HYP-003 (access to source code repositories): **Supported**
-- HYP-004 (access to payment-adjacent/customer credential store): **Partially Supported — confirmed detection gap, supported only by indirect/circumstantial network evidence**
+- HYP-004 (access to payment-adjacent/customer credential store): **Partially Supported - confirmed detection gap, supported only by indirect/circumstantial network evidence**
 - HYP-005 (staged, long-dwell exfiltration): **Supported**
 
 **Confidence:** Medium-High overall, given this is a retrospective reconstruction built from Adobe's own public statements, independent researcher findings, and plausible, era-appropriate log analysis rather than an actual internal DFIR record.
 
-**Impact:** Critical — theft of proprietary source code for multiple flagship products (raising downstream zero-day risk for the entire installed customer base) combined with compromise of tens of millions of customer credential and payment-adjacent records.
+**Impact:** Critical - theft of proprietary source code for multiple flagship products (raising downstream zero-day risk for the entire installed customer base) combined with compromise of tens of millions of customer credential and payment-adjacent records.
 
-**Likelihood (retrospective framing):** Confirmed — this occurred.
+**Likelihood (retrospective framing):** Confirmed - this occurred.
 
 **Threat Level:** Critical.
 
-**Business Risk:** Severe — direct legal, regulatory, and reputational exposure at a scale affecting up to ~150 million registered accounts, plus elevated long-term product-security risk from the source code theft.
+**Business Risk:** Severe - direct legal, regulatory, and reputational exposure at a scale affecting up to ~150 million registered accounts, plus elevated long-term product-security risk from the source code theft.
 
 **Residual Risk:** Until database audit logging, file-integrity monitoring, network segmentation between the DMZ/source-control/payment-adjacent zones, and SCM behavioral alerting are deployed, an equivalent intrusion path remains available to any similarly-capable actor.
 
-**Executive Conclusion:** This retrospective hunt demonstrates that the 2013 intrusion was plausibly detectable **within days of initial exploitation**, using log sources that already existed in the environment, if a single early weak signal (the WAF alert on the ColdFusion admin path) had been correlated with the file-system change that followed two minutes later. The most consequential structural gap was the near-total absence of content-level monitoring — file-integrity and database audit logging — at exactly the two layers (the web root and the customer credential store) that mattered most, despite both layers otherwise having *some* logging capability in place.
+**Executive Conclusion:** This retrospective hunt demonstrates that the 2013 intrusion was plausibly detectable **within days of initial exploitation**, using log sources that already existed in the environment, if a single early weak signal (the WAF alert on the ColdFusion admin path) had been correlated with the file-system change that followed two minutes later. The most consequential structural gap was the near-total absence of content-level monitoring - file-integrity and database audit logging - at exactly the two layers (the web root and the customer credential store) that mattered most, despite both layers otherwise having *some* logging capability in place.
 
 ---
 

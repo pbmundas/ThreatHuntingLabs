@@ -1,6 +1,6 @@
 # The Threat Hunting Maturity Model Explained
 
-> *Not every Security Operations Center (SOC) is ready to conduct advanced threat hunting—and that's perfectly normal. Threat hunting is a capability that evolves over time. The key is understanding where your organization stands today, identifying what's missing, and building a roadmap toward a mature hunting program.*
+> *Not every Security Operations Center (SOC) is ready to conduct advanced threat hunting-and that's perfectly normal. Threat hunting is a capability that evolves over time. The key is understanding where your organization stands today, identifying what's missing, and building a roadmap toward a mature hunting program.*
 
 ---
 
@@ -12,7 +12,7 @@ Organizations often ask a deceptively simple question:
 
 The answer is usually more complicated than a simple yes or no.
 
-Many SOCs believe they are hunting because analysts occasionally search logs after reading a threat intelligence report. Others assume buying an EDR solution automatically makes them capable of threat hunting. In reality, effective threat hunting is not defined by the tools you own—it's defined by the maturity of your people, processes, and capabilities.
+Many SOCs believe they are hunting because analysts occasionally search logs after reading a threat intelligence report. Others assume buying an EDR solution automatically makes them capable of threat hunting. In reality, effective threat hunting is not defined by the tools you own-it's defined by the maturity of your people, processes, and capabilities.
 
 A mature hunting program is proactive, hypothesis-driven, data-informed, and continuously improving. An immature one is reactive, ad hoc, and dependent on alerts.
 
@@ -235,7 +235,7 @@ Each successful hunt strengthens future detection capabilities.
 * Threat-informed detection engineering
 * Executive support and investment
 
-At this level, hunting doesn't replace automation—it improves it.
+At this level, hunting doesn't replace automation-it improves it.
 
 ---
 
@@ -275,7 +275,7 @@ This includes:
 * MITRE ATT&CK mapping
 * Root cause analysis
 
-Technology assists—but human expertise drives mature hunting.
+Technology assists-but human expertise drives mature hunting.
 
 ---
 

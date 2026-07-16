@@ -150,7 +150,7 @@ You know when you've succeeded.
 
 Threat Hunting works exactly the same way.
 
-Modern enterprises generate millions—or even billions—of security events every day.
+Modern enterprises generate millions-or even billions-of security events every day.
 
 Without a clear objective, it's remarkably easy to become distracted by interesting but ultimately irrelevant observations.
 
@@ -196,7 +196,7 @@ Hours pass.
 
 Nothing meaningful is discovered.
 
-Eventually, the investigation ends—not because the environment is clean, but because there was never a clear objective.
+Eventually, the investigation ends-not because the environment is clean, but because there was never a clear objective.
 
 This isn't Threat Hunting.
 
@@ -254,7 +254,7 @@ Threat Hunters ask something entirely different.
 - What assumptions am I making about my environment?
 - If an attacker were trying to remain hidden today, what evidence would they accidentally leave behind?
 
-That shift—from reacting to alerts to proactively questioning assumptions—is what transforms an analyst into a Threat Hunter.
+That shift-from reacting to alerts to proactively questioning assumptions-is what transforms an analyst into a Threat Hunter.
 
 Every hypothesis begins with curiosity.
 
@@ -420,7 +420,7 @@ Even experienced analysts occasionally develop weak hypotheses.
 
 Understanding these common mistakes helps avoid wasted effort.
 
-**Mistake 1 — Hunting Without a Hypothesis**
+**Mistake 1 - Hunting Without a Hypothesis**
 
 This is perhaps the most common mistake made by analysts transitioning into Threat Hunting.
 
@@ -440,7 +440,7 @@ The problem was the lack of direction.
 
 ---
 
-**Mistake 2 — Assuming the Conclusion**
+**Mistake 2 - Assuming the Conclusion**
 
 Consider the following statement.
 
@@ -460,7 +460,7 @@ It asks a question rather than assuming the answer.
 
 ---
 
-**Mistake 3 — Ignoring Available Telemetry**
+**Mistake 3 - Ignoring Available Telemetry**
 
 A brilliant hypothesis becomes useless if the required telemetry doesn't exist.
 
@@ -474,7 +474,7 @@ Always confirm data availability before beginning the investigation.
 
 ---
 
-**Mistake 4 — Writing Hypotheses That Are Too Broad**
+**Mistake 4 - Writing Hypotheses That Are Too Broad**
 
 Broad hypotheses produce broad results.
 
@@ -530,7 +530,7 @@ Let's explore the most common sources.
 
 ---
 
-## Source 1 — Threat Intelligence
+## Source 1 - Threat Intelligence
 
 Threat Intelligence is one of the most common sources of hunting hypotheses.
 
@@ -563,7 +563,7 @@ That's exactly how mature Threat Hunters use intelligence.
 
 ---
 
-## Source 2 — MITRE ATT&CK Framework
+## Source 2 - MITRE ATT&CK Framework
 
 Threat Hunters don't hunt malware.
 
@@ -587,7 +587,7 @@ That makes it far more resilient to changing threat landscapes.
 
 ---
 
-## Source 3 — Detection Engineering Gaps
+## Source 3 - Detection Engineering Gaps
 
 Sometimes the best hunting ideas come from something much simpler.
 
@@ -609,7 +609,7 @@ Rather than waiting for attackers to exploit the weakness, the Threat Hunting te
 
 ---
 
-## Source 4 — Incident Response Lessons Learned
+## Source 4 - Incident Response Lessons Learned
 
 Every security incident teaches something.
 
@@ -621,7 +621,7 @@ Maybe credential theft occurred weeks before detection.
 
 Rather than documenting those lessons and moving on, mature Threat Hunting teams transform them into future hypotheses.
 
-If attackers successfully abused a particular technique once, they—or another adversary—may attempt it again.
+If attackers successfully abused a particular technique once, they-or another adversary-may attempt it again.
 
 Past incidents become future hunting opportunities.
 
@@ -637,7 +637,7 @@ That single question often leads to some of the most valuable Threat Hunts an or
 
 ---
 
-## Source 5 — Purple Team Exercises
+## Source 5 - Purple Team Exercises
 
 Purple Team engagements are one of the richest sources of Threat Hunting hypotheses.
 
@@ -669,7 +669,7 @@ Purple Team exercises continuously expose assumptions, detection blind spots, an
 
 ---
 
-## Source 6 — Red Team Engagements
+## Source 6 - Red Team Engagements
 
 Red Team operations often simulate sophisticated adversaries over several weeks.
 
@@ -705,7 +705,7 @@ The exercise has evolved into a proactive Threat Hunt.
 
 ---
 
-## Source 7 — Vulnerability Disclosures (CVEs)
+## Source 7 - Vulnerability Disclosures (CVEs)
 
 Every week, dozens of new vulnerabilities are disclosed.
 
@@ -739,7 +739,7 @@ Instead of asking whether systems are vulnerable today, hunters ask whether atta
 
 ---
 
-## Source 8 — Security Research
+## Source 8 - Security Research
 
 Threat researchers publish thousands of technical reports every year.
 
@@ -767,7 +767,7 @@ It's to hunt tomorrow's attacker behaviour.
 
 ---
 
-## Source 9 — Environmental Changes
+## Source 9 - Environmental Changes
 
 Organizations constantly evolve.
 
@@ -797,7 +797,7 @@ They change the questions Threat Hunters need to ask.
 
 ---
 
-## Source 10 — Business Context
+## Source 10 - Business Context
 
 Threat Hunting shouldn't exist in isolation.
 
@@ -823,7 +823,7 @@ Business context allows Threat Hunters to prioritize investigations based on wha
 
 ---
 
-## Source 11 — Previous Hunting Results
+## Source 11 - Previous Hunting Results
 
 Threat Hunting is an iterative process.
 
@@ -843,7 +843,7 @@ Mature Threat Hunting teams carefully document every investigation because today
 
 ---
 
-## Source 12 — Anomaly Observations
+## Source 12 - Anomaly Observations
 
 Not every hypothesis begins with threat intelligence or attack reports.
 
@@ -867,7 +867,7 @@ Some of the best Threat Hunts begin with a single observation that simply doesn'
 
 ---
 
-## Source 13 — User Behaviour Changes
+## Source 13 - User Behaviour Changes
 
 People are creatures of habit.
 
@@ -899,7 +899,7 @@ That curiosity becomes a hypothesis.
 
 ---
 
-## Source 14 — Emerging Industry Threats
+## Source 14 - Emerging Industry Threats
 
 Attack trends often spread across entire industries.
 
@@ -1181,7 +1181,7 @@ It's also what makes Threat Hunting repeatable, measurable, and continuously imp
 Let's summarise the most important lessons from this article.
 
 - Every successful Threat Hunt begins with a hypothesis.
-- A hypothesis is an educated assumption—not a conclusion.
+- A hypothesis is an educated assumption-not a conclusion.
 - Good hypotheses are specific, testable, measurable, evidence-based, and relevant to the environment.
 - Threat Hunting hypotheses originate from many sources, including Threat Intelligence, MITRE ATT&CK, Purple Team exercises, Red Team engagements, Incident Response, security research, vulnerability disclosures, business context, and anomaly observations.
 - Experienced Threat Hunters validate hypotheses using evidence rather than assumptions.
@@ -1214,4 +1214,4 @@ The next step is learning **how Threat Hunters actually conduct investigations**
 
 In the next article, we'll explore **Threat Hunting Methodologies**, where you'll learn how mature Threat Hunting teams perform Intelligence-Driven Hunting, TTP-Based Hunting, IOC Hunting, Behavioural Hunting, Baseline Hunting, Risk-Based Hunting, ATT&CK-Driven Hunting, and Hybrid Hunting.
 
-Understanding these methodologies will help you choose the right hunting approach for the right investigative question—turning good hypotheses into effective, repeatable Threat Hunts.
+Understanding these methodologies will help you choose the right hunting approach for the right investigative question-turning good hypotheses into effective, repeatable Threat Hunts.

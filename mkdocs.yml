@@ -58,6 +58,28 @@ nav:
 
   - Foundations:
       - Unknown Facts: foundations/2025-07-20-unknown-facts-about-threat-hunting.md
+      - "Hunting Exercise 98: Outbound SMTP Relay Spam Botnet": foundations/2025-10-28-Threat-Hunting-Exercise-Analyzing-Firewall-Outbound-SMTP-Relay-Spam-Botnet-Dataset.md
+      - "Hunting Exercise 99: SMB Null Session Enumeration": foundations/2025-10-29-Threat-Hunting-Exercise-Analyzing-Firewall-SMB-Null-Session-Enumeration-Dataset.md
+      - "Hunting Exercise 100: Low-and-Slow C2 Beacon": foundations/2025-10-30-Threat-Hunting-Exercise-Analyzing-Firewall-LowAndSlow-Idle-Session-C2-Beacon-Dataset.md
+      - "Hunting Exercise 101: Cobalt Strike Malleable C2": foundations/2025-10-31-Threat-Hunting-Exercise-Analyzing-IDS-CobaltStrike-Malleable-C2-Jitter-Beacon-Dataset.md
+      - "Hunting Exercise 102: Web Shell Upload": foundations/2025-11-01-Threat-Hunting-Exercise-Analyzing-IDS-WebShell-Upload-File-Extension-Signature-Dataset.md
+      - "Hunting Exercise 103: Self-Signed Certificate JA3S": foundations/2025-11-02-Threat-Hunting-Exercise-Analyzing-IDS-SelfSigned-Certificate-JA3S-Fingerprint-C2-Dataset.md
+      - "Hunting Exercise 104: DNS-over-HTTPS Exfiltration": foundations/2025-11-03-Threat-Hunting-Exercise-Analyzing-Proxy-DNS-over-HTTPS-Exfiltration-Bypass-Dataset.md
+      - "Hunting Exercise 105: Malicious Browser Extension": foundations/2025-11-04-Threat-Hunting-Exercise-Analyzing-Proxy-Malicious-Browser-Extension-Data-Exfiltration-Dataset.md
+      - "Hunting Exercise 106: Kerberos Silver Ticket": foundations/2025-11-05-Threat-Hunting-Exercise-Analyzing-Windows-Kerberos-Silver-Ticket-Forgery-Dataset.md
+      - "Hunting Exercise 107: LSASS Direct Syscall": foundations/2025-11-06-Threat-Hunting-Exercise-Analyzing-Windows-LSASS-Direct-Syscall-EDR-Evasion-Dataset.md
+      - "Hunting Exercise 108: BYOVD Kernel Driver": foundations/2025-11-07-Threat-Hunting-Exercise-Analyzing-Windows-BYOVD-Malicious-Kernel-Driver-Loading-Dataset.md
+      - "Hunting Exercise 109: Shadow Credentials": foundations/2025-11-08-Threat-Hunting-Exercise-Analyzing-Windows-Shadow-Credentials-msDS-KeyCredentialLink-Abuse-Dataset.md
+      - "Hunting Exercise 110: RDP Session Hijacking": foundations/2025-11-09-Threat-Hunting-Exercise-Analyzing-Windows-RDP-Session-Hijacking-Tscon-Dataset.md
+      - "Hunting Exercise 111: Linux Systemd Persistence": foundations/2025-11-10-Threat-Hunting-Exercise-Analyzing-Linux-Systemd-Service-Unit-Persistence-Dataset.md
+      - "Hunting Exercise 112: Linux Init.d and rc.local Persistence": foundations/2025-11-11-Threat-Hunting-Exercise-Analyzing-Linux-InitD-RCLocal-Legacy-Persistence-Dataset.md
+      - "Hunting Exercise 113: Privileged Container Escape": foundations/2025-11-12-Threat-Hunting-Exercise-Analyzing-Linux-Privileged-Container-HostPID-Escape-Dataset.md
+      - "Hunting Exercise 114: Auditd Log Tampering": foundations/2025-11-13-Threat-Hunting-Exercise-Analyzing-Linux-Auditd-Rule-Deletion-Log-Tampering-Dataset.md
+      - "Hunting Exercise 115: Cron Malware Downloader": foundations/2025-11-14-Threat-Hunting-Exercise-Analyzing-Linux-Cron-WgetCurl-Malware-Downloader-Staging-Dataset.md
+      - "Hunting Exercise 116: Azure AD Legacy Auth Bypass": foundations/2025-11-15-Threat-Hunting-Exercise-Analyzing-AzureAD-Conditional-Access-Bypass-Legacy-Authentication-Dataset.md
+      - "Hunting Exercise 117: GCP Service Account Key Abuse": foundations/2025-11-16-Threat-Hunting-Exercise-Analyzing-GCP-Service-Account-Key-Exfiltration-Abuse-Dataset.md
+      - "Hunting Exercise 118: HTML Smuggling Phishing": foundations/2025-11-17-Threat-Hunting-Exercise-Analyzing-Email-HTML-Smuggling-Phishing-Attachment-Delivery-Dataset.md
+      - "Hunting Exercise 119: DNS Zone Transfer Reconnaissance": foundations/2025-11-18-Threat-Hunting-Exercise-Analyzing-DNS-Zone-Transfer-AXFR-Reconnaissance-Dataset.md
       - 10 Common Mistakes: foundations/10-Common-Mistakes-Every-Beginner-Makes-When-Learning-Threat-Hunting.md
       - Cybersecurity Fundamentals: foundations/Cybersecurity-Fundamentals-The-Foundation-Every-Threat-Hunter-Needs-part-1.md
       - Why and Where Threat Hunting: foundations/Why-Every-Organization-Needs-Threat-Hunting.md
@@ -81,7 +103,7 @@ nav:
      - Attacks in History: learn-known-cyber-attacks/index.html
      - Attacks Encyclopedia: attack-encyclopedia/index.html
 
-  - Reports: threat-hunting-reports/index.html
+  - Hunting Reports: threat-hunting-reports/index.html
 
   - Case Studies:
      - Stuxnet (2010): case-studies/2010-Stuxnet-Retrospective-Threat-Hunt-Report.md

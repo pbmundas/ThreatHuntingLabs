@@ -269,7 +269,7 @@ Throughout this article, we followed a complete Threat Hunt from a single Threat
 
 We learned that:
 
-- Every Threat Hunt begins with a hypothesis—not random log searches.
+- Every Threat Hunt begins with a hypothesis-not random log searches.
 - Successful investigations rely on selecting the right data sources before writing queries.
 - Hidden threats are uncovered by correlating multiple observations rather than relying on individual events.
 - Context transforms suspicious activity into actionable intelligence.

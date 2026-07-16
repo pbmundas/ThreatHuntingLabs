@@ -83,7 +83,7 @@ Traditional security tools may never generate an alert because none of the indiv
 
 This creates dangerous blind spots.
 
-And this is exactly why advanced attackers often remain undetected for weeks—or even months.
+And this is exactly why advanced attackers often remain undetected for weeks-or even months.
 
 ---
 
@@ -288,7 +288,7 @@ Their objective is simple.
 
 This significantly reduces attacker dwell time and limits the impact of a compromise.
 
-Once suspicious activity becomes visible—or an incident is officially declared—the focus shifts toward reactive security operations.
+Once suspicious activity becomes visible-or an incident is officially declared-the focus shifts toward reactive security operations.
 
 Incident Response teams contain the attack and prevent further damage.
 

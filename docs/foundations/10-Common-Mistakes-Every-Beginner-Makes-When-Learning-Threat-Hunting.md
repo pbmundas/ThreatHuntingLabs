@@ -17,7 +17,7 @@ Threat Hunting isn't about knowing the most commands or using the latest securit
 
 Unfortunately, many beginners spend months learning the wrong things first. They become overwhelmed by countless tools, struggle to connect concepts together, and eventually lose confidence because they feel they're not making progress.
 
-The good news is that these mistakes are completely normal—and more importantly, they're avoidable.
+The good news is that these mistakes are completely normal-and more importantly, they're avoidable.
 
 In this article, we'll explore ten common mistakes beginners make while learning Threat Hunting, understand why they happen, and discuss how to avoid them so you can build a stronger foundation for your cybersecurity journey.
 
@@ -201,7 +201,7 @@ You know what behavior you're investigating.
 
 You know which data sources to examine.
 
-You know what evidence would support—or refute—your assumption.
+You know what evidence would support-or refute-your assumption.
 
 Without a hypothesis, every log becomes equally important.
 
@@ -224,7 +224,7 @@ Ask questions like:
 
 Each question creates a meaningful investigation.
 
-> **Key takeaway:** Every successful hunt starts with a question—not a dashboard.
+> **Key takeaway:** Every successful hunt starts with a question-not a dashboard.
 
 ---
 
@@ -283,7 +283,7 @@ Use behaviors to discover unknown threats.
 
 That's where Threat Hunting becomes truly proactive.
 
-> **Key takeaway:** Hunt for attacker behavior—not just known indicators.
+> **Key takeaway:** Hunt for attacker behavior-not just known indicators.
 
 ---
 
@@ -292,7 +292,7 @@ That's where Threat Hunting becomes truly proactive.
 
 One of the most common misconceptions is believing that Threat Hunting and Incident Response are the same discipline.
 
-They're closely related—but they have very different goals.
+They're closely related-but they have very different goals.
 
 **Incident Response** begins after something suspicious has already been detected. An alert is triggered, a user reports unusual activity, or a compromise is confirmed. The responder's job is to understand what happened, contain the threat, eradicate it, and recover the affected systems.
 
@@ -322,7 +322,7 @@ For example:
 * Are users authenticating from multiple geographic locations within minutes?
 * Are privileged accounts behaving differently from their normal baseline?
 
-Threat Hunting is about discovering the unknown—not confirming what you already know.
+Threat Hunting is about discovering the unknown-not confirming what you already know.
 
 > **Key takeaway:** Incident Response investigates confirmed problems. Threat Hunting searches for problems that haven't been discovered yet.
 
@@ -528,7 +528,7 @@ Most importantly, remain curious.
 
 Curiosity is the single most valuable quality a threat hunter can develop.
 
-> **Key takeaway:** Progress in Threat Hunting is measured by continuous learning—not by how many tools you know.
+> **Key takeaway:** Progress in Threat Hunting is measured by continuous learning-not by how many tools you know.
 
 ---
 

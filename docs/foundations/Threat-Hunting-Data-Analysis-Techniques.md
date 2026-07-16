@@ -492,7 +492,7 @@ Frequency Analysis focuses on measuring how often specific activities occur over
 
 The technique itself is simple.
 
-Unexpected increases—or unexpected decreases—often indicate that something has changed.
+Unexpected increases-or unexpected decreases-often indicate that something has changed.
 
 ---
 
@@ -828,7 +828,7 @@ One common technique involves generating random-looking file names, registry key
 
 Humans naturally create names that are readable.
 
-Attackers—and malware—often don't.
+Attackers-and malware-often don't.
 
 Entropy Analysis measures how random a string appears.
 
@@ -962,7 +962,7 @@ First-Time-Seen Analysis commonly applies to:
 
 Many advanced attacks begin with something the environment has simply never seen before.
 
-Recognising those first appearances allows Threat Hunters to investigate early—often before traditional detection rules are created.
+Recognising those first appearances allows Threat Hunters to investigate early-often before traditional detection rules are created.
 
 ---
 
@@ -1313,4 +1313,4 @@ By now, we've covered:
 - Different Types of Threat Hunting
 - Data Analysis Techniques used by Threat Hunters
 
-In the next article, we'll move from analysing data to **developing hunting hypotheses**—the starting point of every successful Threat Hunt. You'll learn where hypotheses come from, how to write effective ones, and how mature Threat Hunting teams transform intelligence, anomalies, and attacker behaviour into structured investigations.
+In the next article, we'll move from analysing data to **developing hunting hypotheses**-the starting point of every successful Threat Hunt. You'll learn where hypotheses come from, how to write effective ones, and how mature Threat Hunting teams transform intelligence, anomalies, and attacker behaviour into structured investigations.

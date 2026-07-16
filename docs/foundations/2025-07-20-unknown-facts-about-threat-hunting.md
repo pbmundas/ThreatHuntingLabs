@@ -14,7 +14,7 @@ Threat hunting is a proactive cybersecurity practice that involves searching for
 
 4. **Threat Hunting is Hypothesis-Driven**: Effective threat hunting starts with crafting hypotheses based on threat intelligence, not random searches. Learning to develop testable hypotheses (e.g., "A new phishing campaign might use PowerShell scripts") is a critical but underemphasized skill.
 
-5. **Logs Are Not Always Reliable**: Logs can be incomplete, manipulated, or disabled by attackers. Learning to hunt without relying solely on logs—using memory forensics or behavioral analysis—is a nuanced skill that takes time to develop.
+5. **Logs Are Not Always Reliable**: Logs can be incomplete, manipulated, or disabled by attackers. Learning to hunt without relying solely on logs-using memory forensics or behavioral analysis-is a nuanced skill that takes time to develop.
 
 6. **False Positives Are Learning Opportunities**: Beginners often fear false positives, but they’re invaluable for understanding your environment. Each false positive refines your ability to distinguish noise from genuine threats.
 
@@ -40,7 +40,7 @@ Threat hunting is a proactive cybersecurity practice that involves searching for
 
 17. **Human Behavior is a Data Source**: Advanced threat hunting involves analyzing user behavior patterns (e.g., unusual login times or data access). Learning user and entity behavior analytics (UEBA) can uncover subtle threats.
 
-18. **Documentation is a Superpower**: Documenting hunts—hypotheses, findings, and lessons learned—creates a knowledge base that improves future hunts. Many beginners overlook this.
+18. **Documentation is a Superpower**: Documenting hunts-hypotheses, findings, and lessons learned-creates a knowledge base that improves future hunts. Many beginners overlook this.
 
 19. **Open-Source Tools Are Game-Changers**: Tools like Zeek, Velociraptor, or YARA are powerful and free but require time to master. Learning these can level up your hunting without expensive subscriptions.
 

@@ -1,6 +1,6 @@
 # The Threat Hunting Mindset: Thinking Like an Attacker
 
-> *Before you hunt adversaries, you need to understand how they think. Threat hunting isn't about memorizing Sigma rules or writing clever KQL queries—it's about developing an investigative mindset that anticipates attacker behavior.*
+> *Before you hunt adversaries, you need to understand how they think. Threat hunting isn't about memorizing Sigma rules or writing clever KQL queries-it's about developing an investigative mindset that anticipates attacker behavior.*
 
 ---
 
@@ -50,7 +50,7 @@ Traditional SOC thinking:
 
 Threat hunter thinking:
 
-> "If I compromised this company yesterday, what would I do next—and would anyone notice?"
+> "If I compromised this company yesterday, what would I do next-and would anyone notice?"
 
 That's the difference.
 
@@ -425,7 +425,7 @@ Your task is to think like an attacker.
 
 ---
 
-## Attack Path 1 — Phishing to Customer Database
+## Attack Path 1 - Phishing to Customer Database
 
 **Initial Access**
 
@@ -465,7 +465,7 @@ Extracts customer records.
 
 ---
 
-## Attack Path 2 — Vulnerable Web Application
+## Attack Path 2 - Vulnerable Web Application
 
 Attacker discovers outdated web framework.
 
@@ -503,7 +503,7 @@ Access to production servers.
 
 ---
 
-# Attack Path 3 — Compromised Developer Workstation
+# Attack Path 3 - Compromised Developer Workstation
 
 Developer downloads malicious software.
 
@@ -541,7 +541,7 @@ Production AWS environment compromised.
 
 ---
 
-## Deliverable — Attack Path Analysis Worksheet
+## Deliverable - Attack Path Analysis Worksheet
 
 Threat hunters often document their thinking before beginning an investigation. The worksheet below helps convert attacker reasoning into actionable hunting hypotheses.
 
@@ -565,6 +565,6 @@ This worksheet can be expanded during real hunts with additional columns for:
 
 Threat hunting begins long before you write your first query. It starts with understanding how an adversary evaluates an environment, identifies valuable assets, and chooses the path of least resistance. By adopting an assume-breach mentality, focusing on crown jewels, and modeling realistic attack paths, you shift from reacting to alerts to proactively searching for evidence of malicious activity.
 
-The strongest hunters don't ask, **"What alerts did my tools generate today?"** They ask, **"If I were the attacker, what would I do next—and what traces would that leave behind?"** When you consistently think from the attacker's perspective, every log source, authentication event, and system change becomes a clue rather than just another entry in a dashboard.
+The strongest hunters don't ask, **"What alerts did my tools generate today?"** They ask, **"If I were the attacker, what would I do next-and what traces would that leave behind?"** When you consistently think from the attacker's perspective, every log source, authentication event, and system change becomes a clue rather than just another entry in a dashboard.
 
 ---

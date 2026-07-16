@@ -8,7 +8,7 @@
 
 THOS is a fully offline, on-premises AI-powered Threat Hunting Operating System built on Python 3.12. It orchestrates a local LLM (Ollama/Qwen/Mistral) through LangGraph, exposes all tool capabilities via FastMCP servers, and operates exclusively against local Git repositories containing EVTX logs, JSON, CSV, Sigma rules, YARA rules, Markdown playbooks, and MITRE knowledge bases.
 
-The LLM is used **only** for planning, reasoning, decision-making, summarization, explanation, and report generation. All deterministic operations — log parsing, Sigma matching, YARA scanning, statistics, anomaly detection, normalization — are implemented as Python tools.
+The LLM is used **only** for planning, reasoning, decision-making, summarization, explanation, and report generation. All deterministic operations - log parsing, Sigma matching, YARA scanning, statistics, anomaly detection, normalization - are implemented as Python tools.
 
 ---
 
@@ -709,7 +709,7 @@ def route_after_reasoning(state: THOSState) -> str:
 - `list_files(repo: str, path: str = "", extensions: list[str] = [])` → list[FileInfo]
 - `get_file_content(repo: str, file_path: str)` → FileContent
 - `get_commit_log(repo: str, max_entries: int = 50)` → list[CommitInfo]
-- `list_log_files(repo: str)` → list[LogFileInfo] — auto-discovers EVTX/JSON/CSV/log
+- `list_log_files(repo: str)` → list[LogFileInfo] - auto-discovers EVTX/JSON/CSV/log
 - `get_repo_tree(repo: str)` → RepoTree
 
 ### 10.2 parser_mcp
@@ -722,7 +722,7 @@ def route_after_reasoning(state: THOSState) -> str:
 - `parse_csv_logs(file_path: str, timestamp_field: str)` → ParseResult
 - `parse_syslog(file_path: str)` → ParseResult
 - `parse_cef(file_path: str)` → ParseResult
-- `auto_parse(file_path: str)` → ParseResult — detects format automatically
+- `auto_parse(file_path: str)` → ParseResult - detects format automatically
 
 ### 10.3 timeline_mcp
 
@@ -732,7 +732,7 @@ def route_after_reasoning(state: THOSState) -> str:
 - `build_timeline(events: list[dict], timestamp_field: str)` → Timeline
 - `filter_timeline(timeline_id: str, start: str, end: str, event_types: list[str])` → Timeline
 - `pivot_on_entity(timeline_id: str, entity_field: str, entity_value: str)` → Timeline
-- `enrich_timeline(timeline_id: str)` → Timeline — adds MITRE context per event
+- `enrich_timeline(timeline_id: str)` → Timeline - adds MITRE context per event
 - `export_timeline(timeline_id: str, format: str)` → ExportResult
 
 ### 10.4 normalization_mcp
@@ -792,7 +792,7 @@ def route_after_reasoning(state: THOSState) -> str:
 
 ### 10.9 statistics_mcp
 
-**Purpose:** All statistical analysis — never done by LLM
+**Purpose:** All statistical analysis - never done by LLM
 
 **Tools:**
 - `frequency_analysis(events: list[dict], field: str, top_n: int = 20)` → FrequencyResult
@@ -894,7 +894,7 @@ def route_after_reasoning(state: THOSState) -> str:
 - `set_cached(key: str, value: Any, namespace: str, ttl_seconds: int = 3600)` → None
 - `invalidate_cache(key: str, namespace: str)` → None
 - `list_cache_keys(namespace: str)` → list[str]
-- `clear_namespace(namespace: str)` → int — returns count cleared
+- `clear_namespace(namespace: str)` → int - returns count cleared
 
 ### 10.18 configuration_mcp
 
@@ -961,7 +961,7 @@ def route_after_reasoning(state: THOSState) -> str:
 
 ## 12. DATABASE SCHEMA
 
-### 12.1 SQLite — Hunt Sessions & Evidence
+### 12.1 SQLite - Hunt Sessions & Evidence
 
 ```sql
 -- migrations/001_initial.sql
@@ -1035,7 +1035,7 @@ CREATE TABLE evidence_links (
 );
 ```
 
-### 12.2 DuckDB — Log Analytics
+### 12.2 DuckDB - Log Analytics
 
 ```sql
 -- Dynamically created per hunt session
@@ -1440,4 +1440,4 @@ THOS_REPOS_CONFIG=/data/thos/config/repositories.yaml
 ---
 
 *End of PROJECT_SPECIFICATION.md*
-*THOS v1.0.0 — Offline AI-Powered Threat Hunting Operating System*
+*THOS v1.0.0 - Offline AI-Powered Threat Hunting Operating System*

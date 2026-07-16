@@ -27,7 +27,7 @@ Do you review EDR telemetry?
 
 Do you correlate DNS logs?
 
-The reality is that modern enterprises generate **millions—even billions—of events every single day**.
+The reality is that modern enterprises generate **millions-even billions-of events every single day**.
 
 Some of those events may contain evidence of an attack.
 
@@ -91,7 +91,7 @@ Threat Hunting begins by collecting those pieces before trying to understand wha
 
 ---
 
-## Stage 1 — Data
+## Stage 1 - Data
 
 Every organization continuously generates enormous amounts of security telemetry.
 
@@ -126,7 +126,7 @@ Nothing has meaning yet.
 
 ---
 
-## Stage 2 — Processing
+## Stage 2 - Processing
 
 Collecting logs is only the beginning.
 
@@ -173,11 +173,11 @@ During this stage, data is:
 
 Without this step, every investigation would become a manual translation exercise.
 
-Processing ensures that hunters spend time investigating threats—not cleaning data.
+Processing ensures that hunters spend time investigating threats-not cleaning data.
 
 ---
 
-## Stage 3 — Information
+## Stage 3 - Information
 
 Raw data doesn't answer questions.
 

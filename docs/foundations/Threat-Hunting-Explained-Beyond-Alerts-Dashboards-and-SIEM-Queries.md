@@ -218,7 +218,7 @@ Raw data by itself doesn't reveal an attack.
 
 It needs to be collected, processed, analyzed, and transformed into actionable intelligence.
 
-This journey—from raw telemetry to actionable detections—is known as the **Threat Hunting Data Pipeline**.
+This journey-from raw telemetry to actionable detections-is known as the **Threat Hunting Data Pipeline**.
 
 Understanding that pipeline is the foundation of every successful Threat Hunt.
 

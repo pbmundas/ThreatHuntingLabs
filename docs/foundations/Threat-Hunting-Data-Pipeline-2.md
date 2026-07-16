@@ -1,5 +1,5 @@
 
-## Stage 4 — Intelligence
+## Stage 4 - Intelligence
 
 By now, we've transformed millions of raw events into meaningful observations.
 
@@ -43,7 +43,7 @@ Instead of seeing five unrelated events...
 
 You begin seeing an attack.
 
-This transformation—from isolated observations into an understanding of attacker behaviour—is what creates intelligence.
+This transformation-from isolated observations into an understanding of attacker behaviour-is what creates intelligence.
 
 Threat Hunters achieve this by combining information from multiple sources.
 
@@ -94,7 +94,7 @@ Context transforms evidence into confidence.
 
 ---
 
-## Stage 5 — Deploy & Disseminate
+## Stage 5 - Deploy & Disseminate
 
 This is arguably the most overlooked stage of the entire Threat Hunting process.
 
@@ -267,7 +267,7 @@ Throughout this article, we learned that:
 - Intelligence adds context and reveals attacker behaviour.
 - Every successful hunt should improve detections, playbooks, visibility, and future investigations.
 
-Understanding this pipeline is essential because every Threat Hunt follows it—whether consciously or not.
+Understanding this pipeline is essential because every Threat Hunt follows it-whether consciously or not.
 
 However, knowing **how information flows** is only part of the picture.
 
@@ -277,5 +277,5 @@ The next question is equally important.
 
 That's where the **Threat Hunting Lifecycle** begins.
 
-In the next article, we'll walk through each stage of the lifecycle—from developing a hypothesis and planning a hunt to validating findings, documenting evidence, and continuously improving future hunting operations.
+In the next article, we'll walk through each stage of the lifecycle-from developing a hypothesis and planning a hunt to validating findings, documenting evidence, and continuously improving future hunting operations.
 
