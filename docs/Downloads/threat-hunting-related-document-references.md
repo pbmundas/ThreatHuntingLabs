@@ -29,3 +29,32 @@ info "Library Updates"
 | EVTX-ATTACK-SAMPLES | Security Evtx logs collections for analysis, detection and forensic  | [EVTX-ATTACK-SAMPLES](https://github.com/sbousseaden/evtx-attack-samples) |
 
 ---
+
+# Another
+
+## Malware Analysis, Reverse Engineering and Exploit Development
+
+| Link | Description |
+|------|-------------|
+| [https://exploitreversing.com](https://exploitreversing.com/) | 700+ pages of malware analysis and exploit research |
+| [https://class.malware.re](https://class.malware.re/) | full university malware analysis course |
+| [https://malwareunicorn.org](https://malwareunicorn.org/) | RE101, RE102, macOS RE, PE injection |
+| [https://azeria-labs.com](https://azeria-labs.com/) | ARM assembly, shellcode, heap exploitation |
+| [https://revers.engineering](https://revers.engineering/) | applied RE series and hypervisor development |
+| [https://pwn.college](https://pwn.college/) | buffer overflows to kernel exploitation |
+| [https://p.ost2.fyi](https://p.ost2.fyi/) | 30+ courses, WinDbg, IDA, Ghidra, UEFI, kernel exploitation |
+| [https://corelan.be](https://corelan.be/) | 41 tutorials spanning 17 years of exploit dev |
+| [https://lnkd.in/duCYwEav](https://lnkd.in/duCYwEav) | 19-part series, usermode to kernel |
+| [https://windows-internals.com](https://windows-internals.com/) | Windows internals, secure kernel, VBS, KDP, dynamic analysis |
+
+## YouTube Channels
+
+| Link |
+|------|
+| [https://youtube.com/@_JohnHammond](https://youtube.com/@_JohnHammond) |
+| [https://youtube.com/@LiveOverflow](https://youtube.com/@LiveOverflow) |
+| [https://youtube.com/@lauriewired](https://youtube.com/@lauriewired) |
+| [https://youtube.com/@allthingsida](https://youtube.com/@allthingsida) |
+| [https://lnkd.in/dDxUvs_f](https://lnkd.in/dDxUvs_f) |
+
+---
