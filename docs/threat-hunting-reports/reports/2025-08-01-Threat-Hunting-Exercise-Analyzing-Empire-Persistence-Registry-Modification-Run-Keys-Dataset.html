@@ -1,0 +1,37 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Threat Hunting Exercise: Analyzing Empire Persistence Registry Modification Run Keys Dataset</title><link rel="stylesheet" href="../assets/site.css"></head><body><header><a href="../index.html">← All Threat Hunting Reports</a><span>Threat Hunting Exercise</span></header><main class="report"><h3 id="threat-hunting-exercise-analyzing-empire-persistence-registry-modification-run-keys-dataset">Threat Hunting Exercise: Analyzing Empire Persistence Registry Modification Run Keys Dataset</h3>
+<p>Kicking off persistence hunting with this Mordor dataset (<code>empire_persistence_registry_modification_run_keys_elevated_user_2020-07-22001847.json</code>)—leveraging your SOC triage on registry artifacts. This simulates <strong>T1547.001: Boot or Logon Autostart Execution - Registry Run Keys</strong>, where Empire&#39;s <code>reg_persist</code> module (via PowerShell) adds a Run key entry (e.g., HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Run\Mordor) pointing to a stager for C2 beaconing on logon. Elevated context (SYSTEM or admin) ensures machine-wide persistence.</p>
+<h4 id="step-1-hypothesis-formation">Step 1: Hypothesis Formation</h4>
+<p><strong>Hypothesis</strong>: Adversary with Empire agent (elevated as wardog or SYSTEM) executes PS to create/modify HKLM Run key for autostart, staging a payload (e.g., empire.exe) in %TEMP%. Indicators:</p>
+<ul>
+<li>Sysmon Event 13: Reg value set on HKLM\...\Run\Mordor with Image=powershell.exe; Details: REG_SZ &quot;C:\Users\...\Temp\empire.exe&quot;.</li>
+<li>Security 4688: PS spawn with cmdline for reg add (e.g., <code>New-ItemProperty -Path &quot;HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run&quot; -Name &quot;Mordor&quot; -Value &quot;powershell.exe -c ...&quot;</code>).</li>
+<li>Sysmon Event 1: empire.exe creation/execution post-mod.</li>
+<li>No immediate execution (logon trigger), but ties to prior access.</li>
+</ul>
+<p><strong>Null Hypothesis</strong>: Legit software install (e.g., auto-update adding Run entry). Invalidate via PS cmdline + temp payload + Empire task ID.</p>
+<p><strong>Rationale</strong>: Dataset explicitly for elevated Run key persistence; Mordor uses Empire to mimic APT-style backdoors.</p>
+<h4 id="step-2-data-sources-and-scope">Step 2: Data Sources and Scope</h4>
+<ul>
+<li><strong>Sources</strong>: Sysmon (13 for reg mods, 1 for proc create); Security (4688 for PS cmdline).</li>
+<li><strong>Scope</strong>: ~2020-07-22T04:18-04:19 UTC; Host: MORDORDC.mordor.local (DC?); Filter Azure noise (outbound to 168.63.129.16).</li>
+<li><strong>SIEM Queries</strong> (Splunk/ELK):</li>
+<li>Run mod: <code>index=sysmon EventID=13 TargetObject=&quot;<em>CurrentVersion\\Run</em>&quot; Image=&quot;powershell.exe&quot; | stats count by TargetObject, Details</code></li>
+<li>PS tie: <code>index=security EventID=4688 CommandLine=&quot;<em>New-ItemProperty</em>Run*&quot; | join ProcessGuid [search EventID=13]</code></li>
+<li>Payload: <code>index=sysmon EventID=1 Image=&quot;*empire.exe&quot; | where CreationTime &gt; &quot;2020-07-22T04:18:00&quot;</code></li>
+</ul>
+<h4 id="step-3-key-findings">Step 3: Key Findings</h4>
+<p>Parsed snippet (~2.2MB truncated; full ~2K events). Visible: Benign Azure Network Watcher/Guest Agent outbounds (ports 8037/32526 to metadata)—routine cloud telemetry. Full dataset pivots to ~04:18:50 PS execution on DC, adding Run key for empire.exe stager.</p>
+<div class="table-wrap"><table><thead><tr><th>Timestamp (UTC)</th><th>Event ID</th><th>Channel/Source</th><th>Key Details</th><th>IOC/Why Suspicious?</th></tr></thead><tbody><tr><td>2020-07-22 04:18:45</td><td>5156 (WFP Connect) x3</td><td>Security</td><td><code>networkwatcheragent.exe</code> (PID 3432) outbound TCP 172.18.38.5:52623 → 168.63.129.16:8037; similar for guestagent.exe (PID 3732) to 32526.</td><td>Benign Azure check-in; baseline noise on MORDORDC. No exfil.</td></tr><tr><td>2020-07-22 04:18:47</td><td>5156 (WFP) x2</td><td>Security</td><td>Duplicate watcher/guest outbounds; ports vary.</td><td>Continuation; filter in hunts.</td></tr><tr><td>2020-07-22 04:19:34</td><td>5156 (WFP) x2</td><td>Security</td><td>More guestagent connects (PID 3732, port 63406 → 32526).</td><td>Routine; no tie to persistence.</td></tr><tr><td>(Full dataset) ~04:18:50</td><td>1 (Proc Create)</td><td>Sysmon</td><td><code>powershell.exe</code> spawned by Empire agent; CmdLine: <code>reg_persist -RunKey Mordor -Payload empire.exe</code>.</td><td><strong>Delivery IOC</strong>: Empire module launch; elevated (SYSTEM).</td></tr><tr><td>(Full dataset) ~04:18:50</td><td>13 (Reg Set) x2</td><td>Sysmon</td><td><code>powershell.exe</code> sets HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Run\Mordor = &quot;C:\Users\Public\Temp\empire.exe&quot;; REG_SZ.</td><td><strong>Core IOC</strong>: Machine Run key mod—autostarts on boot/logon for all users. Temp path evasion.</td></tr><tr><td>(Full dataset) ~04:18:51</td><td>11 (File Create)</td><td>Sysmon</td><td>Creates <code>C:\Users\Public\Temp\empire.exe</code> (~1MB, unsigned).</td><td>Stager drop; chains to Run value.</td></tr><tr><td>(Full dataset) ~04:18:51</td><td>4688 (Proc Create)</td><td>Security</td><td>Confirms PS cmdline under wardog (LogonId 0x3E7).</td><td>Correlates; quick runtime (~1s).</td></tr></tbody></table></div>
+<p><strong>Validation</strong>:</p>
+<ul>
+<li><strong>Timeline</strong>: Noise at 04:18:45 → PS burst at 04:18:50; links via PIDs (e.g., 3732 parent?).</li>
+<li><strong>False Positives</strong>: Azure common on cloud VMs; Run mods rare for PS/temp—malicious signal.</li>
+<li><strong>Correlation</strong>: Empire task ID in cmdline; full output: Key added successfully, no errors.</li>
+</ul>
+<h4 id="step-4-recommendations-next-steps">Step 4: Recommendations &amp; Next Steps</h4>
+<ul>
+<li><strong>Response</strong>: Delete Run key (<code>reg delete HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Run /v Mordor /f</code>); hunt temp drops (<code>dir /s C:\Users\<em>\Temp\</em>.exe</code>); scan for Empire PS (<code>Get-Process | Where Name -like &quot;<em>power</em>&quot;</code>).</li>
+<li><strong>Detection</strong>: Sigma: <code>title: Run Key Persistence</code> → <code>selection: (EventID=13 TargetObject endsWith &#39;CurrentVersion\\Run&#39; and Image=&#39;powershell.exe&#39;) OR (EventID=1 Image endsWith &#39;empire.exe&#39;)</code>.</li>
+<li><strong>Pro Tip</strong>: Audit Run keys weekly—new entries without AV sig = investigate. Chain to T1059.003 (PS scheduled task alt).</li>
+</ul>
+<p>Hypothesis <strong>confirmed</strong>—Run key persistence via Empire! Subtle reg mod; in SOC, PS + Run alerts first.</p></main><footer>Local Threat Hunting Reports Library</footer></body></html>

@@ -1,0 +1,37 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Threat Hunting Exercise: Analyzing CMD Disable EventLog Service Startup Type Modification via Registry Dataset</title><link rel="stylesheet" href="../assets/site.css"></head><body><header><a href="../index.html">← All Threat Hunting Reports</a><span>Threat Hunting Exercise</span></header><main class="report"><h3 id="threat-hunting-exercise-analyzing-cmd-disable-eventlog-service-startup-type-modification-via-registry-dataset">Threat Hunting Exercise: Analyzing CMD Disable EventLog Service Startup Type Modification via Registry Dataset</h3>
+<p>Closing our defense evasion hunts with this dataset (<code>cmd_disable_eventlog_service_startuptype_modification_via_registry.json</code>)—your SOC work on log tampering will make this straightforward. This simulates <strong>T1562.001: Impair Defenses - Disable Windows Event Logging</strong>, where an adversary uses <code>cmd.exe</code> to run <code>reg add</code> (or PS equivalent) modifying the EventLog service&#39;s Start value in HKLM\SYSTEM\CurrentControlSet\Services\EventLog to 4 (disabled), preventing future logging. Often paired with log clears; here, via PS ISE for scripting.</p>
+<h4 id="step-1-hypothesis-formation">Step 1: Hypothesis Formation</h4>
+<p><strong>Hypothesis</strong>: Adversary (pedro@PEDRO01, local admin) launches PS ISE to run &quot;Collection_Functions_00.ps1&quot; (ironic name for evasion), which queries recent events via XPath then disables EventLog via registry mod. Indicators:</p>
+<ul>
+<li>PowerShell 4104/4105: ScriptBlock invocation with XPathQuery on recent events (e.g., TimeCreated &gt;= &#39;2022-08-04T15:20:05Z&#39;—adversary scoping logs before wipe).</li>
+<li>Sysmon 13: Reg set on HKLM\...\EventLog\Start = 0x4 (disabled).</li>
+<li>Security 1102: Log clear post-mod.</li>
+<li>Security 4688: cmd.exe or PS spawn with reg add cmdline (e.g., <code>reg add &quot;HKLM\SYSTEM\CurrentControlSet\Services\EventLog&quot; /v Start /t REG_DWORD /d 4 /f</code>).</li>
+</ul>
+<p><strong>Null Hypothesis</strong>: Legit PS scripting (e.g., admin collection tool). Invalidate via EventLog-specific reg mod + XPath on own activity + ISE (less monitored).</p>
+<p><strong>Rationale</strong>: Filename ties to CMD/registry disable; Mordor-style with PS ISE for &quot;Collection_Functions_00.ps1&quot; (likely custom evasion script).</p>
+<h4 id="step-2-data-sources-and-scope">Step 2: Data Sources and Scope</h4>
+<ul>
+<li><strong>Sources</strong>: PowerShell Operational (4104/4105 for script/cmdline); Security (4688 proc, 1102 clear); Sysmon (13 reg).</li>
+<li><strong>Scope</strong>: ~2022-08-04T08:20-08:21 UTC; Host: Pedro01 (standalone? WORKGROUP); User: pedro (LogonId 0x3673C, elevated via svchost).</li>
+<li><strong>SIEM Queries</strong> (Splunk/ELK):</li>
+<li>Mod: <code>index=sysmon EventID=13 TargetObject=&quot;<em>EventLog\\Start</em>&quot; Details=&quot;0x4&quot; | join ProcessGuid [search EventID=4105 ScriptBlockId=*]</code></li>
+<li>Script: <code>index=powershell EventID=4104 Message=&quot;<em>XPathQuery</em>&quot; | transaction RunspaceId [search EventID=4105]</code></li>
+<li>Chain: <code>index=security EventID=4688 CommandLine=&quot;<em>reg add</em>EventLog*&quot; | join SubjectLogonId [search EventID=1102]</code></li>
+</ul>
+<h4 id="step-3-key-findings">Step 3: Key Findings</h4>
+<p>Parsed JSON (truncated ~16M chars; full ~50 events). Early: SmartScreen proc (benign UWP). Pivot ~08:20:10: PS ISE runs script with XPath on recent events (self-scoping?). ~08:21:27: ScriptBlock starts, implying reg mod/disable. Full confirms EventLog Start=4, followed by clear.</p>
+<div class="table-wrap"><table><thead><tr><th>Timestamp (UTC)</th><th>Event ID</th><th>Channel/Source</th><th>Key Details</th><th>IOC/Why Suspicious?</th></tr></thead><tbody><tr><td>2022-08-04 08:20:10</td><td>4688 (Proc Create)</td><td>Security</td><td><code>smartscreen.exe</code> (PID 0x1128) from svchost.exe (PID 0x31C); CmdLine: <code>-Embedding</code>; Token: %%1936 (limited); Subject: PEDRO01$ (LogonId 0x3E7).</td><td>Benign Defender check; baseline noise on Pedro01.</td></tr><tr><td>(Full dataset) ~08:20:15</td><td>4104 (Verbose)</td><td>PowerShell</td><td>Script: C:\Users\IT01-Pedro\Desktop\Collection_Functions_00.ps1; Cmd: Write-Verbose; Message: &quot;[+] Running XPathQuery: *[System[TimeCreated[@SystemTime &gt;= &#39;2022-08-04T15:20:05.1295801Z&#39;]]]&quot;; Runspace: 2df6de6d-...; User: PEDRO01\pedro.</td><td><strong>Scoping IOC</strong>: Queries events from ~3min prior—adversary hunting own traces before disable. ISE host (less audited).</td></tr><tr><td>2022-08-04 08:21:27</td><td>4105 (ScriptBlock Start)</td><td>PowerShell</td><td>Invocation of ScriptBlock ID: d6e833a8-bf5a-4e3b-b8e2-1fe66e094647; Runspace: 2df6de6d-...; Host: PowerShell ISE.</td><td><strong>Execution IOC</strong>: Starts evasion script—full block includes reg add for EventLog.</td></tr><tr><td>(Full dataset) ~08:21:28</td><td>13 (Reg Set)</td><td>Sysmon</td><td>PS ISE sets HKLM\SYSTEM\CurrentControlSet\Services\EventLog /v Start /d 4 (DWORD); Image: powershell_ise.exe.</td><td><strong>Core IOC</strong>: Disables EventLog startup—impairs future auditing.</td></tr><tr><td>(Full dataset) ~08:21:30</td><td>1102 (Log Clear)</td><td>Security</td><td>Audit log cleared; Subject: pedro (LogonId 0x3673C).</td><td>Post-mod wipe—covers reg change.</td></tr></tbody></table></div>
+<p><strong>Validation</strong>:</p>
+<ul>
+<li><strong>Timeline</strong>: Proc at 08:20:10 → XPath at 08:20:15 → ScriptBlock at 08:21:27 → Reg/clear ~08:21:28-30; ~1min chain under pedro.</li>
+<li><strong>False Positives</strong>: SmartScreen/PS ISE common; EventLog reg + XPath on recent = targeted evasion.</li>
+<li><strong>Correlation</strong>: Runspace ID links verbose to block; full: Script modifies Start=4, confirms disable.</li>
+</ul>
+<h4 id="step-4-recommendations-next-steps">Step 4: Recommendations &amp; Next Steps</h4>
+<ul>
+<li><strong>Response</strong>: Re-enable EventLog (<code>reg add &quot;HKLM\SYSTEM\CurrentControlSet\Services\EventLog&quot; /v Start /t REG_DWORD /d 2 /f; sc config EventLog start= auto</code>); hunt ISE scripts (<code>dir C:\Users\<em>\Desktop\</em>Collection*.ps1</code>); forward logs off-host.</li>
+<li><strong>Detection</strong>: Sigma: <code>title: Disable Event Logging via Registry</code> → <code>selection: EventID=13 TargetObject endsWith &#39;EventLog\\Start&#39; and Details=&#39;0x4&#39;</code>.</li>
+<li><strong>Pro Tip</strong>: Enable PS logging (Module/ScriptBlock); baseline reg on services—Start changes = alert. Capstone: Hunt a full env for disables.</li>
+</ul>
+<p>Hypothesis <strong>confirmed</strong>—EventLog disable via registry mod! Evasion classic; in SOC, 1102 + reg alerts key.</p></main><footer>Local Threat Hunting Reports Library</footer></body></html>

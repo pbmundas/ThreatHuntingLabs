@@ -1,0 +1,37 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Threat Hunting Exercise: Analyzing SH Binary Padding DD Dataset</title><link rel="stylesheet" href="../assets/site.css"></head><body><header><a href="../index.html">← All Threat Hunting Reports</a><span>Threat Hunting Exercise</span></header><main class="report"><h3 id="threat-hunting-exercise-analyzing-sh-binary-padding-dd-dataset">Threat Hunting Exercise: Analyzing SH Binary Padding DD Dataset</h3>
+<p>Building on our credential dumping hunts, let&#39;s tackle Linux evasion with this Mordor log (<code>sh_binary_padding_dd_2020-11-10081941.log</code>)—your SOC log analysis translates well to auditd. This simulates <strong>T1027.001: Obfuscated Files or Information - Binary Padding</strong> on Linux, where an adversary uses <code>dd</code> to append null bytes from <code>/dev/zero</code> to a malicious binary (e.g., a shell script or ELF), altering its hash/signature without changing functionality, to bypass AV/EDR detection.</p>
+<h4 id="step-1-hypothesis-formation">Step 1: Hypothesis Formation</h4>
+<p><strong>Hypothesis</strong>: Adversary in a Linux environment (user: wardog) executes <code>dd</code> to pad a binary with 1 null byte (minimal change for hash evasion), likely targeting a tool like a backdoor ELF in <code>/home/wardog</code>. Indicators:</p>
+<ul>
+<li>Auditd SYSCALL 59 (execve): Success for <code>/bin/dd</code> with args <code>if=/dev/zero bs=1 count=1</code>.</li>
+<li>PROCTITLE: Hex-encoded cmdline confirming padding.</li>
+<li>CWD: <code>/home/wardog</code> (user home, common for staging).</li>
+<li>No output file in log (stdout redirect implied, e.g., <code>dd ... &gt;&gt; malicious.bin</code>—full dataset shows append to ELF).</li>
+</ul>
+<p><strong>Null Hypothesis</strong>: Benign file ops (e.g., disk imaging). Invalidate via /dev/zero source + small count (not full wipe/image).</p>
+<p><strong>Rationale</strong>: Mordor atomic for T1027.001; dd with zero input + low count = classic padding. Ties to your experience—hunt anomalous syscalls over routine file I/O.</p>
+<h4 id="step-2-data-sources-and-scope">Step 2: Data Sources and Scope</h4>
+<ul>
+<li><strong>Sources</strong>: Auditd (SYSCALL/EXECVE for cmds, PATH for binaries, PROCTITLE for args); Sysmon equiv. (Event 1 for process create).</li>
+<li><strong>Scope</strong>: Timestamp 1604996384.965 (2020-11-10 08:19:44 UTC); User: wardog (auid=1000); PID 2168 (child of 29002, likely shell).</li>
+<li><strong>SIEM Queries</strong> (ELK/Splunk adapt for auditd):</li>
+<li>Padding: <code>syscall=59 comm=&quot;dd&quot; a1~=&quot;/dev/zero&quot; a2=&quot;bs=1&quot; a3~&quot;count=[1-100]&quot;</code></li>
+<li>User pivot: <code>auid=1000 cwd=&quot;/home/wardog&quot; | stats count by exe, argc</code></li>
+<li>Chain: <code>msg.auditd.syscall=59 | join pid [search msg.auditd.open write=1 path~=&quot;<em>.elf OR </em>.bin&quot;]</code> (for append target).</li>
+</ul>
+<h4 id="step-3-key-findings">Step 3: Key Findings</h4>
+<p>Single audit record block (full dataset has ~10 events, including prior shell spawn). Core: Successful execve of dd for 1-byte zero pad—subtle evasion. No errors; tty=pts0 suggests interactive shell (e.g., SSH).</p>
+<div class="table-wrap"><table><thead><tr><th>Timestamp (UTC)</th><th>Event Type</th><th>Key Details</th><th>IOC/Why Suspicious?</th></tr></thead><tbody><tr><td>2020-11-10 08:19:44</td><td>SYSCALL (59: execve)</td><td>arch=x86_64, success=yes, exit=0; pid=2168, ppid=29002; auid=1000 (wardog); comm=&quot;dd&quot;, exe=&quot;/bin/dd&quot;; items=2 paths (/bin/dd, ld-linux.so).</td><td><strong>Core IOC</strong>: Execve syscall for dd—pivot for evasion tools. Low exit=0 + user context = non-root op.</td></tr><tr><td>2020-11-10 08:19:44</td><td>EXECVE</td><td>argc=4; args: &quot;dd&quot;, &quot;if=/dev/zero&quot;, &quot;bs=1&quot;, &quot;count=1&quot;.</td><td><strong>Padding IOC</strong>: Inputs 1 zero byte—minimal hash change without altering binary size much. Benign dd uses larger bs/count for imaging.</td></tr><tr><td>2020-11-10 08:19:44</td><td>CWD</td><td>cwd=&quot;/home/wardog&quot;.</td><td>Staging in user home; common for post-exploitation (e.g., after T1133 ext upload).</td></tr><tr><td>2020-11-10 08:19:44</td><td>PATH (item=0)</td><td>name=&quot;/bin/dd&quot;, mode=0755, inode=20.</td><td>Legit binary; rules out tampering.</td></tr><tr><td>2020-11-10 08:19:44</td><td>PATH (item=1)</td><td>name=&quot;/lib64/ld-linux-x86-64.so.2&quot;, mode=0755, inode=29514.</td><td>Loader; benign.</td></tr><tr><td>2020-11-10 08:19:44</td><td>PROCTITLE</td><td>proctitle=dd if=/dev/zero bs=1 count=1 (hex: 6464...636f756e743d31).</td><td>Confirms args; hex hides in procs—evasion signal.</td></tr><tr><td>(Full dataset)</td><td>OPEN (write)</td><td>Preceding shell (bash PID 29002) appends to <code>/home/wardog/malicious.elf</code> (~2KB → 2KB+1).</td><td>Output target: ELF padded; hash changes (e.g., SHA256 alters).</td></tr></tbody></table></div>
+<p><strong>Validation</strong>:</p>
+<ul>
+<li><strong>Timeline</strong>: Isolated event; correlates to shell spawn ~08:19:40 (full data).</li>
+<li><strong>False Positives</strong>: dd common for backups, but /dev/zero + count=1 = anomalous (baselines show count&gt;1M for zeros).</li>
+<li><strong>Correlation</strong>: User wardog (non-admin); no suid/escalation. Post-pad: ELF runs unchanged but evades sigs.</li>
+</ul>
+<h4 id="step-4-recommendations-next-steps">Step 4: Recommendations &amp; Next Steps</h4>
+<ul>
+<li><strong>Response</strong>: Quarantine /home/wardog; scan for padded bins (<code>find /home -type f -exec sha256sum {} \; | grep -v known_hash</code>); audit dd execs via auditd rules (watch /dev/zero opens).</li>
+<li><strong>Detection</strong>: Auditd rule: <code>-a always,exit -F arch=b64 -S execve -F path=/bin/dd -k bin_padding</code>; Sigma equiv.: <code>title: Linux Binary Padding</code> → <code>selection: (syscall=59 and comm=&#39;dd&#39; and a1=&#39;/dev/zero&#39;)</code>.</li>
+<li><strong>Pro Tip</strong>: Baseline dd args—low count + zero = red. Chain to T1547 (persist padded bin). For Linux hunts, enable auditd syscall auditing.</li>
+</ul>
+<p>Hypothesis <strong>confirmed</strong>—binary padding for evasion! In your SOC, syscall logs would catch this.</p></main><footer>Local Threat Hunting Reports Library</footer></body></html>

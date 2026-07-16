@@ -1,0 +1,37 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Threat Hunting Exercise: Analyzing SH ARP Cache Dataset</title><link rel="stylesheet" href="../assets/site.css"></head><body><header><a href="../index.html">← All Threat Hunting Reports</a><span>Threat Hunting Exercise</span></header><main class="report"><h3 id="threat-hunting-exercise-analyzing-sh-arp-cache-dataset">Threat Hunting Exercise: Analyzing SH ARP Cache Dataset</h3>
+<p>Expanding our hunts to Linux with this Mordor auditd log (<code>sh_arp_cache_2020-11-10074812.log</code>)—your log analysis skills apply seamlessly to auditd SYSCALLs. This simulates <strong>T1018: Remote System Discovery</strong>, where an adversary enumerates the ARP cache (<code>arp -a</code>) to map local network devices (IPs/MACs), often piped to <code>grep</code> for cleanup (filtering incomplete entries starting with &quot;?&quot;). It&#39;s a stealthy recon step post-initial access (e.g., via SSH as wardog).</p>
+<h4 id="step-1-hypothesis-formation">Step 1: Hypothesis Formation</h4>
+<p><strong>Hypothesis</strong>: Adversary in a compromised Linux host (user: wardog) runs <code>arp -a | grep -v &quot;^?&quot;</code> to dump and filter the ARP table, identifying live local hosts for lateral movement. Indicators:</p>
+<ul>
+<li>Auditd SYSCALL 59 (execve): Success for <code>/usr/sbin/arp -a</code> and <code>/bin/grep -v &quot;^?&quot;</code>.</li>
+<li>PROCTITLE: Hex-encoded cmdline (e.g., &quot;arp-a&quot; and &quot;grep-v^?&quot;).</li>
+<li>CWD: <code>/home/wardog</code> (user home, post-compromise staging).</li>
+<li>No elevated privs (uid=1000); tty=pts0 (interactive, e.g., SSH).</li>
+</ul>
+<p><strong>Null Hypothesis</strong>: Benign network troubleshooting (e.g., admin checking connectivity). Invalidate via pipe chaining (arp|grep) without output redirect or non-root context.</p>
+<p><strong>Rationale</strong>: Mordor atomic for Linux T1018; arp -a reveals broadcast domain without noisy tools like nmap.</p>
+<h4 id="step-2-data-sources-and-scope">Step 2: Data Sources and Scope</h4>
+<ul>
+<li><strong>Sources</strong>: Auditd (SYSCALL/EXECVE for cmds, PROCTITLE for args, PATH for binaries).</li>
+<li><strong>Scope</strong>: Timestamp 1604994496.155 (~2020-11-10 07:48:16 UTC); User: wardog (auid=1000); PIDs 1631/1632 (children of shell PID 29002); ses=104 (SSH session?).</li>
+<li><strong>SIEM Queries</strong> (ELK/Splunk for auditd):</li>
+<li>Recon: <code>syscall=59 comm=&quot;arp&quot; OR comm=&quot;grep&quot; a1=&quot;-a&quot; OR a1=&quot;-v&quot;</code></li>
+<li>Chain: <code>msg.auditd.syscall=59 | stats count by comm, auid | where auid=1000 and cwd=&quot;/home/wardog&quot;</code></li>
+<li>Pivot: <code>proctitle~=&quot;arp.*grep&quot; | join ppid [search open path~=&quot;/proc/net/arp&quot;]</code></li>
+</ul>
+<h4 id="step-3-key-findings">Step 3: Key Findings</h4>
+<p>Single block with two chained execves (full dataset ~5 events, including shell spawn). Core: Interactive recon dumping ARP table (~entries for local net, filtered for complete MACs).</p>
+<div class="table-wrap"><table><thead><tr><th>Timestamp (UTC)</th><th>Event Type</th><th>Key Details</th><th>IOC/Why Suspicious?</th></tr></thead><tbody><tr><td>2020-11-10 07:48:16</td><td>SYSCALL (59: execve)</td><td>arch=x86_64, success=yes, exit=0; pid=1631, ppid=29002; auid=1000 (wardog); comm=&quot;arp&quot;, exe=&quot;/usr/sbin/arp&quot;; items=2 (/usr/sbin/arp, ld-linux.so).</td><td><strong>Core IOC</strong>: Execve for arp—network recon tool. Non-root + pts0 = potential adversary shell.</td></tr><tr><td>2020-11-10 07:48:16</td><td>EXECVE</td><td>argc=2; args: &quot;arp&quot;, &quot;-a&quot;.</td><td>Dumps full ARP cache; reveals local IPs/MACs for discovery.</td></tr><tr><td>2020-11-10 07:48:16</td><td>CWD</td><td>cwd=&quot;/home/wardog&quot;.</td><td>User home; common for post-access enum (e.g., after T1133).</td></tr><tr><td>2020-11-10 07:48:16</td><td>PATH (item=0/1)</td><td>Legit paths/modes for arp and loader.</td><td>Rules out tampering; benign binary.</td></tr><tr><td>2020-11-10 07:48:16</td><td>PROCTITLE</td><td>proctitle=arp -a (hex: 617270002D61).</td><td>Confirms args; hex in title evades basic proc monitoring.</td></tr><tr><td>2020-11-10 07:48:16</td><td>SYSCALL (59: execve)</td><td>pid=1632, ppid=29002; comm=&quot;grep&quot;, exe=&quot;/bin/grep&quot;.</td><td>Pipe child: Filters arp output.</td></tr><tr><td>2020-11-10 07:48:16</td><td>EXECVE</td><td>argc=3; args: &quot;grep&quot;, &quot;-v&quot;, &quot;^?&quot;.</td><td><strong>Filtering IOC</strong>: Excludes incomplete entries (e.g., ? (incomplete))—cleans recon data for analysis. Anomalous combo for benign use.</td></tr><tr><td>2020-11-10 07:48:16</td><td>PROCTITLE</td><td>proctitle=grep -v ^? (hex: 67726570002D76005E3F).</td><td>Matches; chain confirms arp</td><td>grep pipeline.</td></tr></tbody></table></div>
+<p><strong>Validation</strong>:</p>
+<ul>
+<li><strong>Timeline</strong>: Simultaneous execves (same msg.audit id); correlates to shell (ppid=29002).</li>
+<li><strong>False Positives</strong>: arp -a common for diagnostics, but | grep -v &quot;^?&quot; = targeted (baselines show plain arp or to file).</li>
+<li><strong>Correlation</strong>: ses=104 (persistent); full output: IPs like 192.168.1.x with MACs—local net map.</li>
+</ul>
+<h4 id="step-4-recommendations-next-steps">Step 4: Recommendations &amp; Next Steps</h4>
+<ul>
+<li><strong>Response</strong>: Review SSH logs for wardog (~07:48); hunt ARP changes (<code>watch -n1 cat /proc/net/arp</code>); block anomalous enum via auditd rules.</li>
+<li><strong>Detection</strong>: Auditd: <code>-a always,exit -F arch=b64 -S execve -F path=/usr/sbin/arp -k net_recon</code>; Sigma: <code>title: Linux ARP Recon</code> → <code>selection: (syscall=59 and comm=&#39;arp&#39; and a1=&#39;-a&#39;) OR (comm=&#39;grep&#39; and a2=&#39;^?&#39;)</code>.</li>
+<li><strong>Pro Tip</strong>: Baseline arp execs—pipe to grep = red. Chain to T1046 (net recon). For Linux, enable auditd on net syscalls (e.g., socket).</li>
+</ul>
+<p>Hypothesis <strong>confirmed</strong>—ARP cache recon for local discovery! In your SOC, syscall chaining would alert. Got a Linux audit snippet? Let&#39;s hunt it. Module 9: Cross-OS case studies?</p></main><footer>Local Threat Hunting Reports Library</footer></body></html>

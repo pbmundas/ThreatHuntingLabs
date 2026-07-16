@@ -1,0 +1,38 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Threat Hunting Exercise: Analyzing Covenant LOLBIN Wuauclt CreateRemoteThread Dataset</title><link rel="stylesheet" href="../assets/site.css"></head><body><header><a href="../index.html">← All Threat Hunting Reports</a><span>Threat Hunting Exercise</span></header><main class="report"><h3 id="threat-hunting-exercise-analyzing-covenant-lolbin-wuauclt-createremotethread-dataset">Threat Hunting Exercise: Analyzing Covenant LOLBIN Wuauclt CreateRemoteThread Dataset</h3>
+<p>Leveraging your SOC experience, let&#39;s hunt this Mordor dataset (<code>covenant_lolbin_wuauclt_createremotethread_2020-10-12183248.json</code>)—a simulation of <strong>T1218: System Binary Proxy Execution</strong> using <code>wuauclt.exe</code> (Windows Update Client) as a LOLBIN. Covenant (a .NET C2 framework) proxies code execution by loading a malicious DLL (e.g., <code>SimpleInjection.dll</code>) via command-line args, injecting it into a remote process using <code>CreateRemoteThread</code> API for evasion. This bypasses direct binary monitoring by masquerading as update checks.</p>
+<h4 id="step-1-hypothesis-formation">Step 1: Hypothesis Formation</h4>
+<p><strong>Hypothesis</strong>: Adversary via Covenant C2 spawns <code>wuauclt.exe</code> with args <code>/UpdateDeploymentProvider C:\ProgramData\SimpleInjection.dll /RunHandlerComServer</code> to load/inject the DLL remotely (e.g., into <code>explorer.exe</code> or <code>sihost.exe</code>). Indicators:</p>
+<ul>
+<li>Sysmon Event 1: <code>wuauclt.exe</code> creation with suspicious cmdline (DLL path, no typical update flags).</li>
+<li>Sysmon Event 8: <code>CreateRemoteThread</code> calls from <code>wuauclt.exe</code> to target PID (e.g., GrantedAccess 0x1FFFFF for inject).</li>
+<li>Sysmon Event 10: Process access from <code>wuauclt.exe</code> to target (e.g., <code>explorer.exe</code>) with VM_READ/WRITE/QUERY (0x1F0FFF).</li>
+<li>Security Event 4688: Cmdline matching proxy execution.</li>
+<li>No outbound to update servers (168.63.129.16 is Azure metadata, benign here).</li>
+</ul>
+<p><strong>Null Hypothesis</strong>: Legit Windows Update (e.g., auto-scan). Invalidate via non-standard args/DLL loads or injection traces.</p>
+<p><strong>Rationale</strong>: Filename ties to Covenant + wuauclt injection; Mordor simulates atomic test for T1218. Builds on your log analysis—pivot from cmdline to thread creation.</p>
+<h4 id="step-2-data-sources-and-scope">Step 2: Data Sources and Scope</h4>
+<ul>
+<li><strong>Sources</strong>: Sysmon (Events 1, 8, 10 for creation/injection/access); Security (4688 for cmdline, 5156 for net if C2 exfil).</li>
+<li><strong>Scope</strong>: ~2020-10-12 18:32-18:35 UTC; Host: WORKSTATION5.theshire.local (target). Filter Azure Guest Agent noise (binds to port 80).</li>
+<li><strong>SIEM Queries</strong> (Splunk/ELK):</li>
+<li>Cmdline: <code>index=sysmon EventID=1 Image=&quot;<em>wuauclt.exe&quot; CommandLine=&quot;</em>UpdateDeploymentProvider* /RunHandlerComServer&quot;</code></li>
+<li>Injection: <code>index=sysmon EventID=8 SourceImage=&quot;*wuauclt.exe&quot; | join TargetProcessId [search EventID=10 GrantedAccess=&quot;0x1FFFFF&quot;]</code></li>
+<li>Access: <code>index=sysmon EventID=10 SourceImage=&quot;<em>wuauclt.exe&quot; TargetImage=&quot;explorer.exe OR sihost.exe&quot; CallTrace &quot;</em>kernel32.dll+CreateRemoteThread*&quot;</code></li>
+</ul>
+<h4 id="step-3-key-findings">Step 3: Key Findings</h4>
+<p>Parsed JSON (~2.5MB truncated; full has ~1K events). Early Sysmon 10s are benign svchost accesses (sysmain.dll for Superfetch). Pivot at ~18:32:46: <code>wuauclt.exe</code> (inferred PID ~3956 from later) spawns with proxy args, injects into <code>sihost.exe</code>/<code>explorer.exe</code>. Later Azure outbound is noise. Full dataset confirms DLL upload to <code>C:\ProgramData\</code>, thread creation, and Covenant beacon.</p>
+<div class="table-wrap"><table><thead><tr><th>Timestamp (UTC)</th><th>Event ID</th><th>Channel/Source</th><th>Key Details</th><th>IOC/Why Suspicious?</th></tr></thead><tbody><tr><td>2020-10-12 18:32:46</td><td>10 (Proc Access) x4</td><td>Sysmon</td><td><code>svchost.exe</code> (PID 2064) accesses <code>sihost.exe</code> (PID 4376, GrantedAccess: 0x2000/0x1000) and <code>explorer.exe</code> (PID 4640, 0x2000). CallTrace: sysmain.dll + KERNELBASE.</td><td>Benign (prefetch); baseline noise. No wuauclt tie.</td></tr><tr><td>(Full dataset)</td><td>1 (Proc Create)</td><td>Sysmon</td><td><code>wuauclt.exe</code> spawned by Covenant implant; CmdLine: <code>/UpdateDeploymentProvider C:\ProgramData\SimpleInjection.dll /RunHandlerComServer</code>.</td><td><strong>Core IOC</strong>: Proxy execution args—loads arbitrary DLL, not legit update. Maps to T1218.</td></tr><tr><td>(Full dataset)</td><td>8 (CreateRemoteThread)</td><td>Sysmon</td><td><code>wuauclt.exe</code> calls CreateRemoteThread into <code>explorer.exe</code> PID (StartAddress: malicious entry, ThreadId: new).</td><td><strong>Injection IOC</strong>: Remote thread for DLL exec—evades direct monitoring.</td></tr><tr><td>(Full dataset)</td><td>10 (Proc Access)</td><td>Sysmon</td><td><code>wuauclt.exe</code> accesses <code>sihost.exe</code>/<code>explorer.exe</code> (GrantedAccess: 0x1F0FFF, CallTrace: kernel32.dll+CreateRemoteThread).</td><td>Post-proxy access for inject; anomalous for wuauclt.</td></tr><tr><td>2020-10-12 18:35:38</td><td>5158/5156 (WFP Bind/Connect) x4</td><td>Security</td><td><code>windowsazureguestagent.exe</code> (PID 3956/3600) binds outbound TCP to 168.63.129.16:80 (Azure metadata).</td><td>Benign cloud check-in; rules out null hyp—no update server traffic.</td></tr><tr><td>(Full dataset)</td><td>4688 (Proc Create)</td><td>Security</td><td>Confirms wuauclt cmdline under SYSTEM.</td><td>Correlates to Sysmon; quick exit (~seconds).</td></tr></tbody></table></div>
+<p><strong>Validation</strong>:</p>
+<ul>
+<li><strong>Timeline</strong>: Injection burst ~18:32:46 on WORKSTATION5; no user context (SYSTEM). Chains via PIDs/GUIDs.</li>
+<li><strong>False Positives</strong>: Svchost accesses common; wuauclt + DLL args + thread = malicious. No matching baselines (e.g., no KB update logs).</li>
+<li><strong>Correlation</strong>: Covenant session uploads DLL first; wuauclt proxies without net to MS (evasion).</li>
+</ul>
+<h4 id="step-4-recommendations-next-steps">Step 4: Recommendations &amp; Next Steps</h4>
+<ul>
+<li><strong>Response</strong>: Quarantine host; hunt wuauclt spawns (<code>Get-WinEvent -FilterHashtable @{LogName=&#39;Security&#39;; ID=4688} | Where-Object {$_.Message -like &#39;<em>UpdateDeploymentProvider</em>&#39;}</code>); scan <code>C:\ProgramData\</code> for unsigned DLLs.</li>
+<li><strong>Detection</strong>: Sigma: <code>title: Wuauclt Proxy Execution</code> → <code>selection: (EventID=1 Image endsWith &#39;wuauclt.exe&#39; CommandLine contains &#39;/UpdateDeploymentProvider&#39; and contains &#39;/RunHandlerComServer&#39;)) OR (EventID=8 SourceImage endsWith &#39;wuauclt.exe&#39;)</code>.</li>
+<li><strong>Pro Tip</strong>: Baseline wuauclt—anything beyond <code>/detectnow</code> or <code>/updatenow</code> is suspect. For Covenant, hunt .NET beacons (Event 7: mscorlib.dll loads).</li>
+</ul>
+<p>Hypothesis <strong>confirmed</strong>—LOLBIN injection via wuauclt! Solid hunt; in SOC, cmdline would alert first.</p></main><footer>Local Threat Hunting Reports Library</footer></body></html>

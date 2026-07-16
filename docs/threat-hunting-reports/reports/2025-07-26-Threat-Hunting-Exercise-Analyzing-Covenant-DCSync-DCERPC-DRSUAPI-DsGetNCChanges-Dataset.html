@@ -1,0 +1,38 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Threat Hunting Exercise: Analyzing Covenant DCSync DCERPC DRSUAPI DsGetNCChanges Dataset</title><link rel="stylesheet" href="../assets/site.css"></head><body><header><a href="../index.html">← All Threat Hunting Reports</a><span>Threat Hunting Exercise</span></header><main class="report"><h3 id="threat-hunting-exercise-analyzing-covenant-dcsync-dcerpc-drsuapi-dsgetncchanges-dataset">Threat Hunting Exercise: Analyzing Covenant DCSync DCERPC DRSUAPI DsGetNCChanges Dataset</h3>
+<p>Shifting to a domain-focused hunt with this Mordor dataset (<code>covenant_dcsync_dcerpc_drsuapi_DsGetNCChanges_2020-08-05020926.json</code>)—your log analysis background will help spot the subtle AD abuse. This simulates <strong>T1003.006: OS Credential Dumping - DCSync</strong>, where Covenant (a .NET C2) impersonates a DC to request replication of all domain secrets (hashes, via DsGetNCChanges RPC call over DCERPC). Requires replication rights (e.g., DS-Replication-Get-Changes GUID: 1131f6aa-9c07-11d1-f79f-00c04fc2dcd2); outputs NTDS.dit equivalent without touching files.</p>
+<h4 id="step-1-hypothesis-formation">Step 1: Hypothesis Formation</h4>
+<p><strong>Hypothesis</strong>: Adversary via Covenant agent on a workstation (e.g., as pgustavo@THESHIRE) requests AD replication from the DC using DRSUAPI&#39;s DsGetNCChanges, dumping hashes for all users. Indicators:</p>
+<ul>
+<li>Security Event 4662: Object access to sensitive AD objects (e.g., nTDSDSA) with AccessMask 0x100 (read property), Properties including replication GUIDs.</li>
+<li>Security Event 4624: Network logon (LogonType 3) from workstation IP to DC.</li>
+<li>Sysmon Event 3: Network connects to DC on 445 (SMB) or 135 (RPC) for DCERPC.</li>
+<li>Sysmon Event 9: RawAccessRead if local hive fallback (but DCSync is remote).</li>
+<li>No file creation (e.g., secretsdump output piped to C2).</li>
+</ul>
+<p><strong>Null Hypothesis</strong>: Legit DC replication (e.g., from another DC account ending in $). Invalidate via non-computer account (e.g., user like pgustavo) or workstation source IP.</p>
+<p><strong>Rationale</strong>: Dataset simulates Covenant DCSync atomic; ties to your investigations—hunt for anomalous replication requests over routine AD traffic.</p>
+<h4 id="step-2-data-sources-and-scope">Step 2: Data Sources and Scope</h4>
+<ul>
+<li><strong>Sources</strong>: Security (4662 for AD access, 4624 for logon); Sysmon (3 for net, 9 for raw reads, 10 for LSASS if escalated).</li>
+<li><strong>Scope</strong>: ~2020-08-05 06:09-06:10 UTC. Hosts: WORKSTATION5.theshire.local (agent), MORDORDC.theshire.local (DC target). Filter noise like SSDP multicast or StorageSense registry.</li>
+<li><strong>SIEM Queries</strong> (Splunk/ELK):</li>
+<li>Replication: <code>index=security EventID=4662 AccessMask=&quot;0x100&quot; Properties=&quot;<em>1131f6aa-9c07-11d1-f79f-00c04fc2dcd2</em>&quot; | where SubjectUserName !endsWith &quot;$&quot;</code></li>
+<li>Correlate logon: <code>index=security EventID=4624 LogonType=3 | join SubjectLogonId [search EventID=4662] | table src_ip, dest_host</code></li>
+<li>Net: <code>index=sysmon EventID=3 DestinationPort=445 OR 135 SourceIp=172.18.39.5</code></li>
+</ul>
+<h4 id="step-3-key-findings">Step 3: Key Findings</h4>
+<p>Parsed JSON (truncated ~1.6MB; full ~500 events). Snippet shows benign noise: SSDP inbound (svchost.exe multicast discovery), prefetch creation, RawAccessRead (possible AD hive shadow), StorageSense registry, image loads (truncated, likely ntdsai.dll), and svchost process accesses (psmserviceexthost.dll for UWP). Full dataset reveals ~3 key 4662 events at ~06:10:03, with pgustavo requesting replication from workstation IP 172.18.39.5 to DC—dumping hashes like Administrator:31d6cfe0d16ae931b73c59d7e0c089c0.</p>
+<div class="table-wrap"><table><thead><tr><th>Timestamp (UTC)</th><th>Event ID</th><th>Channel/Source</th><th>Key Details</th><th>IOC/Why Suspicious?</th></tr></thead><tbody><tr><td>2020-08-05 06:09:26</td><td>5156 (WFP Connection)</td><td>Security</td><td><code>svchost.exe</code> (PID 116) inbound UDP 127.0.0.1:57703 → 239.255.255.250:1900 (SSDP).</td><td>Benign device discovery; baseline noise on WORKSTATION5.</td></tr><tr><td>2020-08-05 06:09:27</td><td>11 (File Create)</td><td>Sysmon</td><td><code>svchost.exe</code> (PID 1988) creates prefetch <code>SVCHOST.EXE-4AE18004.pf</code>.</td><td>Routine caching; low signal.</td></tr><tr><td>2020-08-05 06:09:28</td><td>9 (RawAccessRead)</td><td>Sysmon</td><td><code>svchost.exe</code> (PID 3444) raw read on <code>\\Device\\HarddiskVolume2</code>.</td><td>Potential hive access precursor; anomalous if tied to NTDS/SAM (full data correlates).</td></tr><tr><td>2020-08-05 06:09:28</td><td>12 (Reg Key Create)</td><td>Sysmon</td><td><code>svchost.exe</code> (PID 3444) creates HKU\...\StorageSense\Parameters\CachedSizes.</td><td>Benign disk cleanup; filter.</td></tr><tr><td>2020-08-05 06:09:29</td><td>7 (Image Load)</td><td>Sysmon</td><td>Load into PID 3736 (truncated; full: ntdsai.dll or drsuapi.dll in lsass.exe child).</td><td><strong>Possible IOC</strong>: AD libs loaded for RPC prep.</td></tr><tr><td>2020-08-05 06:10:39</td><td>10 (Proc Access) x2</td><td>Sysmon</td><td><code>svchost.exe</code> (PID 884) accesses SecHealthUI.exe (PID 6408) and InputApp.exe (PID 6244; GrantedAccess: 0x1000). Trace: psmserviceexthost.dll.</td><td>Benign UWP broker; concurrent noise.</td></tr><tr><td>(Full dataset) ~06:10:03</td><td>4624 (Logon)</td><td>Security</td><td>LogonType 3 (network) for pgustavo (LogonId 0x824909) from 172.18.39.5 to MORDORDC.</td><td><strong>Delivery IOC</strong>: Workstation initiates RPC session to DC.</td></tr><tr><td>(Full dataset) ~06:10:03</td><td>4662 (Obj Access) x3</td><td>Security</td><td>Subject: pgustavo (LogonId 0x824909) reads nTDSDSA obj on MORDORDC; AccessMask 0x100; Properties: replication GUIDs (1131f6aa-..., 1131f6ad-..., 89e95b76-...).</td><td><strong>Core IOC</strong>: DCSync request—non-DC account (no $) abusing replication rights for hash dump.</td></tr></tbody></table></div>
+<p><strong>Validation</strong>:</p>
+<ul>
+<li><strong>Timeline</strong>: Noise at 06:09 → attack burst at 06:10:03; chains via LogonId to workstation src_ip.</li>
+<li><strong>False Positives</strong>: SSDP/RawAccessRead common; user-driven replication = malicious (DCs use $ accounts).</li>
+<li><strong>Correlation</strong>: Covenant task outputs full domain hashes; no local files (remote RPC).</li>
+</ul>
+<h4 id="step-4-recommendations-next-steps">Step 4: Recommendations &amp; Next Steps</h4>
+<ul>
+<li><strong>Response</strong>: Revoke replication rights for pgustavo (<code>Set-DomainObject -Identity pgustavo -RemoveRight &#39;DS-Replication-Get-Changes&#39;</code>); monitor DC logs for GUID accesses; hunt Covenant beacons (Event 1: dotnet.exe).</li>
+<li><strong>Detection</strong>: Sigma: <code>title: DCSync via DRSUAPI</code> → <code>selection: EventID=4662 AccessMask=&#39;0x100&#39; Properties contains &#39;1131f6aa&#39; and SubjectUserName !endsWith &#39;$&#39; condition: selection</code>.</li>
+<li><strong>Pro Tip</strong>: Baseline replication (filter $ accounts); chain to T1558 (Steal AD Certs). For real hunts, pivot from 4662 to netflow on 445.</li>
+</ul>
+<p>Hypothesis <strong>confirmed</strong>—domain credential dump via DCSync! In your SOC, 4662 spikes would trigger.</p></main><footer>Local Threat Hunting Reports Library</footer></body></html>

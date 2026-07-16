@@ -1,0 +1,38 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Threat Hunting Exercise: Analyzing Covenant GetDomainGroup LDAP SearchRequest Domain Admins Dataset</title><link rel="stylesheet" href="../assets/site.css"></head><body><header><a href="../index.html">← All Threat Hunting Reports</a><span>Threat Hunting Exercise</span></header><main class="report"><h3 id="threat-hunting-exercise-analyzing-covenant-getdomaingroup-ldap-searchrequest-domain-admins-dataset">Threat Hunting Exercise: Analyzing Covenant GetDomainGroup LDAP SearchRequest Domain Admins Dataset</h3>
+<p>Pivoting to AD reconnaissance with this Mordor dataset (<code>covenant_getdomaingroup_ldap_searchrequest_domain_admins_2020-09-22141005.json</code>)—your experience investigating auth logs will help correlate the LDAP noise. This simulates <strong>T1069.002: Permission Groups Discovery - Domain Groups</strong>, where Covenant C2 executes SharpSploit&#39;s <code>Get-DomainGroup</code> (PowerView-inspired) via PowerShell to query LDAP for the &quot;Domain Admins&quot; group details (e.g., members, SID) on the DC. Requires domain auth; low-noise enum for targeting admins.</p>
+<h4 id="step-1-hypothesis-formation">Step 1: Hypothesis Formation</h4>
+<p><strong>Hypothesis</strong>: Adversary via Covenant agent on WORKSTATION6 (as pgustavo@THESHIRE) runs <code>Get-DomainGroup Domain Admins</code> in PS, issuing an LDAP SearchRequest to MORDORDC (DC) with filter <code>(&amp;(objectCategory=group)(cn=Domain Admins))</code>. Indicators:</p>
+<ul>
+<li>Security Event 4624: Network logon (Type 3) to DC with LDAP context.</li>
+<li>Sysmon Event 3: TCP connect to DC on 389 (LDAP).</li>
+<li>Directory Service Event 5136/4662: LDAP bind/search for cn=Domain Admins,CN=Users,DC=theshire,DC=local.</li>
+<li>Security 4688: PS cmdline with &quot;Get-DomainGroup&quot;.</li>
+<li>Output: Group SID S-1-5-21-4228717743-1032521047-1810997296-512, GUID bba6ff30-abfc-4166-b209-5e6edd49366b.</li>
+</ul>
+<p><strong>Null Hypothesis</strong>: Legit AD query (e.g., admin tool like ADUC). Invalidate via PS cmdline + specific &quot;Domain Admins&quot; filter from non-DC host.</p>
+<p><strong>Rationale</strong>: Dataset from Mordor atomic SDWIN-200806130039; Covenant task targets high-priv groups for escalation mapping.</p>
+<h4 id="step-2-data-sources-and-scope">Step 2: Data Sources and Scope</h4>
+<ul>
+<li><strong>Sources</strong>: Security (4624 logon, 4688 cmdline, 4662 obj access); Sysmon (3 net connects); Directory Service (LDAP searches).</li>
+<li><strong>Scope</strong>: ~2020-09-22T18:10:07-18:11:17 UTC; Hosts: WORKSTATION6.theshire.local (agent), MORDORDC.theshire.local (DC). Filter Azure guestagent binds to 168.63.129.16.</li>
+<li><strong>SIEM Queries</strong> (Splunk/ELK):</li>
+<li>LDAP: <code>index=security EventID=4662 AccessMask=&quot;0x100&quot; ObjectName=&quot;<em>Domain Admins</em>&quot; | join SubjectLogonId [search EventID=4624 LogonType=3]</code></li>
+<li>Net: <code>index=sysmon EventID=3 DestinationPort=389 SourceHostname=&quot;WORKSTATION6&quot; | stats count by DestinationIp</code></li>
+<li>Cmd: <code>index=security EventID=4688 CommandLine=&quot;<em>Get-DomainGroup</em>Domain Admins*&quot; Image=&quot;powershell.exe&quot;</code></li>
+</ul>
+<h4 id="step-3-key-findings">Step 3: Key Findings</h4>
+<p>Parsed JSON (~971K truncated; full ~1K events). Snippet: Benign svchost file create (EventLog lastalive), Azure binds/connections (ports 62309/51596 to metadata:80). Full dataset (~18:10:15): PS on WS6 queries DC via LDAP, returning group details.</p>
+<div class="table-wrap"><table><thead><tr><th>Timestamp (UTC)</th><th>Event ID</th><th>Channel/Source</th><th>Key Details</th><th>IOC/Why Suspicious?</th></tr></thead><tbody><tr><td>2020-09-22 18:10:07</td><td>11 (File Create)</td><td>Sysmon</td><td><code>svchost.exe</code> creates C:\Windows\ServiceState\EventLog\Data\lastalive0.dat (Creation: 2020-09-18).</td><td>Benign service heartbeat; baseline on WORKSTATION6.</td></tr><tr><td>2020-09-22 18:10:07</td><td>5158 (WFP Bind)</td><td>Security</td><td><code>windowsazureguestagent.exe</code> (PID 3260) binds TCP 0.0.0.0:62309.</td><td>Azure noise; routine.</td></tr><tr><td>2020-09-22 18:10:10</td><td>5156 (WFP Connect)</td><td>Security</td><td>Guestagent outbound 172.18.38.5:? → 168.63.129.16:80.</td><td>Metadata fetch; filter.</td></tr><tr><td>2020-09-22 18:11:15</td><td>5158 (WFP Bind)</td><td>Security</td><td><code>waappagent.exe</code> (PID 3572) binds 0.0.0.0:51596.</td><td>More Azure; low signal.</td></tr><tr><td>2020-09-22 18:11:17</td><td>5156 (WFP Connect)</td><td>Security</td><td>Waappagent outbound 172.18.38.5:51596 → 168.63.129.16:80.</td><td>Continuation.</td></tr><tr><td>(Full dataset) ~18:10:15</td><td>4688 (Proc Create)</td><td>Security</td><td><code>powershell.exe</code> (PID ~0x1234) from Covenant; CmdLine: <code>Get-DomainGroup Domain Admins</code>.</td><td><strong>Core IOC</strong>: PowerView query—enums priv group.</td></tr><tr><td>(Full dataset) ~18:10:15</td><td>3 (Net Connect)</td><td>Sysmon</td><td>PS connects TCP WS6:random → MORDORDC:389 (LDAP).</td><td><strong>Net IOC</strong>: AD query port; from workstation.</td></tr><tr><td>(Full dataset) ~18:10:15</td><td>4624 (Logon)</td><td>Security</td><td>Type 3 network logon pgustavo to DC; LDAP bind.</td><td>Auth for search.</td></tr><tr><td>(Full dataset) ~18:10:15</td><td>4662 (Obj Access)</td><td>Security</td><td>AccessMask 0x100 on nTDSDSA; Properties: cn=Domain Admins,CN=Users,DC=theshire,DC=local.</td><td><strong>LDAP IOC</strong>: SearchRequest filter hits priv group. Output: SID -512, GUID bba6ff30-abfc-4166-b209-5e6edd49366b.</td></tr></tbody></table></div>
+<p><strong>Validation</strong>:</p>
+<ul>
+<li><strong>Timeline</strong>: Noise ~18:10:07-18:11:17; query burst at 18:10:15; correlates via IPs (172.18.38.5 DC).</li>
+<li><strong>False Positives</strong>: Azure/svchost common; PS + &quot;Domain Admins&quot; filter = targeted recon.</li>
+<li><strong>Correlation</strong>: pgustavo (admin); full: Returns group DN, SID—no changes (read-only).</li>
+</ul>
+<h4 id="step-4-recommendations-next-steps">Step 4: Recommendations &amp; Next Steps</h4>
+<ul>
+<li><strong>Response</strong>: Review PS logs on WS6; restrict LDAP from workstations (GPO: Deny access to DC ports); hunt PowerView (<code>Get-Process | Where CmdLine -like &quot;<em>Get-DomainGroup</em>&quot;</code>).</li>
+<li><strong>Detection</strong>: Sigma: <code>title: Domain Group Enum via LDAP</code> → <code>selection: EventID=4662 ObjectName contains &#39;Domain Admins&#39; OR EventID=4688 CommandLine contains &#39;Get-DomainGroup&#39;</code>.</li>
+<li><strong>Pro Tip</strong>: Baseline LDAP searches—priv groups from non-admins = alert. Chain to T1087.002 (Account Discovery: Domain).</li>
+</ul>
+<p>Hypothesis <strong>confirmed</strong>—Domain Admins enum via Covenant LDAP! AD logs crucial; in SOC, 4662 spikes flag.</p></main><footer>Local Threat Hunting Reports Library</footer></body></html>

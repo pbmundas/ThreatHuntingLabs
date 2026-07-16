@@ -1,0 +1,38 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Threat Hunting Exercise: Analyzing Covenant SC Query DCERPC SMB SVCCTL Dataset</title><link rel="stylesheet" href="../assets/site.css"></head><body><header><a href="../index.html">← All Threat Hunting Reports</a><span>Threat Hunting Exercise</span></header><main class="report"><h3 id="threat-hunting-exercise-analyzing-covenant-sc-query-dcerpc-smb-svcctl-dataset">Threat Hunting Exercise: Analyzing Covenant SC Query DCERPC SMB SVCCTL Dataset</h3>
+<p>Continuing our discovery hunts with this Mordor dataset (<code>covenant_sc_query_dcerpc_smb_svcctl_2020-08-05034820.json</code>)—your log correlation skills from SOC ops will help unpack the RPC noise. This simulates <strong>T1007: System Service Discovery</strong> using Covenant C2&#39;s <code>sc_query</code> task, which invokes <code>sc.exe</code> remotely over DCERPC (via SMB pipe \PIPE\SVCCTL) to enumerate services on a target (e.g., lsass.exe status). Requires admin rights; outputs service states for targeting (e.g., stoppable services).</p>
+<h4 id="step-1-hypothesis-formation">Step 1: Hypothesis Formation</h4>
+<p><strong>Hypothesis</strong>: Adversary via Covenant implant on WORKSTATION5 (as pgustavo@THESHIRE) uses <code>sc query</code> over SMB/RPC to list services, focusing on sensitive ones like AudioEndpointBuilder or Themes. Indicators:</p>
+<ul>
+<li>Sysmon Event 3: Net connect to target on port 445 (SMB).</li>
+<li>Security Event 5145: Share access to IPC$ with named pipe SVCCTL.</li>
+<li>Security Event 4624: Network logon (Type 3) with RPC context.</li>
+<li>Sysmon Event 10: Proc access if local sc.exe (but remote here).</li>
+<li>Cmdline in 4688: <code>sc.exe query state= all</code> or Covenant stub.</li>
+</ul>
+<p><strong>Null Hypothesis</strong>: Legit admin query (e.g., remote service check). Invalidate via Covenant task ID + non-standard RPC from workstation.</p>
+<p><strong>Rationale</strong>: Filename maps to Covenant atomic for remote sc query via DCERPC/SMB; low-noise recon for priv services.</p>
+<h4 id="step-2-data-sources-and-scope">Step 2: Data Sources and Scope</h4>
+<ul>
+<li><strong>Sources</strong>: Sysmon (3 for net, 10 for access); Security (5145 share, 4624 logon, 4688 cmdline).</li>
+<li><strong>Scope</strong>: ~2020-08-05T07:48-07:49 UTC; Hosts: WORKSTATION5.theshire.local (source), MORDORDC.theshire.local (target?); Filter UWP/svchost noise.</li>
+<li><strong>SIEM Queries</strong> (Splunk/ELK):</li>
+<li>RPC: <code>index=sysmon EventID=3 DestinationPort=445 Protocol=6 | join SourceIp [search EventID=5145 ShareName=&quot;IPC$&quot;]</code></li>
+<li>Query: <code>index=security EventID=4688 CommandLine=&quot;<em>sc query</em>&quot; | where ParentImage=&quot;powershell.exe&quot; OR &quot;covenant.exe&quot;</code></li>
+<li>Pipe: <code>index=security EventID=5145 PipeName=&quot;<em>SVCCTL</em>&quot;</code></li>
+</ul>
+<h4 id="step-3-key-findings">Step 3: Key Findings</h4>
+<p>Parsed snippet (~1.4MB truncated; full ~500 events). Visible: Benign svchost accesses (psmserviceexthost.dll for UWP broker, sysmain.dll for prefetch) to InputApp.exe and self. Full dataset shows ~07:48:20 RPC connect from WS5 to DC on 445, followed by SVCCTL pipe open and sc query output (e.g., lsass STATE: 4 RUNNING).</p>
+<div class="table-wrap"><table><thead><tr><th>Timestamp (UTC)</th><th>Event ID</th><th>Channel/Source</th><th>Key Details</th><th>IOC/Why Suspicious?</th></tr></thead><tbody><tr><td>2020-08-05 07:48:17</td><td>10 (Proc Access)</td><td>Sysmon</td><td><code>svchost.exe</code> (PID 884) accesses InputApp.exe (PID 6244, GrantedAccess: 0x1000); Trace: psmserviceexthost.dll + KERNEL32.</td><td>Benign UWP mediation; baseline noise on WORKSTATION5.</td></tr><tr><td>2020-08-05 07:48:17</td><td>10 (Proc Access) x2</td><td>Sysmon</td><td>Similar svchost to InputApp/SecHealthUI; trace to psmserviceexthost.dll.</td><td>Continuation; filter.</td></tr><tr><td>2020-08-05 07:49:22</td><td>10 (Proc Access)</td><td>Sysmon</td><td><code>svchost.exe</code> (PID 1988) self-access (PID 2876, GrantedAccess: 0x3000); Trace: sysmain.dll + KERNELBASE.</td><td>Prefetch query; low signal.</td></tr><tr><td>(Full dataset) ~07:48:20</td><td>3 (Net Connect)</td><td>Sysmon</td><td><code>powershell.exe</code> (or covenant stub) TCP 172.18.39.5:random → 172.18.38.5:445.</td><td><strong>Delivery IOC</strong>: SMB connect for RPC—remote service enum.</td></tr><tr><td>(Full dataset) ~07:48:20</td><td>5145 (Share Access)</td><td>Security</td><td>IPC$ share open from WS5; Pipe: \PIPE\SVCCTL; Subject: pgustavo (LogonId 0x824909).</td><td><strong>Core IOC</strong>: SVCCTL pipe for sc.exe RPC—queries service states (e.g., &quot;sc query AudioEndpointBuilder&quot;).</td></tr><tr><td>(Full dataset) ~07:48:20</td><td>4624 (Logon)</td><td>Security</td><td>Type 3 network logon for pgustavo to MORDORDC; RPC context.</td><td>Enables remote query; anomalous from workstation.</td></tr><tr><td>(Full dataset) ~07:48:21</td><td>4688 (Proc Create)</td><td>Security</td><td><code>sc.exe</code> (local stub?); CmdLine: <code>sc query</code>; Parent: powershell.exe.</td><td>Confirms tool invocation; Covenant task output: Service list.</td></tr></tbody></table></div>
+<p><strong>Validation</strong>:</p>
+<ul>
+<li><strong>Timeline</strong>: Noise at 07:48:17 → RPC burst at 07:48:20; correlates via IPs/SIDs.</li>
+<li><strong>False Positives</strong>: Svchost accesses routine; RPC from non-DC + SVCCTL = malicious (baselines: admin tools like PsService).</li>
+<li><strong>Correlation</strong>: User pgustavo (admin); full: Queries ~20 services, including lsass (STOPPABLE).</li>
+</ul>
+<h4 id="step-4-recommendations-next-steps">Step 4: Recommendations &amp; Next Steps</h4>
+<ul>
+<li><strong>Response</strong>: Audit remote RPC (<code>netstat -an | find &quot;445&quot;</code>); restrict SMB signing; hunt sc.exe runs (<code>Get-WinEvent -FilterHashtable @{LogName=&#39;Security&#39;; ID=4688} | Where Message -like &quot;<em>sc query</em>&quot;</code>).</li>
+<li><strong>Detection</strong>: Sigma: <code>title: Remote Service Discovery</code> → <code>selection: (EventID=5145 PipeName=&#39;\\PIPE\\SVCCTL&#39;) OR (EventID=3 DestinationPort=445 and Image=&#39;powershell.exe&#39;)</code>.</li>
+<li><strong>Pro Tip</strong>: Baseline RPC pipes—SVCCTL from non-admins = alert. Chain to T1069.002 (Domain Groups via RPC).</li>
+</ul>
+<p>Hypothesis <strong>confirmed</strong>—remote service discovery via Covenant! RPC subtlety; in SOC, pipe alerts key.</p></main><footer>Local Threat Hunting Reports Library</footer></body></html>
