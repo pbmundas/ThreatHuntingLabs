@@ -1,3 +1,0 @@
-[submodule "docs/threat-hunting-lab"]
-	path = docs/threat-hunting-lab
-	url = https://github.com/pbmundas/threat-hunt-challenges-labs.git

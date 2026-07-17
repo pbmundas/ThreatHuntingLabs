@@ -1,0 +1,22 @@
+{
+  "id": "incident-001",
+  "title": "Operation Example",
+  "description": "Background information shown to learners.",
+  "hypothesis": "A compromised endpoint was used to move laterally into a critical server.",
+  "difficulty_tier": "Intermediate",
+  "estimated_minutes": 45,
+  "mitre_tags": ["T1059", "T1021"],
+  "sources": [
+    {"path": "C:/private/raw/endpoint.csv", "table": "endpoint_logs", "timestamp_column": "timestamp"}
+  ],
+  "steps": [
+    {
+      "title": "Identify the initial process",
+      "prompt": "Which process initiated the suspicious command chain?",
+      "answer": "replace-before-publishing",
+      "required_query_token": "process_name",
+      "verification_sql": "SELECT count(*) FROM endpoint_logs WHERE process_name IS NOT NULL",
+      "hints": ["Inspect child and parent process relationships."]
+    }
+  ]
+}
