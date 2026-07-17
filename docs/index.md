@@ -52,7 +52,7 @@ meta:
 
     Move from a clear hypothesis to collection, analysis, validation, and documentation through an applied lab workflow.
 
-    [Enter the lab →](Start-Hunting/threat-hunting-lab/){ .thl-card-link }
+    [Enter the lab →](threat-hunting-lab/){ .thl-card-link }
 
 - <span class="thl-card-id">PATH_04 / REASON</span>
 
