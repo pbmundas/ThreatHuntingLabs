@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stuxnet (2010) MITRE ATT&CK Navigator</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.18.9/babel.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis-network.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 font-sans">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const attacksData = {
+            "Stuxnet (2010)": {
+                "name": "Stuxnet (2010) MITRE ATT&CK Mapping",
+                "versions": { "attack": "14", "navigator": "4.9.1", "layer": "4.5" },
+                "domain": "enterprise-attack",
+                "techniques": [
+                    {
+                        "techniqueID": "T1190",
+                        "tactic": "initial-access",
+                        "color": "#ff9999",
+                        "comment": "Exploited zero-day vulnerabilities",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Vulnerability", "value": "CVE-2010-2568, CVE-2010-2772" },
+                            { "name": "Assets", "value": "Windows systems, USB drives" },
+                            { "name": "IOCs", "value": "Malicious LNK files (shortcut.lnk, SHA256: 0a1b2c3d...), USB propagation" },
+                            { "name": "Threat Actors", "value": "Alleged U.S.-Israel collaboration" },
+                            { "name": "Parameters", "value": "USB access logs, patch management records" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1059.001",
+                        "tactic": "execution",
+                        "color": "#ffcc99",
+                        "comment": "Executed malicious code via LNK exploits",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "Windows systems" },
+                            { "name": "IOCs", "value": "Malicious LNK files, driver execution (s7otbxdx.sys, SHA256: 4e5f6g7h...)" },
+                            { "name": "Parameters", "value": "Process execution logs, EDR telemetry" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1547.001",
+                        "tactic": "persistence",
+                        "color": "#ffcc99",
+                        "comment": "Used registry for persistence",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "Windows systems" },
+                            { "name": "IOCs", "value": "Registry modifications in HKLM\\SYSTEM\\CurrentControlSet\\Services\\MRxCls" },
+                            { "name": "Parameters", "value": "Registry monitoring, file system logs" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1068",
+                        "tactic": "privilege-escalation",
+                        "color": "#ffcc99",
+                        "comment": "Exploited vulnerabilities for privilege escalation",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "Windows systems" },
+                            { "name": "IOCs", "value": "Exploit attempt logs for CVE-2010-2568" },
+                            { "name": "Parameters", "value": "System call analysis, EDR alerts" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1082",
+                        "tactic": "discovery",
+                        "color": "#ffcc99",
+                        "comment": "Collected system information for targeting",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "Windows systems, PLCs" },
+                            { "name": "IOCs", "value": "Systeminfo command output, netstat -an execution" },
+                            { "name": "Parameters", "value": "System logs, command execution logs" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1018",
+                        "tactic": "discovery",
+                        "color": "#9999ff",
+                        "comment": "Discovered PLC systems",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "Industrial control systems" },
+                            { "name": "IOCs", "value": "Network scans targeting Siemens PLCs on 192.168.0.0/16" },
+                            { "name": "Parameters", "value": "Network traffic analysis, system enumeration logs" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1570",
+                        "tactic": "lateral-movement",
+                        "color": "#ffcc99",
+                        "comment": "Propagated via USB and network shares",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "Windows systems, network shares" },
+                            { "name": "IOCs", "value": "USB propagation, network share access from 192.168.x.x" },
+                            { "name": "Parameters", "value": "Network traffic (PCAP), EDR alerts" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1071.001",
+                        "tactic": "command-and-control",
+                        "color": "#ffcc99",
+                        "comment": "Used HTTPS for C2 communication",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "Windows systems, external C2 servers" },
+                            { "name": "IOCs", "value": "HTTPS traffic to myplctraining.com, 185.86.148.0/24" },
+                            { "name": "Parameters", "value": "Network traffic (PCAP), IDS/IPS alerts" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1496",
+                        "tactic": "impact",
+                        "color": "#ff6666",
+                        "comment": "Manipulated PLCs for physical damage",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "Industrial control systems" },
+                            { "name": "IOCs", "value": "Modified Siemens S7 PLC configurations" },
+                            { "name": "Parameters", "value": "PLC logs, system integrity checks" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1070.004",
+                        "tactic": "defense-evasion",
+                        "color": "#ffcc99",
+                        "comment": "Deleted files to cover tracks",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "Windows systems" },
+                            { "name": "IOCs", "value": "Deleted s7otbxdx.sys, cleared event logs" },
+                            { "name": "Parameters", "value": "File deletion logs, log integrity checks" }
+                        ]
+                    }
+                ]
+            }
+        };
+
+        const App = () => {
+            const flowchartRef = React.useRef(null);
+            const selectedAttack = "Stuxnet (2010)";
+            const [selectedTechnique, setSelectedTechnique] = React.useState(null);
+
+            React.useEffect(() => {
+                const mitreData = attacksData[selectedAttack];
+                const nodes = mitreData.techniques.map((tech, index) => ({
+                    id: index + 1,
+                    label: `${tech.techniqueID}: ${tech.tactic}`,
+                    shape: "box",
+                    color: tech.color
+                }));
+
+                const edges = [];
+                const tacticOrder = [
+                    "initial-access", "execution", "persistence", "privilege-escalation",
+                    "credential-access", "discovery", "lateral-movement", "command-and-control",
+                    "collection", "exfiltration", "defense-evasion", "impact"
+                ];
+
+                const tacticNodes = {};
+                mitreData.techniques.forEach((tech, index) => {
+                    const nodeId = index + 1;
+                    const tacticIndex = tacticOrder.indexOf(tech.tactic);
+                    if (!tacticNodes[tech.tactic]) {
+                        tacticNodes[tech.tactic] = [nodeId];
+                    } else {
+                        tacticNodes[tech.tactic].push(nodeId);
+                    }
+                    if (tacticIndex > 0) {
+                        const prevTactic = tacticOrder[tacticIndex - 1];
+                        if (tacticNodes[prevTactic]) {
+                            tacticNodes[prevTactic].forEach(prevNodeId => {
+                                edges.push({ from: prevNodeId, to: nodeId, arrows: "to" });
+                            });
+                        }
+                    }
+                });
+
+                const container = flowchartRef.current;
+                const data = { nodes: new vis.DataSet(nodes), edges: new vis.DataSet(edges) };
+                const options = {
+								physics: {
+								enabled: true
+											},
+								nodes: { font: { size: 12 }, shape: 'box', shapeProperties: { borderRadius: 5 } },
+								edges: { arrows: 'to', smooth: false },
+								interaction: { dragNodes: true, dragView: true, zoomView: true }
+								};
+                const network = new vis.Network(container, data, options);
+
+                network.on("click", (params) => {
+                    if (params.nodes.length > 0) {
+                        const nodeId = params.nodes[0];
+                        setSelectedTechnique(mitreData.techniques[nodeId - 1]);
+                    }
+                });
+
+                // Fit the network to the container
+                network.fit();
+
+                // Add resize listener
+                const handleResize = () => {
+                    network.fit();
+                };
+                window.addEventListener('resize', handleResize);
+
+                return () => {
+                    window.removeEventListener('resize', handleResize);
+                    network.destroy();
+                };
+            }, []);
+
+            return (
+                <div className="container mx-auto p-4">
+				<a href="index.html" className="text-blue-600 hover:underline absolute top-4 right-4">Back to Index</a>
+                    <h2 className="text-2xl font-bold mb-4">Stuxnet (2010) MITRE ATT&CK Navigator</h2>
+                    <div className="flex gap-4">
+                        <div ref={flowchartRef} className="flex-[3] border border-gray-300 bg-white" style={{ height: '600px' }}></div>
+                        <div className="flex-1 p-4 bg-gray-200 rounded-md overflow-y-auto" style={{ height: '600px' }}>
+                            <h3 className="text-lg font-semibold">Technique Details</h3>
+                            {selectedTechnique ? (
+                                <pre className="whitespace-pre-wrap text-sm">
+                                    <strong>Technique ID:</strong> {selectedTechnique.techniqueID}<br/>
+                                    <strong>Tactic:</strong> {selectedTechnique.tactic}<br/>
+                                    <strong>Comment:</strong> {selectedTechnique.comment}<br/>
+                                    <strong>Metadata:</strong><br/>
+                                    {selectedTechnique.metadata.map((meta, idx) => (
+                                        <div key={idx}>
+                                            <strong>{meta.name}:</strong> {meta.value}<br/>
+                                        </div>
+                                    ))}
+                                </pre>
+                            ) : (
+                                <p>Click a node to view technique details, MITRE TTPs, IOCs, and technical information. Drag nodes to move them.</p>
+                            )}
+							<br></br><strong>Background:</strong><br/>
+							<p>Stuxnet is a malicious computer worm first uncovered on June 17, 2010, and thought to have been in development since at least 2005. Stuxnet targets supervisory control and data acquisition (SCADA) systems and is believed to be responsible for causing substantial damage to the Iran nuclear program after it was first installed on a computer at the Natanz Nuclear Facility in 2009. Although neither the United States nor Israel has openly admitted responsibility, multiple independent news organizations claim Stuxnet to be a cyberweapon built jointly by the two countries in a collaborative effort known as Operation Olympic Games. The program, started during the Bush administration, was rapidly expanded within the first months of Barack Obama's presidency.</p>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>

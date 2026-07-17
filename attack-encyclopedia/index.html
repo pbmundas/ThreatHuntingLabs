@@ -1,0 +1,1993 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A local evidence-first encyclopedia for learning cyberattacks, artifacts, detections, ATT&amp;CK mappings, and mitigations.">
+  <title>Attack Encyclopedia — Local HTML Edition</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<main>
+  <header class="site-header">
+    <a class="brand" href="index.html">
+  <span class="brand-mark">AE</span>
+  <span><strong>ATTACK ENCYCLOPEDIA</strong><small>NAME IT. TRACE IT. DETECT IT.</small></span>
+</a>
+    <nav><a href="#catalog">Catalog</a><a href="#method">Study method</a><span class="header-status"><i></i>170 notes offline</span><span class="header-status"><i></i><a href="https://threathuntlabs.com">Threat Hunt Labs</a></span></nav>
+  </header>
+
+  <section class="hero">
+    <div class="hero-grid"></div>
+    <div class="hero-copy">
+      <div class="eyebrow"><span>LOCAL DEFENDER FIELD MANUAL</span><span>STATIC HTML EDITION</span></div>
+      <h1>Learn the attack.<br><em>Name the signal.</em></h1>
+      <p>A local field guide to cyberattacks—organized into one-page notes connecting attacker behavior to evidence, detection, and mitigation.</p>
+      <div class="hero-actions"><a class="primary-button" href="#catalog">Explore the catalog <span>↘</span></a><a class="text-button" href="attacks/password-spraying.html">Start with Password Spraying →</a></div>
+    </div>
+    <div class="hero-console">
+      <div class="console-top"><span>LOCAL_KNOWLEDGE_BASE.STATUS</span><span class="live">READY</span></div>
+      <div class="radar"><span class="radar-ring r1"></span><span class="radar-ring r2"></span><span class="radar-ring r3"></span><span class="radar-sweep"></span><span class="radar-dot d1"></span><span class="radar-dot d2"></span><span class="radar-dot d3"></span><b>170</b><small>ATTACK NOTES</small></div>
+      <div class="console-stats"><div><span>FAMILIES</span><strong>08</strong></div><div><span>DEEP DIVES</span><strong>07</strong></div><div><span>SERVER</span><strong>NOT REQUIRED</strong></div></div>
+    </div>
+  </section>
+
+  <section class="method-strip" id="method">
+    <span class="method-label">THE STUDY LOOP</span>
+    <div class="method-step"><b>01</b><span>UNDERSTAND</span></div><div class="method-step"><b>02</b><span>TRACE</span></div><div class="method-step"><b>03</b><span>OBSERVE</span></div><div class="method-step"><b>04</b><span>DETECT</span></div><div class="method-step"><b>05</b><span>HARDEN</span></div>
+  </section>
+
+  <section class="coverage-note">
+    <div><span class="section-kicker">COVERAGE REVIEW / JULY 2026</span><strong>170 attack notes across 8 families</strong></div>
+    <p>The catalog now includes major ATT&amp;CK behaviors plus common web, network, physical, fraud, supply-chain, and AI-security attack names. Cyberattack terminology keeps evolving, so this is a reviewed learning catalog rather than a claim that history has a final, finite list.</p>
+  </section>
+
+  <section class="catalog" id="catalog">
+    <div class="catalog-head"><div><span class="section-kicker">ATTACK LIBRARY</span><h2>Find your next study note.</h2></div><p>Search by name, platform, ATT&amp;CK ID, or attack family. Every note follows the same evidence-first structure.</p></div>
+    <div class="search-panel">
+      <label class="search-box"><span>⌕</span><input id="attack-search" placeholder="Search attacks, MITRE IDs, platforms..." aria-label="Search attacks"><kbd>/</kbd></label>
+      <span class="result-count" id="result-count">170 RESULTS</span>
+    </div>
+    <div class="filters" aria-label="Filter attack family">
+      <button type="button" class="active" data-filter="All">ALL <span>170</span></button>
+      <button type="button" data-filter="Credentials &amp; Identity">ID <span>36</span></button>
+<button type="button" data-filter="Phishing &amp; Social Engineering">SE <span>16</span></button>
+<button type="button" data-filter="Web Application">WA <span>28</span></button>
+<button type="button" data-filter="Network &amp; Protocol">NP <span>27</span></button>
+<button type="button" data-filter="Malware &amp; Endpoint">ME <span>27</span></button>
+<button type="button" data-filter="Cloud &amp; Containers">CC <span>18</span></button>
+<button type="button" data-filter="Wireless &amp; Physical">WP <span>8</span></button>
+<button type="button" data-filter="Supply Chain &amp; Emerging">SC <span>10</span></button>
+    </div>
+    <div class="attack-groups" id="attack-groups"><section class="attack-group" data-attack-group data-category="Credentials &amp; Identity">
+  <div class="group-title">
+    <span>ID</span><h3>Credentials &amp; Identity</h3><i></i>
+    <b data-group-count>36</b>
+  </div>
+  <div class="attack-list"><a
+  class="attack-row"
+  href="attacks/account-manipulation.html"
+  data-attack-row
+  data-category="Credentials &amp; Identity"
+  data-search="account manipulation existing accounts are altered to preserve or increase access. credentials &amp; identity identity enterprise t1098 ">
+  <span class="row-number">01</span>
+  <span class="row-main"><strong>Account Manipulation</strong><small>Existing accounts are altered to preserve or increase access.</small></span>
+  <span class="row-meta"><span>T1098</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/adversary-in-the-middle-phishing.html"
+  data-attack-row
+  data-category="Credentials &amp; Identity"
+  data-search="adversary-in-the-middle phishing a reverse proxy captures credentials, mfa exchanges, and session cookies in real time. credentials &amp; identity identity provider web saas t1557 ">
+  <span class="row-number">02</span>
+  <span class="row-main"><strong>Adversary-in-the-Middle Phishing</strong><small>A reverse proxy captures credentials, MFA exchanges, and session cookies in real time.</small></span>
+  <span class="row-meta"><span>T1557</span><span>Advanced</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/application-access-token-theft.html"
+  data-attack-row
+  data-category="Credentials &amp; Identity"
+  data-search="application access token theft oauth or api access tokens are stolen and used without the original sign-in. credentials &amp; identity saas cloud containers t1550.001 ">
+  <span class="row-number">03</span>
+  <span class="row-main"><strong>Application Access Token Theft</strong><small>OAuth or API access tokens are stolen and used without the original sign-in.</small></span>
+  <span class="row-meta"><span>T1550.001</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/as-rep-roasting.html"
+  data-attack-row
+  data-category="Credentials &amp; Identity"
+  data-search="as-rep roasting kerberos responses for accounts without pre-authentication are captured for offline cracking. credentials &amp; identity identity enterprise t1558.004 ">
+  <span class="row-number">04</span>
+  <span class="row-main"><strong>AS-REP Roasting</strong><small>Kerberos responses for accounts without pre-authentication are captured for offline cracking.</small></span>
+  <span class="row-meta"><span>T1558.004</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/brute-force.html"
+  data-attack-row
+  data-category="Credentials &amp; Identity"
+  data-search="brute force repeated password or key guesses discover valid authentication material online or offline. credentials &amp; identity windows linux saas web network devices t1110 ">
+  <span class="row-number">05</span>
+  <span class="row-main"><strong>Brute Force</strong><small>Repeated password or key guesses discover valid authentication material online or offline.</small></span>
+  <span class="row-meta"><span>T1110</span><span>Foundational</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/cached-domain-credential-theft.html"
+  data-attack-row
+  data-category="Credentials &amp; Identity"
+  data-search="cached domain credential theft cached domain logon verifiers are extracted for offline cracking. credentials &amp; identity identity enterprise t1003.005 ">
+  <span class="row-number">06</span>
+  <span class="row-main"><strong>Cached Domain Credential Theft</strong><small>Cached domain logon verifiers are extracted for offline cracking.</small></span>
+  <span class="row-meta"><span>T1003.005</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/cloud-secrets-store-theft.html"
+  data-attack-row
+  data-category="Credentials &amp; Identity"
+  data-search="cloud secrets store theft secrets are requested from a cloud vault or secrets-management service. credentials &amp; identity aws azure gcp t1555.006 ">
+  <span class="row-number">07</span>
+  <span class="row-main"><strong>Cloud Secrets Store Theft</strong><small>Secrets are requested from a cloud vault or secrets-management service.</small></span>
+  <span class="row-meta"><span>T1555.006</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/credential-stuffing.html"
+  data-attack-row
+  data-category="Credentials &amp; Identity"
+  data-search="credential stuffing username and password pairs stolen elsewhere are replayed against a new service. credentials &amp; identity saas web vpn mobile apps t1110.004 ">
+  <span class="row-number">08</span>
+  <span class="row-main"><strong>Credential Stuffing</strong><small>Username and password pairs stolen elsewhere are replayed against a new service.</small></span>
+  <span class="row-meta"><span>T1110.004</span><span>Foundational</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/dcshadow.html"
+  data-attack-row
+  data-category="Credentials &amp; Identity"
+  data-search="dcshadow a rogue domain controller pushes malicious directory changes. credentials &amp; identity identity enterprise t1207 ">
+  <span class="row-number">09</span>
+  <span class="row-main"><strong>DCShadow</strong><small>A rogue domain controller pushes malicious directory changes.</small></span>
+  <span class="row-meta"><span>T1207</span><span>Advanced</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/dcsync.html"
+  data-attack-row
+  data-category="Credentials &amp; Identity"
+  data-search="dcsync directory replication rights are abused to request domain password data. credentials &amp; identity identity enterprise t1003.006 ">
+  <span class="row-number">10</span>
+  <span class="row-main"><strong>DCSync</strong><small>Directory replication rights are abused to request domain password data.</small></span>
+  <span class="row-meta"><span>T1003.006</span><span>Advanced</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/default-account-abuse.html"
+  data-attack-row
+  data-category="Credentials &amp; Identity"
+  data-search="default account abuse built-in or vendor-default accounts are used for unauthorized access. credentials &amp; identity identity enterprise t1078.001 ">
+  <span class="row-number">11</span>
+  <span class="row-main"><strong>Default Account Abuse</strong><small>Built-in or vendor-default accounts are used for unauthorized access.</small></span>
+  <span class="row-meta"><span>T1078.001</span><span>Foundational</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/golden-saml.html"
+  data-attack-row
+  data-category="Credentials &amp; Identity"
+  data-search="golden saml a stolen federation signing key is used to forge trusted saml assertions. credentials &amp; identity identity provider saas t1606.002 ">
+  <span class="row-number">12</span>
+  <span class="row-main"><strong>Golden SAML</strong><small>A stolen federation signing key is used to forge trusted SAML assertions.</small></span>
+  <span class="row-meta"><span>T1606.002</span><span>Advanced</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/golden-ticket.html"
+  data-attack-row
+  data-category="Credentials &amp; Identity"
+  data-search="golden ticket a forged kerberos ticket-granting ticket is created with the domain krbtgt secret. credentials &amp; identity windows active directory kerberos t1558.001 ">
+  <span class="row-number">13</span>
+  <span class="row-main"><strong>Golden Ticket</strong><small>A forged Kerberos ticket-granting ticket is created with the domain KRBTGT secret.</small></span>
+  <span class="row-meta"><span>T1558.001</span><span>Advanced</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/group-policy-preferences-credential-theft.html"
+  data-attack-row
+  data-category="Credentials &amp; Identity"
+  data-search="group policy preferences credential theft legacy credentials embedded in group policy preferences are recovered. credentials &amp; identity windows active directory t1552.006 ">
+  <span class="row-number">14</span>
+  <span class="row-main"><strong>Group Policy Preferences Credential Theft</strong><small>Legacy credentials embedded in Group Policy Preferences are recovered.</small></span>
+  <span class="row-meta"><span>T1552.006</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/kerberoasting.html"
+  data-attack-row
+  data-category="Credentials &amp; Identity"
+  data-search="kerberoasting kerberos service tickets are obtained and cracked offline to recover service-account passwords. credentials &amp; identity windows active directory kerberos t1558.003 ">
+  <span class="row-number">15</span>
+  <span class="row-main"><strong>Kerberoasting</strong><small>Kerberos service tickets are obtained and cracked offline to recover service-account passwords.</small></span>
+  <span class="row-meta"><span>T1558.003</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/kerberos-delegation-abuse.html"
+  data-attack-row
+  data-category="Credentials &amp; Identity"
+  data-search="kerberos delegation abuse unconstrained, constrained, or resource-based delegation is abused to impersonate users to services. credentials &amp; identity windows active directory kerberos concept ">
+  <span class="row-number">16</span>
+  <span class="row-main"><strong>Kerberos Delegation Abuse</strong><small>Unconstrained, constrained, or resource-based delegation is abused to impersonate users to services.</small></span>
+  <span class="row-meta"><span>Concept</span><span>Advanced</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/lsass-credential-dumping.html"
+  data-attack-row
+  data-category="Credentials &amp; Identity"
+  data-search="lsass credential dumping credential material is extracted from the windows security process. credentials &amp; identity identity enterprise t1003.001 ">
+  <span class="row-number">17</span>
+  <span class="row-main"><strong>LSASS Credential Dumping</strong><small>Credential material is extracted from the Windows security process.</small></span>
+  <span class="row-meta"><span>T1003.001</span><span>Advanced</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/mfa-fatigue.html"
+  data-attack-row
+  data-category="Credentials &amp; Identity"
+  data-search="mfa fatigue repeated push prompts pressure a user into approving an attacker login. credentials &amp; identity identity enterprise t1621 ">
+  <span class="row-number">18</span>
+  <span class="row-main"><strong>MFA Fatigue</strong><small>Repeated push prompts pressure a user into approving an attacker login.</small></span>
+  <span class="row-meta"><span>T1621</span><span>Foundational</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/mfa-interception.html"
+  data-attack-row
+  data-category="Credentials &amp; Identity"
+  data-search="mfa interception one-time codes or other authentication factors are intercepted and replayed. credentials &amp; identity identity mobile saas t1111 ">
+  <span class="row-number">19</span>
+  <span class="row-main"><strong>MFA Interception</strong><small>One-time codes or other authentication factors are intercepted and replayed.</small></span>
+  <span class="row-meta"><span>T1111</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/ntds-dit-theft.html"
+  data-attack-row
+  data-category="Credentials &amp; Identity"
+  data-search="ntds.dit theft the active directory database is copied to obtain domain hashes. credentials &amp; identity identity enterprise t1003.003 ">
+  <span class="row-number">20</span>
+  <span class="row-main"><strong>NTDS.dit Theft</strong><small>The Active Directory database is copied to obtain domain hashes.</small></span>
+  <span class="row-meta"><span>T1003.003</span><span>Advanced</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/oauth-consent-phishing.html"
+  data-attack-row
+  data-category="Credentials &amp; Identity"
+  data-search="oauth consent phishing a user grants a malicious app access to cloud data. credentials &amp; identity saas cloud identity t1528 ">
+  <span class="row-number">21</span>
+  <span class="row-main"><strong>OAuth Consent Phishing</strong><small>A user grants a malicious app access to cloud data.</small></span>
+  <span class="row-meta"><span>T1528</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/pass-the-hash.html"
+  data-attack-row
+  data-category="Credentials &amp; Identity"
+  data-search="pass-the-hash a stolen password hash is used directly for authentication without recovering the plaintext. credentials &amp; identity windows active directory smb ntlm t1550.002 pth">
+  <span class="row-number">22</span>
+  <span class="row-main"><strong>Pass-the-Hash</strong><small>A stolen password hash is used directly for authentication without recovering the plaintext.</small></span>
+  <span class="row-meta"><span>T1550.002</span><span>Advanced</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/pass-the-ticket.html"
+  data-attack-row
+  data-category="Credentials &amp; Identity"
+  data-search="pass-the-ticket a stolen kerberos ticket is reused to access resources without the account password. credentials &amp; identity windows active directory kerberos t1550.003 ptt">
+  <span class="row-number">23</span>
+  <span class="row-main"><strong>Pass-the-Ticket</strong><small>A stolen Kerberos ticket is reused to access resources without the account password.</small></span>
+  <span class="row-meta"><span>T1550.003</span><span>Advanced</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/password-cracking.html"
+  data-attack-row
+  data-category="Credentials &amp; Identity"
+  data-search="password cracking stolen password hashes are tested offline against candidate passwords. credentials &amp; identity identity enterprise t1110.002 ">
+  <span class="row-number">24</span>
+  <span class="row-main"><strong>Password Cracking</strong><small>Stolen password hashes are tested offline against candidate passwords.</small></span>
+  <span class="row-meta"><span>T1110.002</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/password-guessing.html"
+  data-attack-row
+  data-category="Credentials &amp; Identity"
+  data-search="password guessing common or targeted passwords are tested against one account. credentials &amp; identity identity enterprise t1110.001 ">
+  <span class="row-number">25</span>
+  <span class="row-main"><strong>Password Guessing</strong><small>Common or targeted passwords are tested against one account.</small></span>
+  <span class="row-meta"><span>T1110.001</span><span>Foundational</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/password-reset-poisoning.html"
+  data-attack-row
+  data-category="Credentials &amp; Identity"
+  data-search="password reset poisoning account recovery or reset workflows are manipulated to take control of an identity. credentials &amp; identity web saas identity concept ">
+  <span class="row-number">26</span>
+  <span class="row-main"><strong>Password Reset Poisoning</strong><small>Account recovery or reset workflows are manipulated to take control of an identity.</small></span>
+  <span class="row-meta"><span>Concept</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/password-spraying.html"
+  data-attack-row
+  data-category="Credentials &amp; Identity"
+  data-search="password spraying a small set of common passwords is tried across many accounts to avoid per-user lockout thresholds. credentials &amp; identity active directory entra id saas vpn t1110.003 low-and-slow brute force horizontal password attack">
+  <span class="row-number">27</span>
+  <span class="row-main"><strong>Password Spraying</strong><small>A small set of common passwords is tried across many accounts to avoid per-user lockout thresholds.</small></span>
+  <span class="row-meta"><span>T1110.003</span><span>Foundational</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/private-key-theft.html"
+  data-attack-row
+  data-category="Credentials &amp; Identity"
+  data-search="private key theft private authentication keys and certificates are discovered and stolen. credentials &amp; identity windows linux cloud t1552.004 ">
+  <span class="row-number">28</span>
+  <span class="row-main"><strong>Private Key Theft</strong><small>Private authentication keys and certificates are discovered and stolen.</small></span>
+  <span class="row-meta"><span>T1552.004</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/sam-database-dumping.html"
+  data-attack-row
+  data-category="Credentials &amp; Identity"
+  data-search="sam database dumping local account hashes are recovered from the windows sam. credentials &amp; identity identity enterprise t1003.002 ">
+  <span class="row-number">29</span>
+  <span class="row-main"><strong>SAM Database Dumping</strong><small>Local account hashes are recovered from the Windows SAM.</small></span>
+  <span class="row-meta"><span>T1003.002</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/session-cookie-theft.html"
+  data-attack-row
+  data-category="Credentials &amp; Identity"
+  data-search="session cookie theft authenticated browser cookies are stolen and replayed. credentials &amp; identity web saas t1539 ">
+  <span class="row-number">30</span>
+  <span class="row-main"><strong>Session Cookie Theft</strong><small>Authenticated browser cookies are stolen and replayed.</small></span>
+  <span class="row-meta"><span>T1539</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/shadow-credentials.html"
+  data-attack-row
+  data-category="Credentials &amp; Identity"
+  data-search="shadow credentials key-based authentication data is added to a directory object to impersonate the account. credentials &amp; identity windows active directory t1098 ">
+  <span class="row-number">31</span>
+  <span class="row-main"><strong>Shadow Credentials</strong><small>Key-based authentication data is added to a directory object to impersonate the account.</small></span>
+  <span class="row-meta"><span>T1098</span><span>Advanced</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/silver-ticket.html"
+  data-attack-row
+  data-category="Credentials &amp; Identity"
+  data-search="silver ticket a kerberos service ticket is forged with a stolen service-account key. credentials &amp; identity identity enterprise t1558.002 ">
+  <span class="row-number">32</span>
+  <span class="row-main"><strong>Silver Ticket</strong><small>A Kerberos service ticket is forged with a stolen service-account key.</small></span>
+  <span class="row-meta"><span>T1558.002</span><span>Advanced</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/sim-swapping.html"
+  data-attack-row
+  data-category="Credentials &amp; Identity"
+  data-search="sim swapping a victim mobile number is transferred to intercept recovery or mfa messages. credentials &amp; identity identity enterprise concept ">
+  <span class="row-number">33</span>
+  <span class="row-main"><strong>SIM Swapping</strong><small>A victim mobile number is transferred to intercept recovery or MFA messages.</small></span>
+  <span class="row-meta"><span>Concept</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/skeleton-key.html"
+  data-attack-row
+  data-category="Credentials &amp; Identity"
+  data-search="skeleton key domain-controller authentication is modified to accept a master password. credentials &amp; identity identity enterprise t1556.001 ">
+  <span class="row-number">34</span>
+  <span class="row-main"><strong>Skeleton Key</strong><small>Domain-controller authentication is modified to accept a master password.</small></span>
+  <span class="row-meta"><span>T1556.001</span><span>Advanced</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/token-impersonation.html"
+  data-attack-row
+  data-category="Credentials &amp; Identity"
+  data-search="token impersonation a windows access token is duplicated or used as another principal. credentials &amp; identity identity enterprise t1134 ">
+  <span class="row-number">35</span>
+  <span class="row-main"><strong>Token Impersonation</strong><small>A Windows access token is duplicated or used as another principal.</small></span>
+  <span class="row-meta"><span>T1134</span><span>Advanced</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/web-cookie-forgery.html"
+  data-attack-row
+  data-category="Credentials &amp; Identity"
+  data-search="web cookie forgery application signing material is abused to create a trusted authentication cookie. credentials &amp; identity web saas t1606.001 ">
+  <span class="row-number">36</span>
+  <span class="row-main"><strong>Web Cookie Forgery</strong><small>Application signing material is abused to create a trusted authentication cookie.</small></span>
+  <span class="row-meta"><span>T1606.001</span><span>Advanced</span></span>
+  <span class="row-arrow">↗</span>
+</a></div>
+</section>
+<section class="attack-group" data-attack-group data-category="Phishing &amp; Social Engineering">
+  <div class="group-title">
+    <span>SE</span><h3>Phishing &amp; Social Engineering</h3><i></i>
+    <b data-group-count>16</b>
+  </div>
+  <div class="attack-list"><a
+  class="attack-row"
+  href="attacks/business-email-compromise.html"
+  data-attack-row
+  data-category="Phishing &amp; Social Engineering"
+  data-search="business email compromise a trusted business identity is impersonated or hijacked to redirect money or data. phishing &amp; social engineering email human concept ">
+  <span class="row-number">01</span>
+  <span class="row-main"><strong>Business Email Compromise</strong><small>A trusted business identity is impersonated or hijacked to redirect money or data.</small></span>
+  <span class="row-meta"><span>Concept</span><span>Foundational</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/clickfix-social-engineering.html"
+  data-attack-row
+  data-category="Phishing &amp; Social Engineering"
+  data-search="clickfix social engineering a fake error or verification prompt instructs the user to paste and run attacker-supplied commands. phishing &amp; social engineering windows browser human t1204 ">
+  <span class="row-number">02</span>
+  <span class="row-main"><strong>ClickFix Social Engineering</strong><small>A fake error or verification prompt instructs the user to paste and run attacker-supplied commands.</small></span>
+  <span class="row-meta"><span>T1204</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/clone-phishing.html"
+  data-attack-row
+  data-category="Phishing &amp; Social Engineering"
+  data-search="clone phishing a legitimate message is copied and resent with malicious content. phishing &amp; social engineering email human concept ">
+  <span class="row-number">03</span>
+  <span class="row-main"><strong>Clone Phishing</strong><small>A legitimate message is copied and resent with malicious content.</small></span>
+  <span class="row-meta"><span>Concept</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/consent-and-approval-manipulation.html"
+  data-attack-row
+  data-category="Phishing &amp; Social Engineering"
+  data-search="consent and approval manipulation a user or administrator is persuaded to approve a malicious access, payment, or configuration request. phishing &amp; social engineering human saas business process t1684 ">
+  <span class="row-number">04</span>
+  <span class="row-main"><strong>Consent and Approval Manipulation</strong><small>A user or administrator is persuaded to approve a malicious access, payment, or configuration request.</small></span>
+  <span class="row-meta"><span>T1684</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/drive-by-compromise.html"
+  data-attack-row
+  data-category="Phishing &amp; Social Engineering"
+  data-search="drive-by compromise browsing a compromised site triggers exploitation or malicious delivery. phishing &amp; social engineering email human t1189 ">
+  <span class="row-number">05</span>
+  <span class="row-main"><strong>Drive-by Compromise</strong><small>Browsing a compromised site triggers exploitation or malicious delivery.</small></span>
+  <span class="row-meta"><span>T1189</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/help-desk-impersonation.html"
+  data-attack-row
+  data-category="Phishing &amp; Social Engineering"
+  data-search="help desk impersonation an attacker impersonates a user or technician to obtain resets, enrollment, or remote access. phishing &amp; social engineering human identity concept ">
+  <span class="row-number">06</span>
+  <span class="row-main"><strong>Help Desk Impersonation</strong><small>An attacker impersonates a user or technician to obtain resets, enrollment, or remote access.</small></span>
+  <span class="row-meta"><span>Concept</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/pharming.html"
+  data-attack-row
+  data-category="Phishing &amp; Social Engineering"
+  data-search="pharming name resolution or local configuration redirects users to a fraudulent site without a deceptive message. phishing &amp; social engineering dns web endpoint concept ">
+  <span class="row-number">07</span>
+  <span class="row-main"><strong>Pharming</strong><small>Name resolution or local configuration redirects users to a fraudulent site without a deceptive message.</small></span>
+  <span class="row-meta"><span>Concept</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/pretexting.html"
+  data-attack-row
+  data-category="Phishing &amp; Social Engineering"
+  data-search="pretexting a fabricated scenario persuades a target to disclose information or act. phishing &amp; social engineering email human concept ">
+  <span class="row-number">08</span>
+  <span class="row-main"><strong>Pretexting</strong><small>A fabricated scenario persuades a target to disclose information or act.</small></span>
+  <span class="row-meta"><span>Concept</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/quishing.html"
+  data-attack-row
+  data-category="Phishing &amp; Social Engineering"
+  data-search="quishing a qr code moves a victim from a trusted context to a malicious destination. phishing &amp; social engineering email human concept ">
+  <span class="row-number">09</span>
+  <span class="row-main"><strong>Quishing</strong><small>A QR code moves a victim from a trusted context to a malicious destination.</small></span>
+  <span class="row-meta"><span>Concept</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/smishing.html"
+  data-attack-row
+  data-category="Phishing &amp; Social Engineering"
+  data-search="smishing sms or mobile messages deliver a malicious link, request, or callback lure. phishing &amp; social engineering email human concept ">
+  <span class="row-number">10</span>
+  <span class="row-main"><strong>Smishing</strong><small>SMS or mobile messages deliver a malicious link, request, or callback lure.</small></span>
+  <span class="row-meta"><span>Concept</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/spearphishing-attachment.html"
+  data-attack-row
+  data-category="Phishing &amp; Social Engineering"
+  data-search="spearphishing attachment a targeted message delivers a malicious attachment. phishing &amp; social engineering email human t1566.001 ">
+  <span class="row-number">11</span>
+  <span class="row-main"><strong>Spearphishing Attachment</strong><small>A targeted message delivers a malicious attachment.</small></span>
+  <span class="row-meta"><span>T1566.001</span><span>Foundational</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/spearphishing-link.html"
+  data-attack-row
+  data-category="Phishing &amp; Social Engineering"
+  data-search="spearphishing link a targeted message links to credential theft or malware delivery. phishing &amp; social engineering email human t1566.002 ">
+  <span class="row-number">12</span>
+  <span class="row-main"><strong>Spearphishing Link</strong><small>A targeted message links to credential theft or malware delivery.</small></span>
+  <span class="row-meta"><span>T1566.002</span><span>Foundational</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/spearphishing-via-service.html"
+  data-attack-row
+  data-category="Phishing &amp; Social Engineering"
+  data-search="spearphishing via service chat, social media, or another service delivers a targeted lure. phishing &amp; social engineering email human t1566.003 ">
+  <span class="row-number">13</span>
+  <span class="row-main"><strong>Spearphishing via Service</strong><small>Chat, social media, or another service delivers a targeted lure.</small></span>
+  <span class="row-meta"><span>T1566.003</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/vishing.html"
+  data-attack-row
+  data-category="Phishing &amp; Social Engineering"
+  data-search="vishing voice calls manipulate victims into revealing secrets or taking unsafe actions. phishing &amp; social engineering email human concept ">
+  <span class="row-number">14</span>
+  <span class="row-main"><strong>Vishing</strong><small>Voice calls manipulate victims into revealing secrets or taking unsafe actions.</small></span>
+  <span class="row-meta"><span>Concept</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/watering-hole.html"
+  data-attack-row
+  data-category="Phishing &amp; Social Engineering"
+  data-search="watering hole a site used by a target group is compromised to deliver exploits or tracking. phishing &amp; social engineering email human t1189 ">
+  <span class="row-number">15</span>
+  <span class="row-main"><strong>Watering Hole</strong><small>A site used by a target group is compromised to deliver exploits or tracking.</small></span>
+  <span class="row-meta"><span>T1189</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/whaling.html"
+  data-attack-row
+  data-category="Phishing &amp; Social Engineering"
+  data-search="whaling executives and other high-value people receive tailored social engineering. phishing &amp; social engineering email human concept ">
+  <span class="row-number">16</span>
+  <span class="row-main"><strong>Whaling</strong><small>Executives and other high-value people receive tailored social engineering.</small></span>
+  <span class="row-meta"><span>Concept</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a></div>
+</section>
+<section class="attack-group" data-attack-group data-category="Web Application">
+  <div class="group-title">
+    <span>WA</span><h3>Web Application</h3><i></i>
+    <b data-group-count>28</b>
+  </div>
+  <div class="attack-list"><a
+  class="attack-row"
+  href="attacks/api-broken-object-authorization.html"
+  data-attack-row
+  data-category="Web Application"
+  data-search="api broken object authorization object identifiers are changed to access another user records. web application web api concept ">
+  <span class="row-number">01</span>
+  <span class="row-main"><strong>API Broken Object Authorization</strong><small>Object identifiers are changed to access another user records.</small></span>
+  <span class="row-meta"><span>Concept</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/api-mass-assignment.html"
+  data-attack-row
+  data-category="Web Application"
+  data-search="api mass assignment unexpected object properties are submitted to change protected fields. web application api web concept ">
+  <span class="row-number">02</span>
+  <span class="row-main"><strong>API Mass Assignment</strong><small>Unexpected object properties are submitted to change protected fields.</small></span>
+  <span class="row-meta"><span>Concept</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/authentication-bypass.html"
+  data-attack-row
+  data-category="Web Application"
+  data-search="authentication bypass a logic or implementation flaw allows protected functionality without valid authentication. web application web api t1190 ">
+  <span class="row-number">03</span>
+  <span class="row-main"><strong>Authentication Bypass</strong><small>A logic or implementation flaw allows protected functionality without valid authentication.</small></span>
+  <span class="row-meta"><span>T1190</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/command-injection.html"
+  data-attack-row
+  data-category="Web Application"
+  data-search="command injection untrusted input reaches an operating-system command interpreter. web application web api t1059 ">
+  <span class="row-number">04</span>
+  <span class="row-main"><strong>Command Injection</strong><small>Untrusted input reaches an operating-system command interpreter.</small></span>
+  <span class="row-meta"><span>T1059</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/cross-site-request-forgery.html"
+  data-attack-row
+  data-category="Web Application"
+  data-search="cross-site request forgery a logged-in browser sends an unwanted state-changing request. web application web api concept ">
+  <span class="row-number">05</span>
+  <span class="row-main"><strong>Cross-Site Request Forgery</strong><small>A logged-in browser sends an unwanted state-changing request.</small></span>
+  <span class="row-meta"><span>Concept</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/cross-site-scripting.html"
+  data-attack-row
+  data-category="Web Application"
+  data-search="cross-site scripting attacker-controlled script executes in another user browser. web application web api concept ">
+  <span class="row-number">06</span>
+  <span class="row-main"><strong>Cross-Site Scripting</strong><small>Attacker-controlled script executes in another user browser.</small></span>
+  <span class="row-meta"><span>Concept</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/exploitation-of-public-facing-application.html"
+  data-attack-row
+  data-category="Web Application"
+  data-search="exploitation of public-facing application a vulnerability in an internet-facing service is exploited for initial access. web application web vpn server t1190 ">
+  <span class="row-number">07</span>
+  <span class="row-main"><strong>Exploitation of Public-Facing Application</strong><small>A vulnerability in an internet-facing service is exploited for initial access.</small></span>
+  <span class="row-meta"><span>T1190</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/file-inclusion.html"
+  data-attack-row
+  data-category="Web Application"
+  data-search="file inclusion an application loads an attacker-selected local or remote file. web application web api concept ">
+  <span class="row-number">08</span>
+  <span class="row-main"><strong>File Inclusion</strong><small>An application loads an attacker-selected local or remote file.</small></span>
+  <span class="row-meta"><span>Concept</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/graphql-abuse.html"
+  data-attack-row
+  data-category="Web Application"
+  data-search="graphql abuse introspection, batching, nested queries, or authorization gaps expose data or exhaust resources. web application graphql api concept ">
+  <span class="row-number">09</span>
+  <span class="row-main"><strong>GraphQL Abuse</strong><small>Introspection, batching, nested queries, or authorization gaps expose data or exhaust resources.</small></span>
+  <span class="row-meta"><span>Concept</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/host-header-injection.html"
+  data-attack-row
+  data-category="Web Application"
+  data-search="host header injection a manipulated host header influences links, routing, caches, or password-reset urls. web application web proxy concept ">
+  <span class="row-number">10</span>
+  <span class="row-main"><strong>Host Header Injection</strong><small>A manipulated Host header influences links, routing, caches, or password-reset URLs.</small></span>
+  <span class="row-meta"><span>Concept</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/http-request-smuggling.html"
+  data-attack-row
+  data-category="Web Application"
+  data-search="http request smuggling front-end and back-end servers disagree about request boundaries. web application web api concept ">
+  <span class="row-number">11</span>
+  <span class="row-main"><strong>HTTP Request Smuggling</strong><small>Front-end and back-end servers disagree about request boundaries.</small></span>
+  <span class="row-meta"><span>Concept</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/http-response-splitting.html"
+  data-attack-row
+  data-category="Web Application"
+  data-search="http response splitting injected delimiters create attacker-controlled headers or responses. web application web api concept ">
+  <span class="row-number">12</span>
+  <span class="row-main"><strong>HTTP Response Splitting</strong><small>Injected delimiters create attacker-controlled headers or responses.</small></span>
+  <span class="row-meta"><span>Concept</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/insecure-deserialization.html"
+  data-attack-row
+  data-category="Web Application"
+  data-search="insecure deserialization untrusted serialized data triggers object manipulation or execution. web application web api concept ">
+  <span class="row-number">13</span>
+  <span class="row-main"><strong>Insecure Deserialization</strong><small>Untrusted serialized data triggers object manipulation or execution.</small></span>
+  <span class="row-meta"><span>Concept</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/jwt-token-attack.html"
+  data-attack-row
+  data-category="Web Application"
+  data-search="jwt token attack token validation, algorithms, keys, or claims are abused to impersonate identities. web application web api identity concept ">
+  <span class="row-number">14</span>
+  <span class="row-main"><strong>JWT Token Attack</strong><small>Token validation, algorithms, keys, or claims are abused to impersonate identities.</small></span>
+  <span class="row-meta"><span>Concept</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/ldap-injection.html"
+  data-attack-row
+  data-category="Web Application"
+  data-search="ldap injection input modifies an ldap search filter or directory operation. web application web ldap concept ">
+  <span class="row-number">15</span>
+  <span class="row-main"><strong>LDAP Injection</strong><small>Input modifies an LDAP search filter or directory operation.</small></span>
+  <span class="row-meta"><span>Concept</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/nosql-injection.html"
+  data-attack-row
+  data-category="Web Application"
+  data-search="nosql injection untrusted input changes a nosql query, operator, or document structure. web application web nosql database concept ">
+  <span class="row-number">16</span>
+  <span class="row-main"><strong>NoSQL Injection</strong><small>Untrusted input changes a NoSQL query, operator, or document structure.</small></span>
+  <span class="row-meta"><span>Concept</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/open-redirect.html"
+  data-attack-row
+  data-category="Web Application"
+  data-search="open redirect a trusted application redirects to an attacker-selected destination. web application web api concept ">
+  <span class="row-number">17</span>
+  <span class="row-main"><strong>Open Redirect</strong><small>A trusted application redirects to an attacker-selected destination.</small></span>
+  <span class="row-meta"><span>Concept</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/path-traversal.html"
+  data-attack-row
+  data-category="Web Application"
+  data-search="path traversal path manipulation escapes an intended directory. web application web api concept ">
+  <span class="row-number">18</span>
+  <span class="row-main"><strong>Path Traversal</strong><small>Path manipulation escapes an intended directory.</small></span>
+  <span class="row-meta"><span>Concept</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/prototype-pollution.html"
+  data-attack-row
+  data-category="Web Application"
+  data-search="prototype pollution attacker-controlled properties modify object prototypes and application behavior. web application web node.js concept ">
+  <span class="row-number">19</span>
+  <span class="row-main"><strong>Prototype Pollution</strong><small>Attacker-controlled properties modify object prototypes and application behavior.</small></span>
+  <span class="row-meta"><span>Concept</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/race-condition-attack.html"
+  data-attack-row
+  data-category="Web Application"
+  data-search="race condition attack concurrent requests exploit a gap between validation and state change. web application web api concept ">
+  <span class="row-number">20</span>
+  <span class="row-main"><strong>Race Condition Attack</strong><small>Concurrent requests exploit a gap between validation and state change.</small></span>
+  <span class="row-meta"><span>Concept</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/server-side-request-forgery.html"
+  data-attack-row
+  data-category="Web Application"
+  data-search="server-side request forgery a server is manipulated into requesting internal or restricted destinations. web application web cloud concept ">
+  <span class="row-number">21</span>
+  <span class="row-main"><strong>Server-Side Request Forgery</strong><small>A server is manipulated into requesting internal or restricted destinations.</small></span>
+  <span class="row-meta"><span>Concept</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/sql-injection.html"
+  data-attack-row
+  data-category="Web Application"
+  data-search="sql injection untrusted input changes the structure of a database query. web application web database t1190 ">
+  <span class="row-number">22</span>
+  <span class="row-main"><strong>SQL Injection</strong><small>Untrusted input changes the structure of a database query.</small></span>
+  <span class="row-meta"><span>T1190</span><span>Foundational</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/template-injection.html"
+  data-attack-row
+  data-category="Web Application"
+  data-search="template injection attacker input is evaluated as a template expression. web application web api concept ">
+  <span class="row-number">23</span>
+  <span class="row-main"><strong>Template Injection</strong><small>Attacker input is evaluated as a template expression.</small></span>
+  <span class="row-meta"><span>Concept</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/unrestricted-file-upload.html"
+  data-attack-row
+  data-category="Web Application"
+  data-search="unrestricted file upload a file upload accepts content that becomes executable or dangerous. web application web api concept ">
+  <span class="row-number">24</span>
+  <span class="row-main"><strong>Unrestricted File Upload</strong><small>A file upload accepts content that becomes executable or dangerous.</small></span>
+  <span class="row-meta"><span>Concept</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/web-cache-deception.html"
+  data-attack-row
+  data-category="Web Application"
+  data-search="web cache deception a victim private response is made cacheable and later retrieved. web application web cdn concept ">
+  <span class="row-number">25</span>
+  <span class="row-main"><strong>Web Cache Deception</strong><small>A victim private response is made cacheable and later retrieved.</small></span>
+  <span class="row-meta"><span>Concept</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/web-cache-poisoning.html"
+  data-attack-row
+  data-category="Web Application"
+  data-search="web cache poisoning a malicious response is stored and served by a shared cache. web application web cdn concept ">
+  <span class="row-number">26</span>
+  <span class="row-main"><strong>Web Cache Poisoning</strong><small>A malicious response is stored and served by a shared cache.</small></span>
+  <span class="row-meta"><span>Concept</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/web-shell.html"
+  data-attack-row
+  data-category="Web Application"
+  data-search="web shell a server-side script provides persistent remote command execution. web application web api t1505.003 ">
+  <span class="row-number">27</span>
+  <span class="row-main"><strong>Web Shell</strong><small>A server-side script provides persistent remote command execution.</small></span>
+  <span class="row-meta"><span>T1505.003</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/xml-external-entity-injection.html"
+  data-attack-row
+  data-category="Web Application"
+  data-search="xml external entity injection unsafe xml entity processing exposes files or internal requests. web application web api concept ">
+  <span class="row-number">28</span>
+  <span class="row-main"><strong>XML External Entity Injection</strong><small>Unsafe XML entity processing exposes files or internal requests.</small></span>
+  <span class="row-meta"><span>Concept</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a></div>
+</section>
+<section class="attack-group" data-attack-group data-category="Network &amp; Protocol">
+  <div class="group-title">
+    <span>NP</span><h3>Network &amp; Protocol</h3><i></i>
+    <b data-group-count>27</b>
+  </div>
+  <div class="attack-list"><a
+  class="attack-row"
+  href="attacks/arp-spoofing.html"
+  data-attack-row
+  data-category="Network &amp; Protocol"
+  data-search="arp spoofing forged arp messages redirect local traffic through an attacker. network &amp; protocol network concept ">
+  <span class="row-number">01</span>
+  <span class="row-main"><strong>ARP Spoofing</strong><small>Forged ARP messages redirect local traffic through an attacker.</small></span>
+  <span class="row-meta"><span>Concept</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/bgp-hijacking.html"
+  data-attack-row
+  data-category="Network &amp; Protocol"
+  data-search="bgp hijacking false routing announcements divert or blackhole internet traffic. network &amp; protocol internet routing concept ">
+  <span class="row-number">02</span>
+  <span class="row-main"><strong>BGP Hijacking</strong><small>False routing announcements divert or blackhole internet traffic.</small></span>
+  <span class="row-meta"><span>Concept</span><span>Advanced</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/dhcp-starvation.html"
+  data-attack-row
+  data-category="Network &amp; Protocol"
+  data-search="dhcp starvation large numbers of forged requests exhaust the dhcp address pool. network &amp; protocol network concept ">
+  <span class="row-number">03</span>
+  <span class="row-main"><strong>DHCP Starvation</strong><small>Large numbers of forged requests exhaust the DHCP address pool.</small></span>
+  <span class="row-meta"><span>Concept</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/dns-amplification.html"
+  data-attack-row
+  data-category="Network &amp; Protocol"
+  data-search="dns amplification spoofed dns queries reflect amplified traffic at a victim. network &amp; protocol network t1498 ">
+  <span class="row-number">04</span>
+  <span class="row-main"><strong>DNS Amplification</strong><small>Spoofed DNS queries reflect amplified traffic at a victim.</small></span>
+  <span class="row-meta"><span>T1498</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/dns-cache-poisoning.html"
+  data-attack-row
+  data-category="Network &amp; Protocol"
+  data-search="dns cache poisoning false dns data makes names resolve to attacker-selected addresses. network &amp; protocol dns network concept ">
+  <span class="row-number">05</span>
+  <span class="row-main"><strong>DNS Cache Poisoning</strong><small>False DNS data makes names resolve to attacker-selected addresses.</small></span>
+  <span class="row-meta"><span>Concept</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/dns-tunneling.html"
+  data-attack-row
+  data-category="Network &amp; Protocol"
+  data-search="dns tunneling data or command messages are encoded in dns. network &amp; protocol dns network t1071.004 ">
+  <span class="row-number">06</span>
+  <span class="row-main"><strong>DNS Tunneling</strong><small>Data or command messages are encoded in DNS.</small></span>
+  <span class="row-meta"><span>T1071.004</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/icmp-flood.html"
+  data-attack-row
+  data-category="Network &amp; Protocol"
+  data-search="icmp flood high-volume icmp traffic consumes bandwidth or processing capacity. network &amp; protocol network t1498 ">
+  <span class="row-number">07</span>
+  <span class="row-main"><strong>ICMP Flood</strong><small>High-volume ICMP traffic consumes bandwidth or processing capacity.</small></span>
+  <span class="row-meta"><span>T1498</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/ip-fragmentation-attack.html"
+  data-attack-row
+  data-category="Network &amp; Protocol"
+  data-search="ip fragmentation attack overlapping or abnormal fragments evade inspection or exhaust reassembly resources. network &amp; protocol network concept ">
+  <span class="row-number">08</span>
+  <span class="row-main"><strong>IP Fragmentation Attack</strong><small>Overlapping or abnormal fragments evade inspection or exhaust reassembly resources.</small></span>
+  <span class="row-meta"><span>Concept</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/llmnr-nbt-ns-poisoning.html"
+  data-attack-row
+  data-category="Network &amp; Protocol"
+  data-search="llmnr/nbt-ns poisoning local name-resolution replies are spoofed to capture authentication. network &amp; protocol windows network t1557.001 ">
+  <span class="row-number">09</span>
+  <span class="row-main"><strong>LLMNR/NBT-NS Poisoning</strong><small>Local name-resolution replies are spoofed to capture authentication.</small></span>
+  <span class="row-meta"><span>T1557.001</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/mac-flooding.html"
+  data-attack-row
+  data-category="Network &amp; Protocol"
+  data-search="mac flooding a switch forwarding table is overwhelmed with forged source mac addresses. network &amp; protocol network concept ">
+  <span class="row-number">10</span>
+  <span class="row-main"><strong>MAC Flooding</strong><small>A switch forwarding table is overwhelmed with forged source MAC addresses.</small></span>
+  <span class="row-meta"><span>Concept</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/man-in-the-browser.html"
+  data-attack-row
+  data-category="Network &amp; Protocol"
+  data-search="man-in-the-browser malware inside a browser manipulates trusted transactions. network &amp; protocol browser endpoint concept ">
+  <span class="row-number">11</span>
+  <span class="row-main"><strong>Man-in-the-Browser</strong><small>Malware inside a browser manipulates trusted transactions.</small></span>
+  <span class="row-meta"><span>Concept</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/man-in-the-middle.html"
+  data-attack-row
+  data-category="Network &amp; Protocol"
+  data-search="man-in-the-middle communications are intercepted and potentially altered. network &amp; protocol network t1557 ">
+  <span class="row-number">12</span>
+  <span class="row-main"><strong>Man-in-the-Middle</strong><small>Communications are intercepted and potentially altered.</small></span>
+  <span class="row-meta"><span>T1557</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/network-sniffing.html"
+  data-attack-row
+  data-category="Network &amp; Protocol"
+  data-search="network sniffing network traffic is captured to collect credentials, sessions, or sensitive data. network &amp; protocol network t1040 ">
+  <span class="row-number">13</span>
+  <span class="row-main"><strong>Network Sniffing</strong><small>Network traffic is captured to collect credentials, sessions, or sensitive data.</small></span>
+  <span class="row-meta"><span>T1040</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/ntlm-relay.html"
+  data-attack-row
+  data-category="Network &amp; Protocol"
+  data-search="ntlm relay captured ntlm authentication is forwarded to another service. network &amp; protocol windows network t1557.001 ">
+  <span class="row-number">14</span>
+  <span class="row-main"><strong>NTLM Relay</strong><small>Captured NTLM authentication is forwarded to another service.</small></span>
+  <span class="row-meta"><span>T1557.001</span><span>Advanced</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/ntp-amplification.html"
+  data-attack-row
+  data-category="Network &amp; Protocol"
+  data-search="ntp amplification spoofed ntp requests reflect amplified traffic. network &amp; protocol network t1498 ">
+  <span class="row-number">15</span>
+  <span class="row-main"><strong>NTP Amplification</strong><small>Spoofed NTP requests reflect amplified traffic.</small></span>
+  <span class="row-meta"><span>T1498</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/ping-of-death.html"
+  data-attack-row
+  data-category="Network &amp; Protocol"
+  data-search="ping of death malformed or oversized packet fragments target vulnerable network stacks. network &amp; protocol network concept ">
+  <span class="row-number">16</span>
+  <span class="row-main"><strong>Ping of Death</strong><small>Malformed or oversized packet fragments target vulnerable network stacks.</small></span>
+  <span class="row-meta"><span>Concept</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/port-scanning.html"
+  data-attack-row
+  data-category="Network &amp; Protocol"
+  data-search="port scanning probes identify hosts, ports, protocols, and services. network &amp; protocol network t1046 ">
+  <span class="row-number">17</span>
+  <span class="row-main"><strong>Port Scanning</strong><small>Probes identify hosts, ports, protocols, and services.</small></span>
+  <span class="row-meta"><span>T1046</span><span>Foundational</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/rdp-session-hijacking.html"
+  data-attack-row
+  data-category="Network &amp; Protocol"
+  data-search="rdp session hijacking an existing remote desktop session is taken over without the user password. network &amp; protocol windows rdp t1563.002 ">
+  <span class="row-number">18</span>
+  <span class="row-main"><strong>RDP Session Hijacking</strong><small>An existing Remote Desktop session is taken over without the user password.</small></span>
+  <span class="row-meta"><span>T1563.002</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/rogue-dhcp.html"
+  data-attack-row
+  data-category="Network &amp; Protocol"
+  data-search="rogue dhcp an unauthorized dhcp server supplies malicious network configuration. network &amp; protocol network concept ">
+  <span class="row-number">19</span>
+  <span class="row-main"><strong>Rogue DHCP</strong><small>An unauthorized DHCP server supplies malicious network configuration.</small></span>
+  <span class="row-meta"><span>Concept</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/session-hijacking.html"
+  data-attack-row
+  data-category="Network &amp; Protocol"
+  data-search="session hijacking an established application or remote-access session is taken over. network &amp; protocol network t1563 ">
+  <span class="row-number">20</span>
+  <span class="row-main"><strong>Session Hijacking</strong><small>An established application or remote-access session is taken over.</small></span>
+  <span class="row-meta"><span>T1563</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/slowloris.html"
+  data-attack-row
+  data-category="Network &amp; Protocol"
+  data-search="slowloris slow incomplete http requests hold server connections open. network &amp; protocol network t1499 ">
+  <span class="row-number">21</span>
+  <span class="row-main"><strong>Slowloris</strong><small>Slow incomplete HTTP requests hold server connections open.</small></span>
+  <span class="row-meta"><span>T1499</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/smb-relay.html"
+  data-attack-row
+  data-category="Network &amp; Protocol"
+  data-search="smb relay relayed windows authentication is used against smb. network &amp; protocol windows smb t1557.001 ">
+  <span class="row-number">22</span>
+  <span class="row-main"><strong>SMB Relay</strong><small>Relayed Windows authentication is used against SMB.</small></span>
+  <span class="row-meta"><span>T1557.001</span><span>Advanced</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/ssh-session-hijacking.html"
+  data-attack-row
+  data-category="Network &amp; Protocol"
+  data-search="ssh session hijacking an existing ssh connection or agent is abused to reach additional systems. network &amp; protocol linux macos ssh t1563.001 ">
+  <span class="row-number">23</span>
+  <span class="row-main"><strong>SSH Session Hijacking</strong><small>An existing SSH connection or agent is abused to reach additional systems.</small></span>
+  <span class="row-meta"><span>T1563.001</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/ssl-stripping.html"
+  data-attack-row
+  data-category="Network &amp; Protocol"
+  data-search="ssl stripping a man-in-the-middle downgrades or replaces secure web navigation with an insecure connection. network &amp; protocol network concept ">
+  <span class="row-number">24</span>
+  <span class="row-main"><strong>SSL Stripping</strong><small>A man-in-the-middle downgrades or replaces secure web navigation with an insecure connection.</small></span>
+  <span class="row-meta"><span>Concept</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/tcp-syn-flood.html"
+  data-attack-row
+  data-category="Network &amp; Protocol"
+  data-search="tcp syn flood incomplete tcp handshakes exhaust connection state. network &amp; protocol network t1498 ">
+  <span class="row-number">25</span>
+  <span class="row-main"><strong>TCP SYN Flood</strong><small>Incomplete TCP handshakes exhaust connection state.</small></span>
+  <span class="row-meta"><span>T1498</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/udp-flood.html"
+  data-attack-row
+  data-category="Network &amp; Protocol"
+  data-search="udp flood high-volume udp traffic consumes bandwidth or resources. network &amp; protocol network t1498 ">
+  <span class="row-number">26</span>
+  <span class="row-main"><strong>UDP Flood</strong><small>High-volume UDP traffic consumes bandwidth or resources.</small></span>
+  <span class="row-meta"><span>T1498</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/vlan-hopping.html"
+  data-attack-row
+  data-category="Network &amp; Protocol"
+  data-search="vlan hopping switching behavior is abused to reach another virtual lan. network &amp; protocol network concept ">
+  <span class="row-number">27</span>
+  <span class="row-main"><strong>VLAN Hopping</strong><small>Switching behavior is abused to reach another virtual LAN.</small></span>
+  <span class="row-meta"><span>Concept</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a></div>
+</section>
+<section class="attack-group" data-attack-group data-category="Malware &amp; Endpoint">
+  <div class="group-title">
+    <span>ME</span><h3>Malware &amp; Endpoint</h3><i></i>
+    <b data-group-count>27</b>
+  </div>
+  <div class="attack-list"><a
+  class="attack-row"
+  href="attacks/bootkit.html"
+  data-attack-row
+  data-category="Malware &amp; Endpoint"
+  data-search="bootkit boot components run malicious code before the operating system. malware &amp; endpoint endpoint t1542.003 ">
+  <span class="row-number">01</span>
+  <span class="row-main"><strong>Bootkit</strong><small>Boot components run malicious code before the operating system.</small></span>
+  <span class="row-meta"><span>T1542.003</span><span>Advanced</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/clear-windows-event-logs.html"
+  data-attack-row
+  data-category="Malware &amp; Endpoint"
+  data-search="clear windows event logs security or operational logs are cleared to remove evidence. malware &amp; endpoint windows t1070.001 ">
+  <span class="row-number">02</span>
+  <span class="row-main"><strong>Clear Windows Event Logs</strong><small>Security or operational logs are cleared to remove evidence.</small></span>
+  <span class="row-meta"><span>T1070.001</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/clipboard-hijacking.html"
+  data-attack-row
+  data-category="Malware &amp; Endpoint"
+  data-search="clipboard hijacking clipboard content is read or replaced. malware &amp; endpoint endpoint t1115 ">
+  <span class="row-number">03</span>
+  <span class="row-main"><strong>Clipboard Hijacking</strong><small>Clipboard content is read or replaced.</small></span>
+  <span class="row-meta"><span>T1115</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/computer-worm.html"
+  data-attack-row
+  data-category="Malware &amp; Endpoint"
+  data-search="computer worm malware self-propagates between systems. malware &amp; endpoint endpoint t1210 ">
+  <span class="row-number">04</span>
+  <span class="row-main"><strong>Computer Worm</strong><small>Malware self-propagates between systems.</small></span>
+  <span class="row-meta"><span>T1210</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/data-staging-and-archiving.html"
+  data-attack-row
+  data-category="Malware &amp; Endpoint"
+  data-search="data staging and archiving collected data is gathered and compressed before exfiltration. malware &amp; endpoint endpoint t1560 ">
+  <span class="row-number">05</span>
+  <span class="row-main"><strong>Data Staging and Archiving</strong><small>Collected data is gathered and compressed before exfiltration.</small></span>
+  <span class="row-meta"><span>T1560</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/dll-search-order-hijacking.html"
+  data-attack-row
+  data-category="Malware &amp; Endpoint"
+  data-search="dll search order hijacking a malicious library loads before a legitimate one. malware &amp; endpoint windows t1574.001 ">
+  <span class="row-number">06</span>
+  <span class="row-main"><strong>DLL Search Order Hijacking</strong><small>A malicious library loads before a legitimate one.</small></span>
+  <span class="row-meta"><span>T1574.001</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/dll-side-loading.html"
+  data-attack-row
+  data-category="Malware &amp; Endpoint"
+  data-search="dll side-loading a trusted executable loads an attacker-controlled library. malware &amp; endpoint windows t1574.002 ">
+  <span class="row-number">07</span>
+  <span class="row-main"><strong>DLL Side-Loading</strong><small>A trusted executable loads an attacker-controlled library.</small></span>
+  <span class="row-meta"><span>T1574.002</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/ingress-tool-transfer.html"
+  data-attack-row
+  data-category="Malware &amp; Endpoint"
+  data-search="ingress tool transfer tools or payloads are transferred into a compromised environment. malware &amp; endpoint endpoint t1105 ">
+  <span class="row-number">08</span>
+  <span class="row-main"><strong>Ingress Tool Transfer</strong><small>Tools or payloads are transferred into a compromised environment.</small></span>
+  <span class="row-meta"><span>T1105</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/keylogging.html"
+  data-attack-row
+  data-category="Malware &amp; Endpoint"
+  data-search="keylogging keystrokes are captured to steal secrets. malware &amp; endpoint endpoint t1056.001 ">
+  <span class="row-number">09</span>
+  <span class="row-main"><strong>Keylogging</strong><small>Keystrokes are captured to steal secrets.</small></span>
+  <span class="row-meta"><span>T1056.001</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/living-off-the-land.html"
+  data-attack-row
+  data-category="Malware &amp; Endpoint"
+  data-search="living off the land trusted system tools are abused for malicious actions. malware &amp; endpoint endpoint t1218 ">
+  <span class="row-number">10</span>
+  <span class="row-main"><strong>Living off the Land</strong><small>Trusted system tools are abused for malicious actions.</small></span>
+  <span class="row-meta"><span>T1218</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/powershell-abuse.html"
+  data-attack-row
+  data-category="Malware &amp; Endpoint"
+  data-search="powershell abuse powershell performs execution, download, discovery, or automation. malware &amp; endpoint windows t1059.001 ">
+  <span class="row-number">11</span>
+  <span class="row-main"><strong>PowerShell Abuse</strong><small>PowerShell performs execution, download, discovery, or automation.</small></span>
+  <span class="row-meta"><span>T1059.001</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/process-hollowing.html"
+  data-attack-row
+  data-category="Malware &amp; Endpoint"
+  data-search="process hollowing a legitimate process image is replaced in memory with malicious code. malware &amp; endpoint windows t1055.012 ">
+  <span class="row-number">12</span>
+  <span class="row-main"><strong>Process Hollowing</strong><small>A legitimate process image is replaced in memory with malicious code.</small></span>
+  <span class="row-meta"><span>T1055.012</span><span>Advanced</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/process-injection.html"
+  data-attack-row
+  data-category="Malware &amp; Endpoint"
+  data-search="process injection code executes inside another process. malware &amp; endpoint endpoint t1055 ">
+  <span class="row-number">13</span>
+  <span class="row-main"><strong>Process Injection</strong><small>Code executes inside another process.</small></span>
+  <span class="row-meta"><span>T1055</span><span>Advanced</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/proxy-and-multi-hop-c2.html"
+  data-attack-row
+  data-category="Malware &amp; Endpoint"
+  data-search="proxy and multi-hop c2 compromised systems or proxy services relay command-and-control traffic. malware &amp; endpoint endpoint t1090 ">
+  <span class="row-number">14</span>
+  <span class="row-main"><strong>Proxy and Multi-Hop C2</strong><small>Compromised systems or proxy services relay command-and-control traffic.</small></span>
+  <span class="row-meta"><span>T1090</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/ransomware.html"
+  data-attack-row
+  data-category="Malware &amp; Endpoint"
+  data-search="ransomware files or systems are encrypted or disrupted for extortion. malware &amp; endpoint windows linux esxi t1486 ">
+  <span class="row-number">15</span>
+  <span class="row-main"><strong>Ransomware</strong><small>Files or systems are encrypted or disrupted for extortion.</small></span>
+  <span class="row-meta"><span>T1486</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/registry-run-key-persistence.html"
+  data-attack-row
+  data-category="Malware &amp; Endpoint"
+  data-search="registry run key persistence startup registry locations run code at logon or boot. malware &amp; endpoint windows t1060 ">
+  <span class="row-number">16</span>
+  <span class="row-main"><strong>Registry Run Key Persistence</strong><small>Startup registry locations run code at logon or boot.</small></span>
+  <span class="row-meta"><span>T1060</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/remote-services.html"
+  data-attack-row
+  data-category="Malware &amp; Endpoint"
+  data-search="remote services rdp, smb, ssh, winrm, vnc, or similar services are used to access remote systems. malware &amp; endpoint endpoint t1021 ">
+  <span class="row-number">17</span>
+  <span class="row-main"><strong>Remote Services</strong><small>RDP, SMB, SSH, WinRM, VNC, or similar services are used to access remote systems.</small></span>
+  <span class="row-meta"><span>T1021</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/rootkit.html"
+  data-attack-row
+  data-category="Malware &amp; Endpoint"
+  data-search="rootkit system components are modified to conceal malicious presence. malware &amp; endpoint endpoint t1014 ">
+  <span class="row-number">18</span>
+  <span class="row-main"><strong>Rootkit</strong><small>System components are modified to conceal malicious presence.</small></span>
+  <span class="row-meta"><span>T1014</span><span>Advanced</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/scheduled-task-persistence.html"
+  data-attack-row
+  data-category="Malware &amp; Endpoint"
+  data-search="scheduled task persistence a scheduled job executes malicious code later. malware &amp; endpoint endpoint t1053 ">
+  <span class="row-number">19</span>
+  <span class="row-main"><strong>Scheduled Task Persistence</strong><small>A scheduled job executes malicious code later.</small></span>
+  <span class="row-meta"><span>T1053</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/screen-capture.html"
+  data-attack-row
+  data-category="Malware &amp; Endpoint"
+  data-search="screen capture screens or application windows are captured to collect information. malware &amp; endpoint endpoint t1113 ">
+  <span class="row-number">20</span>
+  <span class="row-main"><strong>Screen Capture</strong><small>Screens or application windows are captured to collect information.</small></span>
+  <span class="row-meta"><span>T1113</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/security-tool-tampering.html"
+  data-attack-row
+  data-category="Malware &amp; Endpoint"
+  data-search="security tool tampering defensive products, logs, or configurations are disabled or changed. malware &amp; endpoint endpoint t1562.001 ">
+  <span class="row-number">21</span>
+  <span class="row-main"><strong>Security Tool Tampering</strong><small>Defensive products, logs, or configurations are disabled or changed.</small></span>
+  <span class="row-meta"><span>T1562.001</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/timestomping.html"
+  data-attack-row
+  data-category="Malware &amp; Endpoint"
+  data-search="timestomping file timestamps are altered to hide activity or imitate legitimate files. malware &amp; endpoint endpoint t1070.006 ">
+  <span class="row-number">22</span>
+  <span class="row-main"><strong>Timestomping</strong><small>File timestamps are altered to hide activity or imitate legitimate files.</small></span>
+  <span class="row-meta"><span>T1070.006</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/trojan-horse.html"
+  data-attack-row
+  data-category="Malware &amp; Endpoint"
+  data-search="trojan horse malicious functionality is disguised as legitimate software. malware &amp; endpoint endpoint concept ">
+  <span class="row-number">23</span>
+  <span class="row-main"><strong>Trojan Horse</strong><small>Malicious functionality is disguised as legitimate software.</small></span>
+  <span class="row-meta"><span>Concept</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/uac-bypass.html"
+  data-attack-row
+  data-category="Malware &amp; Endpoint"
+  data-search="uac bypass windows elevation controls are bypassed to execute with higher integrity. malware &amp; endpoint windows t1548.002 ">
+  <span class="row-number">24</span>
+  <span class="row-main"><strong>UAC Bypass</strong><small>Windows elevation controls are bypassed to execute with higher integrity.</small></span>
+  <span class="row-meta"><span>T1548.002</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/windows-service-execution.html"
+  data-attack-row
+  data-category="Malware &amp; Endpoint"
+  data-search="windows service execution a windows service is created or modified to execute code. malware &amp; endpoint windows t1543.003 ">
+  <span class="row-number">25</span>
+  <span class="row-main"><strong>Windows Service Execution</strong><small>A Windows service is created or modified to execute code.</small></span>
+  <span class="row-meta"><span>T1543.003</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/wiper-malware.html"
+  data-attack-row
+  data-category="Malware &amp; Endpoint"
+  data-search="wiper malware data and system structures are deliberately destroyed. malware &amp; endpoint endpoint t1561 ">
+  <span class="row-number">26</span>
+  <span class="row-main"><strong>Wiper Malware</strong><small>Data and system structures are deliberately destroyed.</small></span>
+  <span class="row-meta"><span>T1561</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/wmi-execution.html"
+  data-attack-row
+  data-category="Malware &amp; Endpoint"
+  data-search="wmi execution windows management instrumentation is used for local or remote execution. malware &amp; endpoint windows t1047 ">
+  <span class="row-number">27</span>
+  <span class="row-main"><strong>WMI Execution</strong><small>Windows Management Instrumentation is used for local or remote execution.</small></span>
+  <span class="row-meta"><span>T1047</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a></div>
+</section>
+<section class="attack-group" data-attack-group data-category="Cloud &amp; Containers">
+  <div class="group-title">
+    <span>CC</span><h3>Cloud &amp; Containers</h3><i></i>
+    <b data-group-count>18</b>
+  </div>
+  <div class="attack-list"><a
+  class="attack-row"
+  href="attacks/additional-cloud-credential-persistence.html"
+  data-attack-row
+  data-category="Cloud &amp; Containers"
+  data-search="additional cloud credential persistence new keys, certificates, secrets, or credentials are added to a compromised cloud identity. cloud &amp; containers aws azure gcp t1098.001 ">
+  <span class="row-number">01</span>
+  <span class="row-main"><strong>Additional Cloud Credential Persistence</strong><small>New keys, certificates, secrets, or credentials are added to a compromised cloud identity.</small></span>
+  <span class="row-meta"><span>T1098.001</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/additional-cloud-role-persistence.html"
+  data-attack-row
+  data-category="Cloud &amp; Containers"
+  data-search="additional cloud role persistence roles or permissions are added to preserve privileged cloud access. cloud &amp; containers aws azure gcp t1098.003 ">
+  <span class="row-number">02</span>
+  <span class="row-main"><strong>Additional Cloud Role Persistence</strong><small>Roles or permissions are added to preserve privileged cloud access.</small></span>
+  <span class="row-meta"><span>T1098.003</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/cloud-access-key-theft.html"
+  data-attack-row
+  data-category="Cloud &amp; Containers"
+  data-search="cloud access key theft long-lived or temporary cloud api credentials are stolen and replayed. cloud &amp; containers aws azure gcp t1552 ">
+  <span class="row-number">03</span>
+  <span class="row-main"><strong>Cloud Access Key Theft</strong><small>Long-lived or temporary cloud API credentials are stolen and replayed.</small></span>
+  <span class="row-meta"><span>T1552</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/cloud-account-takeover.html"
+  data-attack-row
+  data-category="Cloud &amp; Containers"
+  data-search="cloud account takeover stolen credentials, tokens, or recovery paths control a cloud identity. cloud &amp; containers iaas saas t1078.004 ">
+  <span class="row-number">04</span>
+  <span class="row-main"><strong>Cloud Account Takeover</strong><small>Stolen credentials, tokens, or recovery paths control a cloud identity.</small></span>
+  <span class="row-meta"><span>T1078.004</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/cloud-cryptojacking.html"
+  data-attack-row
+  data-category="Cloud &amp; Containers"
+  data-search="cloud cryptojacking compromised cloud resources perform unauthorized mining. cloud &amp; containers cloud t1496 ">
+  <span class="row-number">05</span>
+  <span class="row-main"><strong>Cloud Cryptojacking</strong><small>Compromised cloud resources perform unauthorized mining.</small></span>
+  <span class="row-meta"><span>T1496</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/cloud-iam-privilege-escalation.html"
+  data-attack-row
+  data-category="Cloud &amp; Containers"
+  data-search="cloud iam privilege escalation permissions and role paths are abused for stronger privileges. cloud &amp; containers iaas concept ">
+  <span class="row-number">06</span>
+  <span class="row-main"><strong>Cloud IAM Privilege Escalation</strong><small>Permissions and role paths are abused for stronger privileges.</small></span>
+  <span class="row-meta"><span>Concept</span><span>Advanced</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/cloud-logging-disablement.html"
+  data-attack-row
+  data-category="Cloud &amp; Containers"
+  data-search="cloud logging disablement audit trails, diagnostic settings, or security services are disabled or weakened. cloud &amp; containers aws azure gcp t1562.008 ">
+  <span class="row-number">07</span>
+  <span class="row-main"><strong>Cloud Logging Disablement</strong><small>Audit trails, diagnostic settings, or security services are disabled or weakened.</small></span>
+  <span class="row-meta"><span>T1562.008</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/cloud-metadata-service-abuse.html"
+  data-attack-row
+  data-category="Cloud &amp; Containers"
+  data-search="cloud metadata service abuse a workload metadata endpoint reveals temporary cloud credentials. cloud &amp; containers iaas cloud concept ">
+  <span class="row-number">08</span>
+  <span class="row-main"><strong>Cloud Metadata Service Abuse</strong><small>A workload metadata endpoint reveals temporary cloud credentials.</small></span>
+  <span class="row-meta"><span>Concept</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/cloud-region-evasion.html"
+  data-attack-row
+  data-category="Cloud &amp; Containers"
+  data-search="cloud region evasion resources are created in unused regions to evade normal monitoring. cloud &amp; containers aws azure gcp t1535 ">
+  <span class="row-number">09</span>
+  <span class="row-main"><strong>Cloud Region Evasion</strong><small>Resources are created in unused regions to evade normal monitoring.</small></span>
+  <span class="row-meta"><span>T1535</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/cloud-snapshot-theft.html"
+  data-attack-row
+  data-category="Cloud &amp; Containers"
+  data-search="cloud snapshot theft disk, database, or machine snapshots are copied or shared to expose stored data. cloud &amp; containers aws azure gcp t1537 ">
+  <span class="row-number">10</span>
+  <span class="row-main"><strong>Cloud Snapshot Theft</strong><small>Disk, database, or machine snapshots are copied or shared to expose stored data.</small></span>
+  <span class="row-meta"><span>T1537</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/container-api-exposure.html"
+  data-attack-row
+  data-category="Cloud &amp; Containers"
+  data-search="container api exposure an exposed docker or container management api is used to control workloads or hosts. cloud &amp; containers containers linux t1613 ">
+  <span class="row-number">11</span>
+  <span class="row-main"><strong>Container API Exposure</strong><small>An exposed Docker or container management API is used to control workloads or hosts.</small></span>
+  <span class="row-meta"><span>T1613</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/container-escape.html"
+  data-attack-row
+  data-category="Cloud &amp; Containers"
+  data-search="container escape a process breaks container isolation and reaches the host. cloud &amp; containers containers linux concept ">
+  <span class="row-number">12</span>
+  <span class="row-main"><strong>Container Escape</strong><small>A process breaks container isolation and reaches the host.</small></span>
+  <span class="row-meta"><span>Concept</span><span>Advanced</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/kubernetes-admission-controller-abuse.html"
+  data-attack-row
+  data-category="Cloud &amp; Containers"
+  data-search="kubernetes admission controller abuse admission webhooks or policies are modified to inject, allow, or persist malicious workloads. cloud &amp; containers kubernetes concept ">
+  <span class="row-number">13</span>
+  <span class="row-main"><strong>Kubernetes Admission Controller Abuse</strong><small>Admission webhooks or policies are modified to inject, allow, or persist malicious workloads.</small></span>
+  <span class="row-meta"><span>Concept</span><span>Advanced</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/kubernetes-api-abuse.html"
+  data-attack-row
+  data-category="Cloud &amp; Containers"
+  data-search="kubernetes api abuse tokens or exposed control planes manipulate cluster resources. cloud &amp; containers kubernetes concept ">
+  <span class="row-number">14</span>
+  <span class="row-main"><strong>Kubernetes API Abuse</strong><small>Tokens or exposed control planes manipulate cluster resources.</small></span>
+  <span class="row-meta"><span>Concept</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/kubernetes-secrets-theft.html"
+  data-attack-row
+  data-category="Cloud &amp; Containers"
+  data-search="kubernetes secrets theft cluster secrets are read from apis, etcd, volumes, or environments. cloud &amp; containers kubernetes concept ">
+  <span class="row-number">15</span>
+  <span class="row-main"><strong>Kubernetes Secrets Theft</strong><small>Cluster secrets are read from APIs, etcd, volumes, or environments.</small></span>
+  <span class="row-meta"><span>Concept</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/public-storage-bucket-exposure.html"
+  data-attack-row
+  data-category="Cloud &amp; Containers"
+  data-search="public storage bucket exposure misconfigured object storage exposes sensitive data. cloud &amp; containers cloud storage concept ">
+  <span class="row-number">16</span>
+  <span class="row-main"><strong>Public Storage Bucket Exposure</strong><small>Misconfigured object storage exposes sensitive data.</small></span>
+  <span class="row-meta"><span>Concept</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/saas-data-exfiltration.html"
+  data-attack-row
+  data-category="Cloud &amp; Containers"
+  data-search="saas data exfiltration legitimate apis or compromised accounts export cloud data. cloud &amp; containers saas t1537 ">
+  <span class="row-number">17</span>
+  <span class="row-main"><strong>SaaS Data Exfiltration</strong><small>Legitimate APIs or compromised accounts export cloud data.</small></span>
+  <span class="row-meta"><span>T1537</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/serverless-function-abuse.html"
+  data-attack-row
+  data-category="Cloud &amp; Containers"
+  data-search="serverless function abuse function code, triggers, or identities are manipulated. cloud &amp; containers serverless concept ">
+  <span class="row-number">18</span>
+  <span class="row-main"><strong>Serverless Function Abuse</strong><small>Function code, triggers, or identities are manipulated.</small></span>
+  <span class="row-meta"><span>Concept</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a></div>
+</section>
+<section class="attack-group" data-attack-group data-category="Wireless &amp; Physical">
+  <div class="group-title">
+    <span>WP</span><h3>Wireless &amp; Physical</h3><i></i>
+    <b data-group-count>8</b>
+  </div>
+  <div class="attack-list"><a
+  class="attack-row"
+  href="attacks/bluetooth-exploitation.html"
+  data-attack-row
+  data-category="Wireless &amp; Physical"
+  data-search="bluetooth exploitation bluetooth weaknesses expose data or device control. wireless &amp; physical bluetooth mobile concept ">
+  <span class="row-number">01</span>
+  <span class="row-main"><strong>Bluetooth Exploitation</strong><small>Bluetooth weaknesses expose data or device control.</small></span>
+  <span class="row-meta"><span>Concept</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/evil-twin-wi-fi.html"
+  data-attack-row
+  data-category="Wireless &amp; Physical"
+  data-search="evil twin wi-fi a rogue access point imitates a trusted wireless network. wireless &amp; physical wi-fi concept ">
+  <span class="row-number">02</span>
+  <span class="row-main"><strong>Evil Twin Wi-Fi</strong><small>A rogue access point imitates a trusted wireless network.</small></span>
+  <span class="row-meta"><span>Concept</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/rfid-cloning.html"
+  data-attack-row
+  data-category="Wireless &amp; Physical"
+  data-search="rfid cloning rfid data is copied to impersonate a badge or tag. wireless &amp; physical physical access concept ">
+  <span class="row-number">03</span>
+  <span class="row-main"><strong>RFID Cloning</strong><small>RFID data is copied to impersonate a badge or tag.</small></span>
+  <span class="row-meta"><span>Concept</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/rogue-access-point.html"
+  data-attack-row
+  data-category="Wireless &amp; Physical"
+  data-search="rogue access point an unauthorized wireless device creates an uncontrolled network path. wireless &amp; physical wi-fi concept ">
+  <span class="row-number">04</span>
+  <span class="row-main"><strong>Rogue Access Point</strong><small>An unauthorized wireless device creates an uncontrolled network path.</small></span>
+  <span class="row-meta"><span>Concept</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/tailgating.html"
+  data-attack-row
+  data-category="Wireless &amp; Physical"
+  data-search="tailgating an unauthorized person follows someone into a restricted area. wireless &amp; physical physical access concept ">
+  <span class="row-number">05</span>
+  <span class="row-main"><strong>Tailgating</strong><small>An unauthorized person follows someone into a restricted area.</small></span>
+  <span class="row-meta"><span>Concept</span><span>Foundational</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/usb-drop-attack.html"
+  data-attack-row
+  data-category="Wireless &amp; Physical"
+  data-search="usb drop attack a malicious usb device is left for a target to connect. wireless &amp; physical endpoint physical t1091 ">
+  <span class="row-number">06</span>
+  <span class="row-main"><strong>USB Drop Attack</strong><small>A malicious USB device is left for a target to connect.</small></span>
+  <span class="row-meta"><span>T1091</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/wi-fi-deauthentication.html"
+  data-attack-row
+  data-category="Wireless &amp; Physical"
+  data-search="wi-fi deauthentication management frames disconnect wireless clients. wireless &amp; physical wi-fi concept ">
+  <span class="row-number">07</span>
+  <span class="row-main"><strong>Wi-Fi Deauthentication</strong><small>Management frames disconnect wireless clients.</small></span>
+  <span class="row-meta"><span>Concept</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/wpa-handshake-capture.html"
+  data-attack-row
+  data-category="Wireless &amp; Physical"
+  data-search="wpa handshake capture wireless authentication is captured for offline password testing. wireless &amp; physical wi-fi concept ">
+  <span class="row-number">08</span>
+  <span class="row-main"><strong>WPA Handshake Capture</strong><small>Wireless authentication is captured for offline password testing.</small></span>
+  <span class="row-meta"><span>Concept</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a></div>
+</section>
+<section class="attack-group" data-attack-group data-category="Supply Chain &amp; Emerging">
+  <div class="group-title">
+    <span>SC</span><h3>Supply Chain &amp; Emerging</h3><i></i>
+    <b data-group-count>10</b>
+  </div>
+  <div class="attack-list"><a
+  class="attack-row"
+  href="attacks/adversarial-examples.html"
+  data-attack-row
+  data-category="Supply Chain &amp; Emerging"
+  data-search="adversarial examples modified inputs cause a machine-learning model to misclassify. supply chain &amp; emerging ai systems concept ">
+  <span class="row-number">01</span>
+  <span class="row-main"><strong>Adversarial Examples</strong><small>Modified inputs cause a machine-learning model to misclassify.</small></span>
+  <span class="row-meta"><span>Concept</span><span>Advanced</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/ci-cd-pipeline-compromise.html"
+  data-attack-row
+  data-category="Supply Chain &amp; Emerging"
+  data-search="ci/cd pipeline compromise build identities, runners, secrets, or workflows alter software artifacts. supply chain &amp; emerging software supply chain concept ">
+  <span class="row-number">02</span>
+  <span class="row-main"><strong>CI/CD Pipeline Compromise</strong><small>Build identities, runners, secrets, or workflows alter software artifacts.</small></span>
+  <span class="row-meta"><span>Concept</span><span>Advanced</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/deepfake-social-engineering.html"
+  data-attack-row
+  data-category="Supply Chain &amp; Emerging"
+  data-search="deepfake social engineering synthetic voice, video, or imagery impersonates a trusted person. supply chain &amp; emerging human communication concept ">
+  <span class="row-number">03</span>
+  <span class="row-main"><strong>Deepfake Social Engineering</strong><small>Synthetic voice, video, or imagery impersonates a trusted person.</small></span>
+  <span class="row-meta"><span>Concept</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/dependency-confusion.html"
+  data-attack-row
+  data-category="Supply Chain &amp; Emerging"
+  data-search="dependency confusion a package manager installs a malicious public package instead of an internal one. supply chain &amp; emerging software supply chain concept ">
+  <span class="row-number">04</span>
+  <span class="row-main"><strong>Dependency Confusion</strong><small>A package manager installs a malicious public package instead of an internal one.</small></span>
+  <span class="row-meta"><span>Concept</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/firmware-supply-chain-attack.html"
+  data-attack-row
+  data-category="Supply Chain &amp; Emerging"
+  data-search="firmware supply chain attack malicious changes enter device firmware or its update path. supply chain &amp; emerging software supply chain concept ">
+  <span class="row-number">05</span>
+  <span class="row-main"><strong>Firmware Supply Chain Attack</strong><small>Malicious changes enter device firmware or its update path.</small></span>
+  <span class="row-meta"><span>Concept</span><span>Advanced</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/model-poisoning.html"
+  data-attack-row
+  data-category="Supply Chain &amp; Emerging"
+  data-search="model poisoning training data or weights are changed to alter model behavior. supply chain &amp; emerging ai systems concept ">
+  <span class="row-number">06</span>
+  <span class="row-main"><strong>Model Poisoning</strong><small>Training data or weights are changed to alter model behavior.</small></span>
+  <span class="row-meta"><span>Concept</span><span>Advanced</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/prompt-injection.html"
+  data-attack-row
+  data-category="Supply Chain &amp; Emerging"
+  data-search="prompt injection content instructions manipulate an ai system or its connected tools. supply chain &amp; emerging ai systems concept ">
+  <span class="row-number">07</span>
+  <span class="row-main"><strong>Prompt Injection</strong><small>Content instructions manipulate an AI system or its connected tools.</small></span>
+  <span class="row-meta"><span>Concept</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/software-supply-chain-compromise.html"
+  data-attack-row
+  data-category="Supply Chain &amp; Emerging"
+  data-search="software supply chain compromise a trusted build, update, dependency, or distributor is compromised. supply chain &amp; emerging software supply chain t1195.002 ">
+  <span class="row-number">08</span>
+  <span class="row-main"><strong>Software Supply Chain Compromise</strong><small>A trusted build, update, dependency, or distributor is compromised.</small></span>
+  <span class="row-meta"><span>T1195.002</span><span>Advanced</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/typosquatting-package.html"
+  data-attack-row
+  data-category="Supply Chain &amp; Emerging"
+  data-search="typosquatting package a malicious package imitates the name of a popular dependency. supply chain &amp; emerging software supply chain concept ">
+  <span class="row-number">09</span>
+  <span class="row-main"><strong>Typosquatting Package</strong><small>A malicious package imitates the name of a popular dependency.</small></span>
+  <span class="row-meta"><span>Concept</span><span>Intermediate</span></span>
+  <span class="row-arrow">↗</span>
+</a>
+<a
+  class="attack-row"
+  href="attacks/zero-day-exploitation.html"
+  data-attack-row
+  data-category="Supply Chain &amp; Emerging"
+  data-search="zero-day exploitation an unknown or unpatched vulnerability is exploited before defenses catch up. supply chain &amp; emerging software supply chain t1190 ">
+  <span class="row-number">10</span>
+  <span class="row-main"><strong>Zero-Day Exploitation</strong><small>An unknown or unpatched vulnerability is exploited before defenses catch up.</small></span>
+  <span class="row-meta"><span>T1190</span><span>Advanced</span></span>
+  <span class="row-arrow">↗</span>
+</a></div>
+</section></div>
+    <div class="empty-state" id="empty-state" hidden><span>NO MATCH</span><h3>No attack note matches your search.</h3><button type="button" id="reset-search">Reset search</button></div>
+  </section>
+  <footer>
+  <a class="brand" href="index.html">
+  <span class="brand-mark">AE</span>
+  <span><strong>ATTACK ENCYCLOPEDIA</strong><small>NAME IT. TRACE IT. DETECT IT.</small></span>
+</a>
+  <p>Built for structured defensive learning. Validate every detection against your own environment.</p>
+  <a href="index.html">ALL ATTACKS ↑</a>
+</footer>
+</main>
+<script src="app.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sony Pictures (2014) MITRE ATT&CK Navigator</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.18.9/babel.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis-network.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="site.css">
+</head>
+<body class="bg-gray-100 font-sans">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const attacksData = {
+            "Sony Pictures (2014)": {
+                "name": "Sony Pictures (2014) MITRE ATT&CK Mapping",
+                "versions": { "attack": "14", "navigator": "4.9.1", "layer": "4.5" },
+                "domain": "enterprise-attack",
+                "techniques": [
+                    {
+                        "techniqueID": "T1566.001",
+                        "tactic": "initial-access",
+                        "color": "#ff9999",
+                        "comment": "Spearphishing via email to gain initial foothold",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Vulnerability", "value": "Phishing susceptibility, no MFA" },
+                            { "name": "Assets", "value": "Employee email accounts" },
+                            { "name": "IOCs", "value": "Spearphishing emails from yardgen@gmail.com" },
+                            { "name": "Threat Actors", "value": "Guardians of Peace (Lazarus Group)" },
+                            { "name": "Parameters", "value": "Email gateway logs, user click tracking" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1059.001",
+                        "tactic": "execution",
+                        "color": "#ffcc99",
+                        "comment": "Executed wiper malware via backdoors",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "Windows systems, servers" },
+                            { "name": "IOCs", "value": "Wiper malware execution (SHA256: varies, Destover variant)" },
+                            { "name": "Parameters", "value": "Process execution logs, EDR telemetry" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1547",
+                        "tactic": "persistence",
+                        "color": "#ffcc99",
+                        "comment": "Established persistence with backdoors and scheduled tasks",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "Windows registry, scheduled tasks" },
+                            { "name": "IOCs", "value": "Backdoor services, registry keys for persistence" },
+                            { "name": "Parameters", "value": "Registry monitoring, task scheduler logs" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1082",
+                        "tactic": "discovery",
+                        "color": "#ffcc99",
+                        "comment": "Performed network and system discovery",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "Network infrastructure, domain systems" },
+                            { "name": "IOCs", "value": "Net view, systeminfo, and whoami executions" },
+                            { "name": "Parameters", "value": "Command line audits, network flow data" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1570",
+                        "tactic": "lateral-movement",
+                        "color": "#ffcc99",
+                        "comment": "Lateral movement using SMB and RDP",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "Domain-joined systems" },
+                            { "name": "IOCs", "value": "Anomalous SMB connections from internal IPs" },
+                            { "name": "Parameters", "value": "SMB logs, RDP session records" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1041",
+                        "tactic": "exfiltration",
+                        "color": "#ffcc99",
+                        "comment": "Exfiltrated data over extended period",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "File servers, email systems" },
+                            { "name": "IOCs", "value": "Large outbound data transfers to external IPs" },
+                            { "name": "Parameters", "value": "Network egress filtering, DLP alerts" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1071.001",
+                        "tactic": "command-and-control",
+                        "color": "#ffcc99",
+                        "comment": "C2 via HTTPS and compromised infrastructure",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "Compromised hosts" },
+                            { "name": "IOCs", "value": "HTTPS beacons to C2 domains" },
+                            { "name": "Parameters", "value": "Proxy logs, DNS queries" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1485",
+                        "tactic": "impact",
+                        "color": "#ff6666",
+                        "comment": "Data destruction using wiper malware",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "Hard drives, master boot records" },
+                            { "name": "IOCs", "value": "MBR overwrite, file deletion patterns" },
+                            { "name": "Parameters", "value": "Disk integrity checks, forensic imaging" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1491.001",
+                        "tactic": "impact",
+                        "color": "#ff6666",
+                        "comment": "Defaced systems with threatening messages",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "User workstations" },
+                            { "name": "IOCs", "value": "Skull image and GOP message on desktops" },
+                            { "name": "Parameters", "value": "System image analysis, wallpaper changes" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1567.002",
+                        "tactic": "impact",
+                        "color": "#ff6666",
+                        "comment": "Exfiltrated and leaked sensitive data publicly",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "Confidential files, emails" },
+                            { "name": "IOCs", "value": "Data dumps on file-sharing sites" },
+                            { "name": "Parameters", "value": "Public leak monitoring, reputation damage assessment" }
+                        ]
+                    }
+                ]
+            }
+        };
+
+        const App = () => {
+            const flowchartRef = React.useRef(null);
+            const selectedAttack = "Sony Pictures (2014)";
+            const [selectedTechnique, setSelectedTechnique] = React.useState(null);
+
+            React.useEffect(() => {
+                const mitreData = attacksData[selectedAttack];
+                const nodes = mitreData.techniques.map((tech, index) => ({
+                    id: index + 1,
+                    label: `${tech.techniqueID}: ${tech.tactic}`,
+                    shape: "box",
+                    color: tech.color
+                }));
+
+                const edges = [];
+                const tacticOrder = [
+                    "initial-access", "execution", "persistence", "privilege-escalation",
+                    "credential-access", "discovery", "lateral-movement", "command-and-control",
+                    "collection", "exfiltration", "defense-evasion", "impact"
+                ];
+
+                const tacticNodes = {};
+                mitreData.techniques.forEach((tech, index) => {
+                    const nodeId = index + 1;
+                    const tacticIndex = tacticOrder.indexOf(tech.tactic);
+                    if (!tacticNodes[tech.tactic]) {
+                        tacticNodes[tech.tactic] = [nodeId];
+                    } else {
+                        tacticNodes[tech.tactic].push(nodeId);
+                    }
+                    if (tacticIndex > 0) {
+                        const prevTactic = tacticOrder[tacticIndex - 1];
+                        if (tacticNodes[prevTactic]) {
+                            tacticNodes[prevTactic].forEach(prevNodeId => {
+                                edges.push({ from: prevNodeId, to: nodeId, arrows: "to" });
+                            });
+                        }
+                    }
+                });
+
+                // Custom manual edges
+                const executionNode = mitreData.techniques.findIndex(t => t.tactic === "execution") + 1;
+                const discoveryNode = mitreData.techniques.findIndex(t => t.tactic === "discovery") + 1;
+                const lateralMovementNode = mitreData.techniques.findIndex(t => t.tactic === "lateral-movement") + 1;
+                const commandAndControlNode = mitreData.techniques.findIndex(t => t.tactic === "command-and-control") + 1;
+                const exfiltrationNode = mitreData.techniques.findIndex(t => t.tactic === "exfiltration") + 1;
+                const impactNodes = mitreData.techniques
+                    .map((tech, index) => tech.tactic === "impact" ? index + 1 : null)
+                    .filter(id => id !== null);
+
+                // Execution → Discovery
+                if (executionNode > 0 && discoveryNode > 0) {
+                    edges.push({ from: executionNode, to: discoveryNode, arrows: "to", color: { color: "blue" }, width: 2 });
+                }
+
+                // Discovery → Lateral Movement
+                if (discoveryNode > 0 && lateralMovementNode > 0) {
+                    edges.push({ from: discoveryNode, to: lateralMovementNode, arrows: "to", color: { color: "red" }, dashes: true });
+                }
+
+                // Command and Control → Exfiltration
+                if (commandAndControlNode > 0 && exfiltrationNode > 0) {
+                    edges.push({ from: commandAndControlNode, to: exfiltrationNode, arrows: "to", color: { color: "green" }, width: 2 });
+                }
+
+                // Command and Control → Impact
+                if (commandAndControlNode > 0 && impactNodes.length > 0) {
+                    impactNodes.forEach(impactNode => {
+                        edges.push({ from: commandAndControlNode, to: impactNode, arrows: "to", color: { color: "purple" }, width: 2 });
+                    });
+                }
+
+                const container = flowchartRef.current;
+                const data = { nodes: new vis.DataSet(nodes), edges: new vis.DataSet(edges) };
+                const options = {
+                    physics: { enabled: true },
+                    nodes: { font: { size: 12 }, shape: 'box', shapeProperties: { borderRadius: 5 } },
+                    edges: { arrows: 'to', smooth: false },
+                    interaction: { dragNodes: true, dragView: true, zoomView: true }
+                };
+                const network = new vis.Network(container, data, options);
+
+                network.on("click", (params) => {
+                    if (params.nodes.length > 0) {
+                        const nodeId = params.nodes[0];
+                        setSelectedTechnique(mitreData.techniques[nodeId - 1]);
+                    }
+                });
+
+                network.fit();
+
+                const handleResize = () => {
+                    network.fit();
+                };
+                window.addEventListener('resize', handleResize);
+
+                return () => {
+                    window.removeEventListener('resize', handleResize);
+                    network.destroy();
+                };
+            }, []);
+
+            return (
+                <div className="container mx-auto p-4">
+                    <a href="index.html" className="text-blue-600 hover:underline absolute top-4 right-4">Back to Index</a>
+                    <h2 className="text-2xl font-bold mb-4">Sony Pictures (2014) MITRE ATT&CK Navigator</h2>
+                    <div className="flex gap-4">
+                        <div ref={flowchartRef} className="flex-[3] border border-gray-300 bg-white" style={{ height: '600px' }}></div>
+                        <div className="flex-1 p-4 bg-gray-200 rounded-md overflow-y-auto" style={{ height: '600px' }}>
+                            <h3 className="text-lg font-semibold">Technique Details</h3>
+                            {selectedTechnique ? (
+                                <pre className="whitespace-pre-wrap text-sm">
+                                    <strong>Technique ID:</strong> {selectedTechnique.techniqueID}<br/>
+                                    <strong>Tactic:</strong> {selectedTechnique.tactic}<br/>
+                                    <strong>Comment:</strong> {selectedTechnique.comment}<br/>
+                                    <strong>Metadata:</strong><br/>
+                                    {selectedTechnique.metadata.map((meta, idx) => (
+                                        <div key={idx}>
+                                            <strong>{meta.name}:</strong> {meta.value}<br/>
+                                        </div>
+                                    ))}
+                                </pre>
+                            ) : (
+                                <p>Click a node to view technique details, MITRE TTPs, IOCs, and technical information. Drag nodes to move them.</p>
+                            )}
+                            <br/><strong>Background:</strong><br/>
+                            <p>The 2014 Sony Pictures hack, attributed to the Guardians of Peace (linked to North Korea's Lazarus Group), began with spearphishing attacks and involved the deployment of destructive wiper malware. Hackers stole terabytes of data including unreleased films, executive emails, and employee personal information over months, then leaked it publicly to pressure Sony into canceling the release of "The Interview," a film satirizing North Korean leader Kim Jong-un. The attack caused operational shutdowns, data destruction, and significant reputational damage, highlighting nation-state cyber espionage and sabotage tactics.</p>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+        <div class="mt-8 p-4 bg-white rounded-md shadow space-y-6">
+
+  <!-- Attack Timeline -->
+  <section>
+        <!-- Attack Timeline -->
+        <h2 class="text-2xl font-semibold mb-4">Attack Timeline</h2>
+        <div class="overflow-x-auto mb-8">
+            <table class="min-w-full bg-white border border-gray-300">
+                <thead>
+                    <tr class="bg-gray-200">
+                        <th class="py-2 px-4 border-b">Date/Time</th>
+                        <th class="py-2 px-4 border-b">Action</th>
+                        <th class="py-2 px-4 border-b">Actor/Details</th>
+                        <th class="py-2 px-4 border-b">Evidence/Impact</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="py-2 px-4 border-b">Unknown (pre-Nov 2014)</td>
+                        <td class="py-2 px-4 border-b">Initial access: Spear-phishing compromises an SPE employee’s credentials.</td>
+                        <td class="py-2 px-4 border-b">Guardians of Peace (North Korean hackers, Lazarus Group)</td>
+                        <td class="py-2 px-4 border-b">Undetected phishing email allowed network access.</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border-b">Unknown (months prior)</td>
+                        <td class="py-2 px-4 border-b">Lateral movement and data collection: Attackers map network, steal 100GB of data.</td>
+                        <td class="py-2 px-4 border-b">GOP/Lazarus Group</td>
+                        <td class="py-2 px-4 border-b">Stole 47,000 SSNs, emails, unreleased films, screenplays.</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border-b">November 21, 2014</td>
+                        <td class="py-2 px-4 border-b">Pre-attack warning: GOP (as "God'sApstls") demands "monetary compensation" via email.</td>
+                        <td class="py-2 px-4 border-b">GOP</td>
+                        <td class="py-2 px-4 border-b">Emails ignored by SPE executives.</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border-b">November 24, 2014</td>
+                        <td class="py-2 px-4 border-b">Breach activation: Wiper malware renders SPE systems inoperable; GOP displays skeleton image with threats.</td>
+                        <td class="py-2 px-4 border-b">GOP/Lazarus Group</td>
+                        <td class="py-2 px-4 border-b">Network offline; employees resorted to whiteboards, BlackBerrys.</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border-b">November 24-28, 2014</td>
+                        <td class="py-2 px-4 border-b">Data leaks: GOP releases employee data, four unreleased films to media and file-sharing sites.</td>
+                        <td class="py-2 px-4 border-b">GOP</td>
+                        <td class="py-2 px-4 border-b">Films downloaded millions of times; media frenzy over leaks.</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border-b">December 2, 2014</td>
+                        <td class="py-2 px-4 border-b">Further leaks: GOP releases SSNs, salaries, internal documents.</td>
+                        <td class="py-2 px-4 border-b">GOP</td>
+                        <td class="py-2 px-4 border-b">Exposed executive pay disparities, corporate strategies.</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border-b">December 5, 2014</td>
+                        <td class="py-2 px-4 border-b">Threatening emails sent to SPE employees; investigation escalates.</td>
+                        <td class="py-2 px-4 border-b">GOP</td>
+                        <td class="py-2 px-4 border-b">Increased employee fear; confirmed malicious intent.</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border-b">December 8, 2014</td>
+                        <td class="py-2 px-4 border-b">GOP threatens 9/11-style attacks on theaters showing *The Interview*.</td>
+                        <td class="py-2 px-4 border-b">GOP</td>
+                        <td class="py-2 px-4 border-b">Heightened public fear; theater chains reconsider screenings.</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border-b">December 16, 2014</td>
+                        <td class="py-2 px-4 border-b">GOP demands *The Interview* cancellation via public threats.</td>
+                        <td class="py-2 px-4 border-b">GOP</td>
+                        <td class="py-2 px-4 border-b">Major theater chains pull film; SPE cancels theatrical release.</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border-b">December 19, 2014</td>
+                        <td class="py-2 px-4 border-b">Attack attributed to North Korea; cancellation criticized.</td>
+                        <td class="py-2 px-4 border-b">U.S. Government</td>
+                        <td class="py-2 px-4 border-b">Malware linked to prior North Korean attacks.</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border-b">December 25, 2014</td>
+                        <td class="py-2 px-4 border-b">*The Interview* released online via YouTube and other platforms.</td>
+                        <td class="py-2 px-4 border-b">SPE</td>
+                        <td class="py-2 px-4 border-b">Mitigated some financial loss; limited distribution.</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border-b">January 2015</td>
+                        <td class="py-2 px-4 border-b">Lawsuits filed: Employees sue SPE for negligence in protecting data.</td>
+                        <td class="py-2 px-4 border-b">Employees</td>
+                        <td class="py-2 px-4 border-b">Alleged financial harm; $8M settlement reached.</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border-b">April 2015</td>
+                        <td class="py-2 px-4 border-b">Leaked documents republished, citing public interest.</td>
+                        <td class="py-2 px-4 border-b">Third-party actors</td>
+                        <td class="py-2 px-4 border-b">Exposed internal operations; amplified damage.</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border-b">First Quarter 2015</td>
+                        <td class="py-2 px-4 border-b">SPE allocates $15M for breach-related damages.</td>
+                        <td class="py-2 px-4 border-b">SPE</td>
+                        <td class="py-2 px-4 border-b">Covered IT recovery, legal costs; lawsuits ongoing.</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border-b">September 2018</td>
+                        <td class="py-2 px-4 border-b">Park Jin Hyok indicted for Sony hack and other cyberattacks.</td>
+                        <td class="py-2 px-4 border-b">U.S. DOJ</td>
+                        <td class="py-2 px-4 border-b">Linked to Lazarus Group, North Korean government.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Dwell Time Analysis -->
+        <h2 class="text-2xl font-semibold mb-4">Dwell Time Analysis</h2>
+        <p class="mb-4">Dwell time was likely several months (exact start unknown, detected November 24, 2014), allowing attackers to map the network, steal data, and deploy malware undetected.</p>
+        <div class="overflow-x-auto mb-8">
+            <table class="min-w-full bg-white border border-gray-300">
+                <thead>
+                    <tr class="bg-gray-200">
+                        <th class="py-2 px-4 border-b">Step 1: Initial Access (Pre-Nov 2014)</th>
+                        <th class="py-2 px-4 border-b">Step 2: Lateral Movement (Months Prior)</th>
+                        <th class="py-2 px-4 border-b">Step 3: Collection/Exfiltration (Months Prior)</th>
+                        <th class="py-2 px-4 border-b">Step 4: Malware Deployment (Nov 24, 2014)</th>
+                        <th class="py-2 px-4 border-b">Step 5: Detection (Nov 24, 2014)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="py-2 px-4 border-b">Spear-phishing compromised credentials. <br><strong>What went wrong</strong>: No 2FA, weak phishing training.</td>
+                        <td class="py-2 px-4 border-b">Navigated network undetected. <br><strong>Factor</strong>: No segmentation or monitoring.</td>
+                        <td class="py-2 px-4 border-b">Exfiltrated 100GB (SSNs, films, emails). <br><strong>Factor</strong>: No data loss prevention (DLP).</td>
+                        <td class="py-2 px-4 border-b">Deployed Shamoon-like wiper malware, erasing systems. <br><strong>Factor</strong>: No real-time malware detection.</td>
+                        <td class="py-2 px-4 border-b">Detected after malware activation and screen takeover. <br><strong>Total time</strong>: Enabled extensive data theft and system destruction.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <p class="mb-4"><strong>Dwell Time Insight</strong>: The dwell time was like a thief freely roaming a house for months, unnoticed due to inadequate security. Median dwell time in 2014 was ~205 days (industry reports); Sony’s months-long dwell was typical but catastrophic due to sensitive data exposure and infrastructure wipeout.</p>
+
+        <!-- Learnings -->
+        <h2 class="text-2xl font-semibold mb-4">Learnings</h2>
+        <div class="overflow-x-auto">
+            <table class="min-w-full bg-white border border-gray-300">
+                <thead>
+                    <tr class="bg-gray-200">
+                        <th class="py-2 px-4 border-b">Root Cause Analysis</th>
+                        <th class="py-2 px-4 border-b">Impact Assessment</th>
+                        <th class="py-2 px-4 border-b">Detection Opportunities</th>
+                        <th class="py-2 px-4 border-b">Response and Remediation</th>
+                        <th class="py-2 px-4 border-b">Attribution Analysis</th>
+                        <th class="py-2 px-4 border-b">Lessons Learned</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="py-2 px-4 border-b"><strong>Using 5 Whys</strong>: Why breached? Phishing compromised credentials. Why compromised? No 2FA, weak training. Why weak? Underfunded security. Why underfunded? Profit-driven priorities. Why prioritized? Corporate culture. <br> <strong>Other causes</strong>: No DLP, no SIEM, ignored prior security audits. <br> <strong>Beginners</strong>: Root causes pinpoint security gaps. <br> <strong>Experts</strong>: Fishbone factors: People (untrained staff), Process (no 2FA), Technology (no DLP).</td>
+                        <td class="py-2 px-4 border-b"><strong>Data</strong>: 100GB stolen (47,000 SSNs, films, emails). <br> <strong>Financial</strong>: $15M damages, $8M settlement. <br> <strong>Reputational</strong>: Trust eroded; *The Interview* cancellation backlash. <br> <strong>Operational</strong>: Network offline, manual operations. <br> <strong>Beginners</strong>: Impacts harm employees, business. <br> <strong>Experts</strong>: BIA metrics: Recovery Point/Time Objectives violated due to data loss, downtime.</td>
+                        <td class="py-2 px-4 border-b"><strong>Missed</strong>: Phishing detectable via email filters; exfiltration via DLP; malware via endpoint detection (EDR). <br> <strong>Opportunities</strong>: Implement 2FA, SIEM, DLP; regular audits. <br> <strong>Failures</strong>: No 2FA, ignored audit warnings. <br> <strong>Beginners</strong>: Detection is like a security alarm. <br> <strong>Experts</strong>: Sigma rule: <code>detection: logsource: category: email | selection: attachment: malicious OR sender: unknown</code>.</td>
+                        <td class="py-2 px-4 border-b"><strong>Immediate</strong>: Took network offline, engaged investigators, offered credit monitoring. <br> <strong>Long-term</strong>: Implemented 2FA, hired CISO, improved security posture. <br> <strong>Beginners</strong>: Response mitigates damage. <br> <strong>Experts</strong>: NIST IR followed: Identification (Nov 24), Containment (Nov 24), Eradication (post-Nov).</td>
+                        <td class="py-2 px-4 border-b"><strong>Confirmed</strong>: North Korea, Lazarus Group, Park Jin Hyok (indicted 2018). <br> <strong>TTPs</strong>: Phishing, wiper malware, data theft align with state-sponsored actors. <br> <strong>Beginners</strong>: Attribution identifies attackers. <br> <strong>Experts</strong>: TTPs match Lazarus Group; IOCs include malware hashes, North Korean IPs.</td>
+                        <td class="py-2 px-4 border-b">Enforce 2FA. <br> Deploy DLP, SIEM, EDR. <br> Train staff on phishing. <br> Fund cybersecurity. <br> Prepare crisis PR. <br> <strong>Beginners</strong>: Secure systems, train staff. <br> <strong>Experts</strong>: Adopt MITRE ATT&CK for defense.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+</body>
+</html>

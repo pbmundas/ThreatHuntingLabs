@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ukrainian Power Grid (2015) MITRE ATT&CK Navigator</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.18.9/babel.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis-network.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="site.css">
+</head>
+<body class="bg-gray-100 font-sans">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const attacksData = {
+            "Ukrainian Power Grid (2015)": {
+                "name": "Ukrainian Power Grid (2015) MITRE ATT&CK Mapping",
+                "versions": { "attack": "14", "navigator": "4.9.1", "layer": "4.5" },
+                "domain": "enterprise-attack",
+                "techniques": [
+                    {
+                        "techniqueID": "T1566.001",
+                        "tactic": "initial-access",
+                        "color": "#ff9999",
+                        "comment": "Spearphishing via email with malicious attachments",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Vulnerability", "value": "Phishing susceptibility, lack of MFA" },
+                            { "name": "Assets", "value": "Employee email accounts" },
+                            { "name": "IOCs", "value": "Malicious Word documents with macros" },
+                            { "name": "Threat Actors", "value": "Sandworm (BlackEnergy, APT28)" },
+                            { "name": "Parameters", "value": "Email gateway logs, user click tracking" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1059.001",
+                        "tactic": "execution",
+                        "color": "#ffcc99",
+                        "comment": "Executed BlackEnergy 3 malware via phishing payloads",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "Windows workstations" },
+                            { "name": "IOCs", "value": "BlackEnergy 3 execution (SHA256: varies)" },
+                            { "name": "Parameters", "value": "Process execution logs, EDR telemetry" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1547",
+                        "tactic": "persistence",
+                        "color": "#ffcc99",
+                        "comment": "Backdoors and registry modifications for sustained access",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "Windows registry, scheduled tasks" },
+                            { "name": "IOCs", "value": "Backdoor services, registry keys in HKLM\\SYSTEM" },
+                            { "name": "Parameters", "value": "Registry monitoring, task scheduler logs" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1078",
+                        "tactic": "privilege-escalation",
+                        "color": "#ffcc99",
+                        "comment": "Used stolen credentials for elevated access",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "Domain accounts, admin systems" },
+                            { "name": "IOCs", "value": "Anomalous privilege escalation attempts" },
+                            { "name": "Parameters", "value": "Authentication logs, privilege monitoring" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1082",
+                        "tactic": "discovery",
+                        "color": "#ffcc99",
+                        "comment": "System and network discovery to identify SCADA systems",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "Network infrastructure, ICS systems" },
+                            { "name": "IOCs", "value": "Net view, systeminfo, and whoami executions" },
+                            { "name": "Parameters", "value": "Command line audits, network flow data" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1570",
+                        "tactic": "lateral-movement",
+                        "color": "#ffcc99",
+                        "comment": "Lateral movement using SMB or RDP to reach ICS",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "Domain-joined systems, SCADA servers" },
+                            { "name": "IOCs", "value": "Anomalous SMB/RDP connections from internal IPs" },
+                            { "name": "Parameters", "value": "SMB logs, RDP session records" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1005",
+                        "tactic": "collection",
+                        "color": "#ffcc99",
+                        "comment": "Collected configuration data from SCADA systems",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "SCADA systems, configuration files" },
+                            { "name": "IOCs", "value": "Unauthorized access to SCADA configurations" },
+                            { "name": "Parameters", "value": "ICS logs, file access monitoring" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1071.001",
+                        "tactic": "command-and-control",
+                        "color": "#ffcc99",
+                        "comment": "C2 via HTTPS to manage compromised systems",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "Compromised hosts" },
+                            { "name": "IOCs", "value": "HTTPS beacons to C2 domains" },
+                            { "name": "Parameters", "value": "Proxy logs, DNS queries" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1041",
+                        "tactic": "exfiltration",
+                        "color": "#ffcc99",
+                        "comment": "Exfiltrated system configuration and operational data",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "SCADA systems, file servers" },
+                            { "name": "IOCs", "value": "Large outbound data transfers to external IPs" },
+                            { "name": "Parameters", "value": "Network egress filtering, DLP alerts" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1485",
+                        "tactic": "impact",
+                        "color": "#ff6666",
+                        "comment": "Data destruction using KillDisk wiper malware",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "Hard drives, SCADA systems" },
+                            { "name": "IOCs", "value": "MBR overwrite, file deletion patterns" },
+                            { "name": "Parameters", "value": "Disk integrity checks, forensic imaging" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1489",
+                        "tactic": "impact",
+                        "color": "#ff6666",
+                        "comment": "Disrupted power grid operations via SCADA manipulation",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "SCADA systems, circuit breakers" },
+                            { "name": "IOCs", "value": "Unauthorized SCADA commands, breaker trips" },
+                            { "name": "Parameters", "value": "ICS logs, system availability monitoring" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1498",
+                        "tactic": "impact",
+                        "color": "#ff6666",
+                        "comment": "DoS attack on call centers to hinder recovery",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "Call center systems" },
+                            { "name": "IOCs", "value": "High-volume VoIP traffic to call centers" },
+                            { "name": "Parameters", "value": "Network traffic analysis, VoIP logs" }
+                        ]
+                    }
+                ]
+            }
+        };
+
+        const App = () => {
+            const flowchartRef = React.useRef(null);
+            const selectedAttack = "Ukrainian Power Grid (2015)";
+            const [selectedTechnique, setSelectedTechnique] = React.useState(null);
+
+            React.useEffect(() => {
+                const mitreData = attacksData[selectedAttack];
+                const nodes = mitreData.techniques.map((tech, index) => ({
+                    id: index + 1,
+                    label: `${tech.techniqueID}: ${tech.tactic}`,
+                    shape: "box",
+                    color: tech.color
+                }));
+
+                const edges = [];
+                const tacticOrder = [
+                    "initial-access", "execution", "persistence", "privilege-escalation",
+                    "credential-access", "discovery", "lateral-movement", "collection",
+                    "command-and-control", "exfiltration", "defense-evasion", "impact"
+                ];
+
+                const tacticNodes = {};
+                mitreData.techniques.forEach((tech, index) => {
+                    const nodeId = index + 1;
+                    const tacticIndex = tacticOrder.indexOf(tech.tactic);
+                    if (!tacticNodes[tech.tactic]) {
+                        tacticNodes[tech.tactic] = [nodeId];
+                    } else {
+                        tacticNodes[tech.tactic].push(nodeId);
+                    }
+                    if (tacticIndex > 0) {
+                        const prevTactic = tacticOrder[tacticIndex - 1];
+                        if (tacticNodes[prevTactic]) {
+                            tacticNodes[prevTactic].forEach(prevNodeId => {
+                                edges.push({ from: prevNodeId, to: nodeId, arrows: "to" });
+                            });
+                        }
+                    }
+                });
+
+                // Custom manual edges to ensure full connectivity
+                const initialAccessNode = mitreData.techniques.findIndex(t => t.tactic === "initial-access") + 1;
+                const executionNode = mitreData.techniques.findIndex(t => t.tactic === "execution") + 1;
+                const persistenceNode = mitreData.techniques.findIndex(t => t.tactic === "persistence") + 1;
+                const privilegeEscalationNode = mitreData.techniques.findIndex(t => t.tactic === "privilege-escalation") + 1;
+                const discoveryNode = mitreData.techniques.findIndex(t => t.tactic === "discovery") + 1;
+                const lateralMovementNode = mitreData.techniques.findIndex(t => t.tactic === "lateral-movement") + 1;
+                const collectionNode = mitreData.techniques.findIndex(t => t.tactic === "collection") + 1;
+                const commandAndControlNode = mitreData.techniques.findIndex(t => t.tactic === "command-and-control") + 1;
+                const exfiltrationNode = mitreData.techniques.findIndex(t => t.tactic === "exfiltration") + 1;
+                const impactNodes = mitreData.techniques
+                    .map((tech, index) => tech.tactic === "impact" ? index + 1 : null)
+                    .filter(id => id !== null);
+
+                // Initial Access → Execution
+                if (initialAccessNode > 0 && executionNode > 0) {
+                    edges.push({ from: initialAccessNode, to: executionNode, arrows: "to", color: { color: "blue" }, width: 2 });
+                }
+
+                // Execution → Persistence
+                if (executionNode > 0 && persistenceNode > 0) {
+                    edges.push({ from: executionNode, to: persistenceNode, arrows: "to", color: { color: "blue" }, width: 2 });
+                }
+
+                // Persistence → Privilege Escalation
+                if (persistenceNode > 0 && privilegeEscalationNode > 0) {
+                    edges.push({ from: persistenceNode, to: privilegeEscalationNode, arrows: "to", color: { color: "blue" }, width: 2 });
+                }
+
+                // Privilege Escalation → Discovery
+                if (privilegeEscalationNode > 0 && discoveryNode > 0) {
+                    edges.push({ from: privilegeEscalationNode, to: discoveryNode, arrows: "to", color: { color: "blue" }, width: 2 });
+                }
+
+                // Discovery → Lateral Movement
+                if (discoveryNode > 0 && lateralMovementNode > 0) {
+                    edges.push({ from: discoveryNode, to: lateralMovementNode, arrows: "to", color: { color: "red" }, dashes: true });
+                }
+
+                // Lateral Movement → Collection
+                if (lateralMovementNode > 0 && collectionNode > 0) {
+                    edges.push({ from: lateralMovementNode, to: collectionNode, arrows: "to", color: { color: "blue" }, width: 2 });
+                }
+
+                // Collection → Command and Control
+                if (collectionNode > 0 && commandAndControlNode > 0) {
+                    edges.push({ from: collectionNode, to: commandAndControlNode, arrows: "to", color: { color: "blue" }, width: 2 });
+                }
+
+                // Command and Control → Exfiltration
+                if (commandAndControlNode > 0 && exfiltrationNode > 0) {
+                    edges.push({ from: commandAndControlNode, to: exfiltrationNode, arrows: "to", color: { color: "green" }, width: 2 });
+                }
+
+                // Command and Control → Impact
+                if (commandAndControlNode > 0 && impactNodes.length > 0) {
+                    impactNodes.forEach(impactNode => {
+                        edges.push({ from: commandAndControlNode, to: impactNode, arrows: "to", color: { color: "purple" }, width: 2 });
+                    });
+                }
+
+                // Exfiltration → Impact
+                if (exfiltrationNode > 0 && impactNodes.length > 0) {
+                    impactNodes.forEach(impactNode => {
+                        edges.push({ from: exfiltrationNode, to: impactNode, arrows: "to", color: { color: "purple" }, width: 2 });
+                    });
+                }
+
+                const container = flowchartRef.current;
+                const data = { nodes: new vis.DataSet(nodes), edges: new vis.DataSet(edges) };
+                const options = {
+                    physics: { enabled: true },
+                    nodes: { font: { size: 12 }, shape: 'box', shapeProperties: { borderRadius: 5 } },
+                    edges: { arrows: 'to', smooth: false },
+                    interaction: { dragNodes: true, dragView: true, zoomView: true }
+                };
+                const network = new vis.Network(container, data, options);
+
+                network.on("click", (params) => {
+                    if (params.nodes.length > 0) {
+                        const nodeId = params.nodes[0];
+                        setSelectedTechnique(mitreData.techniques[nodeId - 1]);
+                    }
+                });
+
+                network.fit();
+
+                const handleResize = () => {
+                    network.fit();
+                };
+                window.addEventListener('resize', handleResize);
+
+                return () => {
+                    window.removeEventListener('resize', handleResize);
+                    network.destroy();
+                };
+            }, []);
+
+            return (
+                <div className="container mx-auto p-4">
+                    <a href="index.html" className="text-blue-600 hover:underline absolute top-4 right-4">Back to Index</a>
+                    <h2 className="text-2xl font-bold mb-4">Ukrainian Power Grid (2015) MITRE ATT&CK Navigator</h2>
+                    <div className="flex gap-4">
+                        <div ref={flowchartRef} className="flex-[3] border border-gray-300 bg-white" style={{ height: '600px' }}></div>
+                        <div className="flex-1 p-4 bg-gray-200 rounded-md overflow-y-auto" style={{ height: '600px' }}>
+                            <h3 className="text-lg font-semibold">Technique Details</h3>
+                            {selectedTechnique ? (
+                                <pre className="whitespace-pre-wrap text-sm">
+                                    <strong>Technique ID:</strong> {selectedTechnique.techniqueID}<br/>
+                                    <strong>Tactic:</strong> {selectedTechnique.tactic}<br/>
+                                    <strong>Comment:</strong> {selectedTechnique.comment}<br/>
+                                    <strong>Metadata:</strong><br/>
+                                    {selectedTechnique.metadata.map((meta, idx) => (
+                                        <div key={idx}>
+                                            <strong>{meta.name}:</strong> {meta.value}<br/>
+                                        </div>
+                                    ))}
+                                </pre>
+                            ) : (
+                                <p>Click a node to view technique details, MITRE TTPs, IOCs, and technical information. Drag nodes to move them.</p>
+                            )}
+                            <br/><strong>Background:</strong><br/>
+                            <p>The Ukrainian Power Grid cyberattack on December 23, 2015, attributed to the Russian state-sponsored Sandworm group (BlackEnergy, APT28), targeted three regional power distribution companies, causing outages for approximately 225,000 customers. Attackers used spearphishing to deliver BlackEnergy 3 malware, moved laterally to access SCADA systems, and manipulated them to disrupt power. They deployed KillDisk wiper malware to destroy data and launched a DoS attack on call centers to hinder recovery. This was one of the first cyberattacks to cause physical power grid disruptions, exposing critical infrastructure vulnerabilities.</p>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+        <div class="mt-8 p-4 bg-white rounded-md shadow space-y-6">
+
+  <!-- Attack Timeline -->
+  <section>
+        <!-- Attack Timeline -->
+        <h2 class="text-2xl font-semibold mb-4">Attack Timeline</h2>
+        <div class="overflow-x-auto mb-8">
+            <table class="min-w-full bg-white border border-gray-300">
+                <thead>
+                    <tr class="bg-gray-200">
+                        <th class="py-2 px-4 border-b">Date/Time</th>
+                        <th class="py-2 px-4 border-b">Action</th>
+                        <th class="py-2 px-4 border-b">Actor/Details</th>
+                        <th class="py-2 px-4 border-b">Evidence/Impact</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="py-2 px-4 border-b">Spring 2015</td>
+                        <td class="py-2 px-4 border-b">Initial access: Spear-phishing emails with BlackEnergy 3 malware infect corporate networks.</td>
+                        <td class="py-2 px-4 border-b">Sandworm (Russian GRU, Unit 74455)</td>
+                        <td class="py-2 px-4 border-b">Excel attachment opened by employee at Prykarpattyaoblenergo; malware installed backdoor.</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border-b">Spring–Summer 2015</td>
+                        <td class="py-2 px-4 border-b">Lateral movement and reconnaissance: Attackers map IT and OT networks, collect data.</td>
+                        <td class="py-2 px-4 border-b">Sandworm</td>
+                        <td class="py-2 px-4 border-b">Scanned networks, identified SCADA systems; undetected due to lack of monitoring.</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border-b">Unknown (pre-Dec 2015)</td>
+                        <td class="py-2 px-4 border-b">Malware staging: Attackers install KillDisk and other malicious tools.</td>
+                        <td class="py-2 px-4 border-b">Sandworm</td>
+                        <td class="py-2 px-4 border-b">Positioned malware for system wiping, firmware corruption.</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border-b">December 23, 2015, ~3:30 PM</td>
+                        <td class="py-2 px-4 border-b">Attack execution: Attackers remotely access SCADA systems, open circuit breakers at 30 substations.</td>
+                        <td class="py-2 px-4 border-b">Sandworm</td>
+                        <td class="py-2 px-4 border-b">225,000–230,000 customers lose power; primarily in Ivano-Frankivsk (Prykarpattyaoblenergo).</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border-b">December 23, 2015</td>
+                        <td class="py-2 px-4 border-b">KillDisk deployment: Malware wipes systems, corrupts master boot records.</td>
+                        <td class="py-2 px-4 border-b">Sandworm</td>
+                        <td class="py-2 px-4 border-b">Rendered systems inoperable; delayed recovery efforts.</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border-b">December 23, 2015</td>
+                        <td class="py-2 px-4 border-b">Firmware corruption: Serial-to-Ethernet devices overwritten with malicious code.</td>
+                        <td class="py-2 px-4 border-b">Sandworm</td>
+                        <td class="py-2 px-4 border-b">Devices rendered unrecoverable; disrupted remote control.</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border-b">December 23, 2015</td>
+                        <td class="py-2 px-4 border-b">UPS sabotage: Attackers schedule disconnects for uninterruptible power supplies.</td>
+                        <td class="py-2 px-4 border-b">Sandworm</td>
+                        <td class="py-2 px-4 border-b">Control centers lose power, complicating response.</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border-b">December 23, 2015</td>
+                        <td class="py-2 px-4 border-b">Denial-of-service attack: Call centers flooded, blocking customer reports.</td>
+                        <td class="py-2 px-4 border-b">Sandworm</td>
+                        <td class="py-2 px-4 border-b">Prevented outage reporting; increased public confusion.</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border-b">December 23–24, 2015</td>
+                        <td class="py-2 px-4 border-b">Power restoration: Operators use manual controls to restore power within 1–6 hours.</td>
+                        <td class="py-2 px-4 border-b">Ukrainian utilities</td>
+                        <td class="py-2 px-4 border-b">Manual failover mitigated outage; systems remained constrained.</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border-b">January–February 2016</td>
+                        <td class="py-2 px-4 border-b">Investigation: U.S. agencies (FBI, DHS) and Ukrainian firms analyze attack.</td>
+                        <td class="py-2 px-4 border-b">U.S./Ukrainian teams</td>
+                        <td class="py-2 px-4 border-b">Confirmed BlackEnergy and KillDisk; attributed to Russia.</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border-b">October 2020</td>
+                        <td class="py-2 px-4 border-b">U.S. indicts six Sandworm members for this and other attacks.</td>
+                        <td class="py-2 px-4 border-b">U.S. DOJ</td>
+                        <td class="py-2 px-4 border-b">Linked to Russian GRU; no arrests due to jurisdiction.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Dwell Time Analysis -->
+        <h2 class="text-2xl font-semibold mb-4">Dwell Time Analysis</h2>
+        <p class="mb-4">Dwell time was approximately 6–9 months (from spring 2015 to detection on December 23, 2015), allowing attackers to infiltrate, map networks, and stage malware undetected.</p>
+        <div class="overflow-x-auto mb-8">
+            <table class="min-w-full bg-white border border-gray-300">
+                <thead>
+                    <tr class="bg-gray-200">
+                        <th class="py-2 px-4 border-b">Step 1: Initial Access (Spring 2015)</th>
+                        <th class="py-2 px-4 border-b">Step 2: Lateral Movement (Spring–Summer 2015)</th>
+                        <th class="py-2 px-4 border-b">Step 3: Collection/Exfiltration (Spring–Summer 2015)</th>
+                        <th class="py-2 px-4 border-b">Step 4: Malware Deployment (Dec 23, 2015)</th>
+                        <th class="py-2 px-4 border-b">Step 5: Detection (Dec 23, 2015)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="py-2 px-4 border-b">Spear-phishing with BlackEnergy 3 via Excel attachment. <br><strong>What went wrong</strong>: No email filtering, weak user training.</td>
+                        <td class="py-2 px-4 border-b">Moved from IT to OT networks undetected. <br><strong>Factor</strong>: No network segmentation, no intrusion detection.</td>
+                        <td class="py-2 px-4 border-b">Collected SCADA data, network maps. <br><strong>Factor</strong>: No data loss prevention or anomaly detection.</td>
+                        <td class="py-2 px-4 border-b">Deployed KillDisk, corrupted firmware, opened breakers. <br><strong>Factor</strong>: No real-time monitoring of SCADA.</td>
+                        <td class="py-2 px-4 border-b">Detected after breakers opened, systems wiped. <br><strong>Total time</strong>: Enabled extensive preparation and disruption.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <p class="mb-4"><strong>Dwell Time Insight</strong>: The dwell time was like a saboteur covertly wiring explosives in a factory for months, unnoticed due to poor security. Industry reports suggest median dwell times in 2015 were ~150–200 days; the Ukrainian grid’s 6–9 months was prolonged, enabling a highly coordinated attack on critical infrastructure.</p>
+
+        <!-- Learnings -->
+        <h2 class="text-2xl font-semibold mb-4">Learnings</h2>
+        <div class="overflow-x-auto">
+            <table class="min-w-full bg-white border border-gray-300">
+                <thead>
+                    <tr class="bg-gray-200">
+                        <th class="py-2 px-4 border-b">Root Cause Analysis</th>
+                        <th class="py-2 px-4 border-b">Impact Assessment</th>
+                        <th class="py-2 px-4 border-b">Detection Opportunities</th>
+                        <th class="py-2 px-4 border-b">Response and Remediation</th>
+                        <th class="py-2 px-4 border-b">Attribution Analysis</th>
+                        <th class="py-2 px-4 border-b">Lessons Learned</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="py-2 px-4 border-b"><strong>Using 5 Whys</strong>: Why breached? Phishing delivered BlackEnergy. Why successful? No email filters, weak training. Why weak? Underfunded cybersecurity. Why underfunded? Soviet-era infrastructure, budget constraints. Why constrained? War and corruption. <br> <strong>Other causes</strong>: No OT segmentation, no SIEM. <br> <strong>Beginners</strong>: Root causes trace to lax security. <br> <strong>Experts</strong>: Fishbone factors: People (untrained staff), Process (no filtering), Technology (no IDS).</td>
+                        <td class="py-2 px-4 border-b"><strong>Data</strong>: Network maps, SCADA data stolen. <br> <strong>Physical</strong>: 225,000–230,000 customers without power for 1–6 hours. <br> <strong>Operational</strong>: Systems wiped, control centers offline. <br> <strong>Reputational</strong>: Exposed grid vulnerabilities globally. <br> <strong>Beginners</strong>: Impacts hit customers, operations. <br> <strong>Experts</strong>: BIA metrics: RTO violated due to system downtime.</td>
+                        <td class="py-2 px-4 border-b"><strong>Missed</strong>: Phishing via email filters; lateral movement via IDS; exfiltration via DLP. <br> <strong>Opportunities</strong>: Deploy 2FA, SIEM, OT monitoring; train staff. <br> <strong>Failures</strong>: No segmentation, no real-time alerts. <br> <strong>Beginners</strong>: Detection is like a guard post. <br> <strong>Experts</strong>: Sigma rule: <code>detection: logsource: category: network | selection: traffic: unusual OR protocol: scada</code>.</td>
+                        <td class="py-2 px-4 border-b"><strong>Immediate</strong>: Manual restoration, engaged U.S. investigators. <br> <strong>Long-term</strong>: Hardened OT security, improved monitoring. <br> <strong>Beginners</strong>: Response restores services. <br> <strong>Experts</strong>: NIST IR followed: Identification (Dec 23), Containment (Dec 23–24), Eradication (post-Dec).</td>
+                        <td class="py-2 px-4 border-b"><strong>Confirmed</strong>: Sandworm (Russian GRU), indicted 2020. <br> <strong>TTPs</strong>: Phishing, BlackEnergy, KillDisk align with state-sponsored actors. <br> <strong>Beginners</strong>: Attribution identifies hackers. <br> <strong>Experts</strong>: TTPs match Sandworm; IOCs include malware hashes, Russian IPs.</td>
+                        <td class="py-2 px-4 border-b">Enforce 2FA, email filtering. <br> Segment IT/OT networks. <br> Deploy SIEM, DLP, EDR. <br> Train staff on phishing. <br> Fund critical infrastructure security. <br> <strong>Beginners</strong>: Secure systems, train employees. <br> <strong>Experts</strong>: Adopt ISA/IEC 62443, MITRE ATT&CK for OT defense.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+</body>
+</html>

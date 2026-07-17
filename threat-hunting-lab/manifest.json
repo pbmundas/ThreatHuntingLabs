@@ -1,0 +1,774 @@
+{
+  "schema_version": 1,
+  "labs": [
+    {
+      "id": "otrf-powershell-http-listener",
+      "title": "The Port That Should Not Be Open",
+      "description": "A workstation generated a brief cluster of process-access, registry, DNS, and Windows Filtering Platform events. Determine whether an unauthorized listener was established.",
+      "hypothesis": "PowerShell activity on a user workstation resulted in an unexpected HTTP listener being exposed to the network.",
+      "difficulty_tier": "Novice",
+      "estimated_minutes": 25,
+      "mitre_tags": [
+        "T1059.001",
+        "TA0002"
+      ],
+      "source_attribution": {
+        "dataset_id": "SDWIN-201102041306",
+        "title": "PowerShell HTTP Listener",
+        "project": "OTRF Security-Datasets",
+        "url": "https://github.com/OTRF/Security-Datasets/blob/master/datasets/atomic/_metadata/SDWIN-201102041306.yaml",
+        "license": "MIT"
+      },
+      "steps": [
+        {
+          "title": "Scope the affected asset",
+          "prompt": "Which hostname recorded the suspicious listener activity?",
+          "required_query_token": "Hostname",
+          "verification_sql": "SELECT count(*) FROM http_listener_events WHERE \"Hostname\" IS NOT NULL AND lower(\"Message\") LIKE '%listen%'",
+          "hints": [
+            "Start with distinct values in the Hostname column."
+          ],
+          "solution_hash": "5d427a68ab1af18e1cc42d1bab6cd45f07bbd5ddbb48b8ac7a28b8f332584378"
+        },
+        {
+          "title": "Identify the exposed port",
+          "prompt": "Which local source port was opened for inbound listening? Enter the number only.",
+          "required_query_token": "SourcePort",
+          "verification_sql": "SELECT count(*) FROM http_listener_events WHERE \"SourcePort\" IS NOT NULL AND lower(\"Message\") LIKE '%local port%'",
+          "hints": [
+            "Windows Filtering Platform auditing records describe both binds and listeners."
+          ],
+          "solution_hash": "ad5f9478d603fe97eae2bbff07f76fe7f18610343b5f3bc8e00945ee51b30d2c"
+        },
+        {
+          "title": "Name the confirming event",
+          "prompt": "Which Windows Event ID explicitly states that an application or service listened for incoming connections?",
+          "required_query_token": "EventID",
+          "verification_sql": "SELECT count(*) FROM http_listener_events WHERE lower(\"Message\") LIKE '%listen on a port%'",
+          "hints": [
+            "Compare the Message field for the Filtering Platform events near the bind."
+          ],
+          "solution_hash": "b0cc7072ef8aa1665efaea655d17d1c841048a5b4e6df3545db3d794b52d746f"
+        },
+        {
+          "title": "Resolve the listening application",
+          "prompt": "Which application name did Windows Security associate with the port 8000 listener?",
+          "required_query_token": "Application",
+          "verification_sql": "SELECT count(*) FROM http_listener_events WHERE \"SourcePort\" = 8000 AND lower(\"Application\") = 'system'",
+          "hints": [
+            "Pivot from SourcePort 8000 to the Application field in events 5154 and 5158."
+          ],
+          "solution_hash": "bbc5e661e106c6dcd8dc6dd186454c2fcba3c710fb4d8e71a60c93eaf077f073"
+        },
+        {
+          "title": "Correlate the event provider",
+          "prompt": "Which SourceName supplied the Windows Security listener event?",
+          "required_query_token": "SourceName",
+          "verification_sql": "SELECT count(*) FROM http_listener_events WHERE \"EventID\" = 5154 AND lower(\"SourceName\") = 'microsoft-windows-security-auditing'",
+          "hints": [
+            "Compare the Sysmon context with the SourceName on the confirming Security event."
+          ],
+          "solution_hash": "af50caa5e0c7e6bd96fe2e42fae15d3f833eac4597dd4e7f7fe209aec14d633e"
+        }
+      ],
+      "published": true,
+      "parquet_sources": [
+        {
+          "name": "http_listener_events",
+          "table": "http_listener_events",
+          "url": "data/labs/otrf-powershell-http-listener/http_listener_events.parquet"
+        }
+      ],
+      "log_sources": [
+        "Windows Security",
+        "Sysmon",
+        "Windows Event Log"
+      ]
+    },
+    {
+      "id": "otrf-bitsadmin-download",
+      "title": "A Transfer Hiding in Plain Sight",
+      "description": "Correlate Windows Security process auditing with Sysmon process, image-load, DNS, network, and file-create telemetry around BITSAdmin.",
+      "hypothesis": "A user abused the signed BITSAdmin utility to retrieve a PowerShell artifact into a temporary directory.",
+      "difficulty_tier": "Novice",
+      "estimated_minutes": 35,
+      "mitre_tags": [
+        "T1197",
+        "TA0005"
+      ],
+      "log_sources": [
+        "Windows Security",
+        "Sysmon Process",
+        "Sysmon Network/DNS",
+        "Sysmon File Creation"
+      ],
+      "source_attribution": {
+        "dataset_id": "SDWIN-201023023651",
+        "title": "Bitsadmin Download Malicious File",
+        "project": "OTRF Security-Datasets",
+        "url": "https://github.com/OTRF/Security-Datasets/blob/master/datasets/atomic/_metadata/SDWIN-201023023651.yaml",
+        "license": "MIT"
+      },
+      "steps": [
+        {
+          "title": "Scope the transfer host",
+          "prompt": "Which hostname ran the suspicious BITSAdmin transfer?",
+          "required_query_token": "Hostname",
+          "verification_sql": "SELECT count(*) FROM bitsadmin_events WHERE lower(\"Hostname\") = 'workstation5' AND lower(\"CommandLine\") LIKE '%bitsadmin%/transfer%'",
+          "hints": [
+            "Filter process creation by CommandLine and inspect Hostname."
+          ],
+          "solution_hash": "5d427a68ab1af18e1cc42d1bab6cd45f07bbd5ddbb48b8ac7a28b8f332584378"
+        },
+        {
+          "title": "Attribute the transfer",
+          "prompt": "Which local username launched BITSAdmin?",
+          "required_query_token": "SubjectUserName",
+          "verification_sql": "SELECT count(*) FROM bitsadmin_events WHERE \"EventID\" = 4688 AND lower(\"SubjectUserName\") = 'wardog' AND lower(\"CommandLine\") LIKE '%bitsadmin%'",
+          "hints": [
+            "Windows Security EventID 4688 contains the creator subject."
+          ],
+          "solution_hash": "da6f01f03776861ca5ae4e822cf2265f013637046c0fe8bc2d207f887bdbf35c"
+        },
+        {
+          "title": "Correlate the Sysmon process",
+          "prompt": "What decimal ProcessId did Sysmon assign to bitsadmin.exe?",
+          "required_query_token": "ProcessId",
+          "verification_sql": "SELECT count(*) FROM bitsadmin_events WHERE \"EventID\" = 1 AND CAST(\"ProcessId\" AS VARCHAR) = '9260' AND lower(\"Image\") LIKE '%bitsadmin.exe'",
+          "hints": [
+            "Match the Security process creation with Sysmon EventID 1."
+          ],
+          "solution_hash": "d302498475ec90c0b6da20bb1067dbcd62a40e59784727fe324c5da086ebd702"
+        },
+        {
+          "title": "Recover the downloaded artifact",
+          "prompt": "What filename was written beneath the user's Temp directory?",
+          "required_query_token": "CommandLine",
+          "verification_sql": "SELECT count(*) FROM bitsadmin_events WHERE lower(\"CommandLine\") LIKE '%bitsadmin1_flag.ps1%'",
+          "hints": [
+            "Read the final argument in the BITSAdmin command line."
+          ],
+          "solution_hash": "e071184dd5fe5302c2382212bec3ea548276fb909b2fe7f825666b8cc8e2dbd5"
+        },
+        {
+          "title": "Confirm the audit source",
+          "prompt": "Which Windows Security Event ID records the BITSAdmin process creation?",
+          "required_query_token": "EventID",
+          "verification_sql": "SELECT count(*) FROM bitsadmin_events WHERE \"EventID\" = 4688 AND lower(\"SourceName\") = 'microsoft-windows-security-auditing' AND lower(\"CommandLine\") LIKE '%bitsadmin%'",
+          "hints": [
+            "Correlate the Sysmon EventID 1 record with its Windows Security equivalent."
+          ],
+          "solution_hash": "cea10c90eee9f29280e698a1a2c4a70831fee2881d425c883de61d5b6e72e823"
+        }
+      ],
+      "published": true,
+      "parquet_sources": [
+        {
+          "name": "bitsadmin_events",
+          "table": "bitsadmin_events",
+          "url": "data/labs/otrf-bitsadmin-download/bitsadmin_events.parquet"
+        }
+      ]
+    },
+    {
+      "id": "otrf-wmic-xsl-script-processing",
+      "title": "The Stylesheet That Executed",
+      "description": "Correlate Windows Security process auditing with Sysmon parent-child telemetry to expose WMIC XSL script processing.",
+      "hypothesis": "WMIC retrieved a remote XSL file and used its embedded script to spawn a child process on a workstation.",
+      "difficulty_tier": "Novice",
+      "estimated_minutes": 35,
+      "mitre_tags": [
+        "T1220",
+        "TA0005"
+      ],
+      "log_sources": [
+        "Windows Security",
+        "Sysmon",
+        "Windows Filtering Platform"
+      ],
+      "source_attribution": {
+        "dataset_id": "SDWIN-201017061100",
+        "title": "WMIC Remote XSL JScript Execution",
+        "project": "OTRF Security-Datasets",
+        "url": "https://github.com/OTRF/Security-Datasets/blob/master/datasets/atomic/_metadata/SDWIN-201017061100.yaml",
+        "license": "MIT"
+      },
+      "steps": [
+        {
+          "title": "Scope the endpoint",
+          "prompt": "Which hostname executed the remote XSL command?",
+          "required_query_token": "Hostname",
+          "verification_sql": "SELECT count(*) FROM wmic_xsl_events WHERE lower(\"Hostname\") = 'workstation5' AND lower(\"CommandLine\") LIKE '%wmicscript.xsl%'",
+          "hints": [
+            "Filter CommandLine for /FORMAT and inspect Hostname."
+          ],
+          "solution_hash": "5d427a68ab1af18e1cc42d1bab6cd45f07bbd5ddbb48b8ac7a28b8f332584378"
+        },
+        {
+          "title": "Attribute the command",
+          "prompt": "Which local username launched WMIC?",
+          "required_query_token": "SubjectUserName",
+          "verification_sql": "SELECT count(*) FROM wmic_xsl_events WHERE \"EventID\" = 4688 AND lower(\"SubjectUserName\") = 'wardog' AND lower(\"CommandLine\") LIKE '%wmicscript.xsl%'",
+          "hints": [
+            "Windows Security EventID 4688 identifies the creator subject."
+          ],
+          "solution_hash": "da6f01f03776861ca5ae4e822cf2265f013637046c0fe8bc2d207f887bdbf35c"
+        },
+        {
+          "title": "Recover the remote artifact",
+          "prompt": "What was the filename of the remote XSL stylesheet?",
+          "required_query_token": "CommandLine",
+          "verification_sql": "SELECT count(*) FROM wmic_xsl_events WHERE lower(\"CommandLine\") LIKE '%wmicscript.xsl%'",
+          "hints": [
+            "Read the final path segment of the URL supplied to /FORMAT."
+          ],
+          "solution_hash": "4da0f17ba012d3d1930e0c20e12516cf7df132bc92b47ae6dc7a197d13fa7e00"
+        },
+        {
+          "title": "Identify the payload",
+          "prompt": "Which child executable did WMIC launch? Enter the filename only.",
+          "required_query_token": "Image",
+          "verification_sql": "SELECT count(*) FROM wmic_xsl_events WHERE \"EventID\" = 1 AND lower(\"Image\") LIKE '%calc.exe' AND lower(\"ParentImage\") LIKE '%wmic.exe'",
+          "hints": [
+            "Use Sysmon process-create events and correlate ParentImage with Image."
+          ],
+          "solution_hash": "316d99a695429de01ae129ff1323cf6d191143885d2cfa9075f8369c909d3c9f"
+        },
+        {
+          "title": "Confirm with Sysmon",
+          "prompt": "Which Sysmon Event ID records both the WMIC process and its child process creation?",
+          "required_query_token": "EventID",
+          "verification_sql": "SELECT count(*) FROM wmic_xsl_events WHERE \"EventID\" = 1 AND lower(\"Channel\") = 'microsoft-windows-sysmon/operational' AND lower(COALESCE(\"CommandLine\",'')) LIKE '%wmicscript.xsl%'",
+          "hints": [
+            "Compare Windows Security 4688 with the matching Sysmon event type."
+          ],
+          "solution_hash": "6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b"
+        }
+      ],
+      "published": true,
+      "parquet_sources": [
+        {
+          "name": "wmic_xsl_events",
+          "table": "wmic_xsl_events",
+          "url": "data/labs/otrf-wmic-xsl-script-processing/wmic_xsl_events.parquet"
+        }
+      ]
+    },
+    {
+      "id": "otrf-mimikatz-logonpasswords",
+      "title": "Hands on the Credential Vault",
+      "description": "Correlate Sysmon process access with Windows Security object auditing to reconstruct credential access against LSASS.",
+      "hypothesis": "An interactive PowerShell process accessed LSASS memory on a workstation in a pattern consistent with credential dumping.",
+      "difficulty_tier": "Intermediate",
+      "estimated_minutes": 45,
+      "mitre_tags": [
+        "T1003.001",
+        "TA0006"
+      ],
+      "log_sources": [
+        "Sysmon",
+        "Windows Security",
+        "Windows PowerShell",
+        "Network Filtering Platform"
+      ],
+      "source_attribution": {
+        "dataset_id": "SDWIN-190518202151",
+        "title": "Empire Mimikatz LogonPasswords",
+        "project": "OTRF Security-Datasets",
+        "url": "https://github.com/OTRF/Security-Datasets/blob/master/datasets/atomic/_metadata/SDWIN-190518202151.yaml",
+        "license": "MIT"
+      },
+      "steps": [
+        {
+          "title": "Scope the attacked endpoint",
+          "prompt": "Which fully qualified hostname contains the suspicious PowerShell-to-LSASS access?",
+          "required_query_token": "Hostname",
+          "verification_sql": "SELECT count(*) FROM mimikatz_events WHERE lower(\"Hostname\") = 'workstation5.theshire.local' AND \"EventID\" = 10 AND lower(\"SourceImage\") LIKE '%powershell.exe' AND lower(\"TargetImage\") LIKE '%lsass.exe'",
+          "hints": [
+            "Filter Sysmon EventID 10 and inspect SourceImage, TargetImage, and Hostname together."
+          ],
+          "solution_hash": "62db29e96f3c84540c88b2dd5d33677fbf26cd55568db5ffab8c180cf4c91f16"
+        },
+        {
+          "title": "Attribute the Security audit",
+          "prompt": "Which username requested a handle to the LSASS process? Enter the username without a domain.",
+          "required_query_token": "SubjectUserName",
+          "verification_sql": "SELECT count(*) FROM mimikatz_events WHERE \"EventID\" IN (4656,4663) AND lower(\"ObjectName\") LIKE '%lsass.exe' AND lower(\"SubjectUserName\") = 'pgustavo'",
+          "hints": [
+            "Windows Security events 4656 and 4663 identify the subject separately from Sysmon."
+          ],
+          "solution_hash": "55e9c61b7f39d0c79809ca08238469a4c1f9fef33b23cf23d8486b014732d4e8"
+        },
+        {
+          "title": "Identify the accessing process",
+          "prompt": "What decimal SourceProcessId did Sysmon record for the suspicious PowerShell process?",
+          "required_query_token": "SourceProcessId",
+          "verification_sql": "SELECT count(*) FROM mimikatz_events WHERE \"EventID\" = 10 AND CAST(\"SourceProcessId\" AS VARCHAR) = '1648' AND lower(\"TargetImage\") LIKE '%lsass.exe'",
+          "hints": [
+            "Find the EventID 10 row where SourceImage is PowerShell and TargetImage is LSASS."
+          ],
+          "solution_hash": "a16c0ab260e30b22cd06fadf9a6a30c454ddc845925cc831796b2988874d6a5a"
+        },
+        {
+          "title": "Resolve the LSASS process",
+          "prompt": "What decimal TargetProcessId belonged to LSASS in that Sysmon process-access event?",
+          "required_query_token": "TargetProcessId",
+          "verification_sql": "SELECT count(*) FROM mimikatz_events WHERE \"EventID\" = 10 AND CAST(\"TargetProcessId\" AS VARCHAR) = '768' AND lower(\"SourceImage\") LIKE '%powershell.exe'",
+          "hints": [
+            "Correlate the same Sysmon row using SourceProcessId 1648."
+          ],
+          "solution_hash": "f7b856c054de7ccced087ad4f9413380ec494e40abc818b840aaad990ca3c5bc"
+        },
+        {
+          "title": "Correlate the requested rights",
+          "prompt": "Which hexadecimal GrantedAccess mask did Sysmon record for PowerShell reading LSASS?",
+          "required_query_token": "GrantedAccess",
+          "verification_sql": "SELECT count(*) FROM mimikatz_events WHERE \"EventID\" = 10 AND lower(\"GrantedAccess\") = '0x1010' AND lower(\"SourceImage\") LIKE '%powershell.exe' AND lower(\"TargetImage\") LIKE '%lsass.exe'",
+          "hints": [
+            "Confirm the mask against the Windows Security handle request describing process-memory access."
+          ],
+          "solution_hash": "0ab071029af21ce63e6c4b6c9eacdab962c6757663004728c600c6cee10ed4b5"
+        }
+      ],
+      "published": true,
+      "parquet_sources": [
+        {
+          "name": "mimikatz_events",
+          "table": "mimikatz_events",
+          "url": "data/labs/otrf-mimikatz-logonpasswords/mimikatz_events.parquet"
+        }
+      ]
+    },
+    {
+      "id": "otrf-smbexec-lateral-movement",
+      "title": "Service Across the Wire",
+      "description": "Two Windows workstations show a dense burst of SMB, named-pipe, service-control, and process activity. Reconstruct the remote execution sequence.",
+      "hypothesis": "An operator used SMBExec-style remote service creation to move from one workstation to another and launch a PowerShell stager as SYSTEM.",
+      "difficulty_tier": "Intermediate",
+      "estimated_minutes": 45,
+      "mitre_tags": [
+        "T1021.002",
+        "T1569.002",
+        "TA0008"
+      ],
+      "source_attribution": {
+        "dataset_id": "SDWIN-190518210125",
+        "title": "Empire Invoke SMBExec",
+        "project": "OTRF Security-Datasets",
+        "url": "https://github.com/OTRF/Security-Datasets/blob/master/datasets/atomic/_metadata/SDWIN-190518210125.yaml",
+        "license": "MIT"
+      },
+      "steps": [
+        {
+          "title": "Locate the destination",
+          "prompt": "Which fully qualified hostname received the remotely created service?",
+          "required_query_token": "Hostname",
+          "verification_sql": "SELECT count(*) FROM smbexec_events WHERE \"Hostname\" IS NOT NULL AND \"EventID\" IN (4697, 7045)",
+          "hints": [
+            "Filter service-installation events 4697 and 7045, then inspect Hostname."
+          ],
+          "solution_hash": "f60b22b1b39d289b11d285ad2956b1b9dea8cb6e7b87b6955f029054fb11f560"
+        },
+        {
+          "title": "Find the RPC control path",
+          "prompt": "Which named-pipe target was accessed immediately before service creation?",
+          "required_query_token": "RelativeTargetName",
+          "verification_sql": "SELECT count(*) FROM smbexec_events WHERE \"EventID\" = 5145 AND \"RelativeTargetName\" IS NOT NULL",
+          "hints": [
+            "Event 5145 records detailed share access; inspect RelativeTargetName on IPC$."
+          ],
+          "solution_hash": "9dea3eb02bae11887f46682b651da1d3177ee1f875d43d582fef0ca498ea48c1"
+        },
+        {
+          "title": "Recover the transient service name",
+          "prompt": "What randomized service name was installed on the destination?",
+          "required_query_token": "ServiceName",
+          "verification_sql": "SELECT count(*) FROM smbexec_events WHERE \"ServiceName\" IS NOT NULL AND \"EventID\" IN (4697, 7045)",
+          "hints": [
+            "Service creation events expose ServiceName even when the command is encoded."
+          ],
+          "solution_hash": "3c7453df8264b1bb05dae865b7382c38d980fca75797eacc60b22672ae3381b2"
+        },
+        {
+          "title": "Attribute the remote action",
+          "prompt": "Which account created the remote service? Enter the username without a domain.",
+          "required_query_token": "SubjectUserName",
+          "verification_sql": "SELECT count(*) FROM smbexec_events WHERE \"SubjectUserName\" IS NOT NULL AND \"EventID\" IN (5140, 5145, 4697)",
+          "hints": [
+            "Correlate the share-access and service-installation records by time and user."
+          ],
+          "solution_hash": "55e9c61b7f39d0c79809ca08238469a4c1f9fef33b23cf23d8486b014732d4e8"
+        },
+        {
+          "title": "Confirm service installation",
+          "prompt": "Which System log Event ID confirms that the remote service was installed?",
+          "required_query_token": "EventID",
+          "verification_sql": "SELECT count(*) FROM smbexec_events WHERE \"EventID\" = 7045 AND \"ServiceName\" IS NOT NULL",
+          "hints": [
+            "Correlate Security event 4697 with the Service Control Manager record in the System channel."
+          ],
+          "solution_hash": "8093e894cb1aecf6b7426cecae20f468183f642d4af4c40c8b9b220540b489e3"
+        }
+      ],
+      "published": true,
+      "parquet_sources": [
+        {
+          "name": "smbexec_events",
+          "table": "smbexec_events",
+          "url": "data/labs/otrf-smbexec-lateral-movement/smbexec_events.parquet"
+        }
+      ],
+      "log_sources": [
+        "Windows Security",
+        "System / Service Control Manager",
+        "Sysmon"
+      ]
+    },
+    {
+      "id": "otrf-regsvr32-scriptlet",
+      "title": "The Trusted Binary Detour",
+      "description": "Follow a Regsvr32 scriptlet from PowerShell logging and Security auditing into Sysmon process, module, and network evidence.",
+      "hypothesis": "A signed Windows utility proxied execution of a remote scriptlet and launched an encoded PowerShell stager.",
+      "difficulty_tier": "Intermediate",
+      "estimated_minutes": 45,
+      "mitre_tags": [
+        "T1218.010",
+        "TA0005"
+      ],
+      "log_sources": [
+        "Sysmon",
+        "Windows Security",
+        "PowerShell Script Block",
+        "Windows Filtering Platform"
+      ],
+      "source_attribution": {
+        "dataset_id": "SDWIN-200721232741",
+        "title": "Empire Regsvr32 Execution",
+        "project": "OTRF Security-Datasets",
+        "url": "https://github.com/OTRF/Security-Datasets/blob/master/datasets/atomic/_metadata/SDWIN-200721232741.yaml",
+        "license": "MIT"
+      },
+      "steps": [
+        {
+          "title": "Locate the proxy execution",
+          "prompt": "Which fully qualified hostname executed the suspicious Regsvr32 command?",
+          "required_query_token": "Hostname",
+          "verification_sql": "SELECT count(*) FROM regsvr32_events WHERE lower(\"Hostname\") = 'workstation5.mordor.local' AND lower(\"CommandLine\") LIKE '%launcher.sct%'",
+          "hints": [
+            "Filter CommandLine for regsvr32 and inspect Hostname."
+          ],
+          "solution_hash": "6f708d0ed48e31bdb400211a4a096111987fcb35e9c3e6f3cfbc5f988a2132c2"
+        },
+        {
+          "title": "Attribute the operator",
+          "prompt": "Which username launched Regsvr32? Enter the username without a domain.",
+          "required_query_token": "SubjectUserName",
+          "verification_sql": "SELECT count(*) FROM regsvr32_events WHERE \"EventID\" = 4688 AND lower(\"SubjectUserName\") = 'pgustavo' AND lower(\"CommandLine\") LIKE '%regsvr32%'",
+          "hints": [
+            "Use the Windows Security process-create event rather than the SYSTEM account on Sysmon collection records."
+          ],
+          "solution_hash": "55e9c61b7f39d0c79809ca08238469a4c1f9fef33b23cf23d8486b014732d4e8"
+        },
+        {
+          "title": "Recover the scriptlet",
+          "prompt": "What remote scriptlet filename was supplied to the /i switch?",
+          "required_query_token": "CommandLine",
+          "verification_sql": "SELECT count(*) FROM regsvr32_events WHERE lower(\"CommandLine\") LIKE '%/i:%launcher.sct%'",
+          "hints": [
+            "Read the URL path following the /i switch."
+          ],
+          "solution_hash": "5f92ed97b92ba6880ac6f32c3f8cb9ab09ae45386c39c20a3e5e32ad07463f0a"
+        },
+        {
+          "title": "Identify the scriptlet engine",
+          "prompt": "Which DLL name was passed as the final Regsvr32 argument?",
+          "required_query_token": "CommandLine",
+          "verification_sql": "SELECT count(*) FROM regsvr32_events WHERE lower(\"CommandLine\") LIKE '%scrobj.dll%' AND lower(\"CommandLine\") LIKE '%regsvr32%'",
+          "hints": [
+            "The COM scriptlet engine DLL is the final token in the command."
+          ],
+          "solution_hash": "45b6c0a6986bbb2c08761b48a25f7c65d2b558a05d855469a5842dea0a4b66bc"
+        },
+        {
+          "title": "Correlate PowerShell logging",
+          "prompt": "Which PowerShell Operational Event ID captured the decoded Regsvr32 command as script-block text?",
+          "required_query_token": "EventID",
+          "verification_sql": "SELECT count(*) FROM regsvr32_events WHERE \"EventID\" = 4104 AND lower(\"SourceName\") = 'microsoft-windows-powershell' AND lower(\"Message\") LIKE '%launcher.sct%'",
+          "hints": [
+            "Pivot from Sysmon and Security to the PowerShell Operational channel."
+          ],
+          "solution_hash": "081c68229e69ec1a2bef4d4690440f158baf36beac58225d1b12b3e0563aee62"
+        }
+      ],
+      "published": true,
+      "parquet_sources": [
+        {
+          "name": "regsvr32_events",
+          "table": "regsvr32_events",
+          "url": "data/labs/otrf-regsvr32-scriptlet/regsvr32_events.parquet"
+        }
+      ]
+    },
+    {
+      "id": "otrf-elevated-scheduled-task",
+      "title": "A Task Built to Survive",
+      "description": "Trace a scheduled task from PowerShell staging through Sysmon process and registry telemetry to Task Scheduler registration.",
+      "hypothesis": "An operator established elevated persistence by registering an on-logon task that runs a hidden PowerShell payload as SYSTEM.",
+      "difficulty_tier": "Intermediate",
+      "estimated_minutes": 50,
+      "mitre_tags": [
+        "T1053.005",
+        "TA0003"
+      ],
+      "log_sources": [
+        "Sysmon",
+        "Task Scheduler Operational",
+        "Windows Security",
+        "Windows PowerShell"
+      ],
+      "source_attribution": {
+        "dataset_id": "SDWIN-200921175806",
+        "title": "Empire Elevated Scheduled Tasks",
+        "project": "OTRF Security-Datasets",
+        "url": "https://github.com/OTRF/Security-Datasets/blob/master/datasets/atomic/_metadata/SDWIN-200921175806.yaml",
+        "license": "MIT"
+      },
+      "steps": [
+        {
+          "title": "Locate the persistence host",
+          "prompt": "Which fully qualified hostname registered the suspicious task?",
+          "required_query_token": "Hostname",
+          "verification_sql": "SELECT count(*) FROM scheduled_task_events WHERE lower(\"Hostname\") = 'workstation5.theshire.local' AND lower(\"TaskName\") LIKE '%mordorelevated%'",
+          "hints": [
+            "Start with Task Scheduler Operational events and inspect Hostname."
+          ],
+          "solution_hash": "62db29e96f3c84540c88b2dd5d33677fbf26cd55568db5ffab8c180cf4c91f16"
+        },
+        {
+          "title": "Name the task",
+          "prompt": "What task name was registered? Enter it without the leading backslash.",
+          "required_query_token": "TaskName",
+          "verification_sql": "SELECT count(*) FROM scheduled_task_events WHERE lower(\"TaskName\") LIKE '%mordorelevated%'",
+          "hints": [
+            "TaskName is parsed on Task Scheduler events 106, 140, and 141."
+          ],
+          "solution_hash": "41e0261d538c553a1185bb712283c256727a539013d7d7c54fd8236816f3d49f"
+        },
+        {
+          "title": "Identify the run-as identity",
+          "prompt": "Which account was configured to run the elevated task?",
+          "required_query_token": "AccountName",
+          "verification_sql": "SELECT count(*) FROM scheduled_task_events WHERE lower(\"TaskName\") LIKE '%mordorelevated%' AND lower(\"AccountName\") = 'system'",
+          "hints": [
+            "Correlate the /RU value in the creation command with Task Scheduler's AccountName."
+          ],
+          "solution_hash": "bbc5e661e106c6dcd8dc6dd186454c2fcba3c710fb4d8e71a60c93eaf077f073"
+        },
+        {
+          "title": "Recover the trigger",
+          "prompt": "Which schedule token followed /SC in the schtasks command?",
+          "required_query_token": "CommandLine",
+          "verification_sql": "SELECT count(*) FROM scheduled_task_events WHERE lower(\"CommandLine\") LIKE '%/sc onlogon%' AND lower(\"CommandLine\") LIKE '%mordorelevated%'",
+          "hints": [
+            "Inspect the Sysmon process-create CommandLine for schtasks.exe."
+          ],
+          "solution_hash": "c0b03384266e7a9a60c4af70ade072dcb35c733b3d5452d68afbeaa25a84dbc5"
+        },
+        {
+          "title": "Confirm scheduler registration",
+          "prompt": "Which Task Scheduler Operational Event ID confirms the task registration?",
+          "required_query_token": "EventID",
+          "verification_sql": "SELECT count(*) FROM scheduled_task_events WHERE \"EventID\" = 106 AND lower(\"SourceName\") = 'microsoft-windows-taskscheduler' AND lower(\"TaskName\") LIKE '%mordorelevated%'",
+          "hints": [
+            "Pivot from Sysmon process and registry events to the Task Scheduler Operational channel."
+          ],
+          "solution_hash": "482d9673cfee5de391f97fde4d1c84f9f8d6f2cf0784fcffb958b4032de7236c"
+        }
+      ],
+      "published": true,
+      "parquet_sources": [
+        {
+          "name": "scheduled_task_events",
+          "table": "scheduled_task_events",
+          "url": "data/labs/otrf-elevated-scheduled-task/scheduled_task_events.parquet"
+        }
+      ]
+    },
+    {
+      "id": "otrf-remote-wmic-user-creation",
+      "title": "An Account Across the Wire",
+      "description": "Follow a remote WMIC command from PowerShell and Sysmon telemetry on the source to WMI-hosted account creation on the destination.",
+      "hypothesis": "An operator used WMIC for lateral movement and created a local backdoor account on a second workstation.",
+      "difficulty_tier": "Expert",
+      "estimated_minutes": 55,
+      "mitre_tags": [
+        "T1047",
+        "T1136.001",
+        "TA0008"
+      ],
+      "log_sources": [
+        "Sysmon",
+        "Windows Security",
+        "Windows PowerShell",
+        "WMI process telemetry"
+      ],
+      "source_attribution": {
+        "dataset_id": "SDWIN-200914080546",
+        "title": "Empire Remote WMIC Add User",
+        "project": "OTRF Security-Datasets",
+        "url": "https://github.com/OTRF/Security-Datasets/blob/master/datasets/atomic/_metadata/SDWIN-200914080546.yaml",
+        "license": "MIT"
+      },
+      "steps": [
+        {
+          "title": "Locate the source endpoint",
+          "prompt": "Which fully qualified hostname launched the remote WMIC command?",
+          "required_query_token": "Hostname",
+          "verification_sql": "SELECT count(*) FROM wmic_remote_events WHERE lower(\"Hostname\") = 'workstation5.theshire.local' AND lower(\"Image\") LIKE '%wmic.exe' AND lower(\"CommandLine\") LIKE '%net user%'",
+          "hints": [
+            "Find the Sysmon WMIC process-create event and inspect Hostname."
+          ],
+          "solution_hash": "62db29e96f3c84540c88b2dd5d33677fbf26cd55568db5ffab8c180cf4c91f16"
+        },
+        {
+          "title": "Identify the remote target",
+          "prompt": "Which short hostname followed WMIC's /node switch?",
+          "required_query_token": "CommandLine",
+          "verification_sql": "SELECT count(*) FROM wmic_remote_events WHERE lower(\"CommandLine\") LIKE '%/node:workstation6%'",
+          "hints": [
+            "Read the /node value in the source-side WMIC CommandLine."
+          ],
+          "solution_hash": "53dc3fcd06c83460af87d7d1bbb331bb1dfef12b149b4e3b7ddaddeb806fddba"
+        },
+        {
+          "title": "Attribute the operator",
+          "prompt": "Which domain username launched the source-side WMIC process? Enter the username only.",
+          "required_query_token": "User",
+          "verification_sql": "SELECT count(*) FROM wmic_remote_events WHERE lower(\"User\") LIKE '%\\pgustavo' AND lower(\"Image\") LIKE '%wmic.exe'",
+          "hints": [
+            "The Sysmon User field contains domain and username."
+          ],
+          "solution_hash": "55e9c61b7f39d0c79809ca08238469a4c1f9fef33b23cf23d8486b014732d4e8"
+        },
+        {
+          "title": "Recover the created account",
+          "prompt": "What local username did the destination-side net.exe command attempt to add?",
+          "required_query_token": "CommandLine",
+          "verification_sql": "SELECT count(*) FROM wmic_remote_events WHERE lower(\"Hostname\") = 'workstation6.theshire.local' AND lower(\"CommandLine\") LIKE '%net user%backdoor%'",
+          "hints": [
+            "Pivot to WORKSTATION6 and inspect net.exe and net1.exe command lines."
+          ],
+          "solution_hash": "32783cef30bc23d9549623aa48aa8556346d78bd3ca604f277d63d6e573e8ce0"
+        },
+        {
+          "title": "Prove WMI parentage",
+          "prompt": "Which parent executable spawned net.exe on the destination? Enter the filename only.",
+          "required_query_token": "ParentImage",
+          "verification_sql": "SELECT count(*) FROM wmic_remote_events WHERE \"EventID\" = 1 AND lower(\"ParentImage\") LIKE '%wmiprvse.exe' AND lower(\"Image\") LIKE '%net.exe'",
+          "hints": [
+            "The destination Sysmon event reveals the WMI provider host as ParentImage."
+          ],
+          "solution_hash": "57e16e68cd8148782654fe05f9e44036aca79dcebf6a98a9505d27d04d895837"
+        }
+      ],
+      "published": true,
+      "parquet_sources": [
+        {
+          "name": "wmic_remote_events",
+          "table": "wmic_remote_events",
+          "url": "data/labs/otrf-remote-wmic-user-creation/wmic_remote_events.parquet"
+        }
+      ]
+    },
+    {
+      "id": "otrf-powershell-remoting",
+      "title": "The Session on Port 5985",
+      "description": "Correlate WinRM host execution across Security, Sysmon, and PowerShell with packet-level source, destination, port, and flow evidence.",
+      "hypothesis": "A remote operator used PowerShell Remoting over WinRM to execute commands on a second workstation.",
+      "difficulty_tier": "Expert",
+      "estimated_minutes": 60,
+      "mitre_tags": [
+        "T1021.006",
+        "TA0008"
+      ],
+      "log_sources": [
+        "Sysmon",
+        "Windows Security",
+        "Windows PowerShell",
+        "Network PCAP"
+      ],
+      "source_attribution": {
+        "dataset_id": "SDWIN-200806115603",
+        "title": "Covenant PowerShell Remoting Command",
+        "project": "OTRF Security-Datasets",
+        "url": "https://github.com/OTRF/Security-Datasets/blob/master/datasets/atomic/_metadata/SDWIN-200806115603.yaml",
+        "license": "MIT"
+      },
+      "steps": [
+        {
+          "title": "Identify the remote endpoint",
+          "prompt": "Which fully qualified hostname created the WinRM provider host process?",
+          "required_query_token": "Hostname",
+          "verification_sql": "SELECT count(*) FROM psremoting_host_events WHERE lower(\"Hostname\") = 'workstation6.theshire.local' AND \"EventID\" = 1 AND lower(\"Image\") LIKE '%wsmprovhost.exe'",
+          "hints": [
+            "Find the Sysmon process-create event for the WinRM provider host."
+          ],
+          "solution_hash": "f60b22b1b39d289b11d285ad2956b1b9dea8cb6e7b87b6955f029054fb11f560"
+        },
+        {
+          "title": "Attribute the remote session",
+          "prompt": "Which username owns the wsmprovhost.exe process? Enter the username only.",
+          "required_query_token": "User",
+          "verification_sql": "SELECT count(*) FROM psremoting_host_events WHERE \"EventID\" = 1 AND lower(\"User\") LIKE '%\\pgustavo' AND lower(\"Image\") LIKE '%wsmprovhost.exe'",
+          "hints": [
+            "The Sysmon User field includes both domain and username."
+          ],
+          "solution_hash": "55e9c61b7f39d0c79809ca08238469a4c1f9fef33b23cf23d8486b014732d4e8"
+        },
+        {
+          "title": "Name the provider process",
+          "prompt": "Which executable hosts the remote PowerShell runspace? Enter the filename only.",
+          "required_query_token": "Image",
+          "verification_sql": "SELECT count(*) FROM psremoting_host_events WHERE \"EventID\" = 1 AND lower(\"Image\") LIKE '%wsmprovhost.exe' AND lower(\"Hostname\") = 'workstation6.theshire.local'",
+          "hints": [
+            "Inspect the process description and Image on the destination host."
+          ],
+          "solution_hash": "82bf5ae299b442b1d43c203831820d835d55761b4be7f1de633c1546242501b7"
+        },
+        {
+          "title": "Pivot to the network table",
+          "prompt": "Which destination TCP port carries the dominant WinRM flow?",
+          "required_query_token": "DestinationPort",
+          "verification_sql": "SELECT count(*) FROM psremoting_network WHERE \"Protocol\" = 'TCP' AND \"DestinationPort\" = 5985",
+          "hints": [
+            "Query psremoting_network and group by DestinationPort."
+          ],
+          "solution_hash": "27c6c4c5f2c6371982db88e4f2d750c046237a6f41554afae0732a3340890a65"
+        },
+        {
+          "title": "Identify the initiating address",
+          "prompt": "Which source IP initiated the WinRM connections to destination port 5985?",
+          "required_query_token": "SourceIp",
+          "verification_sql": "SELECT count(*) FROM psremoting_network WHERE \"SourceIp\" = '172.18.39.5' AND \"DestinationIp\" = '172.18.39.6' AND \"DestinationPort\" = 5985",
+          "hints": [
+            "Filter the packet table to destination port 5985, then compare the directional IP pair."
+          ],
+          "solution_hash": "b9325a7bc4bef189ee04de3202b1780271bff14f5a1e0c8e3083ed04b18cbf77"
+        }
+      ],
+      "published": true,
+      "parquet_sources": [
+        {
+          "name": "psremoting_host_events",
+          "table": "psremoting_host_events",
+          "url": "data/labs/otrf-powershell-remoting/psremoting_host_events.parquet"
+        },
+        {
+          "name": "psremoting_network",
+          "table": "psremoting_network",
+          "url": "data/labs/otrf-powershell-remoting/psremoting_network.parquet"
+        }
+      ]
+    }
+  ]
+}

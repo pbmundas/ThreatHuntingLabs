@@ -1,0 +1,2484 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="An independent repository for live cyber threat Hunting, intelligence, playbooks, and raw telemetry.">
+      
+      
+        <meta name="author" content="Threathuntlabs Team">
+      
+      
+        <link rel="canonical" href="https://threathuntlabs.com/foundations/10-Common-Mistakes-Every-Beginner-Makes-When-Learning-Threat-Hunting/">
+      
+      
+        <link rel="prev" href="../2025-07-20-unknown-facts-about-threat-hunting/">
+      
+      
+        <link rel="next" href="../Cybersecurity-Fundamentals-The-Foundation-Every-Threat-Hunter-Needs-part-1/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>10 Common Mistakes - Threat Hunt Labs</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,300i,400,400i,700,700i%7CJetBrains+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Inter";--md-code-font:"JetBrains Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/threat-hunt.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  
+  <script>
+    window.thlNavigation = [
+  {
+    "title": "Home",
+    "url": null,
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Foundations",
+    "url": null,
+    "active": true,
+    "children": [
+  {
+    "title": "Unknown Facts",
+    "url": "../2025-07-20-unknown-facts-about-threat-hunting/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "10 Common Mistakes",
+    "url": "./",
+    "active": true,
+    "children": []
+  },
+  {
+    "title": "Cybersecurity Fundamentals",
+    "url": "../Cybersecurity-Fundamentals-The-Foundation-Every-Threat-Hunter-Needs-part-1/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Why and Where Threat Hunting",
+    "url": "../Why-Every-Organization-Needs-Threat-Hunting/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Threat Hunting Explained",
+    "url": "../Threat-Hunting-Explained-Beyond-Alerts-Dashboards-and-SIEM-Queries/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Data Pipeline",
+    "url": "../Threat-Hunting-Data-Pipeline/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Life Cycle",
+    "url": "../Inside-a-Threat-Hunt-Understanding-the-Threat-Hunting-Lifecycle/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Types",
+    "url": "../Types-of-Threat-Hunting-Choosing-the-Right-Hunting-Strategy/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Data Analysis Techniques",
+    "url": "../Threat-Hunting-Data-Analysis-Techniques/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Hypothesis Development",
+    "url": "../Hypothesis-Development-Thinking-Like-a-Threat-Hunter-Before-Writing-a-Single-Query/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Methodologies",
+    "url": "../Threat-Hunting-Methodologies-Choosing-the-Right-Hunting-Approach/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Mindset",
+    "url": "../The-Threat-Hunting-Mindset-Thinking-Like-an-Attacker/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Maturity Model",
+    "url": "../The-Threat-Hunting-Maturity-Model-Explained/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Lab Setup",
+    "url": "../../Start-Hunting/threat-hunting-lab/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Reading Logs",
+    "url": "../../Start-Hunting/Reading-Raw-Logs-Like-a-Threat-Hunter/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Solo Hunter to Enterprise",
+    "url": "../../Start-Hunting/threat-hunting-program-models/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Reporting",
+    "url": "../../Start-Hunting/threat-hunting-documentation/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Telemetry \u0026 Logs to collect",
+    "url": "../../Start-Hunting/threat-hunting-device-logs-telemetry-details.html",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Low Hanging Fruits",
+    "url": "../../Start-Hunting/low-hanging-fruits-threat-hunting/",
+    "active": false,
+    "children": []
+  }
+]
+  },
+  {
+    "title": "Learn Attacks",
+    "url": null,
+    "active": false,
+    "children": [
+  {
+    "title": "Attacks in History",
+    "url": "../../learn-known-cyber-attacks/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Attacks Encyclopedia",
+    "url": "../../attack-encyclopedia/",
+    "active": false,
+    "children": []
+  }
+]
+  },
+  {
+    "title": "Hunting Reports",
+    "url": "../../threat-hunting-reports/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Case Studies",
+    "url": null,
+    "active": false,
+    "children": [
+  {
+    "title": "Stuxnet (2010)",
+    "url": "../../case-studies/2010-Stuxnet-Retrospective-Threat-Hunt-Report/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "RSA-SecurID (2011)",
+    "url": "../../case-studies/2011-RSA-SecurID-Retrospective-Threat-Hunt-Report/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Linkedin (2012)",
+    "url": "../../case-studies/2012-linkedin-threat-hunt-report/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Adobe (2013)",
+    "url": "../../case-studies/2013-adobe-threat-hunt-report/",
+    "active": false,
+    "children": []
+  }
+]
+  },
+  {
+    "title": "\ud83c\udfafDaily Intel",
+    "url": "https://intel.threathuntlabs.com",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Challenges",
+    "url": "../../threat-hunting-lab/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Blog",
+    "url": "https://blog.threathuntlabs.com",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Resources",
+    "url": "../../Downloads/threat-hunting-related-document-references/",
+    "active": false,
+    "children": []
+  }
+];
+  </script>
+
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="custom">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#10-common-mistakes-every-beginner-makes-when-learning-threat-hunting" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Threat Hunt Labs" class="md-header__button md-logo" aria-label="Threat Hunt Labs" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Threat Hunt Labs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              10 Common Mistakes
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../2025-07-20-unknown-facts-about-threat-hunting/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Foundations
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../learn-known-cyber-attacks/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Learn Attacks
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../threat-hunting-reports/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Hunting Reports
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../case-studies/2010-Stuxnet-Retrospective-Threat-Hunt-Report/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Case Studies
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="https://intel.threathuntlabs.com" class="md-tabs__link">
+        
+  
+  
+    
+  
+  🎯Daily Intel
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../threat-hunting-lab/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Challenges
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="https://blog.threathuntlabs.com" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Blog
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../Downloads/threat-hunting-related-document-references/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Resources
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Threat Hunt Labs" class="md-nav__button md-logo" aria-label="Threat Hunt Labs" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Threat Hunt Labs
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Foundations
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Foundations
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2025-07-20-unknown-facts-about-threat-hunting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Unknown Facts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    10 Common Mistakes
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    10 Common Mistakes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#introduction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Introduction
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mistake-1-focusing-on-tools-before-understanding-the-fundamentals" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mistake 1: Focusing on Tools Before Understanding the Fundamentals
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mistake-2-trying-to-memorize-everything" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mistake 2: Trying to Memorize Everything
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mistake-3-ignoring-windows-fundamentals" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mistake 3: Ignoring Windows Fundamentals
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mistake-4-hunting-without-a-hypothesis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mistake 4: Hunting Without a Hypothesis
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mistake-5-depending-only-on-indicators-of-compromise-iocs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mistake 5: Depending Only on Indicators of Compromise (IOCs)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mistake-6-confusing-threat-hunting-with-incident-response" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mistake 6: Confusing Threat Hunting with Incident Response
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mistake-7-ignoring-normal-behaviour" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mistake 7: Ignoring Normal Behaviour
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mistake-8-believing-a-tool-makes-you-a-threat-hunter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mistake 8: Believing a Tool Makes You a Threat Hunter
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mistake-9-not-documenting-investigations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mistake 9: Not Documenting Investigations
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mistake-10-expecting-to-become-a-threat-hunter-overnight" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mistake 10: Expecting to Become a Threat Hunter Overnight
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Cybersecurity-Fundamentals-The-Foundation-Every-Threat-Hunter-Needs-part-1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cybersecurity Fundamentals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Why-Every-Organization-Needs-Threat-Hunting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Why and Where Threat Hunting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Threat-Hunting-Explained-Beyond-Alerts-Dashboards-and-SIEM-Queries/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Threat Hunting Explained
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Threat-Hunting-Data-Pipeline/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data Pipeline
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Inside-a-Threat-Hunt-Understanding-the-Threat-Hunting-Lifecycle/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Life Cycle
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Types-of-Threat-Hunting-Choosing-the-Right-Hunting-Strategy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Types
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Threat-Hunting-Data-Analysis-Techniques/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data Analysis Techniques
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Hypothesis-Development-Thinking-Like-a-Threat-Hunter-Before-Writing-a-Single-Query/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Hypothesis Development
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Threat-Hunting-Methodologies-Choosing-the-Right-Hunting-Approach/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Methodologies
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../The-Threat-Hunting-Mindset-Thinking-Like-an-Attacker/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mindset
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../The-Threat-Hunting-Maturity-Model-Explained/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Maturity Model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Start-Hunting/threat-hunting-lab/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab Setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Start-Hunting/Reading-Raw-Logs-Like-a-Threat-Hunter/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reading Logs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Start-Hunting/threat-hunting-program-models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Solo Hunter to Enterprise
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Start-Hunting/threat-hunting-documentation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reporting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Start-Hunting/threat-hunting-device-logs-telemetry-details.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Telemetry & Logs to collect
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Start-Hunting/low-hanging-fruits-threat-hunting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Low Hanging Fruits
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../learn-known-cyber-attacks/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Learn Attacks
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Learn Attacks
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../attack-encyclopedia/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Attacks Encyclopedia
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../threat-hunting-reports/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Hunting Reports
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Case Studies
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Case Studies
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../case-studies/2010-Stuxnet-Retrospective-Threat-Hunt-Report/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stuxnet (2010)
+  
+
+    
+      <br>
+      <small>Retrospective Enterprise Threat Hunt: ICS-Targeting Removable-Media Worm (Stuxnet-Class Activity)</small>
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../case-studies/2011-RSA-SecurID-Retrospective-Threat-Hunt-Report/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RSA-SecurID (2011)
+  
+
+    
+      <br>
+      <small>Retrospective Enterprise Threat Hunt: Targeted Spear-Phishing Intrusion Against a Security-Product Vendor (RSA SecurID-Class Activity, 2011)</small>
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../case-studies/2012-linkedin-threat-hunt-report/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linkedin (2012)
+  
+
+    
+      <br>
+      <small>Hunt for Unauthorized Access to Member Credential Store - LinkedIn Corporation</small>
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../case-studies/2013-adobe-threat-hunt-report/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Adobe (2013)
+  
+
+    
+      <br>
+      <small>Engagement: Hunt for Unauthorized Access to Source Code Repositories and Customer Credential/Payment Data- Adobe Systems Inc.</small>
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://intel.threathuntlabs.com" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    🎯Daily Intel
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../threat-hunting-lab/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Challenges
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://blog.threathuntlabs.com" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Blog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Downloads/threat-hunting-related-document-references/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Resources
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#introduction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Introduction
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mistake-1-focusing-on-tools-before-understanding-the-fundamentals" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mistake 1: Focusing on Tools Before Understanding the Fundamentals
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mistake-2-trying-to-memorize-everything" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mistake 2: Trying to Memorize Everything
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mistake-3-ignoring-windows-fundamentals" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mistake 3: Ignoring Windows Fundamentals
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mistake-4-hunting-without-a-hypothesis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mistake 4: Hunting Without a Hypothesis
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mistake-5-depending-only-on-indicators-of-compromise-iocs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mistake 5: Depending Only on Indicators of Compromise (IOCs)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mistake-6-confusing-threat-hunting-with-incident-response" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mistake 6: Confusing Threat Hunting with Incident Response
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mistake-7-ignoring-normal-behaviour" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mistake 7: Ignoring Normal Behaviour
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mistake-8-believing-a-tool-makes-you-a-threat-hunter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mistake 8: Believing a Tool Makes You a Threat Hunter
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mistake-9-not-documenting-investigations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mistake 9: Not Documenting Investigations
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mistake-10-expecting-to-become-a-threat-hunter-overnight" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mistake 10: Expecting to Become a Threat Hunter Overnight
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="10-common-mistakes-every-beginner-makes-when-learning-threat-hunting">10 Common Mistakes Every Beginner Makes When Learning Threat Hunting</h1>
+<hr />
+<h2 id="introduction">Introduction</h2>
+<p>When most people begin learning Threat Hunting, they believe the journey starts with installing tools, memorizing Windows Event IDs, or learning hundreds of MITRE ATT&amp;CK techniques.</p>
+<p>I made the same assumption.</p>
+<p>After all, the internet is filled with tutorials about Sysmon configurations, Sigma rules, Microsoft Sentinel queries, and Splunk dashboards. It's easy to believe that mastering these tools automatically makes someone a threat hunter.</p>
+<p>The reality is very different.</p>
+<p>Threat Hunting isn't about knowing the most commands or using the latest security product. It's about developing the ability to think like an investigator. Every experienced threat hunter approaches an environment with curiosity, asks meaningful questions, gathers evidence, and follows the data wherever it leads.</p>
+<p>Unfortunately, many beginners spend months learning the wrong things first. They become overwhelmed by countless tools, struggle to connect concepts together, and eventually lose confidence because they feel they're not making progress.</p>
+<p>The good news is that these mistakes are completely normal-and more importantly, they're avoidable.</p>
+<p>In this article, we'll explore ten common mistakes beginners make while learning Threat Hunting, understand why they happen, and discuss how to avoid them so you can build a stronger foundation for your cybersecurity journey.</p>
+<hr />
+<h2 id="mistake-1-focusing-on-tools-before-understanding-the-fundamentals">Mistake 1: Focusing on Tools Before Understanding the Fundamentals</h2>
+<p>One of the biggest mistakes beginners make is believing that Threat Hunting starts with tools.</p>
+<p>The typical learning path often looks like this:</p>
+<ul>
+<li>Install Sysmon</li>
+<li>Learn Microsoft Sentinel</li>
+<li>Practice Splunk SPL</li>
+<li>Explore Sigma rules</li>
+<li>Watch KQL tutorials</li>
+</ul>
+<p>While these are all valuable skills, learning them without understanding the underlying concepts is like learning to operate medical equipment without studying human anatomy.</p>
+<p>Tools only help you analyze information.</p>
+<p>They don't tell you <strong>what</strong> to look for or <strong>why</strong> something is suspicious.</p>
+<p>Imagine opening thousands of Windows Event Logs without knowing how Windows normally behaves. Every event will look important, yet none of them will provide meaningful answers because you lack context.</p>
+<p>Threat Hunting begins with understanding:</p>
+<ul>
+<li>How attackers think</li>
+<li>How operating systems work</li>
+<li>What "normal" activity looks like</li>
+<li>How malicious behavior differs from legitimate behavior</li>
+</ul>
+<p>Only then do tools become powerful.</p>
+<p><strong>How to avoid this mistake</strong></p>
+<p>Before spending weeks mastering a SIEM or EDR platform, invest time in learning:</p>
+<ul>
+<li>Windows internals</li>
+<li>Networking fundamentals</li>
+<li>Common attacker techniques</li>
+<li>MITRE ATT&amp;CK concepts</li>
+<li>Threat Hunting methodology</li>
+</ul>
+<p>The tools will eventually change.</p>
+<p>The fundamentals rarely do.</p>
+<blockquote>
+<p><strong>Key takeaway:</strong> Learn <em>why</em> something is suspicious before learning <em>which tool</em> can detect it.</p>
+</blockquote>
+<hr />
+<h2 id="mistake-2-trying-to-memorize-everything">Mistake 2: Trying to Memorize Everything</h2>
+<p>Threat Hunting can feel overwhelming.</p>
+<p>Windows has thousands of Event IDs.</p>
+<p>MITRE ATT&amp;CK contains hundreds of techniques.</p>
+<p>Sysmon generates dozens of event types.</p>
+<p>Security tools introduce countless commands and queries.</p>
+<p>Many beginners respond by trying to memorize everything.</p>
+<p>This approach almost always leads to frustration.</p>
+<p>Experienced threat hunters don't remember every Event ID or every ATT&amp;CK technique from memory.</p>
+<p>Instead, they understand the relationships between attacker behavior, operating system activity, and available telemetry.</p>
+<p>For example, you don't need to memorize every persistence technique.</p>
+<p>Instead, ask:</p>
+<p><em>"If I were an attacker trying to survive a reboot, where could I hide?"</em></p>
+<p>That single question naturally leads you toward:</p>
+<ul>
+<li>Registry Run Keys</li>
+<li>Scheduled Tasks</li>
+<li>Services</li>
+<li>Startup folders</li>
+<li>WMI Event Consumers</li>
+</ul>
+<p>Notice how understanding the objective is more valuable than memorizing a list.</p>
+<p>Threat Hunting rewards understanding over memorization.</p>
+<p><strong>How to avoid this mistake</strong></p>
+<p>Instead of asking:</p>
+<blockquote>
+<p>"What should I memorize?"</p>
+</blockquote>
+<p>Ask:</p>
+<blockquote>
+<p>"Why does this happen?"</p>
+</blockquote>
+<p>The answers will stay with you much longer.</p>
+<blockquote>
+<p><strong>Key takeaway:</strong> Understand concepts deeply. Use documentation as your memory.</p>
+</blockquote>
+<hr />
+<h2 id="mistake-3-ignoring-windows-fundamentals">Mistake 3: Ignoring Windows Fundamentals</h2>
+<p>Threat Hunting is impossible without understanding the operating system you're defending.</p>
+<p>Many beginners jump directly into advanced hunting techniques while skipping Windows fundamentals.</p>
+<p>This creates a major knowledge gap.</p>
+<p>Imagine trying to detect malicious PowerShell execution without understanding:</p>
+<ul>
+<li>How Windows creates processes</li>
+<li>Parent-child process relationships</li>
+<li>User sessions</li>
+<li>Services</li>
+<li>Scheduled Tasks</li>
+<li>Windows Registry</li>
+<li>Event Logging</li>
+</ul>
+<p>Without this knowledge, suspicious behavior often looks completely normal.</p>
+<p>Consider this scenario.</p>
+<p>A Word document launches PowerShell.</p>
+<p>PowerShell launches cmd.exe.</p>
+<p>cmd.exe downloads a file.</p>
+<p>To an experienced analyst, this process chain immediately raises questions.</p>
+<p>To someone unfamiliar with Windows internals, these simply appear as three unrelated processes.</p>
+<p>Threat Hunting isn't about recognizing names.</p>
+<p>It's about recognizing behavior.</p>
+<p><strong>Areas every beginner should understand</strong></p>
+<ul>
+<li>Windows Processes</li>
+<li>Services</li>
+<li>Registry</li>
+<li>Scheduled Tasks</li>
+<li>Authentication</li>
+<li>Windows Event Logs</li>
+<li>PowerShell</li>
+<li>File System</li>
+</ul>
+<p>These topics form the foundation of nearly every investigation you'll perform.</p>
+<blockquote>
+<p><strong>Key takeaway:</strong> Before hunting attackers, learn how Windows behaves under normal conditions.</p>
+</blockquote>
+<hr />
+<h2 id="mistake-4-hunting-without-a-hypothesis">Mistake 4: Hunting Without a Hypothesis</h2>
+<p>One of the most misunderstood aspects of Threat Hunting is the role of a hypothesis.</p>
+<p>Many beginners believe Threat Hunting means opening a SIEM dashboard and searching randomly until something suspicious appears.</p>
+<p>This isn't hunting.</p>
+<p>It's searching.</p>
+<p>Professional threat hunters begin with a hypothesis.</p>
+<p>A hypothesis is simply an educated assumption based on available intelligence, observed behavior, or organizational risk.</p>
+<p>For example:</p>
+<blockquote>
+<p>"Attackers commonly use PowerShell with encoded commands to evade detection."</p>
+</blockquote>
+<p>Now you have a clear direction.</p>
+<p>You know what behavior you're investigating.</p>
+<p>You know which data sources to examine.</p>
+<p>You know what evidence would support-or refute-your assumption.</p>
+<p>Without a hypothesis, every log becomes equally important.</p>
+<p>With a hypothesis, irrelevant data naturally falls away.</p>
+<p>Threat Hunting becomes focused, repeatable, and measurable.</p>
+<p><strong>Build simple hypotheses</strong></p>
+<p>Instead of asking:</p>
+<p><em>"Can I find something malicious?"</em></p>
+<p>Ask questions like:</p>
+<ul>
+<li>Are PowerShell processes using encoded commands?</li>
+<li>Are Office applications spawning command shells?</li>
+<li>Are unsigned executables running from temporary directories?</li>
+<li>Are users authenticating from unusual locations?</li>
+</ul>
+<p>Each question creates a meaningful investigation.</p>
+<blockquote>
+<p><strong>Key takeaway:</strong> Every successful hunt starts with a question-not a dashboard.</p>
+</blockquote>
+<hr />
+<h2 id="mistake-5-depending-only-on-indicators-of-compromise-iocs">Mistake 5: Depending Only on Indicators of Compromise (IOCs)</h2>
+<p>Many newcomers spend significant time collecting:</p>
+<ul>
+<li>File hashes</li>
+<li>Malicious IP addresses</li>
+<li>Domains</li>
+<li>URLs</li>
+</ul>
+<p>These are all Indicators of Compromise (IOCs).</p>
+<p>IOCs are valuable.</p>
+<p>But they have one major weakness.</p>
+<p>Attackers change them constantly.</p>
+<p>A malware hash changes after recompilation.</p>
+<p>A domain is replaced within minutes.</p>
+<p>An IP address disappears overnight.</p>
+<p>If your hunting strategy depends entirely on known IOCs, you'll always be reacting to yesterday's attack.</p>
+<p>Experienced hunters focus more on behavior than artifacts.</p>
+<p>Instead of asking:</p>
+<blockquote>
+<p>"Has this file hash been seen before?"</p>
+</blockquote>
+<p>They ask:</p>
+<blockquote>
+<p>"Why is Word launching PowerShell?"</p>
+</blockquote>
+<p>Behavior is much harder for attackers to change.</p>
+<p>PowerShell still needs to execute.</p>
+<p>Processes still have parent-child relationships.</p>
+<p>Persistence still leaves traces.</p>
+<p>Credentials still need to be accessed.</p>
+<p>Behavior survives where IOCs expire.</p>
+<p><strong>Balance IOC and behavioral hunting</strong></p>
+<p>Use IOCs to confirm findings.</p>
+<p>Use behaviors to discover unknown threats.</p>
+<p>That's where Threat Hunting becomes truly proactive.</p>
+<blockquote>
+<p><strong>Key takeaway:</strong> Hunt for attacker behavior-not just known indicators.</p>
+</blockquote>
+<hr />
+<h2 id="mistake-6-confusing-threat-hunting-with-incident-response">Mistake 6: Confusing Threat Hunting with Incident Response</h2>
+<p>One of the most common misconceptions is believing that Threat Hunting and Incident Response are the same discipline.</p>
+<p>They're closely related-but they have very different goals.</p>
+<p><strong>Incident Response</strong> begins after something suspicious has already been detected. An alert is triggered, a user reports unusual activity, or a compromise is confirmed. The responder's job is to understand what happened, contain the threat, eradicate it, and recover the affected systems.</p>
+<p><strong>Threat Hunting</strong>, on the other hand, is proactive.</p>
+<p>The assumption isn't that you've already found an attacker.</p>
+<p>The assumption is that an attacker <em>might</em> be present without generating an alert.</p>
+<p>Imagine walking into a library.</p>
+<p>An Incident Responder is called because someone reported a missing book.</p>
+<p>A Threat Hunter walks through the shelves looking for signs that books are being quietly removed without anyone noticing.</p>
+<p>The difference is subtle but important.</p>
+<p>Threat hunters actively search for weak signals, unusual behaviors, and hidden attacker activity long before an incident becomes obvious.</p>
+<p><strong>How to avoid this mistake</strong></p>
+<p>Always begin your hunt with a question rather than an alert.</p>
+<p>For example:</p>
+<ul>
+<li>Are Office applications spawning command shells?</li>
+<li>Are users authenticating from multiple geographic locations within minutes?</li>
+<li>Are privileged accounts behaving differently from their normal baseline?</li>
+</ul>
+<p>Threat Hunting is about discovering the unknown-not confirming what you already know.</p>
+<blockquote>
+<p><strong>Key takeaway:</strong> Incident Response investigates confirmed problems. Threat Hunting searches for problems that haven't been discovered yet.</p>
+</blockquote>
+<hr />
+<h2 id="mistake-7-ignoring-normal-behaviour">Mistake 7: Ignoring Normal Behaviour</h2>
+<p>One of the first lessons every experienced threat hunter learns is surprisingly simple:</p>
+<p><strong>You can't identify abnormal behaviour until you understand what's normal.</strong></p>
+<p>Beginners often assume that every PowerShell execution, scheduled task, or network connection is suspicious.</p>
+<p>In reality, enterprise environments are noisy.</p>
+<p>System administrators automate tasks.</p>
+<p>Backup software launches scripts.</p>
+<p>Monitoring tools collect telemetry.</p>
+<p>Security products generate their own activity.</p>
+<p>Without understanding this baseline, almost everything appears malicious.</p>
+<p>Imagine walking into a busy airport.</p>
+<p>If you've never visited one before, every person running might seem suspicious.</p>
+<p>But after observing for a while, you realize people run because they're late for flights.</p>
+<p>Context changes everything.</p>
+<p>Threat Hunting works the same way.</p>
+<p>Experienced hunters spend significant time learning how users, applications, and systems normally behave before looking for anomalies.</p>
+<p><strong>How to avoid this mistake</strong></p>
+<p>Start by asking:</p>
+<ul>
+<li>What normally happens here?</li>
+<li>Which applications usually launch PowerShell?</li>
+<li>What are the expected login hours?</li>
+<li>Which administrative accounts routinely perform privileged actions?</li>
+</ul>
+<p>The better you understand normal behaviour, the easier it becomes to identify genuine anomalies.</p>
+<blockquote>
+<p><strong>Key takeaway:</strong> Baselines reduce false positives and improve confidence during investigations.</p>
+</blockquote>
+<hr />
+<h2 id="mistake-8-believing-a-tool-makes-you-a-threat-hunter">Mistake 8: Believing a Tool Makes You a Threat Hunter</h2>
+<p>The cybersecurity industry offers an incredible number of tools.</p>
+<p>Microsoft Sentinel.</p>
+<p>Splunk.</p>
+<p>Elastic Security.</p>
+<p>CrowdStrike.</p>
+<p>Microsoft Defender XDR.</p>
+<p>Google SecOps.</p>
+<p>While these platforms are incredibly powerful, they don't automatically make someone a threat hunter.</p>
+<p>A common mistake beginners make is believing they need access to enterprise products before they can start learning.</p>
+<p>This creates an unnecessary barrier.</p>
+<p>Threat Hunting isn't defined by the software you use.</p>
+<p>It's defined by the questions you ask and the methodology you follow.</p>
+<p>An experienced hunter can learn valuable lessons by analysing Windows Event Logs on a personal computer.</p>
+<p>Meanwhile, someone with access to a multi-million-dollar SIEM may still struggle if they don't know what they're looking for.</p>
+<p>Technology accelerates investigations.</p>
+<p>It doesn't replace analytical thinking.</p>
+<p><strong>How to avoid this mistake</strong></p>
+<p>Instead of asking:</p>
+<p><em>"Which tool should I learn next?"</em></p>
+<p>Ask:</p>
+<p><em>"What investigation skill should I improve next?"</em></p>
+<p>Focus on building skills that transfer across platforms.</p>
+<p>Understanding attacker behaviour, Windows internals, MITRE ATT&amp;CK, and investigation methodology will remain valuable regardless of which SIEM or EDR your organisation uses.</p>
+<blockquote>
+<p><strong>Key takeaway:</strong> Great threat hunters rely on their thinking first and their tools second.</p>
+</blockquote>
+<hr />
+<h2 id="mistake-9-not-documenting-investigations">Mistake 9: Not Documenting Investigations</h2>
+<p>Many beginners complete an investigation, find something interesting, and move on.</p>
+<p>Experienced threat hunters do something different.</p>
+<p>They document everything.</p>
+<p>Documentation isn't just for compliance or reporting.</p>
+<p>It's an essential part of becoming a better analyst.</p>
+<p>Imagine discovering suspicious PowerShell activity today.</p>
+<p>Six months later, a similar incident occurs.</p>
+<p>Without documentation, you'll repeat the same investigation from scratch.</p>
+<p>With documentation, you've created your own knowledge base.</p>
+<p>A well-documented investigation typically includes:</p>
+<ul>
+<li>The original hypothesis</li>
+<li>Data sources examined</li>
+<li>Evidence collected</li>
+<li>Analysis performed</li>
+<li>Findings</li>
+<li>Final conclusion</li>
+<li>Recommended detections</li>
+<li>Lessons learned</li>
+</ul>
+<p>Professional investigations aren't judged solely by what was discovered.</p>
+<p>They're judged by whether someone else can understand and reproduce the investigation.</p>
+<p><strong>How to avoid this mistake</strong></p>
+<p>Create a simple investigation template and use it consistently.</p>
+<p>Document both successful and unsuccessful hunts.</p>
+<p>Sometimes proving that <em>nothing malicious occurred</em> is just as valuable as finding an attacker.</p>
+<blockquote>
+<p><strong>Key takeaway:</strong> Every investigation should leave behind knowledge that makes the next investigation easier.</p>
+</blockquote>
+<hr />
+<h2 id="mistake-10-expecting-to-become-a-threat-hunter-overnight">Mistake 10: Expecting to Become a Threat Hunter Overnight</h2>
+<p>Threat Hunting combines knowledge from multiple disciplines.</p>
+<p>Operating systems.</p>
+<p>Networking.</p>
+<p>Digital Forensics.</p>
+<p>Detection Engineering.</p>
+<p>Threat Intelligence.</p>
+<p>Malware Analysis.</p>
+<p>Incident Response.</p>
+<p>Cloud Security.</p>
+<p>It's completely normal to feel overwhelmed.</p>
+<p>Many beginners compare themselves to experienced analysts who have spent years investigating real-world incidents.</p>
+<p>What they don't see are the countless hours those professionals spent reading documentation, analysing logs, making mistakes, and learning from failed investigations.</p>
+<p>Threat Hunting isn't a destination.</p>
+<p>It's a continuous learning process.</p>
+<p>Every investigation teaches something new.</p>
+<p>Every article expands your understanding.</p>
+<p>Every mistake improves your judgement.</p>
+<p>The goal isn't to know everything.</p>
+<p>The goal is to become slightly better than you were yesterday.</p>
+<p><strong>How to avoid this mistake</strong></p>
+<p>Focus on consistency rather than speed.</p>
+<p>Read one technical article each day.</p>
+<p>Recreate simple attack scenarios in a lab environment.</p>
+<p>Study one Windows artifact at a time.</p>
+<p>Most importantly, remain curious.</p>
+<p>Curiosity is the single most valuable quality a threat hunter can develop.</p>
+<blockquote>
+<p><strong>Key takeaway:</strong> Progress in Threat Hunting is measured by continuous learning-not by how many tools you know.</p>
+</blockquote>
+<hr />
+<h1 id="final-thoughts">Final Thoughts</h1>
+<p>Every experienced Threat Hunter was once a beginner.</p>
+<p>They asked the same questions.</p>
+<p>Made the same mistakes.</p>
+<p>Felt overwhelmed by the same technologies.</p>
+<p>What separates experienced analysts from beginners isn't intelligence or access to expensive tools.</p>
+<p>It's the willingness to remain curious, challenge assumptions, validate evidence, and continuously improve.</p>
+<p>If there's one lesson I'd like you to take away from this article, it's this:</p>
+<blockquote>
+<p><strong>Threat Hunting isn't about finding attackers. It's about learning how to think like an investigator.</strong></p>
+</blockquote>
+<p>Tools will evolve.</p>
+<p>Attack techniques will change.</p>
+<p>Security products will come and go.</p>
+<p>But the ability to ask meaningful questions, analyse evidence objectively, and follow the data wherever it leads will always remain the foundation of effective Threat Hunting.</p>
+<p>Build that foundation first.</p>
+<p>Everything else becomes much easier.</p>
+<hr />
+<h1 id="key-takeaways">Key Takeaways</h1>
+<ul>
+<li>Learn concepts before learning tools.</li>
+<li>Understand behaviour instead of memorising indicators.</li>
+<li>Build strong Windows fundamentals.</li>
+<li>Always start with a hypothesis.</li>
+<li>Hunt for behaviours, not just IOCs.</li>
+<li>Understand the difference between Threat Hunting and Incident Response.</li>
+<li>Learn normal behaviour before searching for anomalies.</li>
+<li>Develop investigation skills instead of chasing products.</li>
+<li>Document every investigation.</li>
+<li>Stay curious and keep learning.</li>
+</ul>
+<hr />
+<h2 id="whats-next">What's Next?</h2>
+<p>If you're beginning your Threat Hunting journey, the next step is understanding what Threat Hunting really is.</p>
+<p><strong>"What Is Threat Hunting? Understanding the Mindset Before the Methodology."</strong></p>
+<p>We'll break down what Threat Hunting actually means, how it differs from other cybersecurity disciplines, and why developing the right mindset is more important than mastering any particular tool.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.indexes", "navigation.top", "toc.follow", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="../../assets/javascripts/navigation-tabs.js"></script>
+      
+    
+  </body>
+</html>

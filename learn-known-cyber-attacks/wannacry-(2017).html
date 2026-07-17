@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WannaCry (2017) MITRE ATT&CK Navigator</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.18.9/babel.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis-network.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="site.css">
+</head>
+<body class="bg-gray-100 font-sans">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const attacksData = {
+            "WannaCry (2017)": {
+                "name": "WannaCry Ransomware (2017) MITRE ATT&CK Mapping",
+                "versions": { "attack": "14", "navigator": "4.9.1", "layer": "4.5" },
+                "domain": "enterprise-attack",
+                "techniques": [
+                    {
+                        "techniqueID": "T1190",
+                        "tactic": "initial-access",
+                        "color": "#ff9999",
+                        "comment": "Exploited EternalBlue SMB vulnerability",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Vulnerability", "value": "CVE-2017-0144 (MS17-010, CVSS 8.1)" },
+                            { "name": "Assets", "value": "Windows systems" },
+                            { "name": "IOCs", "value": "SMBv1 exploit attempts, WannaCry payload (SHA256: ed01ebfbc9eb5bbea545af4d01bf5f1071661840480439c6e5babe8e080e41aa)" },
+                            { "name": "Threat Actors", "value": "Lazarus Group (North Korean state-sponsored)" },
+                            { "name": "Parameters", "value": "Network traffic (SMB), patch management records, IDS alerts" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1059.003",
+                        "tactic": "execution",
+                        "color": "#ffcc99",
+                        "comment": "Executed ransomware via malicious payload",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "Windows endpoints" },
+                            { "name": "IOCs", "value": "WannaCry executable (wcry.exe, SHA256: 84c82835a5d21bbcf75a61706d8ab549), cmd.exe execution" },
+                            { "name": "Parameters", "value": "Process execution logs, EDR telemetry" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1486",
+                        "tactic": "impact",
+                        "color": "#ff6666",
+                        "comment": "Encrypted data with ransomware",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "Windows file systems" },
+                            { "name": "IOCs", "value": ".WNCRY file extensions, @WanaDecryptor@.exe" },
+                            { "name": "Parameters", "value": "File system logs, DLP alerts" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1078",
+                        "tactic": "privilege-escalation",
+                        "color": "#ffcc99",
+                        "comment": "Used stolen credentials for propagation",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "Windows systems" },
+                            { "name": "IOCs", "value": "Unauthorized admin logins from 192.168.x.x" },
+                            { "name": "Parameters", "value": "Authentication logs, privilege escalation audit trails" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1003",
+                        "tactic": "credential-access",
+                        "color": "#ffcc99",
+                        "comment": "Dumped credentials to move laterally",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "Windows systems" },
+                            { "name": "IOCs", "value": "Mimikatz execution (SHA256: 9b7f5d...), LSASS memory dumps" },
+                            { "name": "Parameters", "value": "Memory analysis, EDR telemetry" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1082",
+                        "tactic": "discovery",
+                        "color": "#ffcc99",
+                        "comment": "Collected system information for propagation",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "Windows systems" },
+                            { "name": "IOCs", "value": "Systeminfo command output, net view execution" },
+                            { "name": "Parameters", "value": "System logs, command execution logs" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1018",
+                        "tactic": "discovery",
+                        "color": "#ffcc99",
+                        "comment": "Discovered remote systems via SMB",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "Network infrastructure" },
+                            { "name": "IOCs", "value": "SMB scanning traffic to 192.168.0.0/16" },
+                            { "name": "Parameters", "value": "Network traffic analysis, system enumeration logs" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1570",
+                        "tactic": "lateral-movement",
+                        "color": "#ffcc99",
+                        "comment": "Propagated via SMB protocol",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "Windows systems, network shares" },
+                            { "name": "IOCs", "value": "SMBv1 traffic spikes to 445/tcp, worm-like propagation" },
+                            { "name": "Parameters", "value": "Network traffic (PCAP), EDR alerts" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1071.002",
+                        "tactic": "command-and-control",
+                        "color": "#ffcc99",
+                        "comment": "Used SMB for C2 communication",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "Windows systems" },
+                            { "name": "IOCs", "value": "Unusual SMB traffic to 185.86.148.0/24" },
+                            { "name": "Parameters", "value": "Network traffic (PCAP), IDS/IPS alerts" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1490",
+                        "tactic": "impact",
+                        "color": "#ff6666",
+                        "comment": "Inhibited system recovery",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "Windows systems" },
+                            { "name": "IOCs", "value": "Disabled shadow copies via vssadmin delete shadows, @Please_Read_Me@.txt" },
+                            { "name": "Parameters", "value": "System recovery logs, file system audits" }
+                        ]
+                    }
+                ]
+            }
+        };
+
+        const App = () => {
+            const flowchartRef = React.useRef(null);
+            const selectedAttack = "WannaCry (2017)";
+            const [selectedTechnique, setSelectedTechnique] = React.useState(null);
+
+            React.useEffect(() => {
+                const mitreData = attacksData[selectedAttack];
+                const nodes = mitreData.techniques.map((tech, index) => ({
+                    id: index + 1,
+                    label: `${tech.techniqueID}: ${tech.tactic}`,
+                    shape: "box",
+                    color: tech.color
+                }));
+
+                const edges = [];
+                const tacticOrder = [
+                    "initial-access", "execution", "persistence", "privilege-escalation",
+                    "credential-access", "discovery", "lateral-movement", "command-and-control",
+                    "collection", "exfiltration", "defense-evasion", "impact"
+                ];
+
+                const tacticNodes = {};
+                mitreData.techniques.forEach((tech, index) => {
+                    const nodeId = index + 1;
+                    const tacticIndex = tacticOrder.indexOf(tech.tactic);
+                    if (!tacticNodes[tech.tactic]) {
+                        tacticNodes[tech.tactic] = [nodeId];
+                    } else {
+                        tacticNodes[tech.tactic].push(nodeId);
+                    }
+                    if (tacticIndex > 0) {
+                        const prevTactic = tacticOrder[tacticIndex - 1];
+                        if (tacticNodes[prevTactic]) {
+                            tacticNodes[prevTactic].forEach(prevNodeId => {
+                                edges.push({ from: prevNodeId, to: nodeId, arrows: "to" });
+                            });
+                        }
+                    }
+                });
+
+				// ✅ Manually connect Execution → Privilege Escalation
+					const executionNode = mitreData.techniques.findIndex(t => t.tactic === "execution") + 1;
+					const privEscNode = mitreData.techniques.findIndex(t => t.tactic === "privilege-escalation") + 1;
+
+					if (executionNode > 0 && privEscNode > 0) {
+						edges.push({ from: executionNode, to: privEscNode, arrows: "to", color: { color: "red" } });
+					}
+
+
+                const container = flowchartRef.current;
+                const data = { nodes: new vis.DataSet(nodes), edges: new vis.DataSet(edges) };
+                const options = {
+								physics: {
+								enabled: true
+											},
+								nodes: { font: { size: 12 }, shape: 'box', shapeProperties: { borderRadius: 5 } },
+								edges: { arrows: 'to', smooth: false },
+								interaction: { dragNodes: true, dragView: true, zoomView: true }
+								};
+                const network = new vis.Network(container, data, options);
+
+                network.on("click", (params) => {
+                    if (params.nodes.length > 0) {
+                        const nodeId = params.nodes[0];
+                        setSelectedTechnique(mitreData.techniques[nodeId - 1]);
+                    }
+                });
+
+                // Fit the network to the container
+                network.fit();
+
+                // Add resize listener
+                const handleResize = () => {
+                    network.fit();
+                };
+                window.addEventListener('resize', handleResize);
+
+                return () => {
+                    window.removeEventListener('resize', handleResize);
+                    network.destroy();
+                };
+            }, []);
+
+            return (
+                <div className="container mx-auto p-4">
+				<a href="index.html" className="text-blue-600 hover:underline absolute top-4 right-4">Back to Index</a>
+                    <h2 className="text-2xl font-bold mb-4">WannaCry (2017) MITRE ATT&CK Navigator</h2>
+                    <div className="flex gap-4">
+                        <div ref={flowchartRef} className="flex-[3] border border-gray-300 bg-white" style={{ height: '600px' }}></div>
+                        <div className="flex-1 p-4 bg-gray-200 rounded-md overflow-y-auto" style={{ height: '600px' }}>
+                            <h3 className="text-lg font-semibold">Technique Details</h3>
+                            {selectedTechnique ? (
+                                <pre className="whitespace-pre-wrap text-sm">
+                                    <strong>Technique ID:</strong> {selectedTechnique.techniqueID}<br/>
+                                    <strong>Tactic:</strong> {selectedTechnique.tactic}<br/>
+                                    <strong>Comment:</strong> {selectedTechnique.comment}<br/>
+                                    <strong>Metadata:</strong><br/>
+                                    {selectedTechnique.metadata.map((meta, idx) => (
+                                        <div key={idx}>
+                                            <strong>{meta.name}:</strong> {meta.value}<br/>
+                                        </div>
+                                    ))}
+                                </pre>
+                            ) : (
+                                <p>Click a node to view technique details, MITRE TTPs, IOCs, and technical information. Drag nodes to move them.</p>
+                            )}
+							<br></br><strong>Background:</strong><br/>
+							<p>WannaCry (2017): WannaCry was a global ransomware attack in May 2017, leveraging the EternalBlue exploit to infect unpatched Windows systems. It encrypted data and demanded ransoms, severely impacting healthcare, businesses, and infrastructure worldwide, with ties to North Korean hackers.</p>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+	<div class="mt-8 p-4 bg-white rounded-md shadow space-y-6">
+
+  <!-- Attack Timeline -->
+  <section>
+	<h2 class="text-2xl font-semibold mb-4">Attack Timeline</h2>
+        <div class="overflow-x-auto mb-8">
+            <table class="min-w-full bg-white border border-gray-300">
+                <thead>
+                    <tr class="bg-gray-200">
+                        <th class="py-2 px-4 border-b">Date/Time</th>
+                        <th class="py-2 px-4 border-b">Action</th>
+                        <th class="py-2 px-4 border-b">Actor/Details</th>
+                        <th class="py-2 px-4 border-b">Evidence/Impact</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="py-2 px-4 border-b">February 2017</td>
+                        <td class="py-2 px-4 border-b">Initial access preparation: Lazarus Group gains EternalBlue exploit, likely from Shadow Brokers’ NSA leak (April 2017).</td>
+                        <td class="py-2 px-4 border-b">Lazarus Group (North Korea)</td>
+                        <td class="py-2 px-4 border-b">Exploit targets SMBv1; used in WannaCry’s worm-like spread.</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border-b">May 12, 2017, Morning</td>
+                        <td class="py-2 px-4 border-b">Attack launch: WannaCry ransomware spreads via EternalBlue, infecting unpatched Windows systems globally.</td>
+                        <td class="py-2 px-4 border-b">Lazarus Group</td>
+                        <td class="py-2 px-4 border-b">230,000+ systems hit; encrypts files, demands $300–$600 Bitcoin.</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border-b">May 12, 2017, Afternoon</td>
+                        <td class="py-2 px-4 border-b">NHS impact: UK hospitals (e.g., London, Blackpool) crippled; 70,000 devices encrypted.</td>
+                        <td class="py-2 px-4 border-b">WannaCry</td>
+                        <td class="py-2 px-4 border-b">Non-emergency patients turned away; NHS loses £92M.</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border-b">May 12, 2017, Evening</td>
+                        <td class="py-2 px-4 border-b">Kill switch discovery: Marcus Hutchins registers sinkhole domain, halting WannaCry’s spread.</td>
+                        <td class="py-2 px-4 border-b">Marcus Hutchins (@MalwareTech)</td>
+                        <td class="py-2 px-4 border-b">Domain in malware code; stops propagation but not decryption.</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border-b">May 13, 2017</td>
+                        <td class="py-2 px-4 border-b">Response: Microsoft releases emergency patches for unsupported systems (e.g., Windows XP).</td>
+                        <td class="py-2 px-4 border-b">Microsoft</td>
+                        <td class="py-2 px-4 border-b">Patches SMBv1 vulnerability; urges updates.</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border-b">May 14–15, 2017</td>
+                        <td class="py-2 px-4 border-b">Containment: Organizations globally apply patches, disable SMBv1, isolate systems.</td>
+                        <td class="py-2 px-4 border-b">Global IT teams</td>
+                        <td class="py-2 px-4 border-b">Reduces further infections; some systems remain locked.</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border-b">May 19, 2017</td>
+                        <td class="py-2 px-4 border-b">Attribution: Symantec and Kaspersky link WannaCry to Lazarus Group.</td>
+                        <td class="py-2 px-4 border-b">Cybersecurity firms</td>
+                        <td class="py-2 px-4 border-b">Code similarities with Lazarus’s 2014 Sony attack.</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border-b">December 19, 2017</td>
+                        <td class="py-2 px-4 border-b">U.S. confirmation: White House attributes WannaCry to North Korea.</td>
+                        <td class="py-2 px-4 border-b">U.S. Government</td>
+                        <td class="py-2 px-4 border-b">Cites Lazarus Group TTPs; no indictments issued.</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border-b">Post-May 2017</td>
+                        <td class="py-2 px-4 border-b">Recovery: Affected organizations rebuild systems; minimal ransom payments ($140K).</td>
+                        <td class="py-2 px-4 border-b">Victims</td>
+                        <td class="py-2 px-4 border-b">$4–8B in global damages; NHS restores services in weeks.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Dwell Time Analysis -->
+        <h2 class="text-2xl font-semibold mb-4">Dwell Time Analysis</h2>
+        <p class="mb-4">Dwell time was effectively hours (May 12, 2017, morning to evening), as WannaCry’s worm-like propagation was rapid, but the kill switch and patches curtailed further spread.</p>
+        <div class="overflow-x-auto mb-8">
+            <table class="min-w-full bg-white border border-gray-300">
+                <thead>
+                    <tr class="bg-gray-200">
+                        <th class="py-2 px-4 border-b">Step 1: Initial Access (May 12, AM)</th>
+                        <th class="py-2 px-4 border-b">Step 2: Spread/Encryption (May 12, AM–PM)</th>
+                        <th class="py-2 px-4 border-b">Step 3: Detection/Containment (May 12, PM)</th>
+                        <th class="py-2 px-4 border-b">Step 4: Recovery (May 13–Post-May)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="py-2 px-4 border-b">EternalBlue exploits unpatched SMBv1. <br><strong>What went wrong</strong>: No patches, SMBv1 enabled.</td>
+                        <td class="py-2 px-4 border-b">Encrypts files on 230,000+ systems. <br><strong>Factor</strong>: No network segmentation, no EDR.</td>
+                        <td class="py-2 px-4 border-b">Kill switch halts spread; patches applied. <br><strong>Factor</strong>: Rapid response, no initial SIEM.</td>
+                        <td class="py-2 px-4 border-b">Patches applied, systems rebuilt; minimal ransoms paid. <br><strong>Total time</strong>: $4–8B global impact.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <p class="mb-4"><strong>Dwell Time Insight</strong>: The dwell time was like a flash flood, spreading in hours due to unpatched systems and no network defenses. Industry reports note 2017 median dwell times were ~100 days; WannaCry’s ultra-short dwell reflects its aggressive worm design, mitigated by a kill switch and rapid patching.</p>
+
+        <!-- Learnings -->
+        <h2 class="text-2xl font-semibold mb-4">Learnings</h2>
+        <div class="overflow-x-auto">
+            <table class="min-w-full bg-white border border-gray-300">
+                <thead>
+                    <tr class="bg-gray-200">
+                        <th class="py-2 px-4 border-b">Root Cause Analysis</th>
+                        <th class="py-2 px-4 border-b">Impact Assessment</th>
+                        <th class="py-2 px-4 border-b">Detection Opportunities</th>
+                        <th class="py-2 px-4 border-b">Response and Remediation</th>
+                        <th class="py-2 px-4 border-b">Attribution Analysis</th>
+                        <th class="py-2 px-4 border-b">Lessons Learned</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="py-2 px-4 border-b"><strong>Using 5 Whys</strong>: Why breached? EternalBlue exploit. Why exploited? Unpatched Windows. Why unpatched? Poor patch management. Why poor? Prioritized operations. Why prioritized? Cost focus. <br> <strong>Other causes</strong>: SMBv1 enabled, no EDR. <br> <strong>Beginners</strong>: Root causes trace to outdated systems. <br> <strong>Experts</strong>: Fishbone factors: Process (patch delays), Technology (no EDR), Network (SMBv1).</td>
+                        <td class="py-2 px-4 border-b"><strong>Data</strong>: Files encrypted on 230,000+ systems; no exfiltration. <br> <strong>Financial</strong>: $4–8B global losses; NHS £92M. <br> <strong>Operational</strong>: NHS hospitals disrupted. <br> <strong>Beginners</strong>: Impacts hit operations, finances. <br> <strong>Experts</strong>: BIA metrics: RTO delayed weeks for NHS.</td>
+                        <td class="py-2 px-4 border-b"><strong>Missed</strong>: SMBv1 traffic via IDS; encryption via EDR. <br> <strong>Opportunities</strong>: Patch management, disable SMBv1, deploy EDR. <br> <strong>Failures</strong>: No monitoring, unpatched systems. <br> <strong>Beginners</strong>: Detection is like antivirus. <br> <strong>Experts</strong>: Sigma rule: <code>detection: logsource: category: network | selection: protocol: smb AND exploit: eternalblue</code>.</td>
+                        <td class="py-2 px-4 border-b"><strong>Immediate</strong>: Kill switch, Microsoft patches, system isolation. <br> <strong>Long-term</strong>: Disabled SMBv1, enhanced EDR, patch policies. <br> <strong>Beginners</strong>: Response restores systems. <br> <strong>Experts</strong>: NIST IR followed: Identification (May 12), Containment (May 12), Eradication (May 13–).</td>
+                        <td class="py-2 px-4 border-b"><strong>Confirmed</strong>: Lazarus Group (North Korea). <br> <strong>TTPs</strong>: EternalBlue, ransomware align with APT38. <br> <strong>Beginners</strong>: Attribution identifies hackers. <br> <strong>Experts</strong>: IOCs include WannaCry hashes, C2 IPs.</td>
+                        <td class="py-2 px-4 border-b">Patch systems promptly. <br> Disable legacy protocols. <br> Deploy EDR, SIEM, DLP. <br> Prioritize patch management. <br> <strong>Beginners</strong>: Update systems, secure networks. <br> <strong>Experts</strong>: Adopt MITRE ATT&CK, zero-trust architecture.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+</body>
+</html>
+

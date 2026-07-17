@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yahoo (2013-2014) MITRE ATT&CK Navigator</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.18.9/babel.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis-network.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="site.css">
+</head>
+<body class="bg-gray-100 font-sans">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const attacksData = {
+            "Yahoo (2013-2014)": {
+                "name": "Yahoo Data Breach (2013-2014) MITRE ATT&CK Mapping",
+                "versions": { "attack": "14", "navigator": "4.9.1", "layer": "4.5" },
+                "domain": "enterprise-attack",
+                "techniques": [
+                    {
+                        "techniqueID": "T1566.002",
+                        "tactic": "initial-access",
+                        "color": "#ff9999",
+                        "comment": "Used spear-phishing for initial access",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Vulnerability", "value": "Social engineering" },
+                            { "name": "Assets", "value": "Employee endpoints" },
+                            { "name": "IOCs", "value": "Phishing emails from yahoo-security.com, malicious links to bit.ly/xyz123" },
+                            { "name": "Threat Actors", "value": "Russian state-sponsored hackers" },
+                            { "name": "Parameters", "value": "Email logs, phishing detection systems" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1059.001",
+                        "tactic": "execution",
+                        "color": "#ffcc99",
+                        "comment": "Executed malware via phishing links",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "Employee endpoints" },
+                            { "name": "IOCs", "value": "Malicious executable downloads (update.exe, SHA256: 4a5b6c7d...)" },
+                            { "name": "Parameters", "value": "Process execution logs, EDR telemetry" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1505.003",
+                        "tactic": "persistence",
+                        "color": "#ffcc99",
+                        "comment": "Deployed persistent malware",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "Yahoo servers" },
+                            { "name": "IOCs", "value": "Malicious executables (svc.exe, SHA256: 8e9f0a...), scheduled task YahooUpdater" },
+                            { "name": "Parameters", "value": "File system logs, registry monitoring" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1078",
+                        "tactic": "privilege-escalation",
+                        "color": "#ffcc99",
+                        "comment": "Used stolen credentials for access",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "Yahoo servers" },
+                            { "name": "IOCs", "value": "Unauthorized admin logins from 185.86.148.0/24" },
+                            { "name": "Parameters", "value": "Authentication logs, privilege escalation audit trails" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1003",
+                        "tactic": "credential-access",
+                        "color": "#ffcc99",
+                        "comment": "Dumped credentials from systems",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "Yahoo servers" },
+                            { "name": "IOCs", "value": "Mimikatz execution (SHA256: 1b2c3d4e...), LSASS memory dumps" },
+                            { "name": "Parameters", "value": "Memory analysis, EDR telemetry" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1082",
+                        "tactic": "discovery",
+                        "color": "#ffcc99",
+                        "comment": "Collected system information",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "Yahoo servers" },
+                            { "name": "IOCs", "value": "Systeminfo command output, whoami execution" },
+                            { "name": "Parameters", "value": "System logs, command execution logs" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1083",
+                        "tactic": "discovery",
+                        "color": "#9999ff",
+                        "comment": "Enumerated user databases",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "Yahoo databases" },
+                            { "name": "IOCs", "value": "SQL query execution: SELECT * FROM user_accounts, database access logs" },
+                            { "name": "Parameters", "value": "Database query logs, network traffic analysis" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1074.001",
+                        "tactic": "collection",
+                        "color": "#ffcc99",
+                        "comment": "Staged user data for exfiltration",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "Yahoo databases" },
+                            { "name": "IOCs", "value": "Staged data in /tmp/user_data_export" },
+                            { "name": "Parameters", "value": "File system logs, DLP alerts" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1041",
+                        "tactic": "exfiltration",
+                        "color": "#ffcc99",
+                        "comment": "Exfiltrated user data",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "Yahoo databases, external servers" },
+                            { "name": "IOCs", "value": "Large data transfers to 185.86.148.0/24" },
+                            { "name": "Parameters", "value": "Network traffic (PCAP), DLP alerts" }
+                        ]
+                    }
+                ]
+            }
+        };
+
+        const App = () => {
+            const flowchartRef = React.useRef(null);
+            const selectedAttack = "Yahoo (2013-2014)";
+            const [selectedTechnique, setSelectedTechnique] = React.useState(null);
+
+            React.useEffect(() => {
+                const mitreData = attacksData[selectedAttack];
+                const nodes = mitreData.techniques.map((tech, index) => ({
+                    id: index + 1,
+                    label: `${tech.techniqueID}: ${tech.tactic}`,
+                    shape: "box",
+                    color: tech.color
+                }));
+
+                const edges = [];
+                const tacticOrder = [
+                    "initial-access", "execution", "persistence", "privilege-escalation",
+                    "credential-access", "discovery", "lateral-movement", "command-and-control",
+                    "collection", "exfiltration", "defense-evasion", "impact"
+                ];
+
+                const tacticNodes = {};
+                mitreData.techniques.forEach((tech, index) => {
+                    const nodeId = index + 1;
+                    const tacticIndex = tacticOrder.indexOf(tech.tactic);
+                    if (!tacticNodes[tech.tactic]) {
+                        tacticNodes[tech.tactic] = [nodeId];
+                    } else {
+                        tacticNodes[tech.tactic].push(nodeId);
+                    }
+                    if (tacticIndex > 0) {
+                        const prevTactic = tacticOrder[tacticIndex - 1];
+                        if (tacticNodes[prevTactic]) {
+                            tacticNodes[prevTactic].forEach(prevNodeId => {
+                                edges.push({ from: prevNodeId, to: nodeId, arrows: "to" });
+                            });
+                        }
+                    }
+                });
+
+                const container = flowchartRef.current;
+                const data = { nodes: new vis.DataSet(nodes), edges: new vis.DataSet(edges) };
+                const options = {
+								physics: {
+								enabled: true
+											},
+								nodes: { font: { size: 12 }, shape: 'box', shapeProperties: { borderRadius: 5 } },
+								edges: { arrows: 'to', smooth: false },
+								interaction: { dragNodes: true, dragView: true, zoomView: true }
+								};
+                const network = new vis.Network(container, data, options);
+
+                network.on("click", (params) => {
+                    if (params.nodes.length > 0) {
+                        const nodeId = params.nodes[0];
+                        setSelectedTechnique(mitreData.techniques[nodeId - 1]);
+                    }
+                });
+
+                // Fit the network to the container
+                network.fit();
+
+                // Add resize listener
+                const handleResize = () => {
+                    network.fit();
+                };
+                window.addEventListener('resize', handleResize);
+
+                return () => {
+                    window.removeEventListener('resize', handleResize);
+                    network.destroy();
+                };
+            }, []);
+
+            return (
+                <div className="container mx-auto p-4">
+				<a href="index.html" className="text-blue-600 hover:underline absolute top-4 right-4">Back to Index</a>
+                    <h2 className="text-2xl font-bold mb-4">Yahoo (2013-2014) MITRE ATT&CK Navigator</h2>
+                    <div className="flex gap-4">
+                        <div ref={flowchartRef} className="flex-[3] border border-gray-300 bg-white" style={{ height: '600px' }}></div>
+                        <div className="flex-1 p-4 bg-gray-200 rounded-md overflow-y-auto" style={{ height: '600px' }}>
+                            <h3 className="text-lg font-semibold">Technique Details</h3>
+                            {selectedTechnique ? (
+                                <pre className="whitespace-pre-wrap text-sm">
+                                    <strong>Technique ID:</strong> {selectedTechnique.techniqueID}<br/>
+                                    <strong>Tactic:</strong> {selectedTechnique.tactic}<br/>
+                                    <strong>Comment:</strong> {selectedTechnique.comment}<br/>
+                                    <strong>Metadata:</strong><br/>
+                                    {selectedTechnique.metadata.map((meta, idx) => (
+                                        <div key={idx}>
+                                            <strong>{meta.name}:</strong> {meta.value}<br/>
+                                        </div>
+                                    ))}
+                                </pre>
+                            ) : (
+                                <p>Click a node to view technique details, MITRE TTPs, IOCs, and technical information. Drag nodes to move them.</p>
+                            )}
+							<br></br><strong>Background:</strong><br/>
+							<p>Yahoo (2013-2014): Yahoo suffered a massive data breach between 2013 and 2014, where spear-phishing attacks compromised employee accounts, leading to the theft of 3 billion user records. Russian hackers are believed to have orchestrated this for intelligence purposes.</p>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+	<div class="mt-8 p-4 bg-white rounded-md shadow space-y-6">
+
+  <!-- Attack Timeline -->
+  <section>
+	<!-- Attack Timeline -->
+        <h2 class="text-2xl font-semibold mb-4">Attack Timeline</h2>
+        <div class="overflow-x-auto mb-8">
+            <table class="min-w-full bg-white border border-gray-300">
+                <thead>
+                    <tr class="bg-gray-200">
+                        <th class="py-2 px-4 border-b">Date/Time</th>
+                        <th class="py-2 px-4 border-b">Action</th>
+                        <th class="py-2 px-4 border-b">Actor/Details</th>
+                        <th class="py-2 px-4 border-b">Evidence/Impact</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="py-2 px-4 border-b">August 2013</td>
+                        <td class="py-2 px-4 border-b">Initial breach (2013): Attackers exploit a vulnerability, possibly in Yahoo’s proprietary cookie generation code.</td>
+                        <td class="py-2 px-4 border-b">Unknown hackers (suspected non-state actors)</td>
+                        <td class="py-2 px-4 border-b">Compromised all 3 billion user accounts; stole names, emails, phone numbers, birth dates, MD5-hashed passwords, security questions.</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border-b">August-September 2013</td>
+                        <td class="py-2 px-4 border-b">Data collection and exfiltration (2013): Stolen data and forged cookies enable password-less access.</td>
+                        <td class="py-2 px-4 border-b">Attackers</td>
+                        <td class="py-2 px-4 border-b">32 million accounts accessed via cookies (2015-2016); data sold on darknet.</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border-b">Early 2014</td>
+                        <td class="py-2 px-4 border-b">Initial breach (2014): Spear-phishing email compromises Yahoo employee credentials.</td>
+                        <td class="py-2 px-4 border-b">Russian actors (Alexey Belan, FSB officers, Karim Baratov)</td>
+                        <td class="py-2 px-4 border-b">Access to User Account Database; state-sponsored motives.</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border-b">November-December 2014</td>
+                        <td class="py-2 px-4 border-b">Data exfiltration (2014): Copied 500 million account records to external servers.</td>
+                        <td class="py-2 px-4 border-b">Alexey Belan</td>
+                        <td class="py-2 px-4 border-b">Included names, emails, phone numbers, birth dates, bcrypt-hashed passwords, security questions.</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border-b">October 2014-November 2016</td>
+                        <td class="py-2 px-4 border-b">Exploitation: Hackers use stolen data to target emails, gift codes, and other platforms (e.g., Gmail).</td>
+                        <td class="py-2 px-4 border-b">Belan, Baratov, FSB officers</td>
+                        <td class="py-2 px-4 border-b">Enabled espionage, phishing, and account takeovers.</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border-b">July 2016</td>
+                        <td class="py-2 px-4 border-b">Yahoo investigates separate incident, uncovering 2014 breach scope.</td>
+                        <td class="py-2 px-4 border-b">Yahoo</td>
+                        <td class="py-2 px-4 border-b">Realized 500 million accounts affected; aware since 2014 but delayed disclosure.</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border-b">September 22, 2016</td>
+                        <td class="py-2 px-4 border-b">Public disclosure (2014 breach): Yahoo announces 500 million accounts compromised.</td>
+                        <td class="py-2 px-4 border-b">Yahoo</td>
+                        <td class="py-2 px-4 border-b">Stock drops 3% ($1.3B loss); Verizon deal impacted.</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border-b">December 14, 2016</td>
+                        <td class="py-2 px-4 border-b">Public disclosure (2013 breach): Yahoo reports 1 billion accounts affected.</td>
+                        <td class="py-2 px-4 border-b">Yahoo</td>
+                        <td class="py-2 px-4 border-b">Forced password resets, invalidated security questions.</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border-b">October 3, 2017</td>
+                        <td class="py-2 px-4 border-b">Revised disclosure (2013 breach): All 3 billion accounts affected.</td>
+                        <td class="py-2 px-4 border-b">Yahoo</td>
+                        <td class="py-2 px-4 border-b">$117.5M settlement; Verizon deal cut by $350M.</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border-b">April 2019</td>
+                        <td class="py-2 px-4 border-b">Legal resolution: $117.5M settlement for ~896 million accounts (194 million users).</td>
+                        <td class="py-2 px-4 border-b">Yahoo/Verizon</td>
+                        <td class="py-2 px-4 border-b">Covered damages, credit monitoring; SEC fine of $35M.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Dwell Time Analysis -->
+        <h2 class="text-2xl font-semibold mb-4">Dwell Time Analysis</h2>
+        <p class="mb-4">Dwell time for the 2013 breach was approximately 3 years (August 2013 to July 2016, when Yahoo began investigating), and for the 2014 breach, about 2 years (early 2014 to July 2016), due to undetected access and delayed investigation.</p>
+        <div class="overflow-x-auto mb-8">
+            <table class="min-w-full bg-white border border-gray-300">
+                <thead>
+                    <tr class="bg-gray-200">
+                        <th class="py-2 px-4 border-b">Step 1: Initial Access (2013: Aug; 2014: Early 2014)</th>
+                        <th class="py-2 px-4 border-b">Step 2: Collection (2013: Aug-Sep; 2014: Nov-Dec)</th>
+                        <th class="py-2 px-4 border-b">Step 3: Exfiltration (2013: Aug-Sep; 2014: Nov-Dec)</th>
+                        <th class="py-2 px-4 border-b">Step 4: Detection (July 2016)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="py-2 px-4 border-b">2013: Exploited system vulnerability (cookie code). 2014: Spear-phishing compromised employee. <br><strong>What went wrong</strong>: Weak encryption (MD5), no 2FA.</td>
+                        <td class="py-2 px-4 border-b">Queried User Account Database for 3B (2013) and 500M (2014) records. <br><strong>Factor</strong>: No anomaly detection for mass queries.</td>
+                        <td class="py-2 px-4 border-b">Exfiltrated data to external servers; 2013 used forged cookies. <br><strong>Factor</strong>: No DLP or egress filtering.</td>
+                        <td class="py-2 px-4 border-b">Investigation triggered by separate incident; 2014 breach known since 2014 but not fully scoped. <br><strong>Total time</strong>: Enabled massive data theft, espionage.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <p class="mb-4"><strong>Dwell Time Insight</strong>: The dwell time was like a hidden termite infestation, eroding data over years due to inadequate monitoring and encryption. Experts: Median dwell time in 2013 was ~150 days (Mandiant); Yahoo’s multi-year dwell was extreme, amplified by weak security practices and delayed response.</p>
+
+        <!-- Learnings -->
+        <h2 class="text-2xl font-semibold mb-4">Learnings</h2>
+        <div class="overflow-x-auto">
+            <table class="min-w-full bg-white border border-gray-300">
+                <thead>
+                    <tr class="bg-gray-200">
+                        <th class="py-2 px-4 border-b">Root Cause Analysis</th>
+                        <th class="py-2 px-4 border-b">Impact Assessment</th>
+                        <th class="py-2 px-4 border-b">Detection Opportunities</th>
+                        <th class="py-2 px-4 border-b">Response and Remediation</th>
+                        <th class="py-2 px-4 border-b">Attribution Analysis</th>
+                        <th class="py-2 px-4 border-b">Lessons Learned</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="py-2 px-4 border-b"><strong>Using 5 Whys</strong>: Why breached? Vulnerable systems/phishing. Why vulnerable? Weak encryption, no 2FA. Why weak? Underfunded security (per Alex Stamos). Why underfunded? Leadership prioritized features. Why prioritized? Profit-driven culture. <br> <strong>Other causes</strong>: No DLP, no SIEM, ignored 2014 breach signals. <br> <strong>Beginners</strong>: Root causes trace security neglect. <br> <strong>Experts</strong>: Fishbone factors: People (underfunded security), Process (no 2FA), Technology (MD5 hashing).</td>
+                        <td class="py-2 px-4 border-b"><strong>Data</strong>: 3B accounts (2013), 500M (2014); names, emails, passwords, security questions. <br> <strong>Financial</strong>: $117.5M settlement, $350M Verizon deal cut, $35M SEC fine. <br> <strong>Reputational</strong>: Trust erosion, CEO bonus forfeited. <br> <strong>Follow-on</strong>: Phishing, account takeovers. <br> <strong>Beginners</strong>: Impacts hit users and valuation. <br> <strong>Experts</strong>: BIA metrics: RPO violated due to data exposure.</td>
+                        <td class="py-2 px-4 border-b"><strong>Missed</strong>: Large queries detectable via SIEM; phishing via email filters; exfiltration via DLP. <br> <strong>Opportunities</strong>: Deploy SIEM for query spikes, 2FA for employees, DLP for egress. <br> <strong>Failures</strong>: No encryption audits, ignored 2014 signals. <br> <strong>Beginners</strong>: Detection is like a firewall. <br> <strong>Experts</strong>: Sigma rule: <code>detection: logsource: category: network | selection: DataVolume > 1GB AND Destination: external</code>.</td>
+                        <td class="py-2 px-4 border-b"><strong>Immediate</strong>: Password resets, invalidated security questions, credit monitoring. <br> <strong>Long-term</strong>: Hired CISO, adopted bcrypt, implemented DLP. <br> <strong>Beginners</strong>: Response is damage control. <br> <strong>Experts</strong>: NIST IR followed: Identification (2016), Containment (2016), Eradication (post-2016).</td>
+                        <td class="py-2 px-4 border-b"><strong>2013</strong>: Unknown, possibly cybercriminals. <strong>2014</strong>: Russian actors (Belan, FSB, Baratov; indicted 2017). <br> <strong>TTPs</strong>: Phishing, cookie forgery, database theft. <br> <strong>Beginners</strong>: Attribution is identifying hackers. <br> <strong>Experts</strong>: TTPs align with APT28-like groups; IOCs include spear-phishing patterns.</td>
+                        <td class="py-2 px-4 border-b">Use strong encryption (bcrypt). <br> Enforce 2FA. <br> Deploy SIEM/DLP. <br> Fund security teams. <br> Disclose breaches promptly. <br> <strong>Beginners</strong>: Secure data, act fast. <br> <strong>Experts</strong>: Adopt MITRE ATT&CK for defense.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+</body>
+</html>
+

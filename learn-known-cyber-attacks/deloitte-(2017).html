@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deloitte Breach (2017) MITRE ATT&CK Navigator</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.18.9/babel.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis-network.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="site.css">
+</head>
+<body class="bg-gray-100 font-sans">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const attacksData = {
+            "Deloitte (2017)": {
+                "name": "Deloitte Breach (2017) MITRE ATT&CK Mapping",
+                "versions": { "attack": "14", "navigator": "4.9.1", "layer": "4.5" },
+                "domain": "enterprise-attack",
+                "techniques": [
+                    {
+                        "techniqueID": "T1078.002",
+                        "tactic": "initial-access",
+                        "color": "#ff9999",
+                        "comment": "Gained access using compromised administrator credentials via an Azure-hosted email server without 2FA",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Vulnerability", "value": "Lack of 2FA on administrator account" },
+                            { "name": "Assets", "value": "Azure-hosted email server" },
+                            { "name": "IOCs", "value": "Unauthorized login attempts" },
+                            { "name": "Threat Actors", "value": "Unknown" },
+                            { "name": "Parameters", "value": "Authentication logs, Azure security monitoring" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1059",
+                        "tactic": "execution",
+                        "color": "#ffcc99",
+                        "comment": "Executed commands to navigate and manipulate the email server environment",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "Email server" },
+                            { "name": "IOCs", "value": "Malicious command execution" },
+                            { "name": "Parameters", "value": "Command execution logs, EDR telemetry" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1098",
+                        "tactic": "persistence",
+                        "color": "#ffcc99",
+                        "comment": "Maintained access through the compromised administrator account, leveraging lack of 2FA",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "Administrator accounts" },
+                            { "name": "IOCs", "value": "Persistent unauthorized access" },
+                            { "name": "Parameters", "value": "Session monitoring, account activity logs" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1078.004",
+                        "tactic": "privilege-escalation",
+                        "color": "#ffcc99",
+                        "comment": "Exploited the privileged administrator account to gain unrestricted access to the email system",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "Email system, administrator accounts" },
+                            { "name": "IOCs", "value": "Unauthorized admin access" },
+                            { "name": "Parameters", "value": "Privilege escalation monitoring, authentication logs" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1027",
+                        "tactic": "defense-evasion",
+                        "color": "#ffcc99",
+                        "comment": "Used obfuscated methods to evade detection during months-long access to the email server",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "Email server" },
+                            { "name": "IOCs", "value": "Obfuscated code or commands" },
+                            { "name": "Parameters", "value": "Behavioral analytics, file integrity monitoring" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1005",
+                        "tactic": "collection",
+                        "color": "#ffcc99",
+                        "comment": "Collected sensitive client data (e.g., emails, usernames, passwords, IP addresses, architectural diagrams) from the email server",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "Email database, client data" },
+                            { "name": "IOCs", "value": "Unauthorized data access" },
+                            { "name": "Parameters", "value": "File access logs, DLP monitoring" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1071.001",
+                        "tactic": "command-and-control",
+                        "color": "#ffcc99",
+                        "comment": "Established HTTPS-based C2 communication to manage the compromised environment",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "Compromised email server" },
+                            { "name": "IOCs", "value": "HTTPS beacons to C2 servers" },
+                            { "name": "Parameters", "value": "Network traffic analysis, DNS queries" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1041",
+                        "tactic": "exfiltration",
+                        "color": "#ffcc99",
+                        "comment": "Exfiltrated gigabytes of email data and attachments to a UK-based server",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "Email data, client information" },
+                            { "name": "IOCs", "value": "Outbound data transfers to UK servers" },
+                            { "name": "Parameters", "value": "Network egress filtering, DLP alerts" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1490",
+                        "tactic": "impact",
+                        "color": "#ff6666",
+                        "comment": "Inhibited system recovery by maintaining persistent access, potentially disrupting Deloitte’s operations",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "Email system, corporate network" },
+                            { "name": "IOCs", "value": "Persistent access artifacts" },
+                            { "name": "Parameters", "value": "System change logs, EDR alerts" }
+                        ]
+                    }
+                ]
+            }
+        };
+
+        const App = () => {
+            const flowchartRef = React.useRef(null);
+            const selectedAttack = "Deloitte (2017)";
+            const [selectedTechnique, setSelectedTechnique] = React.useState(null);
+
+            React.useEffect(() => {
+                const mitreData = attacksData[selectedAttack];
+                const nodes = mitreData.techniques.map((tech, index) => ({
+                    id: index + 1,
+                    label: `${tech.techniqueID}: ${tech.tactic}`,
+                    shape: "box",
+                    color: tech.color
+                }));
+
+                const edges = [];
+                const tacticOrder = [
+                    "initial-access", "execution", "persistence", "privilege-escalation",
+                    "defense-evasion", "collection", "command-and-control", "exfiltration",
+                    "impact"
+                ];
+
+                const tacticNodes = {};
+                mitreData.techniques.forEach((tech, index) => {
+                    const nodeId = index + 1;
+                    const tacticIndex = tacticOrder.indexOf(tech.tactic);
+                    if (!tacticNodes[tech.tactic]) {
+                        tacticNodes[tech.tactic] = [nodeId];
+                    } else {
+                        tacticNodes[tech.tactic].push(nodeId);
+                    }
+                    if (tacticIndex > 0) {
+                        const prevTactic = tacticOrder[tacticIndex - 1];
+                        if (tacticNodes[prevTactic]) {
+                            tacticNodes[prevTactic].forEach(prevNodeId => {
+                                edges.push({ from: prevNodeId, to: nodeId, arrows: "to" });
+                            });
+                        }
+                    }
+                });
+
+                // Custom manual edges to ensure full connectivity
+                const initialAccessNode = mitreData.techniques.findIndex(t => t.tactic === "initial-access") + 1;
+                const executionNode = mitreData.techniques.findIndex(t => t.tactic === "execution") + 1;
+                const persistenceNode = mitreData.techniques.findIndex(t => t.tactic === "persistence") + 1;
+                const privilegeEscalationNode = mitreData.techniques.findIndex(t => t.tactic === "privilege-escalation") + 1;
+                const defenseEvasionNode = mitreData.techniques.findIndex(t => t.tactic === "defense-evasion") + 1;
+                const collectionNode = mitreData.techniques.findIndex(t => t.tactic === "collection") + 1;
+                const commandAndControlNode = mitreData.techniques.findIndex(t => t.tactic === "command-and-control") + 1;
+                const exfiltrationNode = mitreData.techniques.findIndex(t => t.tactic === "exfiltration") + 1;
+                const impactNode = mitreData.techniques.findIndex(t => t.tactic === "impact") + 1;
+
+                // Initial Access → Execution
+                if (initialAccessNode > 0 && executionNode > 0) {
+                    edges.push({ from: initialAccessNode, to: executionNode, arrows: "to", color: { color: "blue" }, width: 2 });
+                }
+
+                // Execution → Persistence
+                if (executionNode > 0 && persistenceNode > 0) {
+                    edges.push({ from: executionNode, to: persistenceNode, arrows: "to", color: { color: "blue" }, width: 2 });
+                }
+
+                // Persistence → Privilege Escalation
+                if (persistenceNode > 0 && privilegeEscalationNode > 0) {
+                    edges.push({ from: persistenceNode, to: privilegeEscalationNode, arrows: "to", color: { color: "blue" }, width: 2 });
+                }
+
+                // Privilege Escalation → Defense Evasion
+                if (privilegeEscalationNode > 0 && defenseEvasionNode > 0) {
+                    edges.push({ from: privilegeEscalationNode, to: defenseEvasionNode, arrows: "to", color: { color: "blue" }, width: 2 });
+                }
+
+                // Defense Evasion → Collection
+                if (defenseEvasionNode > 0 && collectionNode > 0) {
+                    edges.push({ from: defenseEvasionNode, to: collectionNode, arrows: "to", color: { color: "blue" }, width: 2 });
+                }
+
+                // Collection → Command and Control
+                if (collectionNode > 0 && commandAndControlNode > 0) {
+                    edges.push({ from: collectionNode, to: commandAndControlNode, arrows: "to", color: { color: "blue" }, width: 2 });
+                }
+
+                // Command and Control → Exfiltration
+                if (commandAndControlNode > 0 && exfiltrationNode > 0) {
+                    edges.push({ from: commandAndControlNode, to: exfiltrationNode, arrows: "to", color: { color: "green" }, width: 2 });
+                }
+
+                // Exfiltration → Impact
+                if (exfiltrationNode > 0 && impactNode > 0) {
+                    edges.push({ from: exfiltrationNode, to: impactNode, arrows: "to", color: { color: "purple" }, width: 2 });
+                }
+
+                const container = flowchartRef.current;
+                const data = { nodes: new vis.DataSet(nodes), edges: new vis.DataSet(edges) };
+                const options = {
+                    physics: { enabled: true },
+                    nodes: { font: { size: 12 }, shape: 'box', shapeProperties: { borderRadius: 5 } },
+                    edges: { arrows: 'to', smooth: false },
+                    interaction: { dragNodes: true, dragView: true, zoomView: true }
+                };
+                const network = new vis.Network(container, data, options);
+
+                network.on("click", (params) => {
+                    if (params.nodes.length > 0) {
+                        const nodeId = params.nodes[0];
+                        setSelectedTechnique(mitreData.techniques[nodeId - 1]);
+                    }
+                });
+
+                network.fit();
+
+                const handleResize = () => {
+                    network.fit();
+                };
+                window.addEventListener('resize', handleResize);
+
+                return () => {
+                    window.removeEventListener('resize', handleResize);
+                    network.destroy();
+                };
+            }, []);
+
+            return (
+                <div className="container mx-auto p-4">
+                    <a href="index.html" className="text-blue-600 hover:underline absolute top-4 right-4">Back to Index</a>
+                    <h2 className="text-2xl font-bold mb-4">Deloitte Breach (2017) MITRE ATT&CK Navigator</h2>
+                    <div className="flex gap-4">
+                        <div ref={flowchartRef} className="flex-[3] border border-gray-300 bg-white" style={{ height: '600px' }}></div>
+                        <div className="flex-1 p-4 bg-gray-200 rounded-md overflow-y-auto" style={{ height: '600px' }}>
+                            <h3 className="text-lg font-semibold">Technique Details</h3>
+                            {selectedTechnique ? (
+                                <pre className="whitespace-pre-wrap text-sm">
+                                    <strong>Technique ID:</strong> {selectedTechnique.techniqueID}<br/>
+                                    <strong>Tactic:</strong> {selectedTechnique.tactic}<br/>
+                                    <strong>Comment:</strong> {selectedTechnique.comment}<br/>
+                                    <strong>Metadata:</strong><br/>
+                                    {selectedTechnique.metadata.map((meta, idx) => (
+                                        <div key={idx}>
+                                            <strong>{meta.name}:</strong> {meta.value}<br/>
+                                        </div>
+                                    ))}
+                                </pre>
+                            ) : (
+                                <p>Click a node to view technique details, MITRE TTPs, IOCs, and technical information. Drag nodes to move them.</p>
+                            )}
+                            <br/><strong>Background:</strong><br/>
+                            <p>The Deloitte breach, disclosed on September 25, 2017, targeted the firm's Azure-hosted global email server, compromising ~5 million emails with client data (usernames, passwords, IP addresses, architectural diagrams). Attackers accessed the system around October 2016 via a privileged administrator account without 2FA, remaining undetected until March 2017. The U.S.-focused breach affected clients like U.S. government departments, banks, and FIFA. Attackers exfiltrated data to a UK server. Deloitte implemented security protocols, notified clients, and contacted regulators, revealing weaknesses in their cybersecurity practices.</p>[](https://www.theguardian.com/business/2017/sep/25/deloitte-hit-by-cyber-attack-revealing-clients-secret-emails)[](https://krebsonsecurity.com/2017/09/source-deloitte-breach-affected-all-company-email-admin-accounts/)[](https://www.theguardian.com/business/2017/oct/10/deloitte-hack-hit-server-containing-emails-from-across-us-government)
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+        <div class="mt-8 p-4 bg-white rounded-md shadow space-y-6">
+
+  <!-- Attack Timeline -->
+  <section>
+        <h2 class="text-2xl font-semibold mb-4">Attack Timeline</h2>
+        <div class="overflow-x-auto mb-8">
+            <table class="min-w-full bg-white border border-gray-300">
+                <thead>
+                    <tr class="bg-gray-200">
+                        <th class="py-2 px-4 border-b">Date/Time</th>
+                        <th class="py-2 px-4 border-b">Action</th>
+                        <th class="py-2 px-4 border-b">Actor/Details</th>
+                        <th class="py-2 px-4 border-b">Evidence/Impact</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="py-2 px-4 border-b">October/November 2016</td>
+                        <td class="py-2 px-4 border-b">Initial access: Hackers compromise an administrator account to access Deloitte’s global email server on Azure.</td>
+                        <td class="py-2 px-4 border-b">Unknown threat actor(s)</td>
+                        <td class="py-2 px-4 border-b">Account lacked 2FA; provided unrestricted access to email system.</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border-b">October 2016–March 2017</td>
+                        <td class="py-2 px-4 border-b">Data collection: Hackers access up to 5 million emails, including client data (usernames, passwords, IP addresses, health info).</td>
+                        <td class="py-2 px-4 border-b">Unknown threat actor(s)</td>
+                        <td class="py-2 px-4 border-b">Undetected due to lack of monitoring; data from 350 clients potentially exposed.</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border-b">October 13, 2016</td>
+                        <td class="py-2 px-4 border-b">Password reset notice: Deloitte mandates password changes for U.S. employees, possibly indicating breach suspicion.</td>
+                        <td class="py-2 px-4 border-b">Deloitte</td>
+                        <td class="py-2 px-4 border-b">Email sent to 244,000 staff; no public disclosure.</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border-b">March 2017</td>
+                        <td class="py-2 px-4 border-b">Detection: Deloitte identifies breach in email platform.</td>
+                        <td class="py-2 px-4 border-b">Deloitte</td>
+                        <td class="py-2 px-4 border-b">Internal investigation launched; codenamed “Windham.”</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border-b">April 27, 2017</td>
+                        <td class="py-2 px-4 border-b">Legal response: Deloitte hires Hogan Lovells to review “possible cybersecurity incident.”</td>
+                        <td class="py-2 px-4 border-b">Deloitte/Hogan Lovells</td>
+                        <td class="py-2 px-4 border-b">Focused on tracing hacker activity; conducted from Rosslyn, Virginia office.</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border-b">September 25, 2017</td>
+                        <td class="py-2 px-4 border-b">Public disclosure: The Guardian reports breach, citing sources; Deloitte confirms “cyber incident.”</td>
+                        <td class="py-2 px-4 border-b">Deloitte/The Guardian</td>
+                        <td class="py-2 px-4 border-b">Deloitte claims only six clients “impacted”; notifies affected clients and regulators.</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border-b">October 10, 2017</td>
+                        <td class="py-2 px-4 border-b">Scope clarification: Sources reveal up to 350 clients’ data in compromised server, including U.S. government entities.</td>
+                        <td class="py-2 px-4 border-b">The Guardian</td>
+                        <td class="py-2 px-4 border-b">Contradicts Deloitte’s claim; includes sensitive attachments (security/design details).</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border-b">Post-September 2017</td>
+                        <td class="py-2 px-4 border-b">Ongoing investigation: Deloitte continues to analyze compromised data; no attribution confirmed.</td>
+                        <td class="py-2 px-4 border-b">Deloitte</td>
+                        <td class="py-2 px-4 border-b">Unable to identify lone wolf, rival, or state-sponsored actor; no reported disruption.</td>
+                    </tr>
+                </tbody>
+            </table>
+                </br><a href="https://github.com/pbmundas/Threat-Hunting/blob/main/Learning%20through%20known%20attacks/Deloitte%20(2017).md" target="_blank" className="text-blue-600 hover:underline absolute top-4 right-4" style="color:blue;">Understand how to hunt such attacks</a>
+        </div>
+
+        <!-- Dwell Time Analysis -->
+        <h2 class="text-2xl font-semibold mb-4">Dwell Time Analysis</h2>
+        <p class="mb-4">Dwell time was approximately 5–6 months (October/November 2016–March 2017), allowing hackers to access and potentially exfiltrate sensitive client data undetected.</p>
+        <div class="overflow-x-auto mb-8">
+            <table class="min-w-full bg-white border border-gray-300">
+                <thead>
+                    <tr class="bg-gray-200">
+                        <th class="py-2 px-4 border-b">Step 1: Initial Access (Oct/Nov 2016)</th>
+                        <th class="py-2 px-4 border-b">Step 2: Collection/Exfiltration (Oct 2016–Mar 2017)</th>
+                        <th class="py-2 px-4 border-b">Step 3: Detection (Mar 2017)</th>
+                        <th class="py-2 px-4 border-b">Step 4: Disclosure (Sep 2017)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="py-2 px-4 border-b">Compromised admin account via single password. <br><strong>What went wrong</strong>: No 2FA, weak access controls.</td>
+                        <td class="py-2 px-4 border-b">Accessed 5M emails, client data. <br><strong>Factor</strong>: No DLP, no anomaly detection.</td>
+                        <td class="py-2 px-4 border-b">Identified via internal review; Hogan Lovells engaged. <br><strong>Factor</strong>: Delayed detection due to no SIEM.</td>
+                        <td class="py-2 px-4 border-b">Public disclosure after media report; minimized scope. <br><strong>Total time</strong>: Enabled extensive data exposure.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <p class="mb-4"><strong>Dwell Time Insight</strong>: The dwell time was like a thief roaming an office for months, unnoticed due to no security alarms. Industry reports suggest median dwell times in 2017 were ~100 days; Deloitte’s 5–6 months was prolonged, enabling significant data exposure due to inadequate monitoring.</p>
+
+        <!-- Learnings -->
+        <h2 class="text-2xl font-semibold mb-4">Learnings</h2>
+        <div class="overflow-x-auto">
+            <table class="min-w-full bg-white border border-gray-300">
+                <thead>
+                    <tr class="bg-gray-200">
+                        <th class="py-2 px-4 border-b">Root Cause Analysis</th>
+                        <th class="py-2 px-4 border-b">Impact Assessment</th>
+                        <th class="py-2 px-4 border-b">Detection Opportunities</th>
+                        <th class="py-2 px-4 border-b">Response and Remediation</th>
+                        <th class="py-2 px-4 border-b">Attribution Analysis</th>
+                        <th class="py-2 px-4 border-b">Lessons Learned</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="py-2 px-4 border-b"><strong>Using 5 Whys</strong>: Why breached? Admin account compromised. Why compromised? No 2FA. Why no 2FA? Weak security policies. Why weak? Prioritized operations over security. Why prioritized? Cost-cutting focus. <br> <strong>Other causes</strong>: No DLP, no SIEM, unencrypted emails. <br> <strong>Beginners</strong>: Root causes trace to lax security. <br> <strong>Experts</strong>: Fishbone factors: People (untrained admins), Process (no 2FA), Technology (no IDS).</td>
+                        <td class="py-2 px-4 border-b"><strong>Data</strong>: ~5M emails, client data (usernames, passwords, IPs) exposed. <br> <strong>Reputational</strong>: Trust in Deloitte’s cybersecurity services eroded. <br> <strong>Beginners</strong>: Impacts hit client trust. <br> <strong>Experts</strong>: BIA metrics: RPO violated due to sensitive data exposure.</td>
+                        <td class="py-2 px-4 border-b"><strong>Missed</strong>: Admin access via logs; data access via DLP; exfiltration via IDS. <br> <strong>Opportunities</strong>: Deploy 2FA, SIEM, DLP; encrypt emails. <br> <strong>Failures</strong>: No monitoring, ignored alerts. <br> <strong>Beginners</strong>: Detection is like a security camera. <br> <strong>Experts</strong>: Sigma rule: <code>detection: logsource: category: email | selection: access: admin AND auth: single_factor</code>.</td>
+                        <td class="py-2 px-4 border-b"><strong>Immediate</strong>: Engaged Hogan Lovells, notified clients/regulators. <br> <strong>Long-term</strong>: Implemented 2FA, enhanced monitoring. <br> <strong>Beginners</strong>: Response limits damage. <br> <strong>Experts</strong>: NIST IR followed: Identification (Mar 2017), Containment (Apr 2017), Eradication (post-Apr).</td>
+                        <td class="py-2 px-4 border-b"><strong>Unconfirmed</strong>: No clear attribution to lone wolf, rival, or state actor. <br> <strong>TTPs</strong>: Phishing, weak auth align with opportunistic attacks. <br> <strong>Beginners</strong>: Attribution identifies hackers. <br> <strong>Experts</strong>: TTPs suggest targeted attack; IOCs include admin account misuse, Azure logs.</td>
+                        <td class="py-2 px-4 border-b">Enforce 2FA, email encryption. <br> Deploy SIEM, DLP, EDR. <br> Train admins on phishing. <br> Audit privileged accounts. <br> <strong>Beginners</strong>: Secure accounts, monitor systems. <br> <strong>Experts</strong>: Adopt MITRE ATT&CK for email defense.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Threat Hunting Exercise: Analyzing Windows Kerberoasting SPN Enumeration &amp; Offline Cracking Dataset</title><link rel="stylesheet" href="../assets/site.css"></head><body><header><a href="../index.html">← All Threat Hunting Reports</a><span>Threat Hunting Exercise</span></header><main class="report"><h3 id="threat-hunting-exercise-analyzing-windows-kerberoasting-spn-enumeration-offline-cracking-dataset">Threat Hunting Exercise: Analyzing Windows Kerberoasting SPN Enumeration &amp; Offline Cracking Dataset</h3>
+<p>This hunt uses a simulated Active Directory authentication dataset (<code>windows_kerberoast_2022-08-02T141500.json</code>) capturing <strong>T1558.003: Kerberoasting</strong>, where an attacker enumerates Service Principal Names (SPNs) via LDAP and requests Kerberos service tickets encrypted with the target service account&#39;s password hash for offline cracking.</p>
+<h4 id="step-1-hypothesis-formation">Step 1: Hypothesis Formation</h4>
+<p><strong>Hypothesis</strong>: A standard domain user account requests Kerberos service tickets (TGS-REQ) for an unusually large number of distinct SPNs in a short window, followed by no corresponding legitimate application activity. Indicators:</p>
+<ul>
+<li>A single low-privilege account requesting TGS tickets for 10+ distinct SPNs within minutes.</li>
+<li>LDAP queries immediately preceding the TGS requests, filtering on <code>servicePrincipalName=*</code>.</li>
+<li>Tickets requested using weaker encryption (RC4-HMAC, etype 0x17) despite AES being available  -  a common Kerberoasting tool default.</li>
+<li>No corresponding client application launch or service connection following ticket issuance.</li>
+</ul>
+<p><strong>Null Hypothesis</strong>: An administrator or monitoring tool is running a legitimate SPN inventory/audit script that also requests tickets for validation purposes. Invalidate by identifying the source process and confirming it against an approved change ticket or scheduled task inventory.</p>
+<p><strong>Rationale</strong>: Kerberoasting lets an attacker escalate from a low-privileged foothold to a service account&#39;s plaintext password entirely offline, without ever touching the target service  -  this hunt validates ticket-encryption-type and request-volume analytics as an offline-cracking-resistant detection layer.</p>
+<h4 id="step-2-data-sources-and-scope">Step 2: Data Sources and Scope</h4>
+<ul>
+<li><strong>Sources</strong>: Domain Controller Security Event Logs (4769 - Kerberos Service Ticket Requested); LDAP query logs / Directory Service Access auditing (4662); EDR process telemetry for the requesting host.</li>
+<li><strong>Scope</strong>: ~2022-08-02T14:15:00-14:22:00 UTC; Host: WKS-FIN-044 (10.140.2.19); Account: svc-reports (member of Domain Users only).</li>
+<li><strong>SIEM Queries</strong> (Splunk/ELK):</li>
+<li><code>index=wineventlog EventCode=4769 Account_Name=&quot;svc-reports&quot; | stats dc(Service_Name) as distinct_spns by Account_Name, bucket(_time,10m) | where distinct_spns&gt;10</code></li>
+<li>Weak encryption filter: <code>index=wineventlog EventCode=4769 Ticket_Encryption_Type=&quot;0x17&quot; | stats count by Account_Name, Service_Name</code></li>
+<li>LDAP SPN enumeration: <code>index=wineventlog EventCode=4662 Properties=&quot;<em>servicePrincipalName</em>&quot; | stats count by Account_Name, Client_Address</code></li>
+</ul>
+<h4 id="step-3-key-findings">Step 3: Key Findings</h4>
+<p>Parsed events (6 shown) confirm the account <code>svc-reports</code> requested 27 TGS tickets for distinct SPNs within 7 minutes, all using RC4-HMAC encryption, immediately following an LDAP SPN sweep.</p>
+<div class="table-wrap"><table><thead><tr><th>Timestamp (UTC)</th><th>Host</th><th>Event</th><th>Encryption/Detail</th><th>IOC/Why Suspicious?</th></tr></thead><tbody><tr><td>2022-08-02 14:15:02</td><td>WKS-FIN-044</td><td>4662 (LDAP search: <code>servicePrincipalName=*</code>)</td><td>-</td><td><strong>Recon IOC</strong>: a full-domain SPN enumeration query from a standard user account  -  not a behavior seen in normal application logons.</td></tr><tr><td>2022-08-02 14:16:10</td><td>WKS-FIN-044</td><td>4769 - SQLSvc/db01.corp.local</td><td>0x17 (RC4-HMAC)</td><td><strong>Weak-Crypto IOC</strong>: RC4 requested despite the domain functional level supporting AES  -  the classic Rubeus/Impacket default.</td></tr><tr><td>2022-08-02 14:16:11 - 14:22:00</td><td>WKS-FIN-044</td><td>4769 (26 additional distinct SPNs)</td><td>0x17 for all 26</td><td><strong>Volume IOC</strong>: 27 distinct service tickets requested by one account in 7 minutes  -  far exceeds any single legitimate application&#39;s ticket needs.</td></tr><tr><td>2022-08-02 14:22:15</td><td>WKS-FIN-044</td><td>(EDR process check)</td><td><code>rubeus.exe</code> launched from <code>C:\Users\Public\</code></td><td><strong>Tooling IOC</strong>: known Kerberoasting tool binary confirms malicious intent, not an audit script.</td></tr><tr><td>-</td><td>-</td><td>(account context)</td><td>svc-reports: standard domain user, never logs on interactively</td><td>Corroborates that the requesting principal has no legitimate reason to enumerate or roast services.</td></tr><tr><td>-</td><td>-</td><td>(follow-up)</td><td>No corresponding SMB/application connections after ticket issuance</td><td>No legitimate consumption of the tickets  -  consistent with tickets extracted for offline cracking rather than use.</td></tr></tbody></table></div>
+<p><strong>Validation</strong>:</p>
+<ul>
+<li><strong>Timeline</strong>: LDAP SPN sweep immediately followed by 27 RC4-encrypted TGS requests in 7 minutes  -  textbook Kerberoasting tempo.</li>
+<li><strong>False Positives</strong>: No scheduled audit task or change record explains this account&#39;s activity; the requesting binary is a known offensive-security tool, not an approved administrative script.</li>
+<li><strong>Correlation</strong>: Single account, single host, encryption-type and volume both statistically abnormal  -  high confidence Kerberoasting.</li>
+</ul>
+<h4 id="step-4-recommendations-next-steps">Step 4: Recommendations &amp; Next Steps</h4>
+<ul>
+<li><strong>Immediate Response</strong>: Disable/reset the <code>svc-reports</code> account password immediately; force AES-only Kerberos policy where feasible; isolate WKS-FIN-044 for forensic triage; audit all service accounts for weak/reused passwords via an authorized password-spraying/roasting simulation.</li>
+<li><strong>Detection</strong>: Sigma-style rule: <code>title: Kerberoasting - High Volume RC4 TGS Requests</code> → <code>selection: EventID=4769 AND Ticket_Encryption_Type=&quot;0x17&quot; | distinct_spns_per_account_10m &gt; 8</code>.</li>
+<li><strong>Pro Tip</strong>: Enforce AES256 on all service accounts and enroll them in Group Managed Service Accounts (gMSA)  -  this removes the static, crackable password that makes Kerberoasting viable in the first place.</li>
+</ul>
+<p>Hypothesis <strong>confirmed</strong> - a compromised standard user account performed SPN enumeration and roasted 27 service tickets for offline password cracking!</p></main><footer>Local Threat Hunting Reports Library</footer></body></html>

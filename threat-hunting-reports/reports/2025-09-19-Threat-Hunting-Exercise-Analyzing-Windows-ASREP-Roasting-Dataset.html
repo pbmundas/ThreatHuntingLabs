@@ -1,0 +1,37 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Threat Hunting Exercise: Analyzing Windows AS-REP Roasting Against No-Pre-Auth Accounts Dataset</title><link rel="stylesheet" href="../assets/site.css"></head><body><header><a href="../index.html">← All Threat Hunting Reports</a><span>Threat Hunting Exercise</span></header><main class="report"><h3 id="threat-hunting-exercise-analyzing-windows-as-rep-roasting-against-no-pre-auth-accounts-dataset">Threat Hunting Exercise: Analyzing Windows AS-REP Roasting Against No-Pre-Auth Accounts Dataset</h3>
+<p>This hunt uses a simulated Active Directory authentication dataset (<code>windows_asrep_roast_2022-08-03T101000.json</code>) capturing <strong>T1558.004: AS-REP Roasting</strong>, which targets accounts with &quot;Do not require Kerberos preauthentication&quot; enabled to extract crackable ticket material without needing any valid credentials at all.</p>
+<h4 id="step-1-hypothesis-formation">Step 1: Hypothesis Formation</h4>
+<p><strong>Hypothesis</strong>: An external or unauthenticated-looking source generates AS-REQ requests for multiple domain accounts without a prior valid logon, and a subset of responses (AS-REP) are returned without requiring Kerberos pre-authentication. Indicators:</p>
+<ul>
+<li>Rapid AS-REQ requests for many distinct usernames from a single source in a short window (username enumeration/spraying pattern).</li>
+<li>A subset of accounts return AS-REP with encrypted timestamp data crackable offline, rather than a pre-authentication error.</li>
+<li>The requesting host/process is not a legitimate KDC proxy or federation service.</li>
+<li>No corresponding successful interactive logon for the roasted accounts around the same time.</li>
+</ul>
+<p><strong>Null Hypothesis</strong>: A legacy application or misconfigured federation service is intentionally using accounts with pre-auth disabled for compatibility, and a health-check script is enumerating them. Invalidate by cross-referencing the account list against a documented legacy-app exception list.</p>
+<p><strong>Rationale</strong>: AS-REP Roasting is unique among Kerberos attacks in requiring zero valid credentials to begin extracting crackable hashes, making it a critical pre-authentication blind spot; this hunt validates that pre-auth-disabled accounts are actively being targeted, not just theoretically at risk.</p>
+<h4 id="step-2-data-sources-and-scope">Step 2: Data Sources and Scope</h4>
+<ul>
+<li><strong>Sources</strong>: Domain Controller Security Event Logs (4768 - Kerberos TGT Requested, 4771 - Pre-Authentication Failed); Network taps/IDS on port 88 (Kerberos); Active Directory account attribute audit (userAccountControl DONT_REQ_PREAUTH flag).</li>
+<li><strong>Scope</strong>: ~2022-08-03T10:10:00-10:14:00 UTC; Source: 10.140.9.201 (unmanaged laptop, guest VLAN); Domain: corp.local.</li>
+<li><strong>SIEM Queries</strong> (Splunk/ELK):</li>
+<li><code>index=wineventlog EventCode=4768 | stats dc(Account_Name) as distinct_accounts by Client_Address, bucket(_time,5m) | where distinct_accounts&gt;15</code></li>
+<li>Pre-auth-not-required success filter: <code>index=wineventlog EventCode=4768 Pre_Authentication_Type=0 | table _time Account_Name Client_Address</code></li>
+<li>AD attribute audit: <code>Get-ADUser -Filter {UserAccountControl -band 4194304} -Properties userAccountControl</code></li>
+</ul>
+<h4 id="step-3-key-findings">Step 3: Key Findings</h4>
+<p>Parsed events (6 shown) confirm a guest-VLAN host requested TGTs for 34 usernames in 4 minutes, with 3 accounts returning pre-auth-not-required AS-REP tickets suitable for offline cracking.</p>
+<div class="table-wrap"><table><thead><tr><th>Timestamp (UTC)</th><th>Source</th><th>Event</th><th>Detail</th><th>IOC/Why Suspicious?</th></tr></thead><tbody><tr><td>2022-08-03 10:10:03</td><td>10.140.9.201 (guest VLAN)</td><td>4768 - svc-legacy1</td><td>Pre-Auth Type=0 (none)</td><td><strong>No-PreAuth IOC</strong>: KDC issued a TGT without requiring a valid password proof  -  this account can be roasted with zero credentials.</td></tr><tr><td>2022-08-03 10:10:04 - 10:13:50</td><td>10.140.9.201</td><td>4768 (31 additional usernames)</td><td>28 pre-auth-required errors (4771), 2 more successes</td><td><strong>Spray IOC</strong>: 34 distinct usernames probed from one unauthenticated source in under 4 minutes  -  a username-enumeration sweep, not normal client behavior.</td></tr><tr><td>2022-08-03 10:13:58</td><td>10.140.9.201</td><td>4768 - svc-print-legacy</td><td>Pre-Auth Type=0 (none)</td><td>Third roastable account identified; ticket encrypted with the account&#39;s password-derived key, crackable offline via hashcat mode 18200.</td></tr><tr><td>-</td><td>-</td><td>(AD attribute check)</td><td>3 accounts confirmed with <code>DONT_REQ_PREAUTH</code> set, none on an approved legacy exception list</td><td>Confirms these are misconfigured, not intentionally excepted, accounts.</td></tr><tr><td>-</td><td>10.140.9.201</td><td>(asset check)</td><td>Unmanaged BYOD laptop on guest VLAN, no EDR agent</td><td><strong>Source-anomaly IOC</strong>: legitimate service health checks do not originate from guest-network unmanaged devices.</td></tr><tr><td>-</td><td>-</td><td>(follow-up)</td><td>No interactive logons for the 3 roasted accounts followed the requests</td><td>Consistent with hash extraction for offline cracking rather than legitimate authentication.</td></tr></tbody></table></div>
+<p><strong>Validation</strong>:</p>
+<ul>
+<li><strong>Timeline</strong>: 34-account enumeration sweep in 4 minutes from an unmanaged guest-VLAN host, yielding 3 roastable AS-REP tickets  -  matches known AS-REP roasting tooling (Rubeus <code>/asreproast</code>, Impacket <code>GetNPUsers.py</code>).</li>
+<li><strong>False Positives</strong>: none of the 3 flagged accounts appear on the documented legacy-application exception list; the source device has no legitimate business reason to query the KDC for 34 identities.</li>
+<li><strong>Correlation</strong>: single source, tight time window, statistically implausible username breadth  -  high confidence reconnaissance-to-roasting activity.</li>
+</ul>
+<h4 id="step-4-recommendations-next-steps">Step 4: Recommendations &amp; Next Steps</h4>
+<ul>
+<li><strong>Immediate Response</strong>: Immediately enable Kerberos pre-authentication on the 3 exposed accounts; rotate their passwords; block/quarantine 10.140.9.201 and identify the physical device owner; review guest VLAN segmentation to confirm it cannot reach domain controllers on port 88 going forward.</li>
+<li><strong>Detection</strong>: Sigma-style rule: <code>title: AS-REP Roasting - Pre-Auth-Not-Required TGT Issuance</code> → <code>selection: EventID=4768 AND Pre_Authentication_Type=0 | distinct_accounts_per_source_5m &gt; 10</code>.</li>
+<li><strong>Pro Tip</strong>: Run a proactive <code>DONT_REQ_PREAUTH</code> sweep across the domain quarterly  -  this misconfiguration is often introduced by legacy application installers and silently persists for years until an attacker finds it first.</li>
+</ul>
+<p>Hypothesis <strong>confirmed</strong> - an unauthenticated guest-network host enumerated 34 accounts and successfully AS-REP roasted 3 pre-auth-disabled service accounts!</p></main><footer>Local Threat Hunting Reports Library</footer></body></html>

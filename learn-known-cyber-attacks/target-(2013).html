@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Target (2013) MITRE ATT&CK Navigator</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.18.9/babel.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis-network.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="site.css">
+</head>
+<body class="bg-gray-100 font-sans">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const attacksData = {
+            "Target (2013)": {
+                "name": "Target Data Breach (2013) MITRE ATT&CK Mapping",
+                "versions": { "attack": "14", "navigator": "4.9.1", "layer": "4.5" },
+                "domain": "enterprise-attack",
+                "techniques": [
+                    {
+                        "techniqueID": "T1195.001",
+                        "tactic": "initial-access",
+                        "color": "#ff9999",
+                        "comment": "Compromised third-party HVAC vendor",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Vulnerability", "value": "Weak third-party credentials" },
+                            { "name": "Assets", "value": "Vendor systems, POS terminals" },
+                            { "name": "IOCs", "value": "Phishing emails from example.com, stolen credentials (e.g., hvac_user:pass123)" },
+                            { "name": "Threat Actors", "value": "Unknown (Eastern European cybercriminals)" },
+                            { "name": "Parameters", "value": "Email logs, authentication logs" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1059.001",
+                        "tactic": "execution",
+                        "color": "#ffcc99",
+                        "comment": "Executed POS malware",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "POS terminals" },
+                            { "name": "IOCs", "value": "Memory-scraping malware (BlackPOS, SHA256: 9a7b1c2d...)" },
+                            { "name": "Parameters", "value": "Process execution logs, EDR telemetry" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1505.003",
+                        "tactic": "persistence",
+                        "color": "#ffcc99",
+                        "comment": "Installed persistent POS malware",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "POS terminals" },
+                            { "name": "IOCs", "value": "Malicious executables (pos.exe, SHA256: 3b4c5d6e...), registry key HKLM\\Software\\POS" },
+                            { "name": "Parameters", "value": "File system logs, registry monitoring" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1078",
+                        "tactic": "privilege-escalation",
+                        "color": "#ffcc99",
+                        "comment": "Used stolen credentials for access",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "POS terminals, network" },
+                            { "name": "IOCs", "value": "Unauthorized admin logins from 192.168.x.x" },
+                            { "name": "Parameters", "value": "Authentication logs, privilege escalation audit trails" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1003",
+                        "tactic": "credential-access",
+                        "color": "#ffcc99",
+                        "comment": "Dumped credentials from vendor systems",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "Vendor systems" },
+                            { "name": "IOCs", "value": "Mimikatz execution (SHA256: 7e8f9a...), LSASS memory dumps" },
+                            { "name": "Parameters", "value": "Memory analysis, EDR telemetry" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1082",
+                        "tactic": "discovery",
+                        "color": "#ffcc99",
+                        "comment": "Collected system information",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "POS terminals, network" },
+                            { "name": "IOCs", "value": "Systeminfo command output, netstat -an execution" },
+                            { "name": "Parameters", "value": "System logs, command execution logs" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1018",
+                        "tactic": "discovery",
+                        "color": "#ff9999",
+                        "comment": "Discovered POS systems",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "Network infrastructure" },
+                            { "name": "IOCs", "value": "Network scans targeting 192.168.0.0/16" },
+                            { "name": "Parameters", "value": "Network traffic analysis, system enumeration logs" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1570",
+                        "tactic": "lateral-movement",
+                        "color": "#ffcc99",
+                        "comment": "Moved laterally to POS systems",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "POS terminals, network" },
+                            { "name": "IOCs", "value": "Unusual network share access from 192.168.x.x" },
+                            { "name": "Parameters", "value": "Network traffic (PCAP), EDR alerts" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1074.001",
+                        "tactic": "collection",
+                        "color": "#ffcc99",
+                        "comment": "Staged credit card data",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "POS terminals" },
+                            { "name": "IOCs", "value": "Memory-scraped credit card data in C:\\Temp\\cc_data.txt" },
+                            { "name": "Parameters", "value": "File system logs, DLP alerts" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1041",
+                        "tactic": "exfiltration",
+                        "color": "#ffcc99",
+                        "comment": "Exfiltrated credit card data",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "POS terminals, external servers" },
+                            { "name": "IOCs", "value": "Large data transfers to 185.86.148.0/24" },
+                            { "name": "Parameters", "value": "Network traffic (PCAP), DLP alerts" }
+                        ]
+                    }
+                ]
+            }
+        };
+
+        const App = () => {
+            const flowchartRef = React.useRef(null);
+            const selectedAttack = "Target (2013)";
+            const [selectedTechnique, setSelectedTechnique] = React.useState(null);
+
+            React.useEffect(() => {
+                const mitreData = attacksData[selectedAttack];
+                const nodes = mitreData.techniques.map((tech, index) => ({
+                    id: index + 1,
+                    label: `${tech.techniqueID}: ${tech.tactic}`,
+                    shape: "box",
+                    color: tech.color
+                }));
+
+                const edges = [];
+                const tacticOrder = [
+                    "initial-access", "execution", "persistence", "privilege-escalation",
+                    "credential-access", "discovery", "lateral-movement", "command-and-control",
+                    "collection", "exfiltration", "defense-evasion", "impact"
+                ];
+
+                const tacticNodes = {};
+                mitreData.techniques.forEach((tech, index) => {
+                    const nodeId = index + 1;
+                    const tacticIndex = tacticOrder.indexOf(tech.tactic);
+                    if (!tacticNodes[tech.tactic]) {
+                        tacticNodes[tech.tactic] = [nodeId];
+                    } else {
+                        tacticNodes[tech.tactic].push(nodeId);
+                    }
+                    if (tacticIndex > 0) {
+                        const prevTactic = tacticOrder[tacticIndex - 1];
+                        if (tacticNodes[prevTactic]) {
+                            tacticNodes[prevTactic].forEach(prevNodeId => {
+                                edges.push({ from: prevNodeId, to: nodeId, arrows: "to" });
+                            });
+                        }
+                    }
+                });
+
+				// --- Custom manual edge: Lateral Movement → Collection ---
+				const latMoveNode = mitreData.techniques.findIndex(t => t.tactic === "lateral-movement") + 1;
+				const collNode    = mitreData.techniques.findIndex(t => t.tactic === "collection") + 1;
+
+				if (latMoveNode > 0 && collNode > 0) {
+					edges.push({
+						from: latMoveNode,
+						to: collNode,
+						arrows: "to",
+						color: { color: "green" },
+						width: 2
+					});
+				}
+
+
+                const container = flowchartRef.current;
+                const data = { nodes: new vis.DataSet(nodes), edges: new vis.DataSet(edges) };
+                const options = {
+								physics: {
+								enabled: true
+											},
+								nodes: { font: { size: 12 }, shape: 'box', shapeProperties: { borderRadius: 5 } },
+								edges: { arrows: 'to', smooth: false },
+								interaction: { dragNodes: true, dragView: true, zoomView: true }
+								};
+                const network = new vis.Network(container, data, options);
+
+                network.on("click", (params) => {
+                    if (params.nodes.length > 0) {
+                        const nodeId = params.nodes[0];
+                        setSelectedTechnique(mitreData.techniques[nodeId - 1]);
+                    }
+                });
+
+                // Fit the network to the container
+                network.fit();
+
+                // Add resize listener
+                const handleResize = () => {
+                    network.fit();
+                };
+                window.addEventListener('resize', handleResize);
+
+                return () => {
+                    window.removeEventListener('resize', handleResize);
+                    network.destroy();
+                };
+            }, []);
+
+            return (
+                <div className="container mx-auto p-4">
+				<a href="index.html" className="text-blue-600 hover:underline absolute top-4 right-4">Back to Index</a>
+                    <h2 className="text-2xl font-bold mb-4">Target (2013) MITRE ATT&CK Navigator</h2>
+                    <div className="flex gap-4">
+                        <div ref={flowchartRef} className="flex-[3] border border-gray-300 bg-white" style={{ height: '600px' }}></div>
+                        <div className="flex-1 p-4 bg-gray-200 rounded-md overflow-y-auto" style={{ height: '600px' }}>
+                            <h3 className="text-lg font-semibold">Technique Details</h3>
+                            {selectedTechnique ? (
+                                <pre className="whitespace-pre-wrap text-sm">
+                                    <strong>Technique ID:</strong> {selectedTechnique.techniqueID}<br/>
+                                    <strong>Tactic:</strong> {selectedTechnique.tactic}<br/>
+                                    <strong>Comment:</strong> {selectedTechnique.comment}<br/>
+                                    <strong>Metadata:</strong><br/>
+                                    {selectedTechnique.metadata.map((meta, idx) => (
+                                        <div key={idx}>
+                                            <strong>{meta.name}:</strong> {meta.value}<br/>
+                                        </div>
+                                    ))}
+                                </pre>
+                            ) : (
+                                <p>Click a node to view technique details, MITRE TTPs, IOCs, and technical information. Drag nodes to move them.</p>
+                            )}
+							<br></br><strong>Background:</strong><br/>
+							<p>Target (2013): The Target breach in 2013 saw attackers gain access through a third-party HVAC vendor’s credentials, deploying malware on point-of-sale systems. This led to the theft of 40 million credit card details, exposing vulnerabilities in vendor network security.</p>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+	<div class="mt-8 p-4 bg-white rounded-md shadow space-y-6">
+
+  <!-- Attack Timeline -->
+  <section>
+	<!-- Attack Timeline -->
+        <h2 class="text-2xl font-semibold mb-4">Attack Timeline</h2>
+        <div class="overflow-x-auto mb-8">
+            <table class="min-w-full bg-white border border-gray-300">
+                <thead>
+                    <tr class="bg-gray-200">
+                        <th class="py-2 px-4 border-b">Date/Time</th>
+                        <th class="py-2 px-4 border-b">Action</th>
+                        <th class="py-2 px-4 border-b">Actor/Details</th>
+                        <th class="py-2 px-4 border-b">Evidence/Impact</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="py-2 px-4 border-b">September 2013</td>
+                        <td class="py-2 px-4 border-b">Initial access: Phishing email compromises Fazio Mechanical’s credentials.</td>
+                        <td class="py-2 px-4 border-b">Russian cybercriminals</td>
+                        <td class="py-2 px-4 border-b">Stolen vendor credentials used to access Target’s network.</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border-b">November 12, 2013</td>
+                        <td class="py-2 px-4 border-b">Malware deployment: BlackPOS installed on Target’s POS systems.</td>
+                        <td class="py-2 px-4 border-b">Attackers</td>
+                        <td class="py-2 px-4 border-b">Malware scraped card data from POS memory.</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border-b">November 27, 2013</td>
+                        <td class="py-2 px-4 border-b">Data collection begins: BlackPOS captures 40 million card records.</td>
+                        <td class="py-2 px-4 border-b">Attackers</td>
+                        <td class="py-2 px-4 border-b">Captured track data, CVV, PINs during holiday shopping season.</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border-b">November 30, 2013</td>
+                        <td class="py-2 px-4 border-b">FireEye alerts detect malware activity; alerts ignored by Target.</td>
+                        <td class="py-2 px-4 border-b">FireEye/Target</td>
+                        <td class="py-2 px-4 border-b">Missed opportunity to stop breach early.</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border-b">December 2, 2013</td>
+                        <td class="py-2 px-4 border-b">Data exfiltration: Card data moved to internal staging server, then to external FTP servers.</td>
+                        <td class="py-2 px-4 border-b">Attackers</td>
+                        <td class="py-2 px-4 border-b">Data sent to Russian servers; 70 million customer records stolen.</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border-b">December 12, 2013</td>
+                        <td class="py-2 px-4 border-b">U.S. Department of Justice notifies Target of breach after card data appears on black market.</td>
+                        <td class="py-2 px-4 border-b">DOJ/Target</td>
+                        <td class="py-2 px-4 border-b">Investigation confirms compromise; POS systems targeted.</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border-b">December 15, 2013</td>
+                        <td class="py-2 px-4 border-b">Malware removed from most POS systems; breach contained.</td>
+                        <td class="py-2 px-4 border-b">Target</td>
+                        <td class="py-2 px-4 border-b">Data collection halted; remediation begins.</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border-b">December 19, 2013</td>
+                        <td class="py-2 px-4 border-b">Target publicly announces breach, confirming 40 million cards affected.</td>
+                        <td class="py-2 px-4 border-b">Target</td>
+                        <td class="py-2 px-4 border-b">Password resets, customer notifications, credit monitoring offered.</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border-b">January 10, 2014</td>
+                        <td class="py-2 px-4 border-b">Scope expanded: 70 million customer records also stolen.</td>
+                        <td class="py-2 px-4 border-b">Target</td>
+                        <td class="py-2 px-4 border-b">Total impact: $252M in costs, $18.5M settlement in 2017.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Dwell Time Analysis -->
+        <h2 class="text-2xl font-semibold mb-4">Dwell Time Analysis</h2>
+        <p class="mb-4">Dwell time was approximately 60-90 days (September to December 12, 2013), the period attackers operated undetected in Target’s network, allowing credential theft, malware deployment, and data exfiltration.</p>
+        <div class="overflow-x-auto mb-8">
+            <table class="min-w-full bg-white border border-gray-300">
+                <thead>
+                    <tr class="bg-gray-200">
+                        <th class="py-2 px-4 border-b">Step 1: Initial Access (September)</th>
+                        <th class="py-2 px-4 border-b">Step 2: Lateral Movement (November)</th>
+                        <th class="py-2 px-4 border-b">Step 3: Collection (Nov-Dec)</th>
+                        <th class="py-2 px-4 border-b">Step 4: Exfiltration (December)</th>
+                        <th class="py-2 px-4 border-b">Step 5: Detection (December 12)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="py-2 px-4 border-b">Phishing email compromised vendor credentials. <br><strong>What went wrong</strong>: No two-factor authentication for vendors.</td>
+                        <td class="py-2 px-4 border-b">Used credentials to access POS systems via network. <br><strong>Factor</strong>: No network segmentation.</td>
+                        <td class="py-2 px-4 border-b">BlackPOS scraped 40 million card records from POS. <br><strong>Factor</strong>: No real-time malware detection.</td>
+                        <td class="py-2 px-4 border-b">Exfiltrated data via FTP to Russian servers. <br><strong>Factor</strong>: No egress filtering or DLP.</td>
+                        <td class="py-2 px-4 border-b">DOJ alert after card data appeared on black market. <br><strong>Total time</strong>: Enabled theft of 110 million records.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <p class="mb-4"><strong>Dwell Time Insight</strong>: The dwell time was like a thief operating in a store’s backroom, unnoticed due to ignored alerts. Experts: Median dwell time in 2013 was ~150 days (per Mandiant); Target’s 60-90 days was typical but costly due to POS targeting and lack of response to alerts.</p>
+
+        <!-- Learnings -->
+        <h2 class="text-2xl font-semibold mb-4">Learnings</h2>
+        <div class="overflow-x-auto">
+            <table class="min-w-full bg-white border border-gray-300">
+                <thead>
+                    <tr class="bg-gray-200">
+                        <th class="py-2 px-4 border-b">Root Cause Analysis</th>
+                        <th class="py-2 px-4 border-b">Impact Assessment</th>
+                        <th class="py-2 px-4 border-b">Detection Opportunities</th>
+                        <th class="py-2 px-4 border-b">Response and Remediation</th>
+                        <th class="py-2 px-4 border-b">Attribution Analysis</th>
+                        <th class="py-2 px-4 border-b">Lessons Learned</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="py-2 px-4 border-b"><strong>Using 5 Whys</strong>: Why breached? Vendor credential theft. Why stolen? Phishing with no 2FA. Why no 2FA? Weak vendor security policies. Why weak? No supply chain audits. Why no audits? Prioritized operations over security. <br> <strong>Other causes</strong>: No network segmentation, ignored FireEye alerts, no DLP for exfiltration. <br> <strong>Beginners</strong>: Root causes find failure points. <br> <strong>Experts</strong>: Fishbone factors: People (vendor oversight), Process (no 2FA), Technology (no DLP).</td>
+                        <td class="py-2 px-4 border-b"><strong>Data</strong>: 40 million cards, 70 million customer records. <br> <strong>Financial</strong>: $252M in costs, $18.5M settlement. <br> <strong>Reputational</strong>: Trust erosion; CEO resignation. <br> <strong>Regulatory</strong>: Increased scrutiny; PCI DSS violations. <br> <strong>Beginners</strong>: Impacts hit wallets and trust. <br> <strong>Experts</strong>: BIA metrics: RTO/RPO violated due to delayed response.</td>
+                        <td class="py-2 px-4 border-b"><strong>Missed</strong>: FireEye alerts ignored; phishing could have been caught with email filters; exfiltration with DLP. <br> <strong>Opportunities</strong>: Deploy 2FA for vendors, monitor POS with EDR, use DLP for egress. <br> <strong>Failures</strong>: No alert triage, no network segmentation. <br> <strong>Beginners</strong>: Detection is like a security guard. <br> <strong>Experts</strong>: Sigma rule example: <code>detection: logsource: category: pos | selection: event: memory_scrape AND Process: BlackPOS</code>.</td>
+                        <td class="py-2 px-4 border-b"><strong>Immediate</strong>: Removed malware, notified customers, offered credit monitoring. <br> <strong>Long-term</strong>: Implemented 2FA, network segmentation, DLP, enhanced alert response. <br> <strong>Beginners</strong>: Response is cleanup. <br> <strong>Experts</strong>: Followed NIST IR: Identification (December), Containment (December), Eradication (2014).</td>
+                        <td class="py-2 px-4 border-b"><strong>Confirmed</strong>: Russian cybercriminals (per FireEye). <br> <strong>TTPs</strong>: Phishing, BlackPOS, FTP exfiltration align with cybercrime groups. <br> <strong>Beginners</strong>: Attribution is identifying culprits. <br> <strong>Experts</strong>: TTPs match Carbanak-like groups; IOCs include BlackPOS hashes.</td>
+                        <td class="py-2 px-4 border-b">Enforce 2FA for vendors. <br> Segment networks. <br> Deploy DLP and EDR. <br> Prioritize alert response. <br> Audit supply chain. <br> <strong>Beginners</strong>: Secure third-party access. <br> <strong>Experts</strong>: Adopt MITRE ATT&CK for retail defense.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+</body>
+</html>
+

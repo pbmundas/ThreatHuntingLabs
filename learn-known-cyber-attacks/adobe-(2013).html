@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adobe Breach (2013) MITRE ATT&CK Navigator</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.18.9/babel.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis-network.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="site.css">
+</head>
+<body class="bg-gray-100 font-sans">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const attacksData = {
+            "Adobe (2013)": {
+                "name": "Adobe Breach (2013) MITRE ATT&CK Mapping",
+                "versions": { "attack": "14", "navigator": "4.9.1", "layer": "4.5" },
+                "domain": "enterprise-attack",
+                "techniques": [
+                    {
+                        "techniqueID": "T1190",
+                        "tactic": "initial-access",
+                        "color": "#ff9999",
+                        "comment": "Exploited vulnerabilities in a public-facing web server to gain initial access to Adobe’s network",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Vulnerability", "value": "Public-facing web server vulnerabilities" },
+                            { "name": "Assets", "value": "Public-facing servers, Adobe network" },
+                            { "name": "IOCs", "value": "Unauthorized server access attempts" },
+                            { "name": "Threat Actors", "value": "Unknown" },
+                            { "name": "Parameters", "value": "Web server logs, IDS/IPS alerts" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1059",
+                        "tactic": "execution",
+                        "color": "#ffcc99",
+                        "comment": "Executed malicious commands to navigate and manipulate Adobe’s internal systems",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "Compromised servers" },
+                            { "name": "IOCs", "value": "Malicious command execution" },
+                            { "name": "Parameters", "value": "Command execution logs, EDR telemetry" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1505.003",
+                        "tactic": "persistence",
+                        "color": "#ffcc99",
+                        "comment": "Deployed backdoors or maintained access through compromised server configurations",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "Compromised servers" },
+                            { "name": "IOCs", "value": "Unauthorized backdoors, modified configurations" },
+                            { "name": "Parameters", "value": "File integrity monitoring, server configuration logs" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1078",
+                        "tactic": "privilege-escalation",
+                        "color": "#ffcc99",
+                        "comment": "Used stolen credentials or exploited server vulnerabilities to gain elevated access",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "Internal systems, administrative accounts" },
+                            { "name": "IOCs", "value": "Anomalous admin logins" },
+                            { "name": "Parameters", "value": "Authentication logs, privilege escalation monitoring" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1027",
+                        "tactic": "defense-evasion",
+                        "color": "#ffcc99",
+                        "comment": "Employed obfuscated code to evade detection during network traversal",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "Compromised systems" },
+                            { "name": "IOCs", "value": "Obfuscated code artifacts" },
+                            { "name": "Parameters", "value": "File integrity monitoring, behavioral analytics" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1021",
+                        "tactic": "lateral-movement",
+                        "color": "#ffcc99",
+                        "comment": "Moved laterally across Adobe’s network to access customer data and source code repositories",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "Networked systems, file servers" },
+                            { "name": "IOCs", "value": "Anomalous network connections" },
+                            { "name": "Parameters", "value": "Network traffic analysis, SMB session logs" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1005",
+                        "tactic": "collection",
+                        "color": "#ffcc99",
+                        "comment": "Collected sensitive customer data (e.g., user IDs, emails, passwords) and source code from Adobe’s servers",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "Customer database, source code repositories" },
+                            { "name": "IOCs", "value": "Unauthorized data access" },
+                            { "name": "Parameters", "value": "File access logs, DLP monitoring" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1071.001",
+                        "tactic": "command-and-control",
+                        "color": "#ffcc99",
+                        "comment": "Established HTTPS-based C2 communication to manage the compromised environment",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "Compromised systems" },
+                            { "name": "IOCs", "value": "HTTPS beacons to C2 domains" },
+                            { "name": "Parameters", "value": "Network traffic analysis, DNS queries" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1041",
+                        "tactic": "exfiltration",
+                        "color": "#ffcc99",
+                        "comment": "Exfiltrated stolen customer data and source code to attacker-controlled servers",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "Customer data, source code" },
+                            { "name": "IOCs", "value": "Outbound data transfers to C2 servers" },
+                            { "name": "Parameters", "value": "Network egress filtering, DLP alerts" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1490",
+                        "tactic": "impact",
+                        "color": "#ff6666",
+                        "comment": "Inhibited system recovery by maintaining persistent access, potentially disrupting Adobe’s operations",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "Infected systems, corporate networks" },
+                            { "name": "IOCs", "value": "Persistent malware artifacts" },
+                            { "name": "Parameters", "value": "File integrity monitoring, EDR alerts" }
+                        ]
+                    }
+                ]
+            }
+        };
+
+        const App = () => {
+            const flowchartRef = React.useRef(null);
+            const selectedAttack = "Adobe (2013)";
+            const [selectedTechnique, setSelectedTechnique] = React.useState(null);
+
+            React.useEffect(() => {
+                const mitreData = attacksData[selectedAttack];
+                const nodes = mitreData.techniques.map((tech, index) => ({
+                    id: index + 1,
+                    label: `${tech.techniqueID}: ${tech.tactic}`,
+                    shape: "box",
+                    color: tech.color
+                }));
+
+                const edges = [];
+                const tacticOrder = [
+                    "initial-access", "execution", "persistence", "privilege-escalation",
+                    "defense-evasion", "lateral-movement", "collection", "command-and-control",
+                    "exfiltration", "impact"
+                ];
+
+                const tacticNodes = {};
+                mitreData.techniques.forEach((tech, index) => {
+                    const nodeId = index + 1;
+                    const tacticIndex = tacticOrder.indexOf(tech.tactic);
+                    if (!tacticNodes[tech.tactic]) {
+                        tacticNodes[tech.tactic] = [nodeId];
+                    } else {
+                        tacticNodes[tech.tactic].push(nodeId);
+                    }
+                    if (tacticIndex > 0) {
+                        const prevTactic = tacticOrder[tacticIndex - 1];
+                        if (tacticNodes[prevTactic]) {
+                            tacticNodes[prevTactic].forEach(prevNodeId => {
+                                edges.push({ from: prevNodeId, to: nodeId, arrows: "to" });
+                            });
+                        }
+                    }
+                });
+
+                // Custom manual edges to ensure full connectivity
+                const initialAccessNode = mitreData.techniques.findIndex(t => t.tactic === "initial-access") + 1;
+                const executionNode = mitreData.techniques.findIndex(t => t.tactic === "execution") + 1;
+                const persistenceNode = mitreData.techniques.findIndex(t => t.tactic === "persistence") + 1;
+                const privilegeEscalationNode = mitreData.techniques.findIndex(t => t.tactic === "privilege-escalation") + 1;
+                const defenseEvasionNode = mitreData.techniques.findIndex(t => t.tactic === "defense-evasion") + 1;
+                const lateralMovementNode = mitreData.techniques.findIndex(t => t.tactic === "lateral-movement") + 1;
+                const collectionNode = mitreData.techniques.findIndex(t => t.tactic === "collection") + 1;
+                const commandAndControlNode = mitreData.techniques.findIndex(t => t.tactic === "command-and-control") + 1;
+                const exfiltrationNode = mitreData.techniques.findIndex(t => t.tactic === "exfiltration") + 1;
+                const impactNode = mitreData.techniques.findIndex(t => t.tactic === "impact") + 1;
+
+                // Initial Access → Execution
+                if (initialAccessNode > 0 && executionNode > 0) {
+                    edges.push({ from: initialAccessNode, to: executionNode, arrows: "to", color: { color: "blue" }, width: 2 });
+                }
+
+                // Execution → Persistence
+                if (executionNode > 0 && persistenceNode > 0) {
+                    edges.push({ from: executionNode, to: persistenceNode, arrows: "to", color: { color: "blue" }, width: 2 });
+                }
+
+                // Persistence → Privilege Escalation
+                if (persistenceNode > 0 && privilegeEscalationNode > 0) {
+                    edges.push({ from: persistenceNode, to: privilegeEscalationNode, arrows: "to", color: { color: "blue" }, width: 2 });
+                }
+
+                // Privilege Escalation → Defense Evasion
+                if (privilegeEscalationNode > 0 && defenseEvasionNode > 0) {
+                    edges.push({ from: privilegeEscalationNode, to: defenseEvasionNode, arrows: "to", color: { color: "blue" }, width: 2 });
+                }
+
+                // Defense Evasion → Lateral Movement
+                if (defenseEvasionNode > 0 && lateralMovementNode > 0) {
+                    edges.push({ from: defenseEvasionNode, to: lateralMovementNode, arrows: "to", color: { color: "blue" }, width: 2 });
+                }
+
+                // Lateral Movement → Collection
+                if (lateralMovementNode > 0 && collectionNode > 0) {
+                    edges.push({ from: lateralMovementNode, to: collectionNode, arrows: "to", color: { color: "blue" }, width: 2 });
+                }
+
+                // Collection → Command and Control
+                if (collectionNode > 0 && commandAndControlNode > 0) {
+                    edges.push({ from: collectionNode, to: commandAndControlNode, arrows: "to", color: { color: "blue" }, width: 2 });
+                }
+
+                // Command and Control → Exfiltration
+                if (commandAndControlNode > 0 && exfiltrationNode > 0) {
+                    edges.push({ from: commandAndControlNode, to: exfiltrationNode, arrows: "to", color: { color: "green" }, width: 2 });
+                }
+
+                // Exfiltration → Impact
+                if (exfiltrationNode > 0 && impactNode > 0) {
+                    edges.push({ from: exfiltrationNode, to: impactNode, arrows: "to", color: { color: "purple" }, width: 2 });
+                }
+
+                const container = flowchartRef.current;
+                const data = { nodes: new vis.DataSet(nodes), edges: new vis.DataSet(edges) };
+                const options = {
+                    physics: { enabled: true },
+                    nodes: { font: { size: 12 }, shape: 'box', shapeProperties: { borderRadius: 5 } },
+                    edges: { arrows: 'to', smooth: false },
+                    interaction: { dragNodes: true, dragView: true, zoomView: true }
+                };
+                const network = new vis.Network(container, data, options);
+
+                network.on("click", (params) => {
+                    if (params.nodes.length > 0) {
+                        const nodeId = params.nodes[0];
+                        setSelectedTechnique(mitreData.techniques[nodeId - 1]);
+                    }
+                });
+
+                network.fit();
+
+                const handleResize = () => {
+                    network.fit();
+                };
+                window.addEventListener('resize', handleResize);
+
+                return () => {
+                    window.removeEventListener('resize', handleResize);
+                    network.destroy();
+                };
+            }, []);
+
+            return (
+                <div className="container mx-auto p-4">
+                    <a href="index.html" className="text-blue-600 hover:underline absolute top-4 right-4">Back to Index</a>
+                    <h2 className="text-2xl font-bold mb-4">Adobe Breach (2013) MITRE ATT&CK Navigator</h2>
+                    <div className="flex gap-4">
+                        <div ref={flowchartRef} className="flex-[3] border border-gray-300 bg-white" style={{ height: '600px' }}></div>
+                        <div className="flex-1 p-4 bg-gray-200 rounded-md overflow-y-auto" style={{ height: '600px' }}>
+                            <h3 className="text-lg font-semibold">Technique Details</h3>
+                            {selectedTechnique ? (
+                                <pre className="whitespace-pre-wrap text-sm">
+                                    <strong>Technique ID:</strong> {selectedTechnique.techniqueID}<br/>
+                                    <strong>Tactic:</strong> {selectedTechnique.tactic}<br/>
+                                    <strong>Comment:</strong> {selectedTechnique.comment}<br/>
+                                    <strong>Metadata:</strong><br/>
+                                    {selectedTechnique.metadata.map((meta, idx) => (
+                                        <div key={idx}>
+                                            <strong>{meta.name}:</strong> {meta.value}<br/>
+                                        </div>
+                                    ))}
+                                </pre>
+                            ) : (
+                                <p>Click a node to view technique details, MITRE TTPs, IOCs, and technical information. Drag nodes to move them.</p>
+                            )}
+                            <br/><strong>Background:</strong><br/>
+                            <p>The Adobe breach, disclosed on October 3, 2013, was a major cyberattack targeting Adobe Systems, compromising ~153 million accounts. Attackers exploited a public-facing web server to access the network, stealing user IDs, email addresses, encrypted passwords, unencrypted password hints, and, for 2.9 million users, encrypted credit card data. Source code for Acrobat, ColdFusion, and Photoshop was also stolen. The breach, undetected for weeks, was exacerbated by Adobe’s SaaS transition, leaving legacy data on unprotected servers. Weak password encryption allowed some passwords to be recovered. Adobe reset passwords, offered credit monitoring, and improved security measures like encryption and network segmentation.</p>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+        <div class="mt-8 p-4 bg-white rounded-md shadow space-y-6">
+
+  <!-- Attack Timeline -->
+  <section>
+        <!-- Attack Timeline -->
+        <h2 class="text-2xl font-semibold mb-4">Attack Timeline</h2>
+        <div class="overflow-x-auto mb-8">
+            <table class="min-w-full bg-white border border-gray-300">
+                <thead>
+                    <tr class="bg-gray-200">
+                        <th class="py-2 px-4 border-b">Date/Time</th>
+                        <th class="py-2 px-4 border-b">Action</th>
+                        <th class="py-2 px-4 border-b">Actor/Details</th>
+                        <th class="py-2 px-4 border-b">Evidence/Impact</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="py-2 px-4 border-b">Mid-August 2013</td>
+                        <td class="py-2 px-4 border-b">Initial breach: Attackers exploit vulnerabilities in Adobe’s network, likely outdated ColdFusion servers.</td>
+                        <td class="py-2 px-4 border-b">Cybercriminals (suspected, financially motivated)</td>
+                        <td class="py-2 px-4 border-b">Gained access to customer data and source code repositories.</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border-b">August-September 2013</td>
+                        <td class="py-2 px-4 border-b">Data collection and exfiltration: Stolen 2.9 million (later 38 million) user records and source code.</td>
+                        <td class="py-2 px-4 border-b">Attackers</td>
+                        <td class="py-2 px-4 border-b">Included names, encrypted passwords, credit card details, emails, and source code for Acrobat, ColdFusion, Photoshop.</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border-b">September 17, 2013</td>
+                        <td class="py-2 px-4 border-b">Adobe detects breach after server capacity alert reveals decryption attempts.</td>
+                        <td class="py-2 px-4 border-b">Adobe</td>
+                        <td class="py-2 px-4 border-b">Unauthorized access to payment card data detected; investigation begins.</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border-b">Late September 2013</td>
+                        <td class="py-2 px-4 border-b">Source code discovered on hacker’s server by KrebsOnSecurity and Hold Security.</td>
+                        <td class="py-2 px-4 border-b">Brian Krebs, Alex Holden</td>
+                        <td class="py-2 px-4 border-b">40GB of Adobe source code found, indicating broader compromise.</td
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border-b">October 3, 2013</td>
+                        <td class="py-2 px-4 border-b">Adobe publicly announces breach, confirming 2.9 million accounts affected.</td>
+                        <td class="py-2 px-4 border-b">Adobe</td>
+                        <td class="py-2 px-4 border-b">Password resets initiated; banks and customers notified.</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border-b">October 29, 2013</td>
+                        <td class="py-2 px-4 border-b">Breach scope expanded: 38 million active accounts confirmed compromised.</td>
+                        <td class="py-2 px-4 border-b">Adobe</td>
+                        <td class="py-2 px-4 border-b">Additional inactive/test accounts affected; total ~153 million records.</td>
+                    <tr>
+                        <td class="py-2 px-4 border-b">November 2013</td>
+                        <td class="py-2 px-4 border-b">Fallout: Stolen data used for phishing and password reuse attacks; source code risks persist.</td>
+                        <td class="py-2 px-4 border-b">Cybercriminals</td>
+                        <td class="py-2 px-4 border-b">Impacted users of other platforms (e.g., Facebook, Diapers.com) due to password reuse.</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border-b">November 7, 2016</td>
+                        <td class="py-2 px-4 border-b">Legal resolution: Adobe settles with 15 state attorneys general for $1 million.</td>
+                        <td class="py-2 px-4 border-b">Adobe</td>
+                        <td class="py-2 px-4 border-b">Implemented new security policies; reputational damage persists.</td>
+                    </tr>
+                </tbody>
+            </table>
+               </br><a href="https://github.com/pbmundas/Threat-Hunting/blob/main/Learning%20through%20known%20attacks/Adobe%20-%202013.md" target="_blank" className="text-blue-600 hover:underline absolute top-4 right-4" style="color:blue;">Understand how to hunt such attacks</a>
+        </div>
+
+        <!-- Dwell Time Analysis -->
+        <h2 class="text-2xl font-semibold mb-4">Dwell Time Analysis</h2>
+        <p class="mb-4">Dwell time was approximately 30-45 days (mid-August to September 17, 2013), the period attackers operated undetected in Adobe’s network, allowing data and source code exfiltration.</p>
+        <div class="overflow-x-auto mb-8">
+            <table class="min-w-full bg-white border border-gray-300">
+                <thead>
+                    <tr class="bg-gray-200">
+                        <th class="py-2 px-4 border-b">Step 1: Initial Access (Mid-August)</th>
+                        <th class="py-2 px-4 border-b">Step 2: Collection (August-September)</th>
+                        <th class="py-2 px-4 border-b">Step 3: Exfiltration (August-September)</th>
+                        <th class="py-2 px-4 border-b">Step 4: Detection (September 17)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="py-2 px-4 border-b">Exploited vulnerabilities, likely in outdated ColdFusion servers. <br><strong>What went wrong</strong>: Unpatched software, weak network segmentation.</td>
+                        <td class="py-2 px-4 border-b">Queried databases for user data; accessed source code repositories. <br><strong>Factor</strong>: No anomaly detection for mass data access.</td>
+                        <td class="py-2 px-4 border-b">Exfiltrated 38 million records and 40GB source code. <br><strong>Factor</strong>: No egress filtering or DLP for large data transfers.</td>
+                        <td class="py-2 px-4 border-b">Server capacity alert flagged decryption attempts. <br><strong>Total time</strong>: Enabled massive data and IP theft.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <p class="mb-4"><strong>Dwell Time Insight</strong>: The dwell time was like a silent raid on a vault, unnoticed due to inadequate monitoring. Experts: Median dwell time in 2013 was ~150 days (per Mandiant); Adobe’s 30-45 days was relatively short but impactful due to poor encryption and source code loss.</p>
+
+        <!-- Learnings -->
+        <h2 class="text-2xl font-semibold mb-4">Learnings</h2>
+        <div class="overflow-x-auto">
+            <table class="min-w-full bg-white border border-gray-300">
+                <thead>
+                    <tr class="bg-gray-200">
+                        <th class="py-2 px-4 border-b">Root Cause Analysis</th>
+                        <th class="py-2 px-4 border-b">Impact Assessment</th>
+                        <th class="py-2 px-4 border-b">Detection Opportunities</th>
+                        <th class="py-2 px-4 border-b">Response and Remediation</th>
+                        <th class="py-2 px-4 border-b">Attribution Analysis</th>
+                        <th class="py-2 px-4 border-b">Lessons Learned</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="py-2 px-4 border-b"><strong>Using 5 Whys</strong>: Why breached? Vulnerable servers. Why vulnerable? Outdated software (e.g., ColdFusion). Why outdated? No patch management. Why no patching? Siloed IT/security teams. Why siloed? Prioritized product over security. <br> <strong>Other causes</strong>: Weak encryption (no salting), no DLP, inadequate network monitoring. <br> <strong>Beginners</strong>: Root causes trace security gaps. <br> <strong>Experts</strong>: Fishbone factors: Technology (outdated software), Process (no DLP), People (security culture).</td>
+                        <td class="py-2 px-4 border-b"><strong>Data</strong>: 38 million active accounts, ~153 million total, 40GB source code. <br> <strong>Financial</strong>: $1M settlement, millions in remediation. <br> <strong>Reputational</strong>: Trust erosion; impacted Adobe’s cloud transition. <br> <strong>Follow-on</strong>: Password reuse attacks, potential zero-day exploits. <br> <strong>Beginners</strong>: Impacts hit users and brand. <br> <strong>Experts</strong>: BIA metrics: RPO violated due to source code loss.</td>
+                        <td class="py-2 px-4 border-b"><strong>Missed</strong>: Large data queries could have been caught with SIEM; exfiltration with DLP; server issues with monitoring. <br> <strong>Opportunities</strong>: Deploy SIEM for query spikes, DLP for egress, patch management for servers. <br> <strong>Failures</strong>: No encryption audits, short log retention. <br> <strong>Beginners</strong>: Detection is like a watchdog. <br> <strong>Experts</strong>: Sigma rule example: <code>detection: logsource: category: network | selection: DataVolume > 1GB AND Destination: external</code>.</td>
+                        <td class="py-2 px-4 border-b"><strong>Immediate</strong>: Password resets, credit monitoring, notified banks. <br> <strong>Long-term</strong>: Adopted salted hashing, integrated security teams, implemented DLP. <br> <strong>Beginners</strong>: Response is damage control. <br> <strong>Experts</strong>: Followed NIST IR: Identification (September), Containment (October), Eradication (post-2013).</td>
+                        <td class="py-2 px-4 border-b"><strong>Suspected</strong>: Financially motivated cybercriminals. <br> <strong>TTPs</strong>: Server exploitation, data/source code theft align with cybercrime groups. <br> <strong>Beginners</strong>: Attribution is identifying culprits. <br> <strong>Experts</strong>: TTPs suggest Eastern European or Russian actors; limited IOCs due to encrypted data.</td>
+                        <td class="py-2 px-4 border-b">Patch servers promptly. <br> Use strong, salted hashing. <br> Deploy DLP and SIEM. <br> Segment networks. <br> Foster security culture. <br> <strong>Beginners</strong>: Secure data and code. <br> <strong>Experts</strong>: Adopt MITRE ATT&CK for enterprise defense.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+</body>
+</html>

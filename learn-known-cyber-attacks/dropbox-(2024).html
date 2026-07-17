@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dropbox Sign Breach (2024) MITRE ATT&CK Navigator</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.18.9/babel.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis-network.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="site.css">
+</head>
+<body class="bg-gray-100 font-sans">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const attacksData = {
+            "Dropbox Sign (2024)": {
+                "name": "Dropbox Sign Breach (2024) MITRE ATT&CK Mapping",
+                "versions": { "attack": "14", "navigator": "4.9.1", "layer": "4.5" },
+                "domain": "enterprise-attack",
+                "techniques": [
+                    {
+                        "techniqueID": "T1566.002",
+                        "tactic": "initial-access",
+                        "color": "#ff9999",
+                        "comment": "Spear-phishing targeting Dropbox employees to compromise a service account with access to the Dropbox Sign backend",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Vulnerability", "value": "Phishing susceptibility of service accounts" },
+                            { "name": "Assets", "value": "Dropbox Sign backend, service accounts" },
+                            { "name": "IOCs", "value": "Phishing emails, anomalous login attempts" },
+                            { "name": "Threat Actors", "value": "Unknown" },
+                            { "name": "Parameters", "value": "Email filtering, authentication logs" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1059",
+                        "tactic": "execution",
+                        "color": "#ffcc99",
+                        "comment": "Executed commands via the compromised service account to access the automated system configuration tool",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "Automated system configuration tool" },
+                            { "name": "IOCs", "value": "Unauthorized command execution" },
+                            { "name": "Parameters", "value": "Command execution logs, EDR telemetry" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1098",
+                        "tactic": "persistence",
+                        "color": "#ffcc99",
+                        "comment": "Maintained access by leveraging the service account’s elevated privileges in the production environment",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "Service accounts, production environment" },
+                            { "name": "IOCs", "value": "Persistent unauthorized access" },
+                            { "name": "Parameters", "value": "Session monitoring, account activity logs" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1078.004",
+                        "tactic": "privilege-escalation",
+                        "color": "#ffcc99",
+                        "comment": "Exploited the service account’s elevated permissions to manipulate the customer database",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "Customer database, service accounts" },
+                            { "name": "IOCs", "value": "Unauthorized database access" },
+                            { "name": "Parameters", "value": "Database access logs, privilege escalation monitoring" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1078",
+                        "tactic": "defense-evasion",
+                        "color": "#ffcc99",
+                        "comment": "Used legitimate service account credentials to evade detection, blending with normal operations",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "Compromised systems" },
+                            { "name": "IOCs", "value": "Anomalous service account activity" },
+                            { "name": "Parameters", "value": "Behavioral analytics, account monitoring" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1003",
+                        "tactic": "credential-access",
+                        "color": "#ffcc99",
+                        "comment": "Accessed customer credentials (hashed passwords, API keys, OAuth tokens, MFA data) from the database",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "Customer database" },
+                            { "name": "IOCs", "value": "Unauthorized credential access" },
+                            { "name": "Parameters", "value": "Database query logs, DLP monitoring" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1005",
+                        "tactic": "collection",
+                        "color": "#ffcc99",
+                        "comment": "Collected sensitive customer data (emails, usernames, phone numbers) from the compromised database",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "Customer database" },
+                            { "name": "IOCs", "value": "Unauthorized data access" },
+                            { "name": "Parameters", "value": "File access logs, DLP monitoring" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1071.001",
+                        "tactic": "command-and-control",
+                        "color": "#ffcc99",
+                        "comment": "Established HTTPS-based C2 communication for remote control of the compromised environment",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "Compromised systems" },
+                            { "name": "IOCs", "value": "HTTPS beacons to C2 domains" },
+                            { "name": "Parameters", "value": "Network traffic analysis, DNS queries" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1041",
+                        "tactic": "exfiltration",
+                        "color": "#ffcc99",
+                        "comment": "Exfiltrated stolen customer data to attacker-controlled servers",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "Customer data" },
+                            { "name": "IOCs", "value": "Outbound data transfers to C2 servers" },
+                            { "name": "Parameters", "value": "Network egress filtering, DLP alerts" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1531",
+                        "tactic": "impact",
+                        "color": "#ff6666",
+                        "comment": "Potentially disrupted account access by necessitating password resets and API key rotations",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "User accounts, API integrations" },
+                            { "name": "IOCs", "value": "Forced logouts, credential resets" },
+                            { "name": "Parameters", "value": "Account activity logs, authentication monitoring" }
+                        ]
+                    }
+                ]
+            }
+        };
+
+        const App = () => {
+            const flowchartRef = React.useRef(null);
+            const selectedAttack = "Dropbox Sign (2024)";
+            const [selectedTechnique, setSelectedTechnique] = React.useState(null);
+
+            React.useEffect(() => {
+                const mitreData = attacksData[selectedAttack];
+                const nodes = mitreData.techniques.map((tech, index) => ({
+                    id: index + 1,
+                    label: `${tech.techniqueID}: ${tech.tactic}`,
+                    shape: "box",
+                    color: tech.color
+                }));
+
+                const edges = [];
+                const tacticOrder = [
+                    "initial-access", "execution", "persistence", "privilege-escalation",
+                    "defense-evasion", "credential-access", "collection", "command-and-control",
+                    "exfiltration", "impact"
+                ];
+
+                const tacticNodes = {};
+                mitreData.techniques.forEach((tech, index) => {
+                    const nodeId = index + 1;
+                    const tacticIndex = tacticOrder.indexOf(tech.tactic);
+                    if (!tacticNodes[tech.tactic]) {
+                        tacticNodes[tech.tactic] = [nodeId];
+                    } else {
+                        tacticNodes[tech.tactic].push(nodeId);
+                    }
+                    if (tacticIndex > 0) {
+                        const prevTactic = tacticOrder[tacticIndex - 1];
+                        if (tacticNodes[prevTactic]) {
+                            tacticNodes[prevTactic].forEach(prevNodeId => {
+                                edges.push({ from: prevNodeId, to: nodeId, arrows: "to" });
+                            });
+                        }
+                    }
+                });
+
+                // Custom manual edges to ensure full connectivity
+                const initialAccessNode = mitreData.techniques.findIndex(t => t.tactic === "initial-access") + 1;
+                const executionNode = mitreData.techniques.findIndex(t => t.tactic === "execution") + 1;
+                const persistenceNode = mitreData.techniques.findIndex(t => t.tactic === "persistence") + 1;
+                const privilegeEscalationNode = mitreData.techniques.findIndex(t => t.tactic === "privilege-escalation") + 1;
+                const defenseEvasionNode = mitreData.techniques.findIndex(t => t.tactic === "defense-evasion") + 1;
+                const credentialAccessNode = mitreData.techniques.findIndex(t => t.tactic === "credential-access") + 1;
+                const collectionNode = mitreData.techniques.findIndex(t => t.tactic === "collection") + 1;
+                const commandAndControlNode = mitreData.techniques.findIndex(t => t.tactic === "command-and-control") + 1;
+                const exfiltrationNode = mitreData.techniques.findIndex(t => t.tactic === "exfiltration") + 1;
+                const impactNode = mitreData.techniques.findIndex(t => t.tactic === "impact") + 1;
+
+                // Initial Access → Execution
+                if (initialAccessNode > 0 && executionNode > 0) {
+                    edges.push({ from: initialAccessNode, to: executionNode, arrows: "to", color: { color: "blue" }, width: 2 });
+                }
+
+                // Execution → Persistence
+                if (executionNode > 0 && persistenceNode > 0) {
+                    edges.push({ from: executionNode, to: persistenceNode, arrows: "to", color: { color: "blue" }, width: 2 });
+                }
+
+                // Persistence → Privilege Escalation
+                if (persistenceNode > 0 && privilegeEscalationNode > 0) {
+                    edges.push({ from: persistenceNode, to: privilegeEscalationNode, arrows: "to", color: { color: "blue" }, width: 2 });
+                }
+
+                // Privilege Escalation → Defense Evasion
+                if (privilegeEscalationNode > 0 && defenseEvasionNode > 0) {
+                    edges.push({ from: privilegeEscalationNode, to: defenseEvasionNode, arrows: "to", color: { color: "blue" }, width: 2 });
+                }
+
+                // Defense Evasion → Credential Access
+                if (defenseEvasionNode > 0 && credentialAccessNode > 0) {
+                    edges.push({ from: defenseEvasionNode, to: credentialAccessNode, arrows: "to", color: { color: "blue" }, width: 2 });
+                }
+
+                // Credential Access → Collection
+                if (credentialAccessNode > 0 && collectionNode > 0) {
+                    edges.push({ from: credentialAccessNode, to: collectionNode, arrows: "to", color: { color: "blue" }, width: 2 });
+                }
+
+                // Collection → Command and Control
+                if (collectionNode > 0 && commandAndControlNode > 0) {
+                    edges.push({ from: collectionNode, to: commandAndControlNode, arrows: "to", color: { color: "blue" }, width: 2 });
+                }
+
+                // Command and Control → Exfiltration
+                if (commandAndControlNode > 0 && exfiltrationNode > 0) {
+                    edges.push({ from: commandAndControlNode, to: exfiltrationNode, arrows: "to", color: { color: "green" }, width: 2 });
+                }
+
+                // Exfiltration → Impact
+                if (exfiltrationNode > 0 && impactNode > 0) {
+                    edges.push({ from: exfiltrationNode, to: impactNode, arrows: "to", color: { color: "purple" }, width: 2 });
+                }
+
+                const container = flowchartRef.current;
+                const data = { nodes: new vis.DataSet(nodes), edges: new vis.DataSet(edges) };
+                const options = {
+                    physics: { enabled: true },
+                    nodes: { font: { size: 12 }, shape: 'box', shapeProperties: { borderRadius: 5 } },
+                    edges: { arrows: 'to', smooth: false },
+                    interaction: { dragNodes: true, dragView: true, zoomView: true }
+                };
+                const network = new vis.Network(container, data, options);
+
+                network.on("click", (params) => {
+                    if (params.nodes.length > 0) {
+                        const nodeId = params.nodes[0];
+                        setSelectedTechnique(mitreData.techniques[nodeId - 1]);
+                    }
+                });
+
+                network.fit();
+
+                const handleResize = () => {
+                    network.fit();
+                };
+                window.addEventListener('resize', handleResize);
+
+                return () => {
+                    window.removeEventListener('resize', handleResize);
+                    network.destroy();
+                };
+            }, []);
+
+            return (
+                <div className="container mx-auto p-4">
+                    <a href="index.html" className="text-blue-600 hover:underline absolute top-4 right-4">Back to Index</a>
+                    <h2 className="text-2xl font-bold mb-4">Dropbox Sign Breach (2024) MITRE ATT&CK Navigator</h2>
+                    <div className="flex gap-4">
+                        <div ref={flowchartRef} className="flex-[3] border border-gray-300 bg-white" style={{ height: '600px' }}></div>
+                        <div className="flex-1 p-4 bg-gray-200 rounded-md overflow-y-auto" style={{ height: '600px' }}>
+                            <h3 className="text-lg font-semibold">Technique Details</h3>
+                            {selectedTechnique ? (
+                                <pre className="whitespace-pre-wrap text-sm">
+                                    <strong>Technique ID:</strong> {selectedTechnique.techniqueID}<br/>
+                                    <strong>Tactic:</strong> {selectedTechnique.tactic}<br/>
+                                    <strong>Comment:</strong> {selectedTechnique.comment}<br/>
+                                    <strong>Metadata:</strong><br/>
+                                    {selectedTechnique.metadata.map((meta, idx) => (
+                                        <div key={idx}>
+                                            <strong>{meta.name}:</strong> {meta.value}<br/>
+                                        </div>
+                                    ))}
+                                </pre>
+                            ) : (
+                                <p>Click a node to view technique details, MITRE TTPs, IOCs, and technical information. Drag nodes to move them.</p>
+                            )}
+                            <br/><strong>Background:</strong><br/>
+                            <p>The Dropbox Sign breach, disclosed on May 1, 2024, involved unauthorized access to the Dropbox Sign (formerly HelloSign) production environment, detected on April 24, 2024. A threat actor, likely via phishing, compromised a service account in the backend, accessing an automated system configuration tool with elevated privileges. This exposed sensitive data for all Dropbox Sign users, including email addresses, usernames, phone numbers, hashed passwords, API keys, OAuth tokens, and MFA data, plus names and emails of non-account holders who interacted with documents. The breach was isolated to Dropbox Sign, with no evidence of impact on other Dropbox services or customer documents. Dropbox reset passwords, logged out devices, rotated API keys and OAuth tokens, and engaged forensic investigators and authorities.</p>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+        <div class="mt-8 p-4 bg-white rounded-md shadow space-y-6">
+
+  <!-- Attack Timeline -->
+  <section>
+          <h2 class="text-2xl font-semibold mb-4">Attack Timeline</h2>
+        <div class="overflow-x-auto mb-8">
+            <table class="min-w-full bg-white border border-gray-300">
+                <thead>
+                    <tr class="bg-gray-200">
+                        <th class="py-2 px-4 border-b">Date/Time</th>
+                        <th class="py-2 px-4 border-b">Action</th>
+                        <th class="py-2 px-4 border-b">Actor/Details</th>
+                        <th class="py-2 px-4 border-b">Evidence/Impact</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="py-2 px-4 border-b">April 24, 2024</td>
+                        <td class="py-2 px-4 border-b">Detection: Dropbox detects unauthorized access to Dropbox Sign production environment.</td>
+                        <td class="py-2 px-4 border-b">Unknown threat actor</td>
+                        <td class="py-2 px-4 border-b">Access via compromised service account; incident contained immediately.</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border-b">April 24–May 1, 2024</td>
+                        <td class="py-2 px-4 border-b">Investigation: Dropbox engages forensic teams, confirms data access.</td>
+                        <td class="py-2 px-4 border-b">Dropbox</td>
+                        <td class="py-2 px-4 border-b">No documents or agreements accessed; isolated to Sign backend.</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border-b">May 1, 2024</td>
+                        <td class="py-2 px-4 border-b">Public Disclosure: Dropbox announces breach affecting Dropbox Sign users.</td>
+                        <td class="py-2 px-4 border-b">Dropbox</td>
+                        <td class="py-2 px-4 border-b">Exposed emails, usernames, phone numbers, hashed passwords, API keys, OAuth tokens, MFA data; ~2.9M non-account holders affected.</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border-b">May 2, 2024</td>
+                        <td class="py-2 px-4 border-b">Mitigation: Dropbox resets passwords, rotates API keys, logs out devices.</td>
+                        <td class="py-2 px-4 border-b">Dropbox</td>
+                        <td class="py-2 px-4 border-b">Users prompted to change passwords; enhanced security measures implemented.</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border-b">May 2024</td>
+                        <td class="py-2 px-4 border-b">Notifications: Dropbox begins notifying affected users and regulators.</td>
+                        <td class="py-2 px-4 border-b">Dropbox</td>
+                        <td class="py-2 px-4 border-b">SEC filing confirms incident; no evidence of data misuse.</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border-b">June 2024</td>
+                        <td class="py-2 px-4 border-b">Ongoing Investigation: Dropbox continues forensic analysis with third-party experts.</td>
+                        <td class="py-2 px-4 border-b">Dropbox</td>
+                        <td class="py-2 px-4 border-b">No further unauthorized access; focus on root cause.</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border-b">July 2024</td>
+                        <td class="py-2 px-4 border-b">Legal Fallout: Class-action lawsuits filed against Dropbox for negligence.</td>
+                        <td class="py-2 px-4 border-b">Affected users</td>
+                        <td class="py-2 px-4 border-b">Alleged failure to secure service accounts; settlements pending.</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border-b">August 2024</td>
+                        <td class="py-2 px-4 border-b">Regulatory Scrutiny: GDPR and CCPA investigations initiated.</td>
+                        <td class="py-2 px-4 border-b">Regulators</td>
+                        <td class="py-2 px-4 border-b">Potential fines for delayed notification; enhanced compliance measures.</td>
+                    </tr>
+                </tbody>
+            </table>
+                </br><a href="https://github.com/pbmundas/Threat-Hunting/blob/main/Learning%20through%20known%20attacks/Dropbox%20(2024).md" target="_blank" className="text-blue-600 hover:underline absolute top-4 right-4" style="color:blue;">Understand how to hunt such attacks</a>
+        </div>
+
+        <!-- Dwell Time Analysis -->
+        <h2 class="text-2xl font-semibold mb-4">Dwell Time Analysis</h2>
+        <p class="mb-4">Dwell time was approximately 1 week (April 24 to May 1, 2024), from detection to public disclosure, due to swift containment but delayed scope confirmation.</p>
+        <div class="overflow-x-auto mb-8">
+            <table class="min-w-full bg-white border border-gray-300">
+                <thead>
+                    <tr class="bg-gray-200">
+                        <th class="py-2 px-4 border-b">Step 1: Initial Access (Pre-Apr 24)</th>
+                        <th class="py-2 px-4 border-b">Step 2: Data Exfiltration (Pre-Apr 24)</th>
+                        <th class="py-2 px-4 border-b">Step 3: Detection/Containment (Apr 24)</th>
+                        <th class="py-2 px-4 border-b">Step 4: Disclosure (May 1)</th>
+                        <th class="py-2 px-4 border-b">Step 5: Recovery (May 2024+)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="py-2 px-4 border-b">Compromised service account. <br><strong>What went wrong</strong>: No MFA, weak authentication.</td>
+                        <td class="py-2 px-4 border-b">Accessed customer database. <br><strong>Factor</strong>: No DLP, no anomaly detection.</td>
+                        <td class="py-2 px-4 border-b">Internal monitoring flags activity. <br><strong>Factor</strong>: Rapid containment, no initial SIEM.</td>
+                        <td class="py-2 px-4 border-b">Public announcement, user notifications. <br><strong>Factor</strong>: Scope confirmation delayed.</td>
+                        <td class="py-2 px-4 border-b">Password resets, API key rotation; lawsuits filed. <br><strong>Total time</strong>: Potential fines, regulatory scrutiny.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <p class="mb-4"><strong>Dwell Time Insight</strong>: The dwell time (~1 week vs. 2024 median ~21 days) was short due to internal detection, but lack of MFA allowed initial access. Swift response prevented further exfiltration, but delayed disclosure amplified reputational damage.</p>
+
+        <!-- Learnings -->
+        <h2 class="text-2xl font-semibold mb-4">Learnings</h2>
+        <div class="overflow-x-auto">
+            <table class="min-w-full bg-white border border-gray-300">
+                <thead>
+                    <tr class="bg-gray-200">
+                        <th class="py-2 px-4 border-b">Root Cause Analysis</th>
+                        <th class="py-2 px-4 border-b">Impact Assessment</th>
+                        <th class="py-2 px-4 border-b">Detection Opportunities</th>
+                        <th class="py-2 px-4 border-b">Response and Remediation</th>
+                        <th class="py-2 px-4 border-b">Attribution Analysis</th>
+                        <th class="py-2 px-4 border-b">Lessons Learned</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="py-2 px-4 border-b"><strong>Using 5 Whys</strong>: Why breached? Service account compromised. Why compromised? No MFA. Why no MFA? Policy lapse. Why lapse? Prioritized operations. Why prioritized? Cost focus. <br> <strong>Other causes</strong>: No DLP, outdated systems. <br> <strong>Beginners</strong>: Root causes trace to weak authentication. <br> <strong>Experts</strong>: Fishbone factors: Technology (no MFA), Process (no audits), People (lax policy).</td>
+                        <td class="py-2 px-4 border-b"><strong>Data</strong>: Emails, usernames, phone numbers, hashed passwords, API keys, MFA data for all users; 2.9M non-account holders. <br> <strong>Financial</strong>: Potential fines, legal costs. <br> <strong>Reputational</strong>: Trust erosion, lawsuits. <br> <strong>Beginners</strong>: Impacts hit privacy, reputation. <br> <strong>Experts</strong>: BIA metrics: RPO minimal, RTO days for resets.</td>
+                        <td class="py-2 px-4 border-b"><strong>Missed</strong>: Service account access via SIEM; exfiltration via DLP. <br> <strong>Opportunities</strong>: MFA, EDR, network monitoring. <br> <strong>Failures</strong>: No MFA, no anomaly detection. <br> <strong>Beginners</strong>: Detection is like alarms. <br> <strong>Experts</strong>: Sigma rule: <code>detection: logsource: category: service_account | selection: access: unauthorized AND mfa: none</code>.</td>
+                        <td class="py-2 px-4 border-b"><strong>Immediate</strong>: Contained access, rotated credentials. <br> <strong>Long-term</strong>: Enhanced MFA, monitoring; notified regulators. <br> <strong>Beginners</strong>: Response stops damage. <br> <strong>Experts</strong>: NIST IR followed: Identification (Apr 24), Containment (Apr 24), Eradication (May–).</td>
+                        <td class="py-2 px-4 border-b"><strong>Unknown</strong>: No confirmed attribution; suspected financially motivated. <br> <strong>TTPs</strong>: Service account compromise, data theft. <br> <strong>Beginners</strong>: Attribution identifies hackers. <br> <strong>Experts</strong>: IOCs include service account logs, stolen data hashes.</td>
+                        <td class="py-2 px-4 border-b">Enforce MFA on all accounts. <br> Deploy EDR, DLP, SIEM. <br> Monitor service accounts. <br> Conduct regular audits. <br> <strong>Beginners</strong>: Secure logins, monitor systems. <br> <strong>Experts</strong>: Adopt MITRE ATT&CK, zero-trust for SaaS.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+</body>
+</html>

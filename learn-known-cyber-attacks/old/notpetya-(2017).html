@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NotPetya (2017) MITRE ATT&CK Navigator</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.18.9/babel.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis-network.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 font-sans">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const attacksData = {
+            "NotPetya (2017)": {
+                "name": "NotPetya Ransomware (2017) MITRE ATT&CK Mapping",
+                "versions": { "attack": "14", "navigator": "4.9.1", "layer": "4.5" },
+                "domain": "enterprise-attack",
+                "techniques": [
+                    {
+                        "techniqueID": "T1195.002",
+                        "tactic": "initial-access",
+                        "color": "#ff9999",
+                        "comment": "Compromised software update (M.E.Doc)",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Vulnerability", "value": "Supply chain compromise" },
+                            { "name": "Assets", "value": "M.E.Doc software clients" },
+                            { "name": "IOCs", "value": "Malicious M.E.Doc updates (SHA256: 71b77d8...), connections to medoc.com.ua" },
+                            { "name": "Threat Actors", "value": "Sandworm Team (Russian state-sponsored)" },
+                            { "name": "Parameters", "value": "Software update logs, network traffic analysis" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1059.003",
+                        "tactic": "execution",
+                        "color": "#ffcc99",
+                        "comment": "Executed ransomware via malicious payload",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "Windows systems" },
+                            { "name": "IOCs", "value": "NotPetya executable (perfc.dat, SHA256: 027cc...), cmd.exe execution" },
+                            { "name": "Parameters", "value": "Process execution logs, EDR telemetry" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1486",
+                        "tactic": "impact",
+                        "color": "#ff6666",
+                        "comment": "Encrypted data with ransomware-like payload",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "Windows file systems" },
+                            { "name": "IOCs", "value": ".petya file extensions, README.txt ransom notes" },
+                            { "name": "Parameters", "value": "File system logs, DLP alerts" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1078",
+                        "tactic": "privilege-escalation",
+                        "color": "#ffcc99",
+                        "comment": "Used stolen credentials for propagation",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "Windows systems" },
+                            { "name": "IOCs", "value": "Unauthorized admin logins from 10.0.x.x" },
+                            { "name": "Parameters", "value": "Authentication logs, privilege escalation audit trails" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1003",
+                        "tactic": "credential-access",
+                        "color": "#ffcc99",
+                        "comment": "Dumped credentials using Mimikatz",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "Windows systems" },
+                            { "name": "IOCs", "value": "Mimikatz execution (SHA256: 7c8d9e...), LSASS memory dumps" },
+                            { "name": "Parameters", "value": "Memory analysis, EDR telemetry" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1082",
+                        "tactic": "discovery",
+                        "color": "#ffcc99",
+                        "comment": "Collected system information for propagation",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "Windows systems" },
+                            { "name": "IOCs", "value": "Systeminfo command output, net view execution" },
+                            { "name": "Parameters", "value": "System logs, command execution logs" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1018",
+                        "tactic": "discovery",
+                        "color": "#ff9999",
+                        "comment": "Discovered remote systems via SMB",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "Network infrastructure" },
+                            { "name": "IOCs", "value": "SMB scanning traffic to 192.168.0.0/16" },
+                            { "name": "Parameters", "value": "Network traffic analysis, system enumeration logs" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1570",
+                        "tactic": "lateral-movement",
+                        "color": "#ffcc99",
+                        "comment": "Propagated via SMB and WMI",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "Windows systems, network shares" },
+                            { "name": "IOCs", "value": "SMB/WMI traffic spikes to 445/tcp, wmic.exe execution" },
+                            { "name": "Parameters", "value": "Network traffic (PCAP), EDR alerts" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1071.002",
+                        "tactic": "command-and-control",
+                        "color": "#ffcc99",
+                        "comment": "Used SMB for C2 communication",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "Windows systems" },
+                            { "name": "IOCs", "value": "Unusual SMB traffic to 185.86.148.0/24" },
+                            { "name": "Parameters", "value": "Network traffic (PCAP), IDS/IPS alerts" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1489",
+                        "tactic": "impact",
+                        "color": "#ff6666",
+                        "comment": "Disrupted services with destructive payload",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "Windows systems" },
+                            { "name": "IOCs", "value": "MBR overwrites, system crashes, BSOD events" },
+                            { "name": "Parameters", "value": "System logs, boot failure reports" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1070.004",
+                        "tactic": "defense-evasion",
+                        "color": "#ffcc99",
+                        "comment": "Deleted files to cover tracks",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "Windows systems" },
+                            { "name": "IOCs", "value": "Deleted perfc.dat, cleared event logs" },
+                            { "name": "Parameters", "value": "File deletion logs, log integrity checks" }
+                        ]
+                    }
+                ]
+            }
+        };
+
+        const App = () => {
+            const flowchartRef = React.useRef(null);
+            const selectedAttack = "NotPetya (2017)";
+            const [selectedTechnique, setSelectedTechnique] = React.useState(null);
+
+            React.useEffect(() => {
+                const mitreData = attacksData[selectedAttack];
+                const nodes = mitreData.techniques.map((tech, index) => ({
+                    id: index + 1,
+                    label: `${tech.techniqueID}: ${tech.tactic}`,
+                    shape: "box",
+                    color: tech.color
+                }));
+
+                const edges = [];
+                const tacticOrder = [
+                    "initial-access", "execution", "persistence", "privilege-escalation",
+                    "credential-access", "discovery", "lateral-movement", "command-and-control",
+                    "collection", "exfiltration", "defense-evasion", "impact"
+                ];
+
+                const tacticNodes = {};
+                mitreData.techniques.forEach((tech, index) => {
+                    const nodeId = index + 1;
+                    const tacticIndex = tacticOrder.indexOf(tech.tactic);
+                    if (!tacticNodes[tech.tactic]) {
+                        tacticNodes[tech.tactic] = [nodeId];
+                    } else {
+                        tacticNodes[tech.tactic].push(nodeId);
+                    }
+                    if (tacticIndex > 0) {
+                        const prevTactic = tacticOrder[tacticIndex - 1];
+                        if (tacticNodes[prevTactic]) {
+                            tacticNodes[prevTactic].forEach(prevNodeId => {
+                                edges.push({ from: prevNodeId, to: nodeId, arrows: "to" });
+                            });
+                        }
+                    }
+                });
+
+                const container = flowchartRef.current;
+                const data = { nodes: new vis.DataSet(nodes), edges: new vis.DataSet(edges) };
+                const options = {
+								physics: {
+								enabled: true
+											},
+								nodes: { font: { size: 12 }, shape: 'box', shapeProperties: { borderRadius: 5 } },
+								edges: { arrows: 'to', smooth: false },
+								interaction: { dragNodes: true, dragView: true, zoomView: true }
+								};
+                const network = new vis.Network(container, data, options);
+
+                network.on("click", (params) => {
+                    if (params.nodes.length > 0) {
+                        const nodeId = params.nodes[0];
+                        setSelectedTechnique(mitreData.techniques[nodeId - 1]);
+                    }
+                });
+
+                // Fit the network to the container
+                network.fit();
+
+                // Add resize listener
+                const handleResize = () => {
+                    network.fit();
+                };
+                window.addEventListener('resize', handleResize);
+
+                return () => {
+                    window.removeEventListener('resize', handleResize);
+                    network.destroy();
+                };
+            }, []);
+
+            return (
+                <div className="container mx-auto p-4">
+				<a href="index.html" className="text-blue-600 hover:underline absolute top-4 right-4">Back to Index</a>
+                    <h2 className="text-2xl font-bold mb-4">NotPetya (2017) MITRE ATT&CK Navigator</h2>
+                    <div className="flex gap-4">
+                        <div ref={flowchartRef} className="flex-[3] border border-gray-300 bg-white" style={{ height: '600px' }}></div>
+                        <div className="flex-1 p-4 bg-gray-200 rounded-md overflow-y-auto" style={{ height: '600px' }}>
+                            <h3 className="text-lg font-semibold">Technique Details</h3>
+                            {selectedTechnique ? (
+                                <pre className="whitespace-pre-wrap text-sm">
+                                    <strong>Technique ID:</strong> {selectedTechnique.techniqueID}<br/>
+                                    <strong>Tactic:</strong> {selectedTechnique.tactic}<br/>
+                                    <strong>Comment:</strong> {selectedTechnique.comment}<br/>
+                                    <strong>Metadata:</strong><br/>
+                                    {selectedTechnique.metadata.map((meta, idx) => (
+                                        <div key={idx}>
+                                            <strong>{meta.name}:</strong> {meta.value}<br/>
+                                        </div>
+                                    ))}
+                                </pre>
+                            ) : (
+                                <p>Click a node to view technique details, MITRE TTPs, IOCs, and technical information. Drag nodes to move them.</p>
+                            )}
+							<br></br><strong>Background:</strong><br/>
+							<p>NotPetya (2017): NotPetya, initially disguised as ransomware, emerged in June 2017 as a destructive cyberweapon. Originating from a compromised Ukrainian software update, it spread globally via SMB, causing billions in damages, and is widely attributed to Russian state-sponsored actors.</p>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>

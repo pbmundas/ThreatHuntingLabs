@@ -1,0 +1,3650 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="An independent repository for live cyber threat Hunting, intelligence, playbooks, and raw telemetry.">
+      
+      
+        <meta name="author" content="Threathuntlabs Team">
+      
+      
+        <link rel="canonical" href="https://threathuntlabs.com/foundations/Threat-Hunting-Data-Analysis-Techniques/">
+      
+      
+        <link rel="prev" href="../Types-of-Threat-Hunting-Choosing-the-Right-Hunting-Strategy/">
+      
+      
+        <link rel="next" href="../Hypothesis-Development-Thinking-Like-a-Threat-Hunter-Before-Writing-a-Single-Query/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Data Analysis Techniques - Threat Hunt Labs</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,300i,400,400i,700,700i%7CJetBrains+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Inter";--md-code-font:"JetBrains Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/threat-hunt.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  
+  <script>
+    window.thlNavigation = [
+  {
+    "title": "Home",
+    "url": null,
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Foundations",
+    "url": null,
+    "active": true,
+    "children": [
+  {
+    "title": "Unknown Facts",
+    "url": "../2025-07-20-unknown-facts-about-threat-hunting/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "10 Common Mistakes",
+    "url": "../10-Common-Mistakes-Every-Beginner-Makes-When-Learning-Threat-Hunting/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Cybersecurity Fundamentals",
+    "url": "../Cybersecurity-Fundamentals-The-Foundation-Every-Threat-Hunter-Needs-part-1/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Why and Where Threat Hunting",
+    "url": "../Why-Every-Organization-Needs-Threat-Hunting/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Threat Hunting Explained",
+    "url": "../Threat-Hunting-Explained-Beyond-Alerts-Dashboards-and-SIEM-Queries/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Data Pipeline",
+    "url": "../Threat-Hunting-Data-Pipeline/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Life Cycle",
+    "url": "../Inside-a-Threat-Hunt-Understanding-the-Threat-Hunting-Lifecycle/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Types",
+    "url": "../Types-of-Threat-Hunting-Choosing-the-Right-Hunting-Strategy/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Data Analysis Techniques",
+    "url": "./",
+    "active": true,
+    "children": []
+  },
+  {
+    "title": "Hypothesis Development",
+    "url": "../Hypothesis-Development-Thinking-Like-a-Threat-Hunter-Before-Writing-a-Single-Query/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Methodologies",
+    "url": "../Threat-Hunting-Methodologies-Choosing-the-Right-Hunting-Approach/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Mindset",
+    "url": "../The-Threat-Hunting-Mindset-Thinking-Like-an-Attacker/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Maturity Model",
+    "url": "../The-Threat-Hunting-Maturity-Model-Explained/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Lab Setup",
+    "url": "../../Start-Hunting/threat-hunting-lab/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Reading Logs",
+    "url": "../../Start-Hunting/Reading-Raw-Logs-Like-a-Threat-Hunter/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Solo Hunter to Enterprise",
+    "url": "../../Start-Hunting/threat-hunting-program-models/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Reporting",
+    "url": "../../Start-Hunting/threat-hunting-documentation/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Telemetry \u0026 Logs to collect",
+    "url": "../../Start-Hunting/threat-hunting-device-logs-telemetry-details.html",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Low Hanging Fruits",
+    "url": "../../Start-Hunting/low-hanging-fruits-threat-hunting/",
+    "active": false,
+    "children": []
+  }
+]
+  },
+  {
+    "title": "Learn Attacks",
+    "url": null,
+    "active": false,
+    "children": [
+  {
+    "title": "Attacks in History",
+    "url": "../../learn-known-cyber-attacks/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Attacks Encyclopedia",
+    "url": "../../attack-encyclopedia/",
+    "active": false,
+    "children": []
+  }
+]
+  },
+  {
+    "title": "Hunting Reports",
+    "url": "../../threat-hunting-reports/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Case Studies",
+    "url": null,
+    "active": false,
+    "children": [
+  {
+    "title": "Stuxnet (2010)",
+    "url": "../../case-studies/2010-Stuxnet-Retrospective-Threat-Hunt-Report/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "RSA-SecurID (2011)",
+    "url": "../../case-studies/2011-RSA-SecurID-Retrospective-Threat-Hunt-Report/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Linkedin (2012)",
+    "url": "../../case-studies/2012-linkedin-threat-hunt-report/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Adobe (2013)",
+    "url": "../../case-studies/2013-adobe-threat-hunt-report/",
+    "active": false,
+    "children": []
+  }
+]
+  },
+  {
+    "title": "\ud83c\udfafDaily Intel",
+    "url": "https://intel.threathuntlabs.com",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Challenges",
+    "url": "../../threat-hunting-lab/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Blog",
+    "url": "https://blog.threathuntlabs.com",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Resources",
+    "url": "../../Downloads/threat-hunting-related-document-references/",
+    "active": false,
+    "children": []
+  }
+];
+  </script>
+
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="custom">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#threat-hunting-data-analysis-techniques-how-threat-hunters-find-attackers-hidden-in-millions-of-events" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Threat Hunt Labs" class="md-header__button md-logo" aria-label="Threat Hunt Labs" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Threat Hunt Labs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Data Analysis Techniques
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../2025-07-20-unknown-facts-about-threat-hunting/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Foundations
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../learn-known-cyber-attacks/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Learn Attacks
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../threat-hunting-reports/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Hunting Reports
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../case-studies/2010-Stuxnet-Retrospective-Threat-Hunt-Report/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Case Studies
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="https://intel.threathuntlabs.com" class="md-tabs__link">
+        
+  
+  
+    
+  
+  🎯Daily Intel
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../threat-hunting-lab/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Challenges
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="https://blog.threathuntlabs.com" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Blog
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../Downloads/threat-hunting-related-document-references/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Resources
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Threat Hunt Labs" class="md-nav__button md-logo" aria-label="Threat Hunt Labs" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Threat Hunt Labs
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Foundations
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Foundations
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2025-07-20-unknown-facts-about-threat-hunting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Unknown Facts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../10-Common-Mistakes-Every-Beginner-Makes-When-Learning-Threat-Hunting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    10 Common Mistakes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Cybersecurity-Fundamentals-The-Foundation-Every-Threat-Hunter-Needs-part-1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cybersecurity Fundamentals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Why-Every-Organization-Needs-Threat-Hunting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Why and Where Threat Hunting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Threat-Hunting-Explained-Beyond-Alerts-Dashboards-and-SIEM-Queries/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Threat Hunting Explained
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Threat-Hunting-Data-Pipeline/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data Pipeline
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Inside-a-Threat-Hunt-Understanding-the-Threat-Hunting-Lifecycle/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Life Cycle
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Types-of-Threat-Hunting-Choosing-the-Right-Hunting-Strategy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Types
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data Analysis Techniques
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data Analysis Techniques
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#before-we-begin-think-like-a-threat-hunter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Before We Begin: Think Like a Threat Hunter
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-baselining" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Baselining
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-grouping" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Grouping
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-clustering" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Clustering
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-frequency-analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Frequency Analysis
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-stack-counting-repetition-counting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Stack Counting (Repetition Counting)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-rarity-scoring" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Rarity Scoring
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-outlier-detection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Outlier Detection
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-time-delta-analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Time Delta Analysis
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-entropy-string-analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. Entropy &amp; String Analysis
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10-parent-child-process-analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. Parent-Child Process Analysis
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11-first-time-seen-analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11. First-Time-Seen Analysis
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#12-peer-comparison" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12. Peer Comparison
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#13-path-and-location-anomaly" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13. Path and Location Anomaly
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#14-impossible-travel-velocity-analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14. Impossible Travel (Velocity Analysis)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#15-volume-and-size-anomaly" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15. Volume and Size Anomaly
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#16-sequence-chain-analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16. Sequence (Chain) Analysis
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#combining-multiple-techniques" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Combining Multiple Techniques
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#choosing-the-right-technique" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Choosing the Right Technique
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key-takeaways" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Takeaways
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#whats-next" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What's Next?
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Hypothesis-Development-Thinking-Like-a-Threat-Hunter-Before-Writing-a-Single-Query/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Hypothesis Development
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Threat-Hunting-Methodologies-Choosing-the-Right-Hunting-Approach/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Methodologies
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../The-Threat-Hunting-Mindset-Thinking-Like-an-Attacker/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mindset
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../The-Threat-Hunting-Maturity-Model-Explained/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Maturity Model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Start-Hunting/threat-hunting-lab/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab Setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Start-Hunting/Reading-Raw-Logs-Like-a-Threat-Hunter/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reading Logs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Start-Hunting/threat-hunting-program-models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Solo Hunter to Enterprise
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Start-Hunting/threat-hunting-documentation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reporting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Start-Hunting/threat-hunting-device-logs-telemetry-details.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Telemetry & Logs to collect
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Start-Hunting/low-hanging-fruits-threat-hunting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Low Hanging Fruits
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../learn-known-cyber-attacks/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Learn Attacks
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Learn Attacks
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../attack-encyclopedia/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Attacks Encyclopedia
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../threat-hunting-reports/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Hunting Reports
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Case Studies
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Case Studies
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../case-studies/2010-Stuxnet-Retrospective-Threat-Hunt-Report/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stuxnet (2010)
+  
+
+    
+      <br>
+      <small>Retrospective Enterprise Threat Hunt: ICS-Targeting Removable-Media Worm (Stuxnet-Class Activity)</small>
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../case-studies/2011-RSA-SecurID-Retrospective-Threat-Hunt-Report/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RSA-SecurID (2011)
+  
+
+    
+      <br>
+      <small>Retrospective Enterprise Threat Hunt: Targeted Spear-Phishing Intrusion Against a Security-Product Vendor (RSA SecurID-Class Activity, 2011)</small>
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../case-studies/2012-linkedin-threat-hunt-report/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linkedin (2012)
+  
+
+    
+      <br>
+      <small>Hunt for Unauthorized Access to Member Credential Store - LinkedIn Corporation</small>
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../case-studies/2013-adobe-threat-hunt-report/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Adobe (2013)
+  
+
+    
+      <br>
+      <small>Engagement: Hunt for Unauthorized Access to Source Code Repositories and Customer Credential/Payment Data- Adobe Systems Inc.</small>
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://intel.threathuntlabs.com" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    🎯Daily Intel
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../threat-hunting-lab/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Challenges
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://blog.threathuntlabs.com" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Blog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Downloads/threat-hunting-related-document-references/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Resources
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#before-we-begin-think-like-a-threat-hunter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Before We Begin: Think Like a Threat Hunter
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-baselining" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Baselining
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-grouping" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Grouping
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-clustering" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Clustering
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-frequency-analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Frequency Analysis
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-stack-counting-repetition-counting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Stack Counting (Repetition Counting)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-rarity-scoring" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Rarity Scoring
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-outlier-detection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Outlier Detection
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-time-delta-analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Time Delta Analysis
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-entropy-string-analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. Entropy &amp; String Analysis
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10-parent-child-process-analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. Parent-Child Process Analysis
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11-first-time-seen-analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11. First-Time-Seen Analysis
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#12-peer-comparison" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12. Peer Comparison
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#13-path-and-location-anomaly" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13. Path and Location Anomaly
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#14-impossible-travel-velocity-analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14. Impossible Travel (Velocity Analysis)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#15-volume-and-size-anomaly" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15. Volume and Size Anomaly
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#16-sequence-chain-analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16. Sequence (Chain) Analysis
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#combining-multiple-techniques" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Combining Multiple Techniques
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#choosing-the-right-technique" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Choosing the Right Technique
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key-takeaways" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Takeaways
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#whats-next" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What's Next?
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="threat-hunting-data-analysis-techniques-how-threat-hunters-find-attackers-hidden-in-millions-of-events">Threat Hunting Data Analysis Techniques: How Threat Hunters Find Attackers Hidden in Millions of Events</h1>
+<p>It's <strong>9:15 on a Monday morning</strong>.</p>
+<p>Your Security Information and Event Management (SIEM) platform has already ingested more than <strong>34 million security events</strong>.</p>
+<p>Authentication logs.</p>
+<p>DNS queries.</p>
+<p>Firewall connections.</p>
+<p>PowerShell executions.</p>
+<p>Email activity.</p>
+<p>Endpoint telemetry.</p>
+<p>Cloud audit logs.</p>
+<p>Process creation events.</p>
+<p>And it's not even lunchtime.</p>
+<p>Then your manager walks over and asks a seemingly simple question.</p>
+<blockquote>
+<p><strong>"Can you tell me whether an attacker is currently hiding somewhere inside our environment?"</strong></p>
+</blockquote>
+<p>No alerts have been triggered.</p>
+<p>No ransomware has appeared.</p>
+<p>No users have reported suspicious activity.</p>
+<p>There are simply <strong>millions of events</strong> flowing into your SIEM every hour.</p>
+<p>Where do you even begin?</p>
+<p>Surely you can't review every single event manually.</p>
+<p>Even if you could inspect one log every second without taking a break, reviewing just <strong>one day's worth of telemetry</strong> would take years.</p>
+<p>Clearly, experienced Threat Hunters don't investigate events one by one.</p>
+<p>Instead, they look for <strong>patterns</strong>.</p>
+<p>That single realization changes the way you think about Threat Hunting.</p>
+<p>Threat Hunting isn't about reading logs.</p>
+<p>It's about reducing millions of events into a handful of observations that deserve investigation.</p>
+<p>That's exactly where <strong>data analysis techniques</strong> come in.</p>
+<p>Rather than trying to identify attackers directly, these techniques help answer questions like:</p>
+<ul>
+<li>What looks different today?</li>
+<li>What has never happened before?</li>
+<li>Which device behaves differently from every other device?</li>
+<li>Which user suddenly performed an unusual action?</li>
+<li>Which process rarely executes?</li>
+<li>Which sequence of events doesn't make sense?</li>
+</ul>
+<p>Each technique gives the hunter another perspective on the same data.</p>
+<p>Individually they are useful.</p>
+<p>Combined together, they become incredibly powerful.</p>
+<p>By the end of this article you'll understand not only <strong>what these techniques are</strong>, but more importantly <strong>how experienced Threat Hunters use them to uncover hidden attackers.</strong></p>
+<hr />
+<h2 id="before-we-begin-think-like-a-threat-hunter">Before We Begin: Think Like a Threat Hunter</h2>
+<p>One of the biggest misconceptions about Threat Hunting is believing success comes from knowing hundreds of KQL queries.</p>
+<p>Or mastering Splunk SPL.</p>
+<p>Or writing advanced Sigma rules.</p>
+<p>Those skills certainly help.</p>
+<p>But they aren't what separates an experienced Threat Hunter from everyone else.</p>
+<p>Imagine two analysts sitting next to each other.</p>
+<p>Both have access to the same SIEM.</p>
+<p>Both can query exactly the same logs.</p>
+<p>Both have identical permissions.</p>
+<p>Yet one consistently uncovers threats while the other finds nothing.</p>
+<p>Why?</p>
+<p>Because they ask different questions.</p>
+<p>The first analyst asks:</p>
+<blockquote>
+<p><strong>"Which query should I run?"</strong></p>
+</blockquote>
+<p>The Threat Hunter asks:</p>
+<blockquote>
+<p><strong>"If an attacker wanted to stay hidden, what patterns would they accidentally leave behind?"</strong></p>
+</blockquote>
+<p>That difference in mindset changes everything.</p>
+<p>Threat Hunters aren't searching for individual events.</p>
+<p>They're searching for <strong>deviations</strong>.</p>
+<p>Every analytical technique discussed in this article exists for one reason.</p>
+<p>To answer a single question.</p>
+<p>tip "Threat Hunter's Mindset"</p>
+<div class="highlight"><pre><span></span><code>Instead of asking:
+
+**&quot;What is malicious?&quot;**
+
+Experienced Threat Hunters ask:
+
+**&quot;What doesn&#39;t belong?&quot;**
+
+That subtle shift in thinking is what transforms reactive investigations into proactive Threat Hunting.
+</code></pre></div>
+<p>Let's start with the most fundamental technique used during almost every Threat Hunt.</p>
+<hr />
+<h2 id="1-baselining">1. Baselining</h2>
+<p>Imagine you're responsible for protecting <strong>10,000 Windows endpoints</strong>.</p>
+<p>Every morning, employees log in.</p>
+<p>Microsoft Teams starts automatically.</p>
+<p>Outlook opens.</p>
+<p>Edge launches.</p>
+<p>OneDrive synchronizes files.</p>
+<p>Background services initialise.</p>
+<p>Nothing appears unusual.</p>
+<p>The same pattern repeats tomorrow.</p>
+<p>And the day after.</p>
+<p>Eventually, you begin to understand what <strong>normal</strong> looks like.</p>
+<p>This is known as a <strong>baseline</strong>.</p>
+<p>A baseline is simply a reference point representing expected behaviour within an environment.</p>
+<p>Without understanding what "normal" looks like, identifying abnormal behaviour becomes almost impossible.</p>
+<p>Think about airport security.</p>
+<p>Security officers don't inspect every traveller because they expect everyone to be dangerous.</p>
+<p>They understand what normal passenger behaviour looks like.</p>
+<p>Anyone behaving significantly differently naturally attracts more attention.</p>
+<p>Threat Hunters work the same way.</p>
+<hr />
+<p><strong>A Real Investigation</strong></p>
+<p>example "Example: Detecting a Deviation from the Baseline"</p>
+<div class="highlight"><pre><span></span><code>For several months, a user&#39;s workstation has behaved predictably.
+
+Every morning it launches Microsoft Teams, Outlook, Microsoft Edge, and OneDrive.
+
+Today, however, something different appears.
+
+`powershell.exe -EncodedCommand SQBFAFgA...`
+
+The command executes silently.
+
+It downloads additional content.
+
+It creates child processes.
+
+This user has **never** executed an encoded PowerShell command before.
+
+The workstation has **never** communicated with the external domain referenced by the script.
+
+No alert has fired.
+
+No malware has been detected.
+
+But today&#39;s activity no longer resembles the established baseline.
+
+**That&#39;s exactly what Threat Hunters investigate.**
+</code></pre></div>
+<p>Notice something important.</p>
+<p>Nothing here proves malicious activity.</p>
+<p>Baselining doesn't tell us an attack has occurred.</p>
+<p>It simply tells us something has changed.</p>
+<p>That change deserves attention.</p>
+<hr />
+<p><strong>What Can Be Baselined?</strong></p>
+<p>Almost every security dataset can have a baseline.</p>
+<p>Some of the most common examples include:</p>
+<table>
+<thead>
+<tr>
+<th>Data Source</th>
+<th>Typical Baseline</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Authentication Logs</td>
+<td>Normal login hours and locations</td>
+</tr>
+<tr>
+<td>Process Creation</td>
+<td>Commonly executed applications</td>
+</tr>
+<tr>
+<td>DNS Logs</td>
+<td>Frequently accessed domains</td>
+</tr>
+<tr>
+<td>Firewall Logs</td>
+<td>Expected outbound destinations</td>
+</tr>
+<tr>
+<td>Service Accounts</td>
+<td>Normal authentication behaviour</td>
+</tr>
+<tr>
+<td>Endpoint Telemetry</td>
+<td>Parent-child process relationships</td>
+</tr>
+<tr>
+<td>File Access Logs</td>
+<td>Frequently accessed files</td>
+</tr>
+<tr>
+<td>Email Activity</td>
+<td>Average emails sent each day</td>
+</tr>
+<tr>
+<td>Cloud Audit Logs</td>
+<td>Administrative changes</td>
+</tr>
+</tbody>
+</table>
+<p>Once a baseline has been established, every new event can be compared against it.</p>
+<p>Instead of asking,</p>
+<blockquote>
+<p>"Is this malware?"</p>
+</blockquote>
+<p>Threat Hunters ask:</p>
+<blockquote>
+<p><strong>"Does today's behaviour resemble yesterday's behaviour?"</strong></p>
+</blockquote>
+<p>If the answer is no, the investigation has just begun.</p>
+<hr />
+<p><strong>Why Baselining Matters</strong></p>
+<p>Baselining is often the first analytical technique used during Threat Hunting because attackers rarely arrive with flashing warning signs.</p>
+<p>Instead, they quietly introduce small deviations into an otherwise normal environment.</p>
+<p>A workstation that normally contacts ten external domains suddenly contacts an eleventh.</p>
+<p>A service account that authenticates only from servers suddenly logs in from a user workstation.</p>
+<p>A user who typically signs in between 9 AM and 6 PM suddenly authenticates at 2 AM.</p>
+<p>Individually, none of these observations prove malicious activity.</p>
+<p>Collectively, they begin telling a story.</p>
+<p>Baselining gives Threat Hunters the context needed to recognise when that story changes.</p>
+<p>Without it, every event looks equally important.</p>
+<p>With it, unusual behaviour naturally rises to the surface.</p>
+<hr />
+<p>Now that we understand how to identify changes from normal behaviour, the next challenge is equally important.</p>
+<p>What happens when your dataset contains <strong>millions of events</strong>, making it impossible to investigate them individually?</p>
+<p>Before identifying anomalies, we first need to organise the data.</p>
+<h2 id="2-grouping">2. Grouping</h2>
+<p>Imagine your SIEM contains <strong>12 million process creation events</strong> collected over the past 24 hours.</p>
+<p>Reviewing each event individually would be impossible.</p>
+<p>Even if every event were legitimate, simply scrolling through the logs would consume hours before you discovered anything useful.</p>
+<p>Threat Hunters solve this problem by asking a different question.</p>
+<p>Instead of investigating individual events, they begin organising similar events together.</p>
+<p>This technique is known as <strong>Grouping</strong>.</p>
+<p>Grouping transforms millions of unrelated records into meaningful categories, making large datasets significantly easier to understand.</p>
+<p>Think of it like sorting a box of mixed LEGO bricks.</p>
+<p>Rather than examining every single brick individually, you first separate them by colour, size, or shape.</p>
+<p>Once organised, patterns become much easier to recognise.</p>
+<p>Threat Hunting follows exactly the same principle.</p>
+<hr />
+<p><strong>A Real Investigation</strong></p>
+<p>example "Example: Grouping Similar Process Executions"</p>
+<div class="highlight"><pre><span></span><code>Imagine your SIEM has recorded thousands of process executions from endpoints across the organisation.
+
+Instead of reviewing every single event individually, you group identical process names together.
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Process</th>
+<th style="text-align: right;">Number of Executions</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>chrome.exe</td>
+<td style="text-align: right;">486,214</td>
+</tr>
+<tr>
+<td>msedge.exe</td>
+<td style="text-align: right;">352,811</td>
+</tr>
+<tr>
+<td>teams.exe</td>
+<td style="text-align: right;">287,194</td>
+</tr>
+<tr>
+<td>outlook.exe</td>
+<td style="text-align: right;">241,503</td>
+</tr>
+<tr>
+<td>explorer.exe</td>
+<td style="text-align: right;">176,322</td>
+</tr>
+<tr>
+<td>powershell.exe</td>
+<td style="text-align: right;">3,982</td>
+</tr>
+<tr>
+<td>certutil.exe</td>
+<td style="text-align: right;">6</td>
+</tr>
+<tr>
+<td>mshta.exe</td>
+<td style="text-align: right;">2</td>
+</tr>
+</tbody>
+</table>
+<p>Within seconds, the investigation changes.</p>
+<p>You're no longer looking at hundreds of thousands of events.</p>
+<p>You're looking at only eight groups.</p>
+<p>The data has become manageable.</p>
+<p>More importantly, unusual activity has already started becoming visible.</p>
+<hr />
+<p><strong>What Can Be Grouped?</strong></p>
+<p>Almost every security dataset benefits from grouping.</p>
+<p>Threat Hunters frequently group events by:</p>
+<table>
+<thead>
+<tr>
+<th>Data Source</th>
+<th>Common Grouping</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Authentication Logs</td>
+<td>Username</td>
+</tr>
+<tr>
+<td>Endpoint Logs</td>
+<td>Process Name</td>
+</tr>
+<tr>
+<td>DNS Logs</td>
+<td>Queried Domain</td>
+</tr>
+<tr>
+<td>Firewall Logs</td>
+<td>Destination IP</td>
+</tr>
+<tr>
+<td>Email Logs</td>
+<td>Sender Address</td>
+</tr>
+<tr>
+<td>Cloud Audit Logs</td>
+<td>Operation Name</td>
+</tr>
+<tr>
+<td>Registry Events</td>
+<td>Registry Path</td>
+</tr>
+<tr>
+<td>File Activity</td>
+<td>File Extension</td>
+</tr>
+<tr>
+<td>Alerts</td>
+<td>Alert Type</td>
+</tr>
+</tbody>
+</table>
+<p>Grouping doesn't identify attacks.</p>
+<p>It simply removes unnecessary complexity, allowing hunters to focus on meaningful observations instead of drowning in raw data.</p>
+<hr />
+<p><strong>Why Grouping Matters</strong></p>
+<p>One failed login tells you very little.</p>
+<p>Ten thousand failed logins also tell you very little.</p>
+<p>But grouping those events by <strong>country</strong>, <strong>username</strong>, or <strong>source IP address</strong> immediately reveals patterns.</p>
+<p>Consider the following grouped authentication failures.</p>
+<table>
+<thead>
+<tr>
+<th>Country</th>
+<th style="text-align: right;">Failed Logins</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>India</td>
+<td style="text-align: right;">12</td>
+</tr>
+<tr>
+<td>United Kingdom</td>
+<td style="text-align: right;">18</td>
+</tr>
+<tr>
+<td>United States</td>
+<td style="text-align: right;">15</td>
+</tr>
+<tr>
+<td>Russia</td>
+<td style="text-align: right;">8,421</td>
+</tr>
+</tbody>
+</table>
+<p>Nothing about an individual failed login is suspicious.</p>
+<p>However, once grouped together, one country immediately stands out.</p>
+<p>Grouping doesn't find attackers.</p>
+<p>It simply points investigators toward the places worth investigating.</p>
+<hr />
+<h2 id="3-clustering">3. Clustering</h2>
+<p>At first glance, Grouping and Clustering seem almost identical.</p>
+<p>Both organise data.</p>
+<p>Both simplify investigations.</p>
+<p>But there's an important difference.</p>
+<p><strong>Grouping uses characteristics that already exist.</strong></p>
+<p><strong>Clustering discovers relationships that weren't obvious before.</strong></p>
+<p>Imagine you manage thousands of endpoints.</p>
+<p>Most employee laptops naturally behave very similarly.</p>
+<p>Office applications.</p>
+<p>Browsers.</p>
+<p>Video conferencing software.</p>
+<p>PDF readers.</p>
+<p>Engineering workstations, however, look different.</p>
+<p>They frequently execute Visual Studio, Docker, Git, and development tools.</p>
+<p>Database servers form another group.</p>
+<p>Domain Controllers form another.</p>
+<p>Without anyone explicitly defining these categories, systems naturally begin forming clusters based on their behaviour.</p>
+<p>That's exactly what Clustering attempts to identify.</p>
+<hr />
+<p><strong>A Real Investigation</strong></p>
+<p>example "Example: Identifying an Unusual Workstation"</p>
+<p>Imagine your organisation has analysed process execution data from every endpoint.</p>
+<p>Most systems naturally fall into familiar groups.</p>
+<table>
+<thead>
+<tr>
+<th>Cluster</th>
+<th>Typical Applications</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Office Users</td>
+<td>Outlook, Teams, Edge, Excel</td>
+</tr>
+<tr>
+<td>Developers</td>
+<td>Visual Studio, Docker, Git</td>
+</tr>
+<tr>
+<td>Database Servers</td>
+<td>SQL Server, Backup Services</td>
+</tr>
+<tr>
+<td>Domain Controllers</td>
+<td>LSASS, Netlogon, DFSR</td>
+</tr>
+</tbody>
+</table>
+<p>Then one workstation appears that doesn't belong to any cluster.</p>
+<p>Instead, it frequently executes:</p>
+<ul>
+<li><code>certutil.exe</code></li>
+<li><code>mshta.exe</code></li>
+<li><code>powershell.exe</code></li>
+<li><code>rundll32.exe</code></li>
+<li><code>regsvr32.exe</code></li>
+</ul>
+<p>Each application is completely legitimate.</p>
+<p>But together, they don't resemble any other workstation in the organisation.</p>
+<p>That workstation immediately becomes interesting.</p>
+<hr />
+<p><strong>Why Clustering Matters</strong></p>
+<p>Attackers rarely behave exactly like normal users.</p>
+<p>Even when they attempt to blend into legitimate activity, subtle behavioural differences often remain.</p>
+<p>Clustering helps Threat Hunters identify those systems that simply don't fit.</p>
+<p>Instead of asking,</p>
+<blockquote>
+<p><strong>"Is this workstation malicious?"</strong></p>
+</blockquote>
+<p>Hunters ask,</p>
+<blockquote>
+<p><strong>"Why is this workstation behaving differently from every other workstation?"</strong></p>
+</blockquote>
+<p>Sometimes the answer is perfectly legitimate.</p>
+<p>Sometimes it's the first indication that an attacker has established persistence.</p>
+<hr />
+<h2 id="4-frequency-analysis">4. Frequency Analysis</h2>
+<p>One of the simplest Threat Hunting techniques is also one of the most effective.</p>
+<p>Instead of asking what happened, hunters ask:</p>
+<blockquote>
+<p><strong>"How often does this normally happen?"</strong></p>
+</blockquote>
+<p>Frequency Analysis focuses on measuring how often specific activities occur over time.</p>
+<p>The technique itself is simple.</p>
+<p>Unexpected increases-or unexpected decreases-often indicate that something has changed.</p>
+<hr />
+<p><strong>A Real Investigation</strong></p>
+<p>example "Example: Normal PowerShell Activity"</p>
+<p>For the past week, PowerShell executions have remained fairly consistent.</p>
+<table>
+<thead>
+<tr>
+<th>Day</th>
+<th style="text-align: right;">PowerShell Executions</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Monday</td>
+<td style="text-align: right;">38</td>
+</tr>
+<tr>
+<td>Tuesday</td>
+<td style="text-align: right;">41</td>
+</tr>
+<tr>
+<td>Wednesday</td>
+<td style="text-align: right;">36</td>
+</tr>
+<tr>
+<td>Thursday</td>
+<td style="text-align: right;">44</td>
+</tr>
+<tr>
+<td>Friday</td>
+<td style="text-align: right;">39</td>
+</tr>
+</tbody>
+</table>
+<p>Nothing appears unusual.</p>
+<p>This becomes the baseline.</p>
+<p>The following Monday, however, the numbers change dramatically.</p>
+<p>warning "Example: Something Has Changed"</p>
+<table>
+<thead>
+<tr>
+<th>Day</th>
+<th style="text-align: right;">PowerShell Executions</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Monday</td>
+<td style="text-align: right;"><strong>5,732</strong></td>
+</tr>
+</tbody>
+</table>
+<p>One number doesn't prove malicious activity.</p>
+<p>But compared to the established baseline, something has clearly changed.</p>
+<p>That change deserves investigation.</p>
+<hr />
+<p><strong>Common Uses of Frequency Analysis</strong></p>
+<p>Threat Hunters commonly measure the frequency of:</p>
+<ul>
+<li>Authentication attempts</li>
+<li>Failed logins</li>
+<li>DNS requests</li>
+<li>PowerShell executions</li>
+<li>Process launches</li>
+<li>Administrative actions</li>
+<li>File downloads</li>
+<li>Registry modifications</li>
+<li>Email activity</li>
+<li>Firewall connections</li>
+</ul>
+<p>The goal isn't to identify malware.</p>
+<p>The goal is to identify <strong>unexpected changes in behaviour</strong>.</p>
+<hr />
+<h2 id="5-stack-counting-repetition-counting">5. Stack Counting (Repetition Counting)</h2>
+<p>If Frequency Analysis tells us <strong>how often something happens over time</strong>, Stack Counting tells us <strong>how often different things appear within the same dataset</strong>.</p>
+<p>Think of it as ranking events from the most common to the least common.</p>
+<p>Most attackers try to blend into everyday activity.</p>
+<p>Ironically, the tools they use often become the rarest events in the environment.</p>
+<p>That's exactly what Stack Counting helps reveal.</p>
+<hr />
+<p><strong>A Real Investigation</strong></p>
+<p>example "Example: Finding the Needle in the Haystack"</p>
+<p>Imagine you count every executable launched yesterday.</p>
+<table>
+<thead>
+<tr>
+<th>Process</th>
+<th style="text-align: right;">Executions</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>chrome.exe</td>
+<td style="text-align: right;">452,118</td>
+</tr>
+<tr>
+<td>msedge.exe</td>
+<td style="text-align: right;">338,404</td>
+</tr>
+<tr>
+<td>teams.exe</td>
+<td style="text-align: right;">301,442</td>
+</tr>
+<tr>
+<td>outlook.exe</td>
+<td style="text-align: right;">284,006</td>
+</tr>
+<tr>
+<td>explorer.exe</td>
+<td style="text-align: right;">176,311</td>
+</tr>
+<tr>
+<td>powershell.exe</td>
+<td style="text-align: right;">3,241</td>
+</tr>
+<tr>
+<td>certutil.exe</td>
+<td style="text-align: right;">7</td>
+</tr>
+<tr>
+<td>mshta.exe</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr>
+<td>rundll32.exe</td>
+<td style="text-align: right;">1</td>
+</tr>
+</tbody>
+</table>
+<p>Most analysts instinctively focus on the largest numbers.</p>
+<p>Threat Hunters often do the opposite.</p>
+<p>Why did <strong>rundll32.exe</strong> execute only once?</p>
+<p>Why did <strong>mshta.exe</strong> execute twice?</p>
+<p>Why did <strong>certutil.exe</strong> suddenly appear seven times?</p>
+<p>Those rare events may be completely legitimate.</p>
+<p>Or they may represent an attacker attempting to remain hidden.</p>
+<p>Either way, they're worth investigating.</p>
+<hr />
+<p><strong>Why Stack Counting Matters</strong></p>
+<p>Stack Counting is one of the fastest ways to reduce millions of events into a shortlist requiring human attention.</p>
+<p>Instead of searching directly for malicious activity, it asks a much simpler question.</p>
+<blockquote>
+<p><strong>"What is so uncommon that it deserves another look?"</strong></p>
+</blockquote>
+<p>Very often, that's where the investigation begins.</p>
+<hr />
+<p>At this point, we've explored five of the most widely used analytical techniques in Threat Hunting.</p>
+<p>Each one helps reduce overwhelming volumes of telemetry into meaningful observations.</p>
+<p>However, experienced attackers are also aware of these techniques.</p>
+<p>Many deliberately avoid generating rare events or obvious spikes in activity.</p>
+<p>Instead, they attempt to blend into normal operations so convincingly that even frequency analysis and stack counting fail to detect them.</p>
+<p>So how do experienced Threat Hunters identify attackers who intentionally try to look ordinary?</p>
+<p>That's exactly what we'll explore next as we dive into <strong>Rarity Scoring, Outlier Detection, Time Delta Analysis, Entropy Analysis, Parent-Child Process Analysis, and First-Time-Seen Analysis.</strong></p>
+<h2 id="6-rarity-scoring">6. Rarity Scoring</h2>
+<p>Imagine you're responsible for monitoring 15,000 endpoints.</p>
+<p>Most applications executed throughout the day are completely expected.</p>
+<p>Microsoft Teams.</p>
+<p>Microsoft Edge.</p>
+<p>Google Chrome.</p>
+<p>Microsoft Outlook.</p>
+<p>Adobe Acrobat.</p>
+<p>Visual Studio.</p>
+<p>Nothing stands out because thousands of employees use them every day.</p>
+<p>Now imagine discovering a process that appears only once across the entire organization.</p>
+<p>Should you panic?</p>
+<p>Not necessarily.</p>
+<p>But it certainly deserves attention.</p>
+<p>This idea forms the basis of <strong>Rarity Scoring</strong>.</p>
+<p>Unlike Stack Counting, which simply ranks events by occurrence, Rarity Scoring assigns a score based on how uncommon an event is compared to everything else in the environment.</p>
+<p>The rarer the behaviour, the higher the investigation priority.</p>
+<p><strong>Example: A Rare Application</strong></p>
+<table>
+<thead>
+<tr>
+<th>Application</th>
+<th style="text-align: right;">Devices Executed</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>chrome.exe</td>
+<td style="text-align: right;">14,892</td>
+</tr>
+<tr>
+<td>msedge.exe</td>
+<td style="text-align: right;">14,611</td>
+</tr>
+<tr>
+<td>teams.exe</td>
+<td style="text-align: right;">14,488</td>
+</tr>
+<tr>
+<td>outlook.exe</td>
+<td style="text-align: right;">14,021</td>
+</tr>
+<tr>
+<td>powershell.exe</td>
+<td style="text-align: right;">1,623</td>
+</tr>
+<tr>
+<td>mimikatz.exe</td>
+<td style="text-align: right;">1</td>
+</tr>
+</tbody>
+</table>
+<p>Every application above is legitimate except one.</p>
+<p>Would you ignore <strong>mimikatz.exe</strong> simply because it executed once?</p>
+<p>Probably not.</p>
+<p>Being rare doesn't automatically make something malicious.</p>
+<p>But rarity often points investigators toward behaviour that deserves closer examination.</p>
+<p><strong>Where Rarity Scoring Helps</strong></p>
+<p>Threat Hunters commonly apply rarity scoring to:</p>
+<ul>
+<li>Executable names</li>
+<li>Parent-child relationships</li>
+<li>Registry keys</li>
+<li>Network destinations</li>
+<li>DNS queries</li>
+<li>Browser user agents</li>
+<li>Service installations</li>
+<li>Scheduled tasks</li>
+</ul>
+<p>Instead of asking:</p>
+<blockquote>
+<p>"Is this malicious?"</p>
+</blockquote>
+<p>Threat Hunters ask:</p>
+<blockquote>
+<p><strong>"How unusual is this compared to everything else?"</strong></p>
+</blockquote>
+<hr />
+<h2 id="7-outlier-detection">7. Outlier Detection</h2>
+<p>Suppose you collect authentication activity for every employee in your organization.</p>
+<p>Most users log in between:</p>
+<ul>
+<li>8:00 AM</li>
+<li>9:00 AM</li>
+</ul>
+<p>Most generate:</p>
+<ul>
+<li>200–400 authentication events per day.</li>
+</ul>
+<p>Everything appears remarkably consistent.</p>
+<p>Then one user suddenly generates:</p>
+<p><strong>18,000 authentication events.</strong></p>
+<p>That user becomes an <strong>outlier</strong>.</p>
+<p>Outlier Detection identifies observations that are significantly different from the majority of the dataset.</p>
+<p>Unlike baselining, which compares today's behaviour with historical behaviour, outlier detection compares one entity against everyone else.</p>
+<p><strong>Example: Authentication Volume</strong></p>
+<table>
+<thead>
+<tr>
+<th>User</th>
+<th style="text-align: right;">Authentication Events</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>User A</td>
+<td style="text-align: right;">284</td>
+</tr>
+<tr>
+<td>User B</td>
+<td style="text-align: right;">301</td>
+</tr>
+<tr>
+<td>User C</td>
+<td style="text-align: right;">263</td>
+</tr>
+<tr>
+<td>User D</td>
+<td style="text-align: right;">295</td>
+</tr>
+<tr>
+<td>User E</td>
+<td style="text-align: right;"><strong>18,417</strong></td>
+</tr>
+</tbody>
+</table>
+<p>One user clearly behaves differently.</p>
+<p>The reason may be perfectly legitimate.</p>
+<p>Perhaps they're a service account.</p>
+<p>Perhaps they're an administrator.</p>
+<p>Or perhaps an attacker is attempting password spraying or lateral movement.</p>
+<p>Either way, this observation deserves investigation.</p>
+<p><strong>Common Outliers</strong></p>
+<p>Threat Hunters often search for:</p>
+<ul>
+<li>Large authentication spikes</li>
+<li>Excessive network traffic</li>
+<li>Abnormal process creation</li>
+<li>High-volume DNS requests</li>
+<li>Excessive failed logins</li>
+<li>Large data transfers</li>
+</ul>
+<p>Outliers don't always represent attacks.</p>
+<p>But attackers frequently become outliers sooner or later.</p>
+<hr />
+<h2 id="8-time-delta-analysis">8. Time Delta Analysis</h2>
+<p>Security events don't just occur.</p>
+<p>They occur <strong>over time</strong>.</p>
+<p>Sometimes the time between two events is more important than the events themselves.</p>
+<p>This is known as <strong>Time Delta Analysis</strong>.</p>
+<p>Rather than asking what happened, Threat Hunters ask:</p>
+<blockquote>
+<p><strong>"How quickly did it happen?"</strong></p>
+</blockquote>
+<p><strong>Example: Impossible Speed</strong></p>
+<p>Imagine the following sequence.</p>
+<table>
+<thead>
+<tr>
+<th>Time</th>
+<th>Activity</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>09:02:14</td>
+<td>User opens Microsoft Word</td>
+</tr>
+<tr>
+<td>09:02:18</td>
+<td>PowerShell launches</td>
+</tr>
+<tr>
+<td>09:02:19</td>
+<td>Encoded command executed</td>
+</tr>
+<tr>
+<td>09:02:20</td>
+<td>External payload downloaded</td>
+</tr>
+<tr>
+<td>09:02:22</td>
+<td>Scheduled task created</td>
+</tr>
+</tbody>
+</table>
+<p>Everything occurred within <strong>eight seconds</strong>.</p>
+<p>Humans rarely work this quickly.</p>
+<p>Automation does.</p>
+<p>Malware does.</p>
+<p>Attack frameworks do.</p>
+<p>The extremely small time difference immediately suggests automated execution.</p>
+<p><strong>Time Delta Analysis Can Reveal</strong></p>
+<ul>
+<li>Malware execution</li>
+<li>Automated scripts</li>
+<li>Brute-force attacks</li>
+<li>Password spraying</li>
+<li>Beaconing activity</li>
+<li>Scheduled persistence</li>
+</ul>
+<p>Sometimes the timing tells a more compelling story than the events themselves.</p>
+<hr />
+<h2 id="9-entropy-string-analysis">9. Entropy &amp; String Analysis</h2>
+<p>Attackers frequently disguise their payloads.</p>
+<p>One common technique involves generating random-looking file names, registry keys, domains, or PowerShell commands.</p>
+<p>Humans naturally create names that are readable.</p>
+<p>Attackers-and malware-often don't.</p>
+<p>Entropy Analysis measures how random a string appears.</p>
+<p>The more random it looks, the more suspicious it may become.</p>
+<p><strong>Example</strong></p>
+<p>Which filename looks more suspicious?</p>
+<table>
+<thead>
+<tr>
+<th>Filename</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PayrollReport.pdf</td>
+</tr>
+<tr>
+<td>Invoice-April.xlsx</td>
+</tr>
+<tr>
+<td>xJ83kdPqLm92Af.exe</td>
+</tr>
+</tbody>
+</table>
+<p>The third filename immediately attracts attention.</p>
+<p>Not because it's malware.</p>
+<p>But because it doesn't resemble something humans normally create.</p>
+<p>Threat Hunters commonly analyse:</p>
+<ul>
+<li>File names</li>
+<li>Registry keys</li>
+<li>Scheduled task names</li>
+<li>Service names</li>
+<li>Domains</li>
+<li>URLs</li>
+<li>PowerShell commands</li>
+<li>Base64 strings</li>
+</ul>
+<p>Entropy doesn't identify attacks.</p>
+<p>It identifies <strong>artificial randomness</strong>, which often accompanies malicious activity.</p>
+<hr />
+<h2 id="10-parent-child-process-analysis">10. Parent-Child Process Analysis</h2>
+<p>One of the most powerful analytical techniques involves understanding which processes launch other processes.</p>
+<p>Windows follows fairly predictable parent-child relationships.</p>
+<p>For example:</p>
+<table>
+<thead>
+<tr>
+<th>Parent</th>
+<th>Child</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>explorer.exe</td>
+<td>chrome.exe</td>
+</tr>
+<tr>
+<td>explorer.exe</td>
+<td>outlook.exe</td>
+</tr>
+<tr>
+<td>services.exe</td>
+<td>svchost.exe</td>
+</tr>
+</tbody>
+</table>
+<p>These relationships occur thousands of times every day.</p>
+<p>Now consider something different.</p>
+<table>
+<thead>
+<tr>
+<th>Parent</th>
+<th>Child</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>WINWORD.EXE</td>
+<td>powershell.exe</td>
+</tr>
+<tr>
+<td>EXCEL.EXE</td>
+<td>cmd.exe</td>
+</tr>
+<tr>
+<td>Acrobat.exe</td>
+<td>mshta.exe</td>
+</tr>
+</tbody>
+</table>
+<p>Nothing here is technically illegal.</p>
+<p>Every executable is signed by Microsoft or Adobe.</p>
+<p>But the relationships themselves are unusual.</p>
+<p>Attackers frequently abuse trusted applications to launch malicious payloads.</p>
+<p>Rather than hunting for malware, Threat Hunters hunt for <strong>unexpected process relationships</strong>.</p>
+<p><strong>Parent-Child Analysis Commonly Detects</strong></p>
+<ul>
+<li>Office macro abuse</li>
+<li>LOLBins (Living-off-the-Land Binaries)</li>
+<li>Script execution</li>
+<li>Malware launch chains</li>
+<li>Initial payload execution</li>
+<li>Persistence mechanisms</li>
+</ul>
+<p>The individual process may appear harmless.</p>
+<p>The parent-child relationship often tells the real story.</p>
+<hr />
+<h2 id="11-first-time-seen-analysis">11. First-Time-Seen Analysis</h2>
+<p>Threat Hunters love asking one simple question.</p>
+<blockquote>
+<p><strong>"Has this ever happened before?"</strong></p>
+</blockquote>
+<p>If the answer is no, the event becomes immediately interesting.</p>
+<p>This technique is known as <strong>First-Time-Seen Analysis</strong>.</p>
+<p>Rather than focusing on rarity, it focuses on novelty.</p>
+<p><strong>Example</strong></p>
+<p>A workstation suddenly contacts:</p>
+<div class="highlight"><pre><span></span><code>update-secure-microsoft365-cloudsync.net
+</code></pre></div>
+<p>Threat Intelligence reports nothing.</p>
+<p>No antivirus alerts appear.</p>
+<p>No users complain.</p>
+<p>But one observation stands out.</p>
+<p>This domain has <strong>never</strong> been contacted by any device in the organization before.</p>
+<p>That's enough to justify investigation.</p>
+<p>First-Time-Seen Analysis commonly applies to:</p>
+<ul>
+<li>Domains</li>
+<li>IP addresses</li>
+<li>Processes</li>
+<li>Scheduled tasks</li>
+<li>Services</li>
+<li>Registry keys</li>
+<li>Executables</li>
+<li>User agents</li>
+<li>Cloud applications</li>
+</ul>
+<p>Many advanced attacks begin with something the environment has simply never seen before.</p>
+<p>Recognising those first appearances allows Threat Hunters to investigate early-often before traditional detection rules are created.</p>
+<hr />
+<p>We've now explored techniques that identify <strong>rare behaviour</strong>, <strong>statistical anomalies</strong>, <strong>timing anomalies</strong>, <strong>randomness</strong>, <strong>unexpected process relationships</strong>, and <strong>new observations</strong>.</p>
+<p>In the final part of this article, we'll explore techniques that compare entities with their peers, identify impossible behaviour, detect abnormal data movement, reconstruct attack chains, and learn how experienced Threat Hunters combine multiple analytical techniques during a single investigation.</p>
+<h2 id="12-peer-comparison">12. Peer Comparison</h2>
+<p>Imagine you're responsible for monitoring activity across 2,000 employees.</p>
+<p>Most users in the Human Resources department perform similar tasks every day.</p>
+<p>They access the HR portal.</p>
+<p>Open Microsoft Outlook.</p>
+<p>Use Microsoft Teams.</p>
+<p>Download payroll reports.</p>
+<p>Occasionally upload documents to SharePoint.</p>
+<p>Their daily behavior is remarkably consistent.</p>
+<p>Now imagine one HR employee suddenly uploads <strong>18 GB</strong> of data to an unfamiliar cloud storage service.</p>
+<p>Would that be considered normal?</p>
+<p>Probably not.</p>
+<p>Nothing about uploading files is inherently malicious.</p>
+<p>However, compared to everyone else performing the same role, this user's behaviour is significantly different.</p>
+<p>This is where <strong>Peer Comparison</strong> becomes valuable.</p>
+<p>Rather than comparing a user against their own historical behaviour, Peer Comparison compares them against others performing similar roles.</p>
+<p><strong>Example: Comparing Similar Users</strong></p>
+<table>
+<thead>
+<tr>
+<th>Department</th>
+<th style="text-align: right;">Average Daily Upload</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Human Resources</td>
+<td style="text-align: right;">35 MB</td>
+</tr>
+<tr>
+<td>Finance</td>
+<td style="text-align: right;">52 MB</td>
+</tr>
+<tr>
+<td>Marketing</td>
+<td style="text-align: right;">410 MB</td>
+</tr>
+<tr>
+<td>Engineering</td>
+<td style="text-align: right;">2.8 GB</td>
+</tr>
+</tbody>
+</table>
+<p>Now consider one HR employee.</p>
+<table>
+<thead>
+<tr>
+<th>User</th>
+<th style="text-align: right;">Daily Upload</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>HR-User-27</td>
+<td style="text-align: right;"><strong>18 GB</strong></td>
+</tr>
+</tbody>
+</table>
+<p>Nothing proves malicious activity.</p>
+<p>Perhaps they're preparing quarterly reports.</p>
+<p>Perhaps they're migrating data.</p>
+<p>Or perhaps they're exfiltrating sensitive information.</p>
+<p>The key observation is simple.</p>
+<p>Compared to their peers, their behaviour doesn't fit.</p>
+<p><strong>Common Peer Comparisons</strong></p>
+<p>Threat Hunters frequently compare:</p>
+<ul>
+<li>Users within the same department</li>
+<li>Devices with identical roles</li>
+<li>Domain Controllers</li>
+<li>Database Servers</li>
+<li>Cloud workloads</li>
+<li>Service Accounts</li>
+<li>Administrative accounts</li>
+</ul>
+<p>Peer Comparison is especially valuable in large enterprises where historical behaviour alone isn't enough to identify suspicious activity.</p>
+<hr />
+<h2 id="13-path-and-location-anomaly">13. Path and Location Anomaly</h2>
+<p>Attackers often try to hide malicious files in locations users rarely inspect.</p>
+<p>Windows itself follows predictable conventions.</p>
+<p>System files belong in system directories.</p>
+<p>Applications install into program directories.</p>
+<p>User documents remain within user profiles.</p>
+<p>When software suddenly appears somewhere unexpected, it deserves attention.</p>
+<p><strong>Example</strong></p>
+<p>Which executable looks more suspicious?</p>
+<table>
+<thead>
+<tr>
+<th>Executable</th>
+<th>Location</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>notepad.exe</td>
+<td><code>C:\Windows\System32\</code></td>
+</tr>
+<tr>
+<td>chrome.exe</td>
+<td><code>C:\Program Files\Google\Chrome\</code></td>
+</tr>
+<tr>
+<td>AdobeUpdater.exe</td>
+<td><code>C:\Users\Public\Adobe\</code></td>
+</tr>
+</tbody>
+</table>
+<p>The executable name itself appears legitimate.</p>
+<p>The location doesn't.</p>
+<p>Attackers frequently exploit trusted filenames while storing them in unexpected directories.</p>
+<p>Threat Hunters commonly investigate:</p>
+<ul>
+<li>Executables inside temporary folders</li>
+<li>Files under <code>C:\Users\Public</code></li>
+<li>Unexpected startup locations</li>
+<li>Unusual scheduled task paths</li>
+<li>DLLs loaded from user profiles</li>
+<li>Scripts stored in Downloads folders</li>
+</ul>
+<p>The executable may be legitimate.</p>
+<p>Its location may not be.</p>
+<hr />
+<h2 id="14-impossible-travel-velocity-analysis">14. Impossible Travel (Velocity Analysis)</h2>
+<p>Authentication events become much more interesting when geography is considered.</p>
+<p>Suppose an employee successfully authenticates from Bangalore at 9:00 AM.</p>
+<p>Twenty minutes later, the same account authenticates from London.</p>
+<p>Technically, both logins are successful.</p>
+<p>Neither violates authentication policies.</p>
+<p>Yet something doesn't make sense.</p>
+<p>Humans can't travel halfway around the world in twenty minutes.</p>
+<p>This analytical technique is known as <strong>Impossible Travel</strong> or <strong>Velocity Analysis</strong>.</p>
+<p><strong>Example</strong></p>
+<table>
+<thead>
+<tr>
+<th>Time</th>
+<th>Location</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>09:00</td>
+<td>Bangalore, India</td>
+</tr>
+<tr>
+<td>09:18</td>
+<td>London, United Kingdom</td>
+</tr>
+</tbody>
+</table>
+<p>Unless the employee has discovered teleportation, one of these sessions is likely suspicious.</p>
+<p>Possible explanations include:</p>
+<ul>
+<li>VPN usage</li>
+<li>Credential theft</li>
+<li>Session hijacking</li>
+<li>Cloud proxy services</li>
+<li>Identity compromise</li>
+</ul>
+<p>Threat Hunters investigate before drawing conclusions.</p>
+<p>The goal isn't to prove an attack.</p>
+<p>The goal is to identify behaviour that defies normal human movement.</p>
+<hr />
+<h2 id="15-volume-and-size-anomaly">15. Volume and Size Anomaly</h2>
+<p>Sometimes the content of an event isn't unusual.</p>
+<p>Its size is.</p>
+<p>Imagine a workstation that normally uploads between <strong>50 MB and 100 MB</strong> every day.</p>
+<p>One afternoon, it uploads <strong>47 GB</strong>.</p>
+<p>The destination might be legitimate.</p>
+<p>The protocol might be encrypted.</p>
+<p>No malware is detected.</p>
+<p>Yet the volume alone deserves investigation.</p>
+<p><strong>Example</strong></p>
+<table>
+<thead>
+<tr>
+<th>Day</th>
+<th style="text-align: right;">Data Uploaded</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Monday</td>
+<td style="text-align: right;">64 MB</td>
+</tr>
+<tr>
+<td>Tuesday</td>
+<td style="text-align: right;">71 MB</td>
+</tr>
+<tr>
+<td>Wednesday</td>
+<td style="text-align: right;">58 MB</td>
+</tr>
+<tr>
+<td>Thursday</td>
+<td style="text-align: right;">69 MB</td>
+</tr>
+<tr>
+<td>Friday</td>
+<td style="text-align: right;"><strong>47 GB</strong></td>
+</tr>
+</tbody>
+</table>
+<p>Threat Hunters frequently monitor:</p>
+<ul>
+<li>Large uploads</li>
+<li>Large downloads</li>
+<li>Archive creation</li>
+<li>Database exports</li>
+<li>Cloud storage uploads</li>
+<li>Backup transfers</li>
+<li>Email attachment sizes</li>
+</ul>
+<p>Large volumes don't automatically indicate data theft.</p>
+<p>However, they often represent the earliest visible sign of exfiltration.</p>
+<hr />
+<h2 id="16-sequence-chain-analysis">16. Sequence (Chain) Analysis</h2>
+<p>Individual events rarely tell the full story.</p>
+<p>The sequence in which they occur often reveals far more than the events themselves.</p>
+<p>Attackers don't simply execute one command.</p>
+<p>They perform a chain of actions.</p>
+<p>Each step prepares for the next.</p>
+<p>Threat Hunters reconstruct those chains to understand the attack.</p>
+<p><strong>Example</strong></p>
+<p>Consider the following sequence.</p>
+<table>
+<thead>
+<tr>
+<th>Step</th>
+<th>Activity</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Microsoft Word opens</td>
+</tr>
+<tr>
+<td>2</td>
+<td>PowerShell launches</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Encoded command executes</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Payload downloaded</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Scheduled task created</td>
+</tr>
+<tr>
+<td>6</td>
+<td>LSASS accessed</td>
+</tr>
+<tr>
+<td>7</td>
+<td>External communication established</td>
+</tr>
+</tbody>
+</table>
+<p>Viewed individually, every event appears legitimate.</p>
+<p>Microsoft Word opening isn't suspicious.</p>
+<p>Neither is PowerShell.</p>
+<p>Nor is a scheduled task.</p>
+<p>However, when these activities occur in sequence, they form a recognizable attack chain.</p>
+<p>Sequence Analysis helps Threat Hunters reconstruct an adversary's actions instead of evaluating isolated events.</p>
+<hr />
+<h2 id="combining-multiple-techniques">Combining Multiple Techniques</h2>
+<p>One of the biggest misconceptions about Threat Hunting is believing that a single analytical technique identifies attackers.</p>
+<p>In reality, experienced Threat Hunters combine several techniques before reaching a conclusion.</p>
+<p>Imagine the following investigation.</p>
+<p>A workstation executes <strong>rundll32.exe</strong> for the first time.</p>
+<p>Stack Counting identifies it as a rare process.</p>
+<p>First-Time-Seen Analysis confirms it has never executed before.</p>
+<p>Parent-Child Analysis shows it was launched by Microsoft Word.</p>
+<p>Time Delta Analysis reveals the entire execution chain completed within five seconds.</p>
+<p>Sequence Analysis shows PowerShell, a scheduled task, and outbound network communication immediately followed.</p>
+<p>None of these observations independently prove malicious activity.</p>
+<p>Together, they build a compelling investigative narrative.</p>
+<p>Threat Hunting is rarely about finding a single suspicious event.</p>
+<p>It's about connecting multiple observations until the overall picture becomes clear.</p>
+<hr />
+<h2 id="choosing-the-right-technique">Choosing the Right Technique</h2>
+<p>Not every investigation requires every analytical technique.</p>
+<p>Different questions require different approaches.</p>
+<table>
+<thead>
+<tr>
+<th>Question</th>
+<th>Recommended Technique</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>What changed compared to yesterday?</td>
+<td>Baselining</td>
+</tr>
+<tr>
+<td>Which events occur most frequently?</td>
+<td>Frequency Analysis</td>
+</tr>
+<tr>
+<td>Which events are rare?</td>
+<td>Stack Counting / Rarity Scoring</td>
+</tr>
+<tr>
+<td>Which systems behave differently?</td>
+<td>Clustering</td>
+</tr>
+<tr>
+<td>Which users differ from similar users?</td>
+<td>Peer Comparison</td>
+</tr>
+<tr>
+<td>Which events occurred unusually quickly?</td>
+<td>Time Delta Analysis</td>
+</tr>
+<tr>
+<td>Which processes launched unexpectedly?</td>
+<td>Parent-Child Analysis</td>
+</tr>
+<tr>
+<td>Which files appear randomly generated?</td>
+<td>Entropy Analysis</td>
+</tr>
+<tr>
+<td>Which domains have never been contacted before?</td>
+<td>First-Time-Seen Analysis</td>
+</tr>
+<tr>
+<td>Which activities form an attack chain?</td>
+<td>Sequence Analysis</td>
+</tr>
+</tbody>
+</table>
+<p>Experienced Threat Hunters don't memorise techniques.</p>
+<p>They understand which technique best answers the investigative question in front of them.</p>
+<hr />
+<h2 id="key-takeaways">Key Takeaways</h2>
+<p>Throughout this article, we've explored sixteen analytical techniques that help Threat Hunters reduce millions of security events into a manageable set of meaningful observations.</p>
+<p>Some techniques identify changes from normal behaviour.</p>
+<p>Others highlight statistical anomalies.</p>
+<p>Some focus on relationships.</p>
+<p>Others reconstruct complete attack chains.</p>
+<p>None of them guarantee the discovery of malicious activity.</p>
+<p>Instead, they provide different perspectives on the same data.</p>
+<p>The most effective Threat Hunters don't rely on just one technique.</p>
+<p>They combine multiple observations, challenge their assumptions, and follow the evidence wherever it leads.</p>
+<p>Ultimately, Threat Hunting isn't about writing clever queries or memorising detection rules.</p>
+<p>It's about recognising patterns that don't belong.</p>
+<p>And that's a skill developed through curiosity, experience, and continuous practice.</p>
+<hr />
+<h2 id="whats-next">What's Next?</h2>
+<p>By now, we've covered:</p>
+<ul>
+<li>Why Threat Hunting matters</li>
+<li>Where Threat Hunting fits within Security Operations</li>
+<li>The Threat Hunting Data Pipeline</li>
+<li>The Threat Hunting Lifecycle</li>
+<li>Different Types of Threat Hunting</li>
+<li>Data Analysis Techniques used by Threat Hunters</li>
+</ul>
+<p>In the next article, we'll move from analysing data to <strong>developing hunting hypotheses</strong>-the starting point of every successful Threat Hunt. You'll learn where hypotheses come from, how to write effective ones, and how mature Threat Hunting teams transform intelligence, anomalies, and attacker behaviour into structured investigations.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.indexes", "navigation.top", "toc.follow", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="../../assets/javascripts/navigation-tabs.js"></script>
+      
+    
+  </body>
+</html>

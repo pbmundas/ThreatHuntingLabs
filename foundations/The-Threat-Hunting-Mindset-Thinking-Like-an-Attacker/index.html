@@ -1,0 +1,2510 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="An independent repository for live cyber threat Hunting, intelligence, playbooks, and raw telemetry.">
+      
+      
+        <meta name="author" content="Threathuntlabs Team">
+      
+      
+        <link rel="canonical" href="https://threathuntlabs.com/foundations/The-Threat-Hunting-Mindset-Thinking-Like-an-Attacker/">
+      
+      
+        <link rel="prev" href="../Threat-Hunting-Methodologies-Choosing-the-Right-Hunting-Approach/">
+      
+      
+        <link rel="next" href="../The-Threat-Hunting-Maturity-Model-Explained/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Mindset - Threat Hunt Labs</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,300i,400,400i,700,700i%7CJetBrains+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Inter";--md-code-font:"JetBrains Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/threat-hunt.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  
+  <script>
+    window.thlNavigation = [
+  {
+    "title": "Home",
+    "url": null,
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Foundations",
+    "url": null,
+    "active": true,
+    "children": [
+  {
+    "title": "Unknown Facts",
+    "url": "../2025-07-20-unknown-facts-about-threat-hunting/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "10 Common Mistakes",
+    "url": "../10-Common-Mistakes-Every-Beginner-Makes-When-Learning-Threat-Hunting/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Cybersecurity Fundamentals",
+    "url": "../Cybersecurity-Fundamentals-The-Foundation-Every-Threat-Hunter-Needs-part-1/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Why and Where Threat Hunting",
+    "url": "../Why-Every-Organization-Needs-Threat-Hunting/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Threat Hunting Explained",
+    "url": "../Threat-Hunting-Explained-Beyond-Alerts-Dashboards-and-SIEM-Queries/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Data Pipeline",
+    "url": "../Threat-Hunting-Data-Pipeline/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Life Cycle",
+    "url": "../Inside-a-Threat-Hunt-Understanding-the-Threat-Hunting-Lifecycle/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Types",
+    "url": "../Types-of-Threat-Hunting-Choosing-the-Right-Hunting-Strategy/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Data Analysis Techniques",
+    "url": "../Threat-Hunting-Data-Analysis-Techniques/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Hypothesis Development",
+    "url": "../Hypothesis-Development-Thinking-Like-a-Threat-Hunter-Before-Writing-a-Single-Query/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Methodologies",
+    "url": "../Threat-Hunting-Methodologies-Choosing-the-Right-Hunting-Approach/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Mindset",
+    "url": "./",
+    "active": true,
+    "children": []
+  },
+  {
+    "title": "Maturity Model",
+    "url": "../The-Threat-Hunting-Maturity-Model-Explained/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Lab Setup",
+    "url": "../../Start-Hunting/threat-hunting-lab/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Reading Logs",
+    "url": "../../Start-Hunting/Reading-Raw-Logs-Like-a-Threat-Hunter/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Solo Hunter to Enterprise",
+    "url": "../../Start-Hunting/threat-hunting-program-models/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Reporting",
+    "url": "../../Start-Hunting/threat-hunting-documentation/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Telemetry \u0026 Logs to collect",
+    "url": "../../Start-Hunting/threat-hunting-device-logs-telemetry-details.html",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Low Hanging Fruits",
+    "url": "../../Start-Hunting/low-hanging-fruits-threat-hunting/",
+    "active": false,
+    "children": []
+  }
+]
+  },
+  {
+    "title": "Learn Attacks",
+    "url": null,
+    "active": false,
+    "children": [
+  {
+    "title": "Attacks in History",
+    "url": "../../learn-known-cyber-attacks/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Attacks Encyclopedia",
+    "url": "../../attack-encyclopedia/",
+    "active": false,
+    "children": []
+  }
+]
+  },
+  {
+    "title": "Hunting Reports",
+    "url": "../../threat-hunting-reports/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Case Studies",
+    "url": null,
+    "active": false,
+    "children": [
+  {
+    "title": "Stuxnet (2010)",
+    "url": "../../case-studies/2010-Stuxnet-Retrospective-Threat-Hunt-Report/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "RSA-SecurID (2011)",
+    "url": "../../case-studies/2011-RSA-SecurID-Retrospective-Threat-Hunt-Report/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Linkedin (2012)",
+    "url": "../../case-studies/2012-linkedin-threat-hunt-report/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Adobe (2013)",
+    "url": "../../case-studies/2013-adobe-threat-hunt-report/",
+    "active": false,
+    "children": []
+  }
+]
+  },
+  {
+    "title": "\ud83c\udfafDaily Intel",
+    "url": "https://intel.threathuntlabs.com",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Challenges",
+    "url": "../../threat-hunting-lab/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Blog",
+    "url": "https://blog.threathuntlabs.com",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Resources",
+    "url": "../../Downloads/threat-hunting-related-document-references/",
+    "active": false,
+    "children": []
+  }
+];
+  </script>
+
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="custom">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#the-threat-hunting-mindset-thinking-like-an-attacker" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Threat Hunt Labs" class="md-header__button md-logo" aria-label="Threat Hunt Labs" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Threat Hunt Labs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Mindset
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../2025-07-20-unknown-facts-about-threat-hunting/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Foundations
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../learn-known-cyber-attacks/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Learn Attacks
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../threat-hunting-reports/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Hunting Reports
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../case-studies/2010-Stuxnet-Retrospective-Threat-Hunt-Report/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Case Studies
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="https://intel.threathuntlabs.com" class="md-tabs__link">
+        
+  
+  
+    
+  
+  🎯Daily Intel
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../threat-hunting-lab/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Challenges
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="https://blog.threathuntlabs.com" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Blog
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../Downloads/threat-hunting-related-document-references/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Resources
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Threat Hunt Labs" class="md-nav__button md-logo" aria-label="Threat Hunt Labs" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Threat Hunt Labs
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Foundations
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Foundations
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2025-07-20-unknown-facts-about-threat-hunting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Unknown Facts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../10-Common-Mistakes-Every-Beginner-Makes-When-Learning-Threat-Hunting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    10 Common Mistakes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Cybersecurity-Fundamentals-The-Foundation-Every-Threat-Hunter-Needs-part-1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cybersecurity Fundamentals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Why-Every-Organization-Needs-Threat-Hunting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Why and Where Threat Hunting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Threat-Hunting-Explained-Beyond-Alerts-Dashboards-and-SIEM-Queries/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Threat Hunting Explained
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Threat-Hunting-Data-Pipeline/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data Pipeline
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Inside-a-Threat-Hunt-Understanding-the-Threat-Hunting-Lifecycle/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Life Cycle
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Types-of-Threat-Hunting-Choosing-the-Right-Hunting-Strategy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Types
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Threat-Hunting-Data-Analysis-Techniques/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data Analysis Techniques
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Hypothesis-Development-Thinking-Like-a-Threat-Hunter-Before-Writing-a-Single-Query/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Hypothesis Development
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Threat-Hunting-Methodologies-Choosing-the-Right-Hunting-Approach/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Methodologies
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mindset
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mindset
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#introduction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Introduction
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#why-mindset-matters-more-than-tools" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why Mindset Matters More Than Tools
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#understanding-attacker-psychology" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Understanding Attacker Psychology
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#adopting-the-assume-breach-mentality" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Adopting the Assume-Breach Mentality
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#thinking-beyond-indicators-of-compromise" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Thinking Beyond Indicators of Compromise
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#crown-jewel-analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Crown Jewel Analysis
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#threat-modelling-basics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Threat Modelling Basics
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#practical-exercise" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Practical Exercise
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#attack-path-1-phishing-to-customer-database" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Attack Path 1 - Phishing to Customer Database
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#attack-path-2-vulnerable-web-application" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Attack Path 2 - Vulnerable Web Application
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../The-Threat-Hunting-Maturity-Model-Explained/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Maturity Model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Start-Hunting/threat-hunting-lab/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab Setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Start-Hunting/Reading-Raw-Logs-Like-a-Threat-Hunter/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reading Logs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Start-Hunting/threat-hunting-program-models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Solo Hunter to Enterprise
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Start-Hunting/threat-hunting-documentation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reporting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Start-Hunting/threat-hunting-device-logs-telemetry-details.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Telemetry & Logs to collect
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Start-Hunting/low-hanging-fruits-threat-hunting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Low Hanging Fruits
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../learn-known-cyber-attacks/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Learn Attacks
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Learn Attacks
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../attack-encyclopedia/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Attacks Encyclopedia
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../threat-hunting-reports/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Hunting Reports
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Case Studies
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Case Studies
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../case-studies/2010-Stuxnet-Retrospective-Threat-Hunt-Report/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stuxnet (2010)
+  
+
+    
+      <br>
+      <small>Retrospective Enterprise Threat Hunt: ICS-Targeting Removable-Media Worm (Stuxnet-Class Activity)</small>
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../case-studies/2011-RSA-SecurID-Retrospective-Threat-Hunt-Report/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RSA-SecurID (2011)
+  
+
+    
+      <br>
+      <small>Retrospective Enterprise Threat Hunt: Targeted Spear-Phishing Intrusion Against a Security-Product Vendor (RSA SecurID-Class Activity, 2011)</small>
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../case-studies/2012-linkedin-threat-hunt-report/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linkedin (2012)
+  
+
+    
+      <br>
+      <small>Hunt for Unauthorized Access to Member Credential Store - LinkedIn Corporation</small>
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../case-studies/2013-adobe-threat-hunt-report/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Adobe (2013)
+  
+
+    
+      <br>
+      <small>Engagement: Hunt for Unauthorized Access to Source Code Repositories and Customer Credential/Payment Data- Adobe Systems Inc.</small>
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://intel.threathuntlabs.com" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    🎯Daily Intel
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../threat-hunting-lab/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Challenges
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://blog.threathuntlabs.com" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Blog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Downloads/threat-hunting-related-document-references/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Resources
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#introduction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Introduction
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#why-mindset-matters-more-than-tools" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why Mindset Matters More Than Tools
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#understanding-attacker-psychology" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Understanding Attacker Psychology
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#adopting-the-assume-breach-mentality" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Adopting the Assume-Breach Mentality
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#thinking-beyond-indicators-of-compromise" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Thinking Beyond Indicators of Compromise
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#crown-jewel-analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Crown Jewel Analysis
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#threat-modelling-basics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Threat Modelling Basics
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#practical-exercise" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Practical Exercise
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#attack-path-1-phishing-to-customer-database" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Attack Path 1 - Phishing to Customer Database
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#attack-path-2-vulnerable-web-application" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Attack Path 2 - Vulnerable Web Application
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="the-threat-hunting-mindset-thinking-like-an-attacker">The Threat Hunting Mindset: Thinking Like an Attacker</h1>
+<blockquote>
+<p><em>Before you hunt adversaries, you need to understand how they think. Threat hunting isn't about memorizing Sigma rules or writing clever KQL queries-it's about developing an investigative mindset that anticipates attacker behavior.</em></p>
+</blockquote>
+<hr />
+<h2 id="introduction">Introduction</h2>
+<p>Many security professionals spend years mastering SIEM platforms, endpoint detection tools, and threat intelligence feeds. Yet when asked to proactively search for an attacker inside an environment, they often don't know where to begin.</p>
+<p>The reason is simple.</p>
+<p>Most defensive training teaches <strong>how security technologies work</strong>, while threat hunting requires understanding <strong>how attackers think</strong>.</p>
+<p>Attackers don't wake up thinking:</p>
+<blockquote>
+<p>"Today I'll generate Event ID 4688."</p>
+</blockquote>
+<p>Instead, they think:</p>
+<ul>
+<li>How do I gain access?</li>
+<li>What credentials can I steal?</li>
+<li>Where is the valuable data?</li>
+<li>How can I avoid detection?</li>
+<li>What's the fastest path to my objective?</li>
+</ul>
+<p>Threat hunters should think exactly the same way.</p>
+<p>The objective isn't to predict every attack. It's to understand what an intelligent adversary is most likely to do after entering your environment.</p>
+<p>That shift in thinking transforms hunting from searching random logs into conducting focused investigations.</p>
+<hr />
+<h2 id="why-mindset-matters-more-than-tools">Why Mindset Matters More Than Tools</h2>
+<p>Organizations frequently invest millions in security technologies while still struggling to detect intrusions.</p>
+<p>Why?</p>
+<p>Because tools generate alerts.</p>
+<p>Hunters generate hypotheses.</p>
+<p>Consider this comparison.</p>
+<p>Traditional SOC thinking:</p>
+<blockquote>
+<p>"What alerts fired today?"</p>
+</blockquote>
+<p>Threat hunter thinking:</p>
+<blockquote>
+<p>"If I compromised this company yesterday, what would I do next-and would anyone notice?"</p>
+</blockquote>
+<p>That's the difference.</p>
+<p>One waits.</p>
+<p>The other actively searches.</p>
+<hr />
+<h2 id="understanding-attacker-psychology">Understanding Attacker Psychology</h2>
+<p>Every attacker has objectives.</p>
+<p>Those objectives may differ depending on the adversary.</p>
+<p>Some want money.</p>
+<p>Some want data.</p>
+<p>Some want persistence.</p>
+<p>Some simply want disruption.</p>
+<p>But regardless of motivation, nearly every attacker follows a similar decision-making process.</p>
+<p>Instead of memorizing attack techniques, understand the questions attackers continuously ask themselves.</p>
+<hr />
+<p><strong>Question 1: How Do I Get In?</strong></p>
+<p>Attackers evaluate every possible entry point.</p>
+<p>Examples include:</p>
+<ul>
+<li>Phishing employees</li>
+<li>Exploiting vulnerable web applications</li>
+<li>Stolen VPN credentials</li>
+<li>Weak passwords</li>
+<li>Third-party vendors</li>
+<li>Public cloud misconfigurations</li>
+</ul>
+<p>They rarely care which method succeeds.</p>
+<p>Their goal is simply obtaining an initial foothold.</p>
+<hr />
+<p><strong>Question 2: Where Am I?</strong></p>
+<p>After gaining access, attackers gather information.</p>
+<p>Typical reconnaissance includes:</p>
+<ul>
+<li>Current user</li>
+<li>Hostname</li>
+<li>Operating system</li>
+<li>Installed software</li>
+<li>Network configuration</li>
+<li>Domain membership</li>
+<li>Running processes</li>
+<li>Active users</li>
+</ul>
+<p>Without understanding the environment, they cannot plan their next move.</p>
+<p>Hunters should therefore ask:</p>
+<blockquote>
+<p>"What reconnaissance activity would I expect immediately after compromise?"</p>
+</blockquote>
+<hr />
+<p><strong>Question 3: What Is Valuable?</strong></p>
+<p>Attackers don't compromise systems for entertainment.</p>
+<p>They want something valuable.</p>
+<p>Examples include:</p>
+<ul>
+<li>Customer databases</li>
+<li>Financial records</li>
+<li>Payment systems</li>
+<li>Domain Administrator credentials</li>
+<li>Cloud access keys</li>
+<li>Backup servers</li>
+<li>Source code</li>
+<li>Intellectual property</li>
+</ul>
+<p>Finding these assets becomes their priority.</p>
+<hr />
+<p><strong>Question 4: How Can I Stay Hidden?</strong></p>
+<p>Stealth is often more important than speed.</p>
+<p>Attackers commonly:</p>
+<ul>
+<li>Create scheduled tasks</li>
+<li>Install persistence mechanisms</li>
+<li>Abuse legitimate tools</li>
+<li>Disable logging</li>
+<li>Blend into administrator behavior</li>
+<li>Use encrypted communication</li>
+<li>Clear logs</li>
+<li>Create backdoor accounts</li>
+</ul>
+<p>The longer they remain undetected, the greater the damage.</p>
+<hr />
+<p><strong>Question 5: How Do I Reach My Objective?</strong></p>
+<p>The attacker continually evaluates:</p>
+<ul>
+<li>Which credentials can I steal?</li>
+<li>Which systems trust each other?</li>
+<li>Which administrator logged into this server?</li>
+<li>Which file shares contain sensitive information?</li>
+<li>Can I move laterally?</li>
+</ul>
+<p>Their path constantly changes based on opportunity.</p>
+<p>Threat hunters should learn to visualize these paths before attackers do.</p>
+<hr />
+<h2 id="adopting-the-assume-breach-mentality">Adopting the Assume-Breach Mentality</h2>
+<p>One of the biggest mindset shifts in threat hunting is abandoning the question:</p>
+<blockquote>
+<p>"Have we been compromised?"</p>
+</blockquote>
+<p>Instead ask:</p>
+<blockquote>
+<p>"If we were already compromised, where would evidence exist?"</p>
+</blockquote>
+<p>This philosophy is called <strong>Assume Breach</strong>.</p>
+<p>It changes everything.</p>
+<p>Instead of relying solely on alerts, you proactively search for attacker behaviors.</p>
+<p>For example:</p>
+<p>Instead of asking:</p>
+<blockquote>
+<p>"Did Defender detect malware?"</p>
+</blockquote>
+<p>Ask:</p>
+<ul>
+<li>Did PowerShell execute unusually?</li>
+<li>Were administrative tools launched unexpectedly?</li>
+<li>Did privileged accounts authenticate at unusual hours?</li>
+<li>Were service accounts used interactively?</li>
+<li>Did internal systems suddenly communicate externally?</li>
+</ul>
+<p>Assume Breach removes optimism from investigations.</p>
+<p>It replaces hope with evidence.</p>
+<hr />
+<h2 id="thinking-beyond-indicators-of-compromise">Thinking Beyond Indicators of Compromise</h2>
+<p>Traditional detection often relies on:</p>
+<ul>
+<li>Malicious hashes</li>
+<li>IP addresses</li>
+<li>Domains</li>
+<li>URLs</li>
+</ul>
+<p>These are useful but temporary.</p>
+<p>Sophisticated attackers constantly change them.</p>
+<p>Threat hunters instead focus on <strong>behavior</strong>.</p>
+<p>Behavior changes far less frequently.</p>
+<p>For example:</p>
+<p>Instead of hunting for:</p>
+<div class="highlight"><pre><span></span><code>Malicious IP Address
+</code></pre></div>
+<p>Hunt for:</p>
+<div class="highlight"><pre><span></span><code>Workstation initiating SMB connections to 50 servers
+</code></pre></div>
+<p>Instead of:</p>
+<div class="highlight"><pre><span></span><code>Known malware hash
+</code></pre></div>
+<p>Hunt for:</p>
+<div class="highlight"><pre><span></span><code>Office application spawning PowerShell
+</code></pre></div>
+<p>Instead of:</p>
+<div class="highlight"><pre><span></span><code>Specific ransomware family
+</code></pre></div>
+<p>Hunt for:</p>
+<div class="highlight"><pre><span></span><code>Massive file rename activity followed by encryption behavior
+</code></pre></div>
+<p>Behavior survives infrastructure changes.</p>
+<hr />
+<h2 id="crown-jewel-analysis">Crown Jewel Analysis</h2>
+<p>Every organization has assets that matter more than everything else.</p>
+<p>These are known as <strong>Crown Jewels</strong>.</p>
+<p>If attackers steal them, the business suffers severe consequences.</p>
+<p>Examples include:</p>
+<p><strong>For an E-Commerce Company</strong></p>
+<ul>
+<li>Customer database</li>
+<li>Payment processing systems</li>
+<li>Identity platform</li>
+<li>Source code repositories</li>
+<li>Cloud production environment</li>
+<li>Order management platform</li>
+<li>Encryption keys</li>
+<li>Administrator credentials</li>
+</ul>
+<p>Not every system deserves equal attention.</p>
+<p>A cafeteria printer is not as valuable as a payment gateway.</p>
+<p>Threat hunters prioritize investigations around assets attackers would most likely target.</p>
+<hr />
+<p><strong>Questions Every Hunter Should Ask</strong></p>
+<p>Instead of inventorying assets, ask:</p>
+<ul>
+<li>What keeps the CEO awake at night?</li>
+<li>Which system cannot fail?</li>
+<li>Which database contains regulated information?</li>
+<li>Which credentials unlock everything?</li>
+<li>Which server would ransomware operators encrypt first?</li>
+</ul>
+<p>Those answers define your hunting priorities.</p>
+<hr />
+<h2 id="threat-modelling-basics">Threat Modelling Basics</h2>
+<p>Threat modelling helps defenders think systematically about attacks before they happen.</p>
+<p>A simple approach consists of four questions.</p>
+<hr />
+<p><strong>Step 1: What Are We Protecting?</strong></p>
+<p>Examples:</p>
+<ul>
+<li>Customer information</li>
+<li>Payment data</li>
+<li>Cloud infrastructure</li>
+<li>APIs</li>
+<li>Employee identities</li>
+</ul>
+<hr />
+<p><strong>Step 2: Who Wants It?</strong></p>
+<p>Potential adversaries include:</p>
+<ul>
+<li>Cybercriminals</li>
+<li>Insider threats</li>
+<li>Competitors</li>
+<li>Nation-state actors</li>
+<li>Hacktivists</li>
+</ul>
+<p>Different adversaries pursue different objectives.</p>
+<hr />
+<p><strong>Step 3: How Could They Reach It?</strong></p>
+<p>Identify possible attack paths.</p>
+<p>For example:</p>
+<div class="highlight"><pre><span></span><code>Internet
+
+↓
+
+Web Application
+
+↓
+
+Application Server
+
+↓
+
+Database
+
+↓
+
+Customer Data
+</code></pre></div>
+<p>Each transition becomes a hunting opportunity.</p>
+<hr />
+<p><strong>Step 4: What Evidence Would They Leave?</strong></p>
+<p>Examples:</p>
+<ul>
+<li>Failed logins</li>
+<li>PowerShell execution</li>
+<li>Privilege escalation</li>
+<li>Service creation</li>
+<li>Unusual authentication</li>
+<li>Database exports</li>
+<li>Large outbound transfers</li>
+</ul>
+<p>These become hunting hypotheses.</p>
+<hr />
+<h2 id="practical-exercise">Practical Exercise</h2>
+<p>Let's put the mindset into practice.</p>
+<p>Imagine the following fictional organization.</p>
+<hr />
+<p><strong>Company Profile</strong></p>
+<p><strong>ShopSphere</strong></p>
+<p>An online retail company.</p>
+<p>Infrastructure:</p>
+<ul>
+<li>Public e-commerce website</li>
+<li>Customer database</li>
+<li>Payment gateway</li>
+<li>Active Directory</li>
+<li>Microsoft 365</li>
+<li>AWS-hosted production servers</li>
+<li>Developer Git repository</li>
+<li>VPN for employees</li>
+</ul>
+<p>Your task is to think like an attacker.</p>
+<hr />
+<h2 id="attack-path-1-phishing-to-customer-database">Attack Path 1 - Phishing to Customer Database</h2>
+<p><strong>Initial Access</strong></p>
+<p>Employee receives phishing email.</p>
+<p>↓</p>
+<p>Credentials stolen.</p>
+<p>↓</p>
+<p>Attacker logs into Microsoft 365.</p>
+<p>↓</p>
+<p>Finds VPN credentials.</p>
+<p>↓</p>
+<p>Accesses internal network.</p>
+<p>↓</p>
+<p>Discovers database server.</p>
+<p>↓</p>
+<p>Extracts customer records.</p>
+<p><strong>Hunting Opportunities</strong></p>
+<ul>
+<li>Impossible travel logins</li>
+<li>New device authentication</li>
+<li>VPN access from unusual geography</li>
+<li>Database access outside business hours</li>
+<li>Large SQL exports</li>
+</ul>
+<hr />
+<h2 id="attack-path-2-vulnerable-web-application">Attack Path 2 - Vulnerable Web Application</h2>
+<p>Attacker discovers outdated web framework.</p>
+<p>↓</p>
+<p>Remote code execution.</p>
+<p>↓</p>
+<p>Web shell installed.</p>
+<p>↓</p>
+<p>Credential dumping.</p>
+<p>↓</p>
+<p>Lateral movement.</p>
+<p>↓</p>
+<p>Domain Administrator compromise.</p>
+<p>↓</p>
+<p>Access to production servers.</p>
+<p><strong>Hunting Opportunities</strong></p>
+<ul>
+<li>Suspicious web server child processes</li>
+<li>Unexpected PowerShell execution</li>
+<li>LSASS access attempts</li>
+<li>New administrator accounts</li>
+<li>Lateral movement using PsExec or WMI</li>
+</ul>
+<hr />
+<h1 id="attack-path-3-compromised-developer-workstation">Attack Path 3 - Compromised Developer Workstation</h1>
+<p>Developer downloads malicious software.</p>
+<p>↓</p>
+<p>Workstation infected.</p>
+<p>↓</p>
+<p>Git credentials stolen.</p>
+<p>↓</p>
+<p>Source code accessed.</p>
+<p>↓</p>
+<p>Secrets discovered.</p>
+<p>↓</p>
+<p>Cloud credentials extracted.</p>
+<p>↓</p>
+<p>Production AWS environment compromised.</p>
+<p><strong>Hunting Opportunities</strong></p>
+<ul>
+<li>Git authentication anomalies</li>
+<li>Secret scanning alerts</li>
+<li>AWS console logins from unusual IPs</li>
+<li>New IAM users</li>
+<li>Unexpected infrastructure creation</li>
+</ul>
+<hr />
+<h2 id="deliverable-attack-path-analysis-worksheet">Deliverable - Attack Path Analysis Worksheet</h2>
+<p>Threat hunters often document their thinking before beginning an investigation. The worksheet below helps convert attacker reasoning into actionable hunting hypotheses.</p>
+<table>
+<thead>
+<tr>
+<th>Attack Path</th>
+<th>Initial Access</th>
+<th>Target Asset</th>
+<th>Key Attacker Actions</th>
+<th>Observable Evidence</th>
+<th>Hunting Questions</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Phishing → VPN → Database</td>
+<td>Phishing email</td>
+<td>Customer database</td>
+<td>Credential theft, VPN login, SQL access</td>
+<td>New sign-ins, VPN logs, database queries</td>
+<td>Did users authenticate from unusual devices or locations?</td>
+</tr>
+<tr>
+<td>Web Exploit → Domain Admin</td>
+<td>Vulnerable web application</td>
+<td>Active Directory</td>
+<td>Web shell, privilege escalation, lateral movement</td>
+<td>Process creation, PowerShell, service creation</td>
+<td>Did the web server execute administrative tools unexpectedly?</td>
+</tr>
+<tr>
+<td>Developer → Git → AWS</td>
+<td>Malware infection</td>
+<td>Cloud production</td>
+<td>Credential theft, secret discovery, cloud access</td>
+<td>Git logs, IAM events, CloudTrail activity</td>
+<td>Were new cloud identities created or used abnormally?</td>
+</tr>
+</tbody>
+</table>
+<p>This worksheet can be expanded during real hunts with additional columns for:</p>
+<ul>
+<li>MITRE ATT&amp;CK techniques</li>
+<li>Required log sources</li>
+<li>Detection gaps</li>
+<li>Existing security controls</li>
+<li>Hunt status and findings</li>
+</ul>
+<hr />
+<h2 id="key-takeaways">Key Takeaways</h2>
+<p>Threat hunting begins long before you write your first query. It starts with understanding how an adversary evaluates an environment, identifies valuable assets, and chooses the path of least resistance. By adopting an assume-breach mentality, focusing on crown jewels, and modeling realistic attack paths, you shift from reacting to alerts to proactively searching for evidence of malicious activity.</p>
+<p>The strongest hunters don't ask, <strong>"What alerts did my tools generate today?"</strong> They ask, <strong>"If I were the attacker, what would I do next-and what traces would that leave behind?"</strong> When you consistently think from the attacker's perspective, every log source, authentication event, and system change becomes a clue rather than just another entry in a dashboard.</p>
+<hr />
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.indexes", "navigation.top", "toc.follow", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="../../assets/javascripts/navigation-tabs.js"></script>
+      
+    
+  </body>
+</html>

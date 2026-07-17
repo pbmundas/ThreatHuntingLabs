@@ -1,0 +1,3295 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="An independent repository for live cyber threat Hunting, intelligence, playbooks, and raw telemetry.">
+      
+      
+        <meta name="author" content="Threathuntlabs Team">
+      
+      
+        <link rel="canonical" href="https://threathuntlabs.com/Start-Hunting/Threat-Hunting-using-AI-Project-Details/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>PROJECT_SPECIFICATION.md - Threat Hunt Labs</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,300i,400,400i,700,700i%7CJetBrains+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Inter";--md-code-font:"JetBrains Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/threat-hunt.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  
+  <script>
+    window.thlNavigation = [
+  {
+    "title": "Home",
+    "url": null,
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Foundations",
+    "url": null,
+    "active": false,
+    "children": [
+  {
+    "title": "Unknown Facts",
+    "url": "../../foundations/2025-07-20-unknown-facts-about-threat-hunting/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "10 Common Mistakes",
+    "url": "../../foundations/10-Common-Mistakes-Every-Beginner-Makes-When-Learning-Threat-Hunting/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Cybersecurity Fundamentals",
+    "url": "../../foundations/Cybersecurity-Fundamentals-The-Foundation-Every-Threat-Hunter-Needs-part-1/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Why and Where Threat Hunting",
+    "url": "../../foundations/Why-Every-Organization-Needs-Threat-Hunting/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Threat Hunting Explained",
+    "url": "../../foundations/Threat-Hunting-Explained-Beyond-Alerts-Dashboards-and-SIEM-Queries/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Data Pipeline",
+    "url": "../../foundations/Threat-Hunting-Data-Pipeline/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Life Cycle",
+    "url": "../../foundations/Inside-a-Threat-Hunt-Understanding-the-Threat-Hunting-Lifecycle/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Types",
+    "url": "../../foundations/Types-of-Threat-Hunting-Choosing-the-Right-Hunting-Strategy/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Data Analysis Techniques",
+    "url": "../../foundations/Threat-Hunting-Data-Analysis-Techniques/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Hypothesis Development",
+    "url": "../../foundations/Hypothesis-Development-Thinking-Like-a-Threat-Hunter-Before-Writing-a-Single-Query/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Methodologies",
+    "url": "../../foundations/Threat-Hunting-Methodologies-Choosing-the-Right-Hunting-Approach/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Mindset",
+    "url": "../../foundations/The-Threat-Hunting-Mindset-Thinking-Like-an-Attacker/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Maturity Model",
+    "url": "../../foundations/The-Threat-Hunting-Maturity-Model-Explained/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Lab Setup",
+    "url": "../threat-hunting-lab/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Reading Logs",
+    "url": "../Reading-Raw-Logs-Like-a-Threat-Hunter/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Solo Hunter to Enterprise",
+    "url": "../threat-hunting-program-models/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Reporting",
+    "url": "../threat-hunting-documentation/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Telemetry \u0026 Logs to collect",
+    "url": "../threat-hunting-device-logs-telemetry-details.html",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Low Hanging Fruits",
+    "url": "../low-hanging-fruits-threat-hunting/",
+    "active": false,
+    "children": []
+  }
+]
+  },
+  {
+    "title": "Learn Attacks",
+    "url": null,
+    "active": false,
+    "children": [
+  {
+    "title": "Attacks in History",
+    "url": "../../learn-known-cyber-attacks/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Attacks Encyclopedia",
+    "url": "../../attack-encyclopedia/",
+    "active": false,
+    "children": []
+  }
+]
+  },
+  {
+    "title": "Hunting Reports",
+    "url": "../../threat-hunting-reports/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Case Studies",
+    "url": null,
+    "active": false,
+    "children": [
+  {
+    "title": "Stuxnet (2010)",
+    "url": "../../case-studies/2010-Stuxnet-Retrospective-Threat-Hunt-Report/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "RSA-SecurID (2011)",
+    "url": "../../case-studies/2011-RSA-SecurID-Retrospective-Threat-Hunt-Report/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Linkedin (2012)",
+    "url": "../../case-studies/2012-linkedin-threat-hunt-report/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Adobe (2013)",
+    "url": "../../case-studies/2013-adobe-threat-hunt-report/",
+    "active": false,
+    "children": []
+  }
+]
+  },
+  {
+    "title": "\ud83c\udfafDaily Intel",
+    "url": "https://intel.threathuntlabs.com",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Challenges",
+    "url": "../../threat-hunting-lab/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Blog",
+    "url": "https://blog.threathuntlabs.com",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Resources",
+    "url": "../../Downloads/threat-hunting-related-document-references/",
+    "active": false,
+    "children": []
+  }
+];
+  </script>
+
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="custom">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#project_specificationmd" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Threat Hunt Labs" class="md-header__button md-logo" aria-label="Threat Hunt Labs" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Threat Hunt Labs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              PROJECT_SPECIFICATION.md
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../foundations/2025-07-20-unknown-facts-about-threat-hunting/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Foundations
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../learn-known-cyber-attacks/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Learn Attacks
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../threat-hunting-reports/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Hunting Reports
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../case-studies/2010-Stuxnet-Retrospective-Threat-Hunt-Report/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Case Studies
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="https://intel.threathuntlabs.com" class="md-tabs__link">
+        
+  
+  
+    
+  
+  🎯Daily Intel
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../threat-hunting-lab/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Challenges
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="https://blog.threathuntlabs.com" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Blog
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../Downloads/threat-hunting-related-document-references/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Resources
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Threat Hunt Labs" class="md-nav__button md-logo" aria-label="Threat Hunt Labs" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Threat Hunt Labs
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Foundations
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Foundations
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../foundations/2025-07-20-unknown-facts-about-threat-hunting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Unknown Facts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../foundations/10-Common-Mistakes-Every-Beginner-Makes-When-Learning-Threat-Hunting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    10 Common Mistakes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../foundations/Cybersecurity-Fundamentals-The-Foundation-Every-Threat-Hunter-Needs-part-1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cybersecurity Fundamentals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../foundations/Why-Every-Organization-Needs-Threat-Hunting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Why and Where Threat Hunting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../foundations/Threat-Hunting-Explained-Beyond-Alerts-Dashboards-and-SIEM-Queries/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Threat Hunting Explained
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../foundations/Threat-Hunting-Data-Pipeline/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data Pipeline
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../foundations/Inside-a-Threat-Hunt-Understanding-the-Threat-Hunting-Lifecycle/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Life Cycle
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../foundations/Types-of-Threat-Hunting-Choosing-the-Right-Hunting-Strategy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Types
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../foundations/Threat-Hunting-Data-Analysis-Techniques/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data Analysis Techniques
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../foundations/Hypothesis-Development-Thinking-Like-a-Threat-Hunter-Before-Writing-a-Single-Query/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Hypothesis Development
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../foundations/Threat-Hunting-Methodologies-Choosing-the-Right-Hunting-Approach/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Methodologies
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../foundations/The-Threat-Hunting-Mindset-Thinking-Like-an-Attacker/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mindset
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../foundations/The-Threat-Hunting-Maturity-Model-Explained/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Maturity Model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../threat-hunting-lab/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab Setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Reading-Raw-Logs-Like-a-Threat-Hunter/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reading Logs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../threat-hunting-program-models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Solo Hunter to Enterprise
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../threat-hunting-documentation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reporting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../threat-hunting-device-logs-telemetry-details.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Telemetry & Logs to collect
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../low-hanging-fruits-threat-hunting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Low Hanging Fruits
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../learn-known-cyber-attacks/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Learn Attacks
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Learn Attacks
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../attack-encyclopedia/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Attacks Encyclopedia
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../threat-hunting-reports/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Hunting Reports
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Case Studies
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Case Studies
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../case-studies/2010-Stuxnet-Retrospective-Threat-Hunt-Report/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stuxnet (2010)
+  
+
+    
+      <br>
+      <small>Retrospective Enterprise Threat Hunt: ICS-Targeting Removable-Media Worm (Stuxnet-Class Activity)</small>
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../case-studies/2011-RSA-SecurID-Retrospective-Threat-Hunt-Report/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RSA-SecurID (2011)
+  
+
+    
+      <br>
+      <small>Retrospective Enterprise Threat Hunt: Targeted Spear-Phishing Intrusion Against a Security-Product Vendor (RSA SecurID-Class Activity, 2011)</small>
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../case-studies/2012-linkedin-threat-hunt-report/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linkedin (2012)
+  
+
+    
+      <br>
+      <small>Hunt for Unauthorized Access to Member Credential Store - LinkedIn Corporation</small>
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../case-studies/2013-adobe-threat-hunt-report/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Adobe (2013)
+  
+
+    
+      <br>
+      <small>Engagement: Hunt for Unauthorized Access to Source Code Repositories and Customer Credential/Payment Data- Adobe Systems Inc.</small>
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://intel.threathuntlabs.com" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    🎯Daily Intel
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../threat-hunting-lab/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Challenges
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://blog.threathuntlabs.com" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Blog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Downloads/threat-hunting-related-document-references/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Resources
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="project_specificationmd">PROJECT_SPECIFICATION.md</h1>
+<h1 id="threat-hunting-operating-system-thos">Threat Hunting Operating System (THOS)</h1>
+<h1 id="enterprise-grade-ai-powered-offline-threat-hunting-platform">Enterprise-Grade AI-Powered Offline Threat Hunting Platform</h1>
+<hr />
+<h2 id="1-executive-overview">1. EXECUTIVE OVERVIEW</h2>
+<p>THOS is a fully offline, on-premises AI-powered Threat Hunting Operating System built on Python 3.12. It orchestrates a local LLM (Ollama/Qwen/Mistral) through LangGraph, exposes all tool capabilities via FastMCP servers, and operates exclusively against local Git repositories containing EVTX logs, JSON, CSV, Sigma rules, YARA rules, Markdown playbooks, and MITRE knowledge bases.</p>
+<p>The LLM is used <strong>only</strong> for planning, reasoning, decision-making, summarization, explanation, and report generation. All deterministic operations - log parsing, Sigma matching, YARA scanning, statistics, anomaly detection, normalization - are implemented as Python tools.</p>
+<hr />
+<h2 id="2-core-design-principles">2. CORE DESIGN PRINCIPLES</h2>
+<table>
+<thead>
+<tr>
+<th>Principle</th>
+<th>Implementation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Clean Architecture</td>
+<td>Presentation → Use Cases → Domain → Infrastructure</td>
+</tr>
+<tr>
+<td>SOLID</td>
+<td>Single responsibility per module, dependency injection throughout</td>
+</tr>
+<tr>
+<td>Domain-Driven Design</td>
+<td>Bounded contexts: Hunting, Evidence, Reporting, Knowledge</td>
+</tr>
+<tr>
+<td>Offline-First</td>
+<td>Zero network calls; all data from local Git repos</td>
+</tr>
+<tr>
+<td>LLM Discipline</td>
+<td>LLM never touches raw data; only receives structured summaries</td>
+</tr>
+<tr>
+<td>Deterministic Safety</td>
+<td>All rule matching, parsing, statistics in Python tools</td>
+</tr>
+<tr>
+<td>Configuration-Driven</td>
+<td>All paths, models, thresholds in YAML/TOML config</td>
+</tr>
+<tr>
+<td>Observability</td>
+<td>Loguru structured logging; DuckDB audit trail</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="3-technology-stack">3. TECHNOLOGY STACK</h2>
+<div class="highlight"><pre><span></span><code>Runtime          : Python 3.12
+Package Manager  : UV
+MCP Framework    : FastMCP
+LLM Orchestrator : LangGraph
+LLM Backend      : Ollama (Qwen2.5:14b / Mistral:7b)
+Vector Store     : ChromaDB (local)
+Relational DB    : SQLite (hunt sessions, evidence)
+Analytics DB     : DuckDB (log analytics, statistics)
+Version Control  : GitPython (read-only access to data repos)
+Log Parsing      : PyEvtx, python-libevtx, json, csv
+Detection Engine : Sigma (pySigma), YARA (yara-python)
+Templating       : Jinja2
+Report Formats   : Markdown, HTML, PDF (weasyprint), JSON
+Models           : Pydantic v2
+CLI              : Typer + Rich
+Logging          : Loguru
+Testing          : Pytest + pytest-asyncio + pytest-cov
+Containers       : Docker + Docker Compose
+</code></pre></div>
+<hr />
+<h2 id="4-complete-folder-hierarchy">4. COMPLETE FOLDER HIERARCHY</h2>
+<div class="highlight"><pre><span></span><code>thos/
+├── PROJECT_SPECIFICATION.md
+├── PROJECT_TREE.md
+├── pyproject.toml
+├── uv.lock
+├── Dockerfile
+├── docker-compose.yml
+├── .env.example
+├── README.md
+│
+├── config/
+│   ├── __init__.py
+│   ├── settings.py              # Pydantic Settings root config loader
+│   ├── thos.yaml                # Main configuration file
+│   ├── repositories.yaml        # Git repo definitions
+│   ├── models.yaml              # LLM model profiles
+│   ├── logging.yaml             # Loguru logging config
+│   └── collections.yaml         # ChromaDB collection definitions
+│
+├── core/
+│   ├── __init__.py
+│   ├── exceptions.py            # Domain exceptions hierarchy
+│   ├── types.py                 # Shared type aliases and enums
+│   ├── constants.py             # System-wide constants
+│   ├── events.py                # Domain event definitions
+│   └── interfaces/
+│       ├── __init__.py
+│       ├── repository.py        # Abstract repository interface
+│       ├── parser.py            # Abstract log parser interface
+│       ├── detector.py          # Abstract detection interface
+│       └── embedder.py          # Abstract embedder interface
+│
+├── domain/
+│   ├── __init__.py
+│   ├── hunting/
+│   │   ├── __init__.py
+│   │   ├── models.py            # HuntSession, HuntHypothesis, HuntResult
+│   │   ├── state.py             # LangGraph THOSState definition
+│   │   └── entities.py          # Hunt domain entities
+│   ├── evidence/
+│   │   ├── __init__.py
+│   │   ├── models.py            # Evidence, IOC, Artifact, Finding
+│   │   └── entities.py
+│   ├── detection/
+│   │   ├── __init__.py
+│   │   ├── models.py            # SigmaMatch, YaraMatch, Anomaly
+│   │   └── entities.py
+│   ├── reporting/
+│   │   ├── __init__.py
+│   │   ├── models.py            # Report, ReportSection, ReportMetadata
+│   │   └── entities.py
+│   └── knowledge/
+│       ├── __init__.py
+│       ├── models.py            # MITRETechnique, Playbook, ThreatActor
+│       └── entities.py
+│
+├── infrastructure/
+│   ├── __init__.py
+│   ├── database/
+│   │   ├── __init__.py
+│   │   ├── sqlite_manager.py    # SQLite connection/migration manager
+│   │   ├── duckdb_manager.py    # DuckDB analytics engine
+│   │   └── migrations/
+│   │       ├── 001_initial.sql
+│   │       ├── 002_evidence.sql
+│   │       └── 003_sessions.sql
+│   ├── repositories/
+│   │   ├── __init__.py
+│   │   ├── hunt_repository.py   # Hunt session persistence
+│   │   ├── evidence_repository.py
+│   │   ├── detection_repository.py
+│   │   └── report_repository.py
+│   ├── git/
+│   │   ├── __init__.py
+│   │   ├── git_client.py        # GitPython read-only client
+│   │   └── repo_registry.py     # Repository catalog manager
+│   ├── vector/
+│   │   ├── __init__.py
+│   │   ├── chroma_client.py     # ChromaDB client wrapper
+│   │   ├── embedder.py          # Local embedding (sentence-transformers)
+│   │   └── indexer.py           # Document indexing pipeline
+│   ├── ollama/
+│   │   ├── __init__.py
+│   │   ├── client.py            # Ollama HTTP client (local only)
+│   │   └── model_manager.py     # Model availability checks
+│   └── filesystem/
+│       ├── __init__.py
+│       └── file_manager.py      # Safe file I/O utilities
+│
+├── parsers/
+│   ├── __init__.py
+│   ├── evtx_parser.py           # Windows EVTX log parser (PyEvtx)
+│   ├── json_parser.py           # Generic JSON log parser
+│   ├── csv_parser.py            # CSV log parser with schema detection
+│   ├── syslog_parser.py         # Syslog RFC3164/5424 parser
+│   ├── cef_parser.py            # CEF (ArcSight) format parser
+│   └── normalizer.py            # ECS-like field normalization
+│
+├── detectors/
+│   ├── __init__.py
+│   ├── sigma_engine.py          # pySigma rule matching engine
+│   ├── yara_engine.py           # YARA rule scanning engine
+│   ├── anomaly_engine.py        # Statistical anomaly detection
+│   └── ioc_matcher.py           # IOC pattern matching engine
+│
+├── analytics/
+│   ├── __init__.py
+│   ├── statistics.py            # Frequency analysis, baselines
+│   ├── timeline.py              # Event timeline reconstruction
+│   ├── correlation.py           # Cross-source event correlation
+│   └── graph_builder.py         # Entity relationship graph
+│
+├── mcp_servers/
+│   ├── __init__.py
+│   │
+│   ├── github_mcp/
+│   │   ├── __init__.py
+│   │   ├── server.py
+│   │   └── tools.py             # list_repos, get_file, list_files, diff_commits, get_log_files
+│   │
+│   ├── parser_mcp/
+│   │   ├── __init__.py
+│   │   ├── server.py
+│   │   └── tools.py             # parse_evtx, parse_json_logs, parse_csv_logs, parse_syslog, parse_cef
+│   │
+│   ├── timeline_mcp/
+│   │   ├── __init__.py
+│   │   ├── server.py
+│   │   └── tools.py             # build_timeline, filter_timeline, pivot_on_entity, export_timeline
+│   │
+│   ├── normalization_mcp/
+│   │   ├── __init__.py
+│   │   ├── server.py
+│   │   └── tools.py             # normalize_events, detect_schema, map_to_ecs, validate_normalized
+│   │
+│   ├── sigma_mcp/
+│   │   ├── __init__.py
+│   │   ├── server.py
+│   │   └── tools.py             # load_sigma_rules, run_sigma_scan, list_sigma_rules, get_rule_detail
+│   │
+│   ├── yara_mcp/
+│   │   ├── __init__.py
+│   │   ├── server.py
+│   │   └── tools.py             # load_yara_rules, scan_with_yara, list_yara_rules, compile_rules
+│   │
+│   ├── query_mcp/
+│   │   ├── __init__.py
+│   │   ├── server.py
+│   │   └── tools.py             # run_duckdb_query, run_sqlite_query, explain_query, list_tables
+│   │
+│   ├── hearth_mcp/
+│   │   ├── __init__.py
+│   │   ├── server.py
+│   │   └── tools.py             # create_hypothesis, validate_hypothesis, score_hypothesis, get_hearth_template
+│   │
+│   ├── statistics_mcp/
+│   │   ├── __init__.py
+│   │   ├── server.py
+│   │   └── tools.py             # frequency_analysis, top_n, baseline_deviation, entropy_score, time_series
+│   │
+│   ├── anomaly_mcp/
+│   │   ├── __init__.py
+│   │   ├── server.py
+│   │   └── tools.py             # detect_anomalies, isolation_forest, zscore_outliers, rare_events
+│   │
+│   ├── mitre_mcp/
+│   │   ├── __init__.py
+│   │   ├── server.py
+│   │   └── tools.py             # lookup_technique, map_to_attack, get_tactic, list_techniques, search_mitre
+│   │
+│   ├── evidence_mcp/
+│   │   ├── __init__.py
+│   │   ├── server.py
+│   │   └── tools.py             # add_evidence, get_evidence, list_evidence, tag_evidence, export_chain
+│   │
+│   ├── report_mcp/
+│   │   ├── __init__.py
+│   │   ├── server.py
+│   │   └── tools.py             # generate_markdown, generate_html, generate_pdf, generate_json, generate_ioc_report
+│   │
+│   ├── visualization_mcp/
+│   │   ├── __init__.py
+│   │   ├── server.py
+│   │   └── tools.py             # render_timeline_chart, render_heatmap, render_attack_graph, render_statistics
+│   │
+│   ├── session_mcp/
+│   │   ├── __init__.py
+│   │   ├── server.py
+│   │   └── tools.py             # create_session, get_session, list_sessions, close_session, export_session
+│   │
+│   ├── vector_mcp/
+│   │   ├── __init__.py
+│   │   ├── server.py
+│   │   └── tools.py             # semantic_search, keyword_search, hybrid_search, index_document, list_collections
+│   │
+│   ├── cache_mcp/
+│   │   ├── __init__.py
+│   │   ├── server.py
+│   │   └── tools.py             # get_cached, set_cached, invalidate_cache, list_cache_keys, clear_namespace
+│   │
+│   ├── configuration_mcp/
+│   │   ├── __init__.py
+│   │   ├── server.py
+│   │   └── tools.py             # get_config, list_repos, get_model_profile, validate_config
+│   │
+│   ├── logging_mcp/
+│   │   ├── __init__.py
+│   │   ├── server.py
+│   │   └── tools.py             # write_audit_log, get_recent_logs, search_logs, get_session_logs
+│   │
+│   └── system_mcp/
+│       ├── __init__.py
+│       ├── server.py
+│       └── tools.py             # health_check, get_system_info, list_available_models, check_ollama
+│
+├── graph/
+│   ├── __init__.py
+│   ├── nodes/
+│   │   ├── __init__.py
+│   │   ├── planner_node.py      # LLM: decomposes user intent into hunt plan
+│   │   ├── data_loader_node.py  # Tool: loads logs from git repos
+│   │   ├── parser_node.py       # Tool: parses raw logs to normalized events
+│   │   ├── detection_node.py    # Tool: runs Sigma + YARA
+│   │   ├── statistics_node.py   # Tool: frequency / anomaly analysis
+│   │   ├── mitre_node.py        # Tool: maps findings to MITRE ATT&amp;CK
+│   │   ├── evidence_node.py     # Tool: collects and stores evidence
+│   │   ├── rag_node.py          # Tool: semantic search against knowledge base
+│   │   ├── hypothesis_node.py   # LLM: creates/validates HEARTH hypotheses
+│   │   ├── reasoning_node.py    # LLM: reasons over structured findings
+│   │   ├── report_node.py       # LLM + Tool: generates hunt report
+│   │   └── supervisor_node.py   # LLM: decides next action, handles retries
+│   ├── edges.py                 # Conditional edge logic
+│   ├── state.py                 # THOSState (TypedDict, complete)
+│   ├── workflow.py              # LangGraph graph compilation
+│   └── checkpointer.py          # SQLite-backed graph checkpointing
+│
+├── agents/
+│   ├── __init__.py
+│   ├── hunt_agent.py            # Primary LangGraph agent entry point
+│   └── prompt_templates/
+│       ├── __init__.py
+│       ├── planner.jinja2
+│       ├── hypothesis.jinja2
+│       ├── reasoning.jinja2
+│       ├── report_executive.jinja2
+│       ├── report_technical.jinja2
+│       └── supervisor.jinja2
+│
+├── templates/
+│   ├── reports/
+│   │   ├── executive_report.html.jinja2
+│   │   ├── technical_report.html.jinja2
+│   │   ├── ioc_report.html.jinja2
+│   │   ├── timeline_report.html.jinja2
+│   │   ├── mitre_report.html.jinja2
+│   │   └── evidence_report.html.jinja2
+│   └── styles/
+│       └── report.css
+│
+├── cli/
+│   ├── __init__.py
+│   ├── app.py                   # Typer root CLI app
+│   ├── commands/
+│   │   ├── __init__.py
+│   │   ├── hunt.py              # thos hunt &lt;hypothesis&gt;
+│   │   ├── index.py             # thos index &lt;repo&gt;
+│   │   ├── report.py            # thos report &lt;session_id&gt;
+│   │   ├── sessions.py          # thos sessions list/show/export
+│   │   ├── repos.py             # thos repos list/sync
+│   │   └── system.py            # thos system health/info
+│   └── display/
+│       ├── __init__.py
+│       ├── tables.py            # Rich table renderers
+│       ├── panels.py            # Rich panel/layout builders
+│       └── progress.py          # Rich progress indicators
+│
+├── data/
+│   ├── mitre/
+│   │   └── enterprise-attack.json   # Local MITRE ATT&amp;CK JSON bundle
+│   ├── sigma_rules/                 # Bundled Sigma rule library
+│   └── yara_rules/                  # Bundled YARA rule library
+│
+├── tests/
+│   ├── conftest.py
+│   ├── fixtures/
+│   │   ├── sample.evtx
+│   │   ├── sample_logs.json
+│   │   ├── sample.csv
+│   │   └── test_sigma.yml
+│   ├── unit/
+│   │   ├── test_parsers.py
+│   │   ├── test_detectors.py
+│   │   ├── test_analytics.py
+│   │   ├── test_repositories.py
+│   │   └── test_normalizer.py
+│   ├── integration/
+│   │   ├── test_mcp_servers.py
+│   │   ├── test_graph_workflow.py
+│   │   └── test_vector_search.py
+│   └── e2e/
+│       └── test_full_hunt.py
+│
+└── scripts/
+    ├── setup_repos.sh
+    ├── index_knowledge_base.py
+    └── seed_test_data.py
+</code></pre></div>
+<hr />
+<h2 id="5-domain-models">5. DOMAIN MODELS</h2>
+<h3 id="51-hunt-domain">5.1 Hunt Domain</h3>
+<div class="highlight"><pre><span></span><code><span class="c1"># domain/hunting/models.py (Pydantic v2)</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">HuntStatus</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
+    <span class="n">PENDING</span> <span class="o">=</span> <span class="s2">&quot;pending&quot;</span>
+    <span class="n">PLANNING</span> <span class="o">=</span> <span class="s2">&quot;planning&quot;</span>
+    <span class="n">EXECUTING</span> <span class="o">=</span> <span class="s2">&quot;executing&quot;</span>
+    <span class="n">ANALYZING</span> <span class="o">=</span> <span class="s2">&quot;analyzing&quot;</span>
+    <span class="n">REPORTING</span> <span class="o">=</span> <span class="s2">&quot;reporting&quot;</span>
+    <span class="n">COMPLETE</span> <span class="o">=</span> <span class="s2">&quot;complete&quot;</span>
+    <span class="n">FAILED</span> <span class="o">=</span> <span class="s2">&quot;failed&quot;</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">HuntHypothesis</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="nb">id</span><span class="p">:</span> <span class="n">UUID</span>
+    <span class="n">text</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">tactic</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">technique_id</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">data_sources</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="n">hearth_template</span><span class="p">:</span> <span class="n">HEARTHTemplate</span>
+    <span class="n">confidence</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">created_at</span><span class="p">:</span> <span class="n">datetime</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">HuntSession</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="nb">id</span><span class="p">:</span> <span class="n">UUID</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">hypothesis</span><span class="p">:</span> <span class="n">HuntHypothesis</span>
+    <span class="n">status</span><span class="p">:</span> <span class="n">HuntStatus</span>
+    <span class="n">repositories</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="n">start_time</span><span class="p">:</span> <span class="n">datetime</span>
+    <span class="n">end_time</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="p">]</span>
+    <span class="n">findings_count</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">evidence_ids</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">UUID</span><span class="p">]</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">HuntResult</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">session_id</span><span class="p">:</span> <span class="n">UUID</span>
+    <span class="n">findings</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Finding</span><span class="p">]</span>
+    <span class="n">mitre_mappings</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">MITREMapping</span><span class="p">]</span>
+    <span class="n">iocs</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">IOC</span><span class="p">]</span>
+    <span class="n">timeline_events</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">TimelineEvent</span><span class="p">]</span>
+    <span class="n">risk_score</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">summary</span><span class="p">:</span> <span class="nb">str</span>
+</code></pre></div>
+<h3 id="52-evidence-domain">5.2 Evidence Domain</h3>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">EvidenceType</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
+    <span class="n">LOG_EVENT</span> <span class="o">=</span> <span class="s2">&quot;log_event&quot;</span>
+    <span class="n">FILE_ARTIFACT</span> <span class="o">=</span> <span class="s2">&quot;file_artifact&quot;</span>
+    <span class="n">NETWORK_CONNECTION</span> <span class="o">=</span> <span class="s2">&quot;network_connection&quot;</span>
+    <span class="n">PROCESS_EXECUTION</span> <span class="o">=</span> <span class="s2">&quot;process_execution&quot;</span>
+    <span class="n">REGISTRY_MODIFICATION</span> <span class="o">=</span> <span class="s2">&quot;registry_modification&quot;</span>
+    <span class="n">SIGMA_HIT</span> <span class="o">=</span> <span class="s2">&quot;sigma_hit&quot;</span>
+    <span class="n">YARA_HIT</span> <span class="o">=</span> <span class="s2">&quot;yara_hit&quot;</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Evidence</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="nb">id</span><span class="p">:</span> <span class="n">UUID</span>
+    <span class="n">session_id</span><span class="p">:</span> <span class="n">UUID</span>
+    <span class="nb">type</span><span class="p">:</span> <span class="n">EvidenceType</span>
+    <span class="n">source_file</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">source_repo</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">timestamp</span><span class="p">:</span> <span class="n">datetime</span>
+    <span class="n">raw_event</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span>
+    <span class="n">normalized_event</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span>
+    <span class="n">tags</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="n">mitre_technique</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="n">confidence</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">notes</span><span class="p">:</span> <span class="nb">str</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">IOC</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="nb">id</span><span class="p">:</span> <span class="n">UUID</span>
+    <span class="n">session_id</span><span class="p">:</span> <span class="n">UUID</span>
+    <span class="n">ioc_type</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;ip&quot;</span><span class="p">,</span> <span class="s2">&quot;domain&quot;</span><span class="p">,</span> <span class="s2">&quot;hash_md5&quot;</span><span class="p">,</span> <span class="s2">&quot;hash_sha1&quot;</span><span class="p">,</span> <span class="s2">&quot;hash_sha256&quot;</span><span class="p">,</span> <span class="s2">&quot;url&quot;</span><span class="p">,</span> <span class="s2">&quot;email&quot;</span><span class="p">,</span> <span class="s2">&quot;registry_key&quot;</span><span class="p">,</span> <span class="s2">&quot;file_path&quot;</span><span class="p">]</span>
+    <span class="n">value</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">context</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">first_seen</span><span class="p">:</span> <span class="n">datetime</span>
+    <span class="n">last_seen</span><span class="p">:</span> <span class="n">datetime</span>
+    <span class="n">occurrence_count</span><span class="p">:</span> <span class="nb">int</span>
+</code></pre></div>
+<h3 id="53-detection-domain">5.3 Detection Domain</h3>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">SigmaMatch</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">rule_id</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">rule_title</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">rule_description</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">severity</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;critical&quot;</span><span class="p">,</span> <span class="s2">&quot;high&quot;</span><span class="p">,</span> <span class="s2">&quot;medium&quot;</span><span class="p">,</span> <span class="s2">&quot;low&quot;</span><span class="p">,</span> <span class="s2">&quot;informational&quot;</span><span class="p">]</span>
+    <span class="n">matched_events</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span>
+    <span class="n">match_count</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">source_file</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">technique_ids</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">YaraMatch</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">rule_name</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">rule_tags</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="n">matched_strings</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span>
+    <span class="n">source_file</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">offset</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">meta</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Anomaly</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">anomaly_type</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;frequency&quot;</span><span class="p">,</span> <span class="s2">&quot;zscore&quot;</span><span class="p">,</span> <span class="s2">&quot;isolation&quot;</span><span class="p">,</span> <span class="s2">&quot;temporal&quot;</span><span class="p">,</span> <span class="s2">&quot;rare_event&quot;</span><span class="p">]</span>
+    <span class="n">field</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">value</span><span class="p">:</span> <span class="n">Any</span>
+    <span class="n">expected_baseline</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">observed_value</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">deviation_score</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">supporting_events</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span>
+</code></pre></div>
+<h3 id="54-mitre-domain">5.4 MITRE Domain</h3>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">MITRETechnique</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">technique_id</span><span class="p">:</span> <span class="nb">str</span>          <span class="c1"># e.g. &quot;T1059.001&quot;</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">tactic</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">data_sources</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="n">detection_guidance</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">mitigations</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="n">subtechniques</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="n">platforms</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">MITREMapping</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">session_id</span><span class="p">:</span> <span class="n">UUID</span>
+    <span class="n">technique_id</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">technique_name</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">tactic</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">evidence_ids</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">UUID</span><span class="p">]</span>
+    <span class="n">confidence</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">rationale</span><span class="p">:</span> <span class="nb">str</span>
+</code></pre></div>
+<h3 id="55-report-domain">5.5 Report Domain</h3>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">ReportFormat</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
+    <span class="n">MARKDOWN</span> <span class="o">=</span> <span class="s2">&quot;markdown&quot;</span>
+    <span class="n">HTML</span> <span class="o">=</span> <span class="s2">&quot;html&quot;</span>
+    <span class="n">PDF</span> <span class="o">=</span> <span class="s2">&quot;pdf&quot;</span>
+    <span class="n">JSON</span> <span class="o">=</span> <span class="s2">&quot;json&quot;</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">ReportType</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
+    <span class="n">EXECUTIVE</span> <span class="o">=</span> <span class="s2">&quot;executive&quot;</span>
+    <span class="n">TECHNICAL</span> <span class="o">=</span> <span class="s2">&quot;technical&quot;</span>
+    <span class="n">EVIDENCE</span> <span class="o">=</span> <span class="s2">&quot;evidence&quot;</span>
+    <span class="n">TIMELINE</span> <span class="o">=</span> <span class="s2">&quot;timeline&quot;</span>
+    <span class="n">MITRE</span> <span class="o">=</span> <span class="s2">&quot;mitre&quot;</span>
+    <span class="n">IOC</span> <span class="o">=</span> <span class="s2">&quot;ioc&quot;</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Report</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="nb">id</span><span class="p">:</span> <span class="n">UUID</span>
+    <span class="n">session_id</span><span class="p">:</span> <span class="n">UUID</span>
+    <span class="n">report_type</span><span class="p">:</span> <span class="n">ReportType</span>
+    <span class="nb">format</span><span class="p">:</span> <span class="n">ReportFormat</span>
+    <span class="n">title</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">generated_at</span><span class="p">:</span> <span class="n">datetime</span>
+    <span class="n">content</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">file_path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="n">metadata</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span>
+</code></pre></div>
+<hr />
+<h2 id="6-langgraph-state">6. LANGGRAPH STATE</h2>
+<div class="highlight"><pre><span></span><code><span class="c1"># graph/state.py</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">THOSState</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">):</span>
+    <span class="c1"># Session</span>
+    <span class="n">session_id</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">session_name</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">started_at</span><span class="p">:</span> <span class="nb">str</span>
+
+    <span class="c1"># User Input</span>
+    <span class="n">user_query</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">raw_hypothesis</span><span class="p">:</span> <span class="nb">str</span>
+
+    <span class="c1"># Planning</span>
+    <span class="n">structured_hypothesis</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">HuntHypothesisDict</span><span class="p">]</span>
+    <span class="n">hunt_plan</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">HuntStepDict</span><span class="p">]]</span>
+    <span class="n">current_step</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">total_steps</span><span class="p">:</span> <span class="nb">int</span>
+
+    <span class="c1"># Data Loading</span>
+    <span class="n">target_repositories</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="n">loaded_files</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="n">raw_log_batches</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">LogBatchDict</span><span class="p">]</span>
+
+    <span class="c1"># Parsing</span>
+    <span class="n">parsed_events</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">NormalizedEventDict</span><span class="p">]</span>
+    <span class="n">parse_errors</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="n">total_events_parsed</span><span class="p">:</span> <span class="nb">int</span>
+
+    <span class="c1"># Detection</span>
+    <span class="n">sigma_matches</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">SigmaMatchDict</span><span class="p">]</span>
+    <span class="n">yara_matches</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">YaraMatchDict</span><span class="p">]</span>
+    <span class="n">detection_summary</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+
+    <span class="c1"># Analytics</span>
+    <span class="n">statistics_results</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">StatisticsResultDict</span><span class="p">]</span>
+    <span class="n">anomalies</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">AnomalyDict</span><span class="p">]</span>
+    <span class="n">timeline_events</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">TimelineEventDict</span><span class="p">]</span>
+
+    <span class="c1"># Knowledge</span>
+    <span class="n">rag_context</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">RAGResultDict</span><span class="p">]</span>
+    <span class="n">mitre_techniques</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">MITREMappingDict</span><span class="p">]</span>
+
+    <span class="c1"># Evidence</span>
+    <span class="n">evidence_ids</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="n">iocs</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">IOCDict</span><span class="p">]</span>
+
+    <span class="c1"># Reasoning</span>
+    <span class="n">reasoning_chain</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">ReasoningStepDict</span><span class="p">]</span>
+    <span class="n">findings_summary</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="n">risk_score</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">confidence_score</span><span class="p">:</span> <span class="nb">float</span>
+
+    <span class="c1"># Reporting</span>
+    <span class="n">reports_generated</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="n">report_paths</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+
+    <span class="c1"># Control</span>
+    <span class="n">errors</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="n">warnings</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="n">next_action</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="n">is_complete</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">retry_count</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">max_retries</span><span class="p">:</span> <span class="nb">int</span>
+</code></pre></div>
+<hr />
+<h2 id="7-langgraph-nodes">7. LANGGRAPH NODES</h2>
+<h3 id="node-definitions">Node Definitions</h3>
+<table>
+<thead>
+<tr>
+<th>Node</th>
+<th>Type</th>
+<th>Responsibility</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>supervisor_node</code></td>
+<td>LLM</td>
+<td>Orchestrates the workflow, decides next action</td>
+</tr>
+<tr>
+<td><code>planner_node</code></td>
+<td>LLM</td>
+<td>Decomposes hypothesis into structured hunt plan</td>
+</tr>
+<tr>
+<td><code>data_loader_node</code></td>
+<td>Tool</td>
+<td>Discovers and loads log files from Git repos</td>
+</tr>
+<tr>
+<td><code>parser_node</code></td>
+<td>Tool</td>
+<td>Parses EVTX/JSON/CSV/syslog/CEF to normalized events</td>
+</tr>
+<tr>
+<td><code>detection_node</code></td>
+<td>Tool</td>
+<td>Runs Sigma and YARA engines</td>
+</tr>
+<tr>
+<td><code>statistics_node</code></td>
+<td>Tool</td>
+<td>Frequency analysis, baseline deviation, entropy</td>
+</tr>
+<tr>
+<td><code>anomaly_node</code></td>
+<td>Tool</td>
+<td>Isolation forest, Z-score, rare event detection</td>
+</tr>
+<tr>
+<td><code>correlation_node</code></td>
+<td>Tool</td>
+<td>Cross-source event correlation</td>
+</tr>
+<tr>
+<td><code>mitre_node</code></td>
+<td>Tool</td>
+<td>Maps detections to MITRE ATT&amp;CK</td>
+</tr>
+<tr>
+<td><code>rag_node</code></td>
+<td>Tool</td>
+<td>Semantic search against knowledge base</td>
+</tr>
+<tr>
+<td><code>hypothesis_node</code></td>
+<td>LLM</td>
+<td>Creates and validates HEARTH hypothesis</td>
+</tr>
+<tr>
+<td><code>evidence_node</code></td>
+<td>Tool</td>
+<td>Stores findings as evidence chain</td>
+</tr>
+<tr>
+<td><code>reasoning_node</code></td>
+<td>LLM</td>
+<td>Synthesizes all findings into threat narrative</td>
+</tr>
+<tr>
+<td><code>report_node</code></td>
+<td>LLM+Tool</td>
+<td>Generates all report formats</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="8-state-machine-transitions">8. STATE MACHINE TRANSITIONS</h2>
+<div class="highlight"><pre><span></span><code>stateDiagram-v2
+    [*] --&gt; SUPERVISOR : user submits query
+
+    SUPERVISOR --&gt; PLANNER : first run or re-planning
+    SUPERVISOR --&gt; DATA_LOADER : plan ready
+    SUPERVISOR --&gt; REASONING : all data processed
+    SUPERVISOR --&gt; REPORT : reasoning complete
+    SUPERVISOR --&gt; FAILED : max retries exceeded
+
+    PLANNER --&gt; SUPERVISOR : plan generated
+
+    DATA_LOADER --&gt; PARSER : files loaded
+    DATA_LOADER --&gt; SUPERVISOR : no files found (error)
+
+    PARSER --&gt; DETECTION : events normalized
+    PARSER --&gt; SUPERVISOR : parse error
+
+    DETECTION --&gt; STATISTICS : detections complete
+    STATISTICS --&gt; ANOMALY : stats complete
+    ANOMALY --&gt; CORRELATION : anomalies flagged
+    CORRELATION --&gt; MITRE : correlations done
+    MITRE --&gt; RAG : mappings complete
+    RAG --&gt; EVIDENCE : context retrieved
+    EVIDENCE --&gt; SUPERVISOR : evidence stored
+
+    REASONING --&gt; REPORT : narrative complete
+    REPORT --&gt; [*] : reports saved
+    FAILED --&gt; [*]
+</code></pre></div>
+<hr />
+<h2 id="9-conditional-edge-logic">9. CONDITIONAL EDGE LOGIC</h2>
+<div class="highlight"><pre><span></span><code><span class="c1"># graph/edges.py</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">route_supervisor</span><span class="p">(</span><span class="n">state</span><span class="p">:</span> <span class="n">THOSState</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">state</span><span class="p">[</span><span class="s2">&quot;errors&quot;</span><span class="p">]</span> <span class="ow">and</span> <span class="n">state</span><span class="p">[</span><span class="s2">&quot;retry_count&quot;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">state</span><span class="p">[</span><span class="s2">&quot;max_retries&quot;</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="s2">&quot;failed&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">state</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;hunt_plan&quot;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;planner&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">state</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;parsed_events&quot;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;data_loader&quot;</span>
+    <span class="k">if</span> <span class="n">state</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;is_complete&quot;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;report&quot;</span>
+    <span class="k">if</span> <span class="n">state</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;findings_summary&quot;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;report&quot;</span>
+    <span class="k">return</span> <span class="s2">&quot;reasoning&quot;</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">route_after_detection</span><span class="p">(</span><span class="n">state</span><span class="p">:</span> <span class="n">THOSState</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="n">total_hits</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="nb">len</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;sigma_matches&quot;</span><span class="p">,</span> <span class="p">[]))</span> <span class="o">+</span>
+        <span class="nb">len</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;yara_matches&quot;</span><span class="p">,</span> <span class="p">[]))</span>
+    <span class="p">)</span>
+    <span class="k">if</span> <span class="n">total_hits</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;statistics&quot;</span>  <span class="c1"># continue with statistical analysis anyway</span>
+    <span class="k">return</span> <span class="s2">&quot;statistics&quot;</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">route_after_reasoning</span><span class="p">(</span><span class="n">state</span><span class="p">:</span> <span class="n">THOSState</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">state</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;findings_summary&quot;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;report&quot;</span>
+    <span class="k">return</span> <span class="s2">&quot;supervisor&quot;</span>
+</code></pre></div>
+<hr />
+<h2 id="10-mcp-server-specifications">10. MCP SERVER SPECIFICATIONS</h2>
+<h3 id="101-github_mcp">10.1 github_mcp</h3>
+<p><strong>Purpose:</strong> Read-only access to local Git repositories</p>
+<p><strong>Tools:</strong>
+- <code>list_repositories()</code> → list[RepoInfo]
+- <code>list_files(repo: str, path: str = "", extensions: list[str] = [])</code> → list[FileInfo]
+- <code>get_file_content(repo: str, file_path: str)</code> → FileContent
+- <code>get_commit_log(repo: str, max_entries: int = 50)</code> → list[CommitInfo]
+- <code>list_log_files(repo: str)</code> → list[LogFileInfo] - auto-discovers EVTX/JSON/CSV/log
+- <code>get_repo_tree(repo: str)</code> → RepoTree</p>
+<h3 id="102-parser_mcp">10.2 parser_mcp</h3>
+<p><strong>Purpose:</strong> Parse all supported log formats to normalized event dicts</p>
+<p><strong>Tools:</strong>
+- <code>parse_evtx(file_path: str, max_events: int = 10000)</code> → ParseResult
+- <code>parse_json_logs(file_path: str, record_path: Optional[str])</code> → ParseResult
+- <code>parse_csv_logs(file_path: str, timestamp_field: str)</code> → ParseResult
+- <code>parse_syslog(file_path: str)</code> → ParseResult
+- <code>parse_cef(file_path: str)</code> → ParseResult
+- <code>auto_parse(file_path: str)</code> → ParseResult - detects format automatically</p>
+<h3 id="103-timeline_mcp">10.3 timeline_mcp</h3>
+<p><strong>Purpose:</strong> Build, filter, and export chronological event timelines</p>
+<p><strong>Tools:</strong>
+- <code>build_timeline(events: list[dict], timestamp_field: str)</code> → Timeline
+- <code>filter_timeline(timeline_id: str, start: str, end: str, event_types: list[str])</code> → Timeline
+- <code>pivot_on_entity(timeline_id: str, entity_field: str, entity_value: str)</code> → Timeline
+- <code>enrich_timeline(timeline_id: str)</code> → Timeline - adds MITRE context per event
+- <code>export_timeline(timeline_id: str, format: str)</code> → ExportResult</p>
+<h3 id="104-normalization_mcp">10.4 normalization_mcp</h3>
+<p><strong>Purpose:</strong> Normalize diverse log formats to a common ECS-like schema</p>
+<p><strong>Tools:</strong>
+- <code>normalize_events(events: list[dict], source_type: str)</code> → list[NormalizedEvent]
+- <code>detect_schema(events: list[dict])</code> → SchemaDetectionResult
+- <code>map_to_ecs(events: list[dict], source_type: str)</code> → list[ECSEvent]
+- <code>validate_normalized(events: list[dict])</code> → ValidationResult
+- <code>get_field_mapping(source_type: str)</code> → FieldMapping</p>
+<h3 id="105-sigma_mcp">10.5 sigma_mcp</h3>
+<p><strong>Purpose:</strong> Load and execute Sigma rules against normalized events</p>
+<p><strong>Tools:</strong>
+- <code>load_sigma_rules(rules_path: str, tags: list[str] = [])</code> → RuleLoadResult
+- <code>run_sigma_scan(events: list[dict], rule_ids: list[str] = [])</code> → list[SigmaMatch]
+- <code>list_sigma_rules(filter_tactic: str = "", filter_severity: str = "")</code> → list[SigmaRuleSummary]
+- <code>get_rule_detail(rule_id: str)</code> → SigmaRule
+- <code>validate_sigma_rule(rule_yaml: str)</code> → ValidationResult</p>
+<h3 id="106-yara_mcp">10.6 yara_mcp</h3>
+<p><strong>Purpose:</strong> YARA rule scanning against file content and log artifacts</p>
+<p><strong>Tools:</strong>
+- <code>load_yara_rules(rules_path: str)</code> → RuleLoadResult
+- <code>scan_with_yara(content: str | bytes, rule_ids: list[str] = [])</code> → list[YaraMatch]
+- <code>scan_file_yara(file_path: str, rule_ids: list[str] = [])</code> → list[YaraMatch]
+- <code>list_yara_rules()</code> → list[YaraRuleSummary]
+- <code>compile_rules(rules_path: str)</code> → CompileResult</p>
+<h3 id="107-query_mcp">10.7 query_mcp</h3>
+<p><strong>Purpose:</strong> SQL analytics against DuckDB (logs) and SQLite (sessions)</p>
+<p><strong>Tools:</strong>
+- <code>run_duckdb_query(sql: str, params: dict = {})</code> → QueryResult
+- <code>run_sqlite_query(sql: str, params: dict = {})</code> → QueryResult
+- <code>load_events_to_duckdb(events: list[dict], table_name: str)</code> → LoadResult
+- <code>list_tables(database: Literal["duckdb", "sqlite"])</code> → list[TableInfo]
+- <code>explain_query(sql: str)</code> → str</p>
+<h3 id="108-hearth_mcp">10.8 hearth_mcp</h3>
+<p><strong>Purpose:</strong> HEARTH methodology hypothesis management</p>
+<p><strong>Tools:</strong>
+- <code>create_hypothesis(text: str, tactic: str, technique_id: str)</code> → HEARTHHypothesis
+- <code>validate_hypothesis(hypothesis_id: str)</code> → ValidationResult
+- <code>score_hypothesis(hypothesis_id: str, findings: dict)</code> → HypothesisScore
+- <code>get_hearth_template(tactic: str)</code> → HEARTHTemplate
+- <code>list_hypotheses(session_id: str)</code> → list[HEARTHHypothesis]</p>
+<h3 id="109-statistics_mcp">10.9 statistics_mcp</h3>
+<p><strong>Purpose:</strong> All statistical analysis - never done by LLM</p>
+<p><strong>Tools:</strong>
+- <code>frequency_analysis(events: list[dict], field: str, top_n: int = 20)</code> → FrequencyResult
+- <code>top_n_values(events: list[dict], field: str, n: int)</code> → list[ValueCount]
+- <code>baseline_deviation(events: list[dict], field: str, window_hours: int)</code> → BaselineResult
+- <code>entropy_score(values: list[str])</code> → float
+- <code>time_series_analysis(events: list[dict], bucket_minutes: int)</code> → TimeSeriesResult
+- <code>co_occurrence_matrix(events: list[dict], field_a: str, field_b: str)</code> → CoOccurrenceResult</p>
+<h3 id="1010-anomaly_mcp">10.10 anomaly_mcp</h3>
+<p><strong>Purpose:</strong> Statistical anomaly and outlier detection</p>
+<p><strong>Tools:</strong>
+- <code>detect_anomalies(events: list[dict], method: Literal["isolation_forest", "zscore", "iqr"])</code> → list[Anomaly]
+- <code>isolation_forest_scan(events: list[dict], features: list[str])</code> → list[Anomaly]
+- <code>zscore_outliers(values: list[float], threshold: float = 3.0)</code> → list[int]
+- <code>find_rare_events(events: list[dict], field: str, min_count: int = 2)</code> → list[dict]
+- <code>temporal_anomaly(events: list[dict], expected_pattern: str)</code> → list[Anomaly]</p>
+<h3 id="1011-mitre_mcp">10.11 mitre_mcp</h3>
+<p><strong>Purpose:</strong> MITRE ATT&amp;CK knowledge (fully local, from bundled JSON)</p>
+<p><strong>Tools:</strong>
+- <code>lookup_technique(technique_id: str)</code> → MITRETechnique
+- <code>map_to_attack(sigma_matches: list[dict], yara_matches: list[dict])</code> → list[MITREMapping]
+- <code>get_tactic(tactic_name: str)</code> → TacticDetail
+- <code>list_techniques(tactic: str = "", platform: str = "")</code> → list[TechniqueSummary]
+- <code>search_mitre(query: str)</code> → list[TechniqueSummary]
+- <code>get_datasources_for_technique(technique_id: str)</code> → list[str]</p>
+<h3 id="1012-evidence_mcp">10.12 evidence_mcp</h3>
+<p><strong>Purpose:</strong> Evidence chain management and persistence</p>
+<p><strong>Tools:</strong>
+- <code>add_evidence(session_id: str, evidence: dict)</code> → Evidence
+- <code>get_evidence(evidence_id: str)</code> → Evidence
+- <code>list_evidence(session_id: str, filter_type: str = "")</code> → list[Evidence]
+- <code>tag_evidence(evidence_id: str, tags: list[str])</code> → Evidence
+- <code>export_chain(session_id: str, format: str)</code> → ExportResult
+- <code>link_evidence(evidence_id_a: str, evidence_id_b: str, relationship: str)</code> → None</p>
+<h3 id="1013-report_mcp">10.13 report_mcp</h3>
+<p><strong>Purpose:</strong> Multi-format report generation</p>
+<p><strong>Tools:</strong>
+- <code>generate_markdown(session_id: str, report_type: str)</code> → ReportResult
+- <code>generate_html(session_id: str, report_type: str)</code> → ReportResult
+- <code>generate_pdf(session_id: str, report_type: str)</code> → ReportResult
+- <code>generate_json(session_id: str, report_type: str)</code> → ReportResult
+- <code>generate_ioc_report(session_id: str)</code> → ReportResult
+- <code>generate_executive_summary(session_id: str)</code> → ReportResult
+- <code>list_reports(session_id: str)</code> → list[ReportInfo]</p>
+<h3 id="1014-visualization_mcp">10.14 visualization_mcp</h3>
+<p><strong>Purpose:</strong> Chart and graph generation (SVG/HTML, no external services)</p>
+<p><strong>Tools:</strong>
+- <code>render_timeline_chart(timeline: dict)</code> → SVGContent
+- <code>render_heatmap(data: dict, x_field: str, y_field: str)</code> → SVGContent
+- <code>render_attack_graph(mitre_mappings: list[dict])</code> → SVGContent
+- <code>render_frequency_bar(frequency_result: dict)</code> → SVGContent
+- <code>render_statistics_dashboard(stats: dict)</code> → HTMLContent</p>
+<h3 id="1015-session_mcp">10.15 session_mcp</h3>
+<p><strong>Purpose:</strong> Hunt session lifecycle management</p>
+<p><strong>Tools:</strong>
+- <code>create_session(name: str, hypothesis: dict)</code> → Session
+- <code>get_session(session_id: str)</code> → Session
+- <code>list_sessions(status: str = "", limit: int = 20)</code> → list[SessionSummary]
+- <code>update_session_status(session_id: str, status: str)</code> → Session
+- <code>close_session(session_id: str)</code> → Session
+- <code>export_session(session_id: str)</code> → ExportResult</p>
+<h3 id="1016-vector_mcp">10.16 vector_mcp</h3>
+<p><strong>Purpose:</strong> Semantic / hybrid search over local knowledge base</p>
+<p><strong>Tools:</strong>
+- <code>semantic_search(query: str, collection: str, top_k: int = 10)</code> → list[SearchResult]
+- <code>keyword_search(query: str, collection: str, top_k: int = 10)</code> → list[SearchResult]
+- <code>hybrid_search(query: str, collection: str, top_k: int = 10, alpha: float = 0.5)</code> → list[SearchResult]
+- <code>index_document(content: str, metadata: dict, collection: str)</code> → IndexResult
+- <code>list_collections()</code> → list[CollectionInfo]
+- <code>delete_document(doc_id: str, collection: str)</code> → None</p>
+<h3 id="1017-cache_mcp">10.17 cache_mcp</h3>
+<p><strong>Purpose:</strong> In-memory and disk-backed caching for expensive operations</p>
+<p><strong>Tools:</strong>
+- <code>get_cached(key: str, namespace: str)</code> → Optional[Any]
+- <code>set_cached(key: str, value: Any, namespace: str, ttl_seconds: int = 3600)</code> → None
+- <code>invalidate_cache(key: str, namespace: str)</code> → None
+- <code>list_cache_keys(namespace: str)</code> → list[str]
+- <code>clear_namespace(namespace: str)</code> → int - returns count cleared</p>
+<h3 id="1018-configuration_mcp">10.18 configuration_mcp</h3>
+<p><strong>Purpose:</strong> Runtime configuration access</p>
+<p><strong>Tools:</strong>
+- <code>get_config(key: str)</code> → Any
+- <code>list_repos()</code> → list[RepoConfig]
+- <code>get_model_profile(profile_name: str)</code> → ModelProfile
+- <code>validate_config()</code> → ValidationResult
+- <code>get_collection_config(collection_name: str)</code> → CollectionConfig</p>
+<h3 id="1019-logging_mcp">10.19 logging_mcp</h3>
+<p><strong>Purpose:</strong> Structured audit logging and log search</p>
+<p><strong>Tools:</strong>
+- <code>write_audit_log(session_id: str, event_type: str, payload: dict)</code> → None
+- <code>get_recent_logs(session_id: str, limit: int = 100)</code> → list[AuditLog]
+- <code>search_logs(query: str, session_id: str = "")</code> → list[AuditLog]
+- <code>get_session_logs(session_id: str)</code> → list[AuditLog]</p>
+<h3 id="1020-system_mcp">10.20 system_mcp</h3>
+<p><strong>Purpose:</strong> System health, model availability, environment checks</p>
+<p><strong>Tools:</strong>
+- <code>health_check()</code> → HealthStatus
+- <code>get_system_info()</code> → SystemInfo
+- <code>list_available_models()</code> → list[ModelInfo]
+- <code>check_ollama()</code> → OllamaStatus
+- <code>check_database()</code> → DatabaseStatus
+- <code>check_vector_store()</code> → VectorStoreStatus</p>
+<hr />
+<h2 id="11-chromadb-vector-collections">11. CHROMADB VECTOR COLLECTIONS</h2>
+<table>
+<thead>
+<tr>
+<th>Collection Name</th>
+<th>Contents</th>
+<th>Embedding Model</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>playbooks</code></td>
+<td>HEARTH playbooks, hunt runbooks</td>
+<td>all-MiniLM-L6-v2</td>
+</tr>
+<tr>
+<td><code>mitre_knowledge</code></td>
+<td>ATT&amp;CK technique descriptions</td>
+<td>all-MiniLM-L6-v2</td>
+</tr>
+<tr>
+<td><code>sigma_rules_kb</code></td>
+<td>Sigma rule descriptions and rationale</td>
+<td>all-MiniLM-L6-v2</td>
+</tr>
+<tr>
+<td><code>threat_reports</code></td>
+<td>Markdown threat research docs</td>
+<td>all-MiniLM-L6-v2</td>
+</tr>
+<tr>
+<td><code>yara_rules_kb</code></td>
+<td>YARA rule documentation</td>
+<td>all-MiniLM-L6-v2</td>
+</tr>
+<tr>
+<td><code>investigation_notes</code></td>
+<td>Past hunt session summaries</td>
+<td>all-MiniLM-L6-v2</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Metadata Schema (all collections):</strong>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;source_repo&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;string&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;file_path&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;string&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;doc_type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;string&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;technique_ids&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;T1059&quot;</span><span class="p">],</span>
+<span class="w">  </span><span class="nt">&quot;tactic&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;string&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;severity&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;string&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;indexed_at&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;ISO8601&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;chunk_index&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;total_chunks&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span>
+<span class="p">}</span>
+</code></pre></div></p>
+<hr />
+<h2 id="12-database-schema">12. DATABASE SCHEMA</h2>
+<h3 id="121-sqlite-hunt-sessions-evidence">12.1 SQLite - Hunt Sessions &amp; Evidence</h3>
+<div class="highlight"><pre><span></span><code><span class="c1">-- migrations/001_initial.sql</span>
+<span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">hunt_sessions</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="n">id</span><span class="w"> </span><span class="nb">TEXT</span><span class="w"> </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="p">,</span>
+<span class="w">    </span><span class="n">name</span><span class="w"> </span><span class="nb">TEXT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+<span class="w">    </span><span class="n">hypothesis_text</span><span class="w"> </span><span class="nb">TEXT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+<span class="w">    </span><span class="n">technique_id</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">,</span>
+<span class="w">    </span><span class="n">tactic</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">,</span>
+<span class="w">    </span><span class="n">status</span><span class="w"> </span><span class="nb">TEXT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="s1">&#39;pending&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="n">repositories</span><span class="w"> </span><span class="nb">TEXT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span><span class="w">  </span><span class="c1">-- JSON array</span>
+<span class="w">    </span><span class="n">start_time</span><span class="w"> </span><span class="nb">TEXT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+<span class="w">    </span><span class="n">end_time</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">,</span>
+<span class="w">    </span><span class="n">findings_count</span><span class="w"> </span><span class="nb">INTEGER</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">    </span><span class="n">risk_score</span><span class="w"> </span><span class="nb">REAL</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span>
+<span class="w">    </span><span class="n">created_at</span><span class="w"> </span><span class="nb">TEXT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span>
+<span class="p">);</span>
+
+<span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">evidence</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="n">id</span><span class="w"> </span><span class="nb">TEXT</span><span class="w"> </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="p">,</span>
+<span class="w">    </span><span class="n">session_id</span><span class="w"> </span><span class="nb">TEXT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">REFERENCES</span><span class="w"> </span><span class="n">hunt_sessions</span><span class="p">(</span><span class="n">id</span><span class="p">),</span>
+<span class="w">    </span><span class="n">evidence_type</span><span class="w"> </span><span class="nb">TEXT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+<span class="w">    </span><span class="n">source_file</span><span class="w"> </span><span class="nb">TEXT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+<span class="w">    </span><span class="n">source_repo</span><span class="w"> </span><span class="nb">TEXT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+<span class="w">    </span><span class="n">event_timestamp</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">,</span>
+<span class="w">    </span><span class="n">raw_event</span><span class="w"> </span><span class="nb">TEXT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span><span class="w">     </span><span class="c1">-- JSON</span>
+<span class="w">    </span><span class="n">normalized_event</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">,</span><span class="w">       </span><span class="c1">-- JSON</span>
+<span class="w">    </span><span class="n">tags</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">,</span><span class="w">                   </span><span class="c1">-- JSON array</span>
+<span class="w">    </span><span class="n">mitre_technique</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">,</span>
+<span class="w">    </span><span class="n">confidence</span><span class="w"> </span><span class="nb">REAL</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span>
+<span class="w">    </span><span class="n">notes</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">,</span>
+<span class="w">    </span><span class="n">created_at</span><span class="w"> </span><span class="nb">TEXT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span>
+<span class="p">);</span>
+
+<span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">iocs</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="n">id</span><span class="w"> </span><span class="nb">TEXT</span><span class="w"> </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="p">,</span>
+<span class="w">    </span><span class="n">session_id</span><span class="w"> </span><span class="nb">TEXT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">REFERENCES</span><span class="w"> </span><span class="n">hunt_sessions</span><span class="p">(</span><span class="n">id</span><span class="p">),</span>
+<span class="w">    </span><span class="n">ioc_type</span><span class="w"> </span><span class="nb">TEXT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+<span class="w">    </span><span class="n">value</span><span class="w"> </span><span class="nb">TEXT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+<span class="w">    </span><span class="n">context</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">,</span>
+<span class="w">    </span><span class="n">first_seen</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">,</span>
+<span class="w">    </span><span class="n">last_seen</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">,</span>
+<span class="w">    </span><span class="n">occurrence_count</span><span class="w"> </span><span class="nb">INTEGER</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="mi">1</span>
+<span class="p">);</span>
+
+<span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">reports</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="n">id</span><span class="w"> </span><span class="nb">TEXT</span><span class="w"> </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="p">,</span>
+<span class="w">    </span><span class="n">session_id</span><span class="w"> </span><span class="nb">TEXT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">REFERENCES</span><span class="w"> </span><span class="n">hunt_sessions</span><span class="p">(</span><span class="n">id</span><span class="p">),</span>
+<span class="w">    </span><span class="n">report_type</span><span class="w"> </span><span class="nb">TEXT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+<span class="w">    </span><span class="n">format</span><span class="w"> </span><span class="nb">TEXT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+<span class="w">    </span><span class="n">title</span><span class="w"> </span><span class="nb">TEXT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+<span class="w">    </span><span class="n">generated_at</span><span class="w"> </span><span class="nb">TEXT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+<span class="w">    </span><span class="n">file_path</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">,</span>
+<span class="w">    </span><span class="n">metadata</span><span class="w"> </span><span class="nb">TEXT</span><span class="w">              </span><span class="c1">-- JSON</span>
+<span class="p">);</span>
+
+<span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">audit_logs</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="n">id</span><span class="w"> </span><span class="nb">TEXT</span><span class="w"> </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="p">,</span>
+<span class="w">    </span><span class="n">session_id</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">,</span>
+<span class="w">    </span><span class="n">event_type</span><span class="w"> </span><span class="nb">TEXT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+<span class="w">    </span><span class="n">payload</span><span class="w"> </span><span class="nb">TEXT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span><span class="w">     </span><span class="c1">-- JSON</span>
+<span class="w">    </span><span class="n">created_at</span><span class="w"> </span><span class="nb">TEXT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span>
+<span class="p">);</span>
+
+<span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">evidence_links</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="n">id</span><span class="w"> </span><span class="nb">TEXT</span><span class="w"> </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="p">,</span>
+<span class="w">    </span><span class="n">evidence_id_a</span><span class="w"> </span><span class="nb">TEXT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">REFERENCES</span><span class="w"> </span><span class="n">evidence</span><span class="p">(</span><span class="n">id</span><span class="p">),</span>
+<span class="w">    </span><span class="n">evidence_id_b</span><span class="w"> </span><span class="nb">TEXT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">REFERENCES</span><span class="w"> </span><span class="n">evidence</span><span class="p">(</span><span class="n">id</span><span class="p">),</span>
+<span class="w">    </span><span class="n">relationship</span><span class="w"> </span><span class="nb">TEXT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+<span class="w">    </span><span class="n">created_at</span><span class="w"> </span><span class="nb">TEXT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span>
+<span class="p">);</span>
+</code></pre></div>
+<h3 id="122-duckdb-log-analytics">12.2 DuckDB - Log Analytics</h3>
+<div class="highlight"><pre><span></span><code><span class="c1">-- Dynamically created per hunt session</span>
+<span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">normalized_events_</span><span class="err">{</span><span class="n">session_id</span><span class="err">}</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="n">event_id</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="w"> </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="p">,</span>
+<span class="w">    </span><span class="k">timestamp</span><span class="w"> </span><span class="n">TIMESTAMPTZ</span><span class="p">,</span>
+<span class="w">    </span><span class="n">source_file</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">,</span>
+<span class="w">    </span><span class="n">source_type</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">,</span>
+<span class="w">    </span><span class="n">event_type</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">,</span>
+<span class="w">    </span><span class="n">host_name</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">,</span>
+<span class="w">    </span><span class="n">user_name</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">,</span>
+<span class="w">    </span><span class="n">process_name</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">,</span>
+<span class="w">    </span><span class="n">process_id</span><span class="w"> </span><span class="nb">INTEGER</span><span class="p">,</span>
+<span class="w">    </span><span class="n">parent_process_name</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">,</span>
+<span class="w">    </span><span class="n">command_line</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">,</span>
+<span class="w">    </span><span class="n">file_path</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">,</span>
+<span class="w">    </span><span class="n">network_src_ip</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">,</span>
+<span class="w">    </span><span class="n">network_dst_ip</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">,</span>
+<span class="w">    </span><span class="n">network_dst_port</span><span class="w"> </span><span class="nb">INTEGER</span><span class="p">,</span>
+<span class="w">    </span><span class="n">raw_event</span><span class="w"> </span><span class="n">JSON</span><span class="p">,</span>
+<span class="w">    </span><span class="n">normalized_at</span><span class="w"> </span><span class="n">TIMESTAMPTZ</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="n">now</span><span class="p">()</span>
+<span class="p">);</span>
+
+<span class="k">CREATE</span><span class="w"> </span><span class="k">INDEX</span><span class="w"> </span><span class="n">idx_events_timestamp</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">normalized_events_</span><span class="err">{</span><span class="n">session_id</span><span class="err">}</span><span class="p">(</span><span class="k">timestamp</span><span class="p">);</span>
+<span class="k">CREATE</span><span class="w"> </span><span class="k">INDEX</span><span class="w"> </span><span class="n">idx_events_host</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">normalized_events_</span><span class="err">{</span><span class="n">session_id</span><span class="err">}</span><span class="p">(</span><span class="n">host_name</span><span class="p">);</span>
+<span class="k">CREATE</span><span class="w"> </span><span class="k">INDEX</span><span class="w"> </span><span class="n">idx_events_user</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">normalized_events_</span><span class="err">{</span><span class="n">session_id</span><span class="err">}</span><span class="p">(</span><span class="n">user_name</span><span class="p">);</span>
+</code></pre></div>
+<hr />
+<h2 id="13-configuration-schema">13. CONFIGURATION SCHEMA</h2>
+<h3 id="131-thosyaml">13.1 thos.yaml</h3>
+<div class="highlight"><pre><span></span><code><span class="nt">thos</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1.0.0&quot;</span>
+<span class="w">  </span><span class="nt">environment</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;production&quot;</span>
+<span class="w">  </span><span class="nt">data_dir</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/data/thos&quot;</span>
+<span class="w">  </span><span class="nt">output_dir</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/data/thos/output&quot;</span>
+
+<span class="nt">ollama</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">base_url</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;http://localhost:11434&quot;</span>
+<span class="w">  </span><span class="nt">default_model</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;qwen2.5:14b&quot;</span>
+<span class="w">  </span><span class="nt">fallback_model</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;mistral:7b&quot;</span>
+<span class="w">  </span><span class="nt">timeout_seconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">300</span>
+<span class="w">  </span><span class="nt">context_window</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">32768</span>
+
+<span class="nt">database</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">sqlite_path</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/data/thos/db/thos.db&quot;</span>
+<span class="w">  </span><span class="nt">duckdb_path</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/data/thos/db/thos.duckdb&quot;</span>
+
+<span class="nt">chromadb</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">persist_directory</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/data/thos/vector&quot;</span>
+<span class="w">  </span><span class="nt">embedding_model</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;all-MiniLM-L6-v2&quot;</span>
+<span class="w">  </span><span class="nt">embedding_device</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;cpu&quot;</span>
+
+<span class="nt">mcp_servers</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;127.0.0.1&quot;</span>
+<span class="w">  </span><span class="nt">base_port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8100</span>
+
+<span class="nt">logging</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">level</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;INFO&quot;</span>
+<span class="w">  </span><span class="nt">file</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/data/thos/logs/thos.log&quot;</span>
+<span class="w">  </span><span class="nt">rotation</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;100</span><span class="nv"> </span><span class="s">MB&quot;</span>
+<span class="w">  </span><span class="nt">retention</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;30</span><span class="nv"> </span><span class="s">days&quot;</span>
+
+<span class="nt">detection</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">sigma_rules_path</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/data/thos/rules/sigma&quot;</span>
+<span class="w">  </span><span class="nt">yara_rules_path</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/data/thos/rules/yara&quot;</span>
+<span class="w">  </span><span class="nt">max_events_per_scan</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">100000</span>
+
+<span class="nt">reporting</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">output_path</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/data/thos/reports&quot;</span>
+<span class="w">  </span><span class="nt">templates_path</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;templates/reports&quot;</span>
+
+<span class="nt">cache</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">ttl_seconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3600</span>
+<span class="w">  </span><span class="nt">max_size_mb</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">512</span>
+</code></pre></div>
+<h3 id="132-repositoriesyaml">13.2 repositories.yaml</h3>
+<div class="highlight"><pre><span></span><code><span class="nt">repositories</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;evtx_lab&quot;</span>
+<span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/data/repos/evtx-lab&quot;</span>
+<span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Windows</span><span class="nv"> </span><span class="s">EVTX</span><span class="nv"> </span><span class="s">log</span><span class="nv"> </span><span class="s">samples&quot;</span>
+<span class="w">    </span><span class="nt">log_types</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;evtx&quot;</span><span class="p p-Indicator">]</span>
+<span class="w">    </span><span class="nt">auto_index</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;sigma_rules&quot;</span>
+<span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/data/repos/sigma&quot;</span>
+<span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Sigma</span><span class="nv"> </span><span class="s">detection</span><span class="nv"> </span><span class="s">rules&quot;</span>
+<span class="w">    </span><span class="nt">log_types</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span>
+<span class="w">    </span><span class="nt">auto_index</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;yara_rules&quot;</span>
+<span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/data/repos/yara&quot;</span>
+<span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;YARA</span><span class="nv"> </span><span class="s">malware</span><span class="nv"> </span><span class="s">rules&quot;</span>
+<span class="w">    </span><span class="nt">log_types</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span>
+<span class="w">    </span><span class="nt">auto_index</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;knowledge_base&quot;</span>
+<span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/data/repos/knowledge&quot;</span>
+<span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Threat</span><span class="nv"> </span><span class="s">intel</span><span class="nv"> </span><span class="s">and</span><span class="nv"> </span><span class="s">playbooks&quot;</span>
+<span class="w">    </span><span class="nt">log_types</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span>
+<span class="w">    </span><span class="nt">auto_index</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;json_logs&quot;</span>
+<span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/data/repos/json-logs&quot;</span>
+<span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Structured</span><span class="nv"> </span><span class="s">JSON</span><span class="nv"> </span><span class="s">log</span><span class="nv"> </span><span class="s">samples&quot;</span>
+<span class="w">    </span><span class="nt">log_types</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;json&quot;</span><span class="p p-Indicator">]</span>
+<span class="w">    </span><span class="nt">auto_index</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+</code></pre></div>
+<hr />
+<h2 id="14-workflow-sequence-diagrams">14. WORKFLOW SEQUENCE DIAGRAMS</h2>
+<h3 id="141-full-hunt-workflow">14.1 Full Hunt Workflow</h3>
+<div class="highlight"><pre><span></span><code>sequenceDiagram
+    participant U as User (CLI)
+    participant A as HuntAgent
+    participant S as SupervisorNode (LLM)
+    participant P as PlannerNode (LLM)
+    participant DL as DataLoaderNode
+    participant PR as ParserNode
+    participant DE as DetectionNode
+    participant ST as StatisticsNode
+    participant AN as AnomalyNode
+    participant MI as MITRENode
+    participant RA as RAGNode
+    participant EV as EvidenceNode
+    participant RE as ReasoningNode (LLM)
+    participant RN as ReportNode
+
+    U-&gt;&gt;A: submit_hunt(hypothesis)
+    A-&gt;&gt;S: invoke(initial_state)
+    S-&gt;&gt;P: route to planner
+    P-&gt;&gt;P: structure hypothesis (HEARTH)
+    P-&gt;&gt;S: return plan
+    S-&gt;&gt;DL: route to data_loader
+    DL-&gt;&gt;DL: discover log files in repos
+    DL-&gt;&gt;PR: pass file list
+    PR-&gt;&gt;PR: parse EVTX/JSON/CSV/syslog
+    PR-&gt;&gt;PR: normalize to ECS schema
+    PR-&gt;&gt;DE: pass normalized events
+    DE-&gt;&gt;DE: run Sigma rules
+    DE-&gt;&gt;DE: run YARA rules
+    DE-&gt;&gt;ST: pass results
+    ST-&gt;&gt;ST: frequency analysis
+    ST-&gt;&gt;ST: baseline deviation
+    ST-&gt;&gt;AN: pass stats
+    AN-&gt;&gt;AN: isolation forest
+    AN-&gt;&gt;AN: zscore outliers
+    AN-&gt;&gt;MI: pass all findings
+    MI-&gt;&gt;MI: map to ATT&amp;CK techniques
+    MI-&gt;&gt;RA: pass technique IDs
+    RA-&gt;&gt;RA: semantic search knowledge base
+    RA-&gt;&gt;EV: pass RAG context
+    EV-&gt;&gt;EV: persist all evidence to SQLite
+    EV-&gt;&gt;S: return to supervisor
+    S-&gt;&gt;RE: route to reasoning
+    RE-&gt;&gt;RE: synthesize findings into narrative (LLM)
+    RE-&gt;&gt;RN: pass narrative + state
+    RN-&gt;&gt;RN: generate Markdown report
+    RN-&gt;&gt;RN: generate HTML report
+    RN-&gt;&gt;RN: generate PDF report
+    RN-&gt;&gt;RN: generate JSON report
+    RN-&gt;&gt;U: report paths returned
+</code></pre></div>
+<h3 id="142-sigma-detection-flow">14.2 Sigma Detection Flow</h3>
+<div class="highlight"><pre><span></span><code>sequenceDiagram
+    participant SigmaMCP
+    participant SigmaEngine
+    participant pySigma
+    participant DuckDB
+
+    SigmaMCP-&gt;&gt;SigmaEngine: run_sigma_scan(events, rule_ids)
+    SigmaEngine-&gt;&gt;SigmaEngine: load compiled rules from cache
+    SigmaEngine-&gt;&gt;DuckDB: load_events_to_duckdb(events)
+    SigmaEngine-&gt;&gt;pySigma: evaluate rules against event stream
+    pySigma-&gt;&gt;SigmaEngine: return match list
+    SigmaEngine-&gt;&gt;SigmaEngine: enrich matches with technique IDs
+    SigmaEngine-&gt;&gt;SigmaMCP: return list[SigmaMatch]
+</code></pre></div>
+<hr />
+<h2 id="15-class-diagrams">15. CLASS DIAGRAMS</h2>
+<div class="highlight"><pre><span></span><code>classDiagram
+    class HuntAgent {
+        +session_id: str
+        +graph: CompiledGraph
+        +invoke(hypothesis: str) HuntResult
+        +stream(hypothesis: str) AsyncIterator
+    }
+
+    class THOSState {
+        +session_id: str
+        +user_query: str
+        +hunt_plan: list
+        +parsed_events: list
+        +sigma_matches: list
+        +anomalies: list
+        +evidence_ids: list
+        +reports_generated: list
+        +is_complete: bool
+    }
+
+    class SupervisorNode {
+        +llm: OllamaClient
+        +invoke(state: THOSState) THOSState
+        -decide_next_action(state) str
+    }
+
+    class SigmaEngine {
+        +rules_path: str
+        +compiled_rules: dict
+        +load_rules(path: str) int
+        +scan(events: list) list[SigmaMatch]
+    }
+
+    class EvidenceRepository {
+        +db: SQLiteManager
+        +add(evidence: Evidence) Evidence
+        +get(id: str) Evidence
+        +list(session_id: str) list[Evidence]
+    }
+
+    class ChromaClient {
+        +persist_dir: str
+        +collection(name: str) Collection
+        +add_documents(docs: list, collection: str)
+        +search(query: str, collection: str, n: int) list
+    }
+
+    HuntAgent --&gt; THOSState
+    HuntAgent --&gt; SupervisorNode
+    SupervisorNode --&gt; THOSState
+    SigmaEngine --&gt; SigmaMatch
+    EvidenceRepository --&gt; Evidence
+</code></pre></div>
+<hr />
+<h2 id="16-report-formats">16. REPORT FORMATS</h2>
+<h3 id="161-executive-report">16.1 Executive Report</h3>
+<ul>
+<li>Threat Summary (1 paragraph, LLM generated)</li>
+<li>Risk Score (0–10, calculated)</li>
+<li>Key Findings (bullet list)</li>
+<li>MITRE ATT&amp;CK Navigator coverage</li>
+<li>Recommended Actions</li>
+</ul>
+<h3 id="162-technical-report">16.2 Technical Report</h3>
+<ul>
+<li>Hypothesis and Methodology</li>
+<li>Data Sources Analyzed</li>
+<li>Detection Results (Sigma hits, YARA matches)</li>
+<li>Statistical Anomalies</li>
+<li>Evidence Chain</li>
+<li>IOC List</li>
+<li>Timeline of Events</li>
+<li>MITRE Technique Mapping</li>
+</ul>
+<h3 id="163-ioc-report">16.3 IOC Report</h3>
+<ul>
+<li>Hash IOCs (MD5/SHA1/SHA256)</li>
+<li>IP Indicators</li>
+<li>Domain Indicators</li>
+<li>File Path Indicators</li>
+<li>Registry Key Indicators</li>
+<li>First/Last Seen timestamps</li>
+<li>Occurrence counts</li>
+</ul>
+<h3 id="164-timeline-report">16.4 Timeline Report</h3>
+<ul>
+<li>Chronological event list</li>
+<li>Color-coded by severity</li>
+<li>Pivotable by host/user/process</li>
+<li>Export to CSV</li>
+</ul>
+<h3 id="165-mitre-report">16.5 MITRE Report</h3>
+<ul>
+<li>Techniques detected (with confidence)</li>
+<li>Tactic coverage matrix</li>
+<li>Detection gaps</li>
+<li>Navigator JSON layer</li>
+</ul>
+<h3 id="166-evidence-report">16.6 Evidence Report</h3>
+<ul>
+<li>Full evidence chain</li>
+<li>Chain of custody log</li>
+<li>Source files</li>
+<li>Normalized event details</li>
+</ul>
+<hr />
+<h2 id="17-dependency-graph">17. DEPENDENCY GRAPH</h2>
+<div class="highlight"><pre><span></span><code>graph TD
+    CLI --&gt; HuntAgent
+    HuntAgent --&gt; LangGraph
+    LangGraph --&gt; SupervisorNode
+    LangGraph --&gt; PlannerNode
+    LangGraph --&gt; DataLoaderNode
+    LangGraph --&gt; ParserNode
+    LangGraph --&gt; DetectionNode
+    LangGraph --&gt; StatisticsNode
+    LangGraph --&gt; AnomalyNode
+    LangGraph --&gt; MITRENode
+    LangGraph --&gt; RAGNode
+    LangGraph --&gt; EvidenceNode
+    LangGraph --&gt; ReasoningNode
+    LangGraph --&gt; ReportNode
+
+    SupervisorNode --&gt; OllamaClient
+    PlannerNode --&gt; OllamaClient
+    ReasoningNode --&gt; OllamaClient
+    ReportNode --&gt; OllamaClient
+
+    DataLoaderNode --&gt; github_mcp
+    ParserNode --&gt; parser_mcp
+    ParserNode --&gt; normalization_mcp
+    DetectionNode --&gt; sigma_mcp
+    DetectionNode --&gt; yara_mcp
+    StatisticsNode --&gt; statistics_mcp
+    StatisticsNode --&gt; query_mcp
+    AnomalyNode --&gt; anomaly_mcp
+    MITRENode --&gt; mitre_mcp
+    RAGNode --&gt; vector_mcp
+    EvidenceNode --&gt; evidence_mcp
+    EvidenceNode --&gt; session_mcp
+    ReportNode --&gt; report_mcp
+    ReportNode --&gt; visualization_mcp
+
+    github_mcp --&gt; GitClient
+    parser_mcp --&gt; EVTXParser
+    parser_mcp --&gt; JSONParser
+    parser_mcp --&gt; CSVParser
+    sigma_mcp --&gt; SigmaEngine
+    yara_mcp --&gt; YaraEngine
+    statistics_mcp --&gt; DuckDB
+    anomaly_mcp --&gt; ScikitLearn
+    mitre_mcp --&gt; MITREBundle
+    vector_mcp --&gt; ChromaDB
+    evidence_mcp --&gt; SQLite
+    report_mcp --&gt; Jinja2
+    report_mcp --&gt; WeasyPrint
+</code></pre></div>
+<hr />
+<h2 id="18-future-extension-points">18. FUTURE EXTENSION POINTS</h2>
+<table>
+<thead>
+<tr>
+<th>Extension</th>
+<th>Interface</th>
+<th>Location</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>New log format</td>
+<td><code>core/interfaces/parser.py:AbstractParser</code></td>
+<td><code>parsers/</code></td>
+</tr>
+<tr>
+<td>New detection engine</td>
+<td><code>core/interfaces/detector.py:AbstractDetector</code></td>
+<td><code>detectors/</code></td>
+</tr>
+<tr>
+<td>New LLM backend</td>
+<td><code>infrastructure/ollama/client.py</code></td>
+<td>Switch via config</td>
+</tr>
+<tr>
+<td>New MCP server</td>
+<td><code>mcp_servers/&lt;name&gt;/server.py</code></td>
+<td>Auto-discovered</td>
+</tr>
+<tr>
+<td>New report format</td>
+<td><code>templates/reports/</code> + <code>mcp_servers/report_mcp/tools.py</code></td>
+<td>Template + tool</td>
+</tr>
+<tr>
+<td>New vector collection</td>
+<td><code>config/collections.yaml</code></td>
+<td>Config-driven</td>
+</tr>
+<tr>
+<td>New Git data source</td>
+<td><code>config/repositories.yaml</code></td>
+<td>Config-driven</td>
+</tr>
+<tr>
+<td>New embedding model</td>
+<td><code>config/thos.yaml:chromadb.embedding_model</code></td>
+<td>Config-driven</td>
+</tr>
+<tr>
+<td>External SIEM</td>
+<td><code>infrastructure/repositories/</code></td>
+<td>New repo class</td>
+</tr>
+<tr>
+<td>Streaming hunt output</td>
+<td><code>graph/workflow.py</code></td>
+<td>LangGraph <code>.stream()</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="19-testing-strategy">19. TESTING STRATEGY</h2>
+<table>
+<thead>
+<tr>
+<th>Level</th>
+<th>Scope</th>
+<th>Tools</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Unit</td>
+<td>Parsers, detectors, analytics</td>
+<td>pytest, fixtures</td>
+</tr>
+<tr>
+<td>Integration</td>
+<td>MCP server tool invocations</td>
+<td>pytest-asyncio, FastMCP test client</td>
+</tr>
+<tr>
+<td>Integration</td>
+<td>LangGraph node transitions</td>
+<td>mock LLM responses</td>
+</tr>
+<tr>
+<td>E2E</td>
+<td>Full hunt with sample EVTX</td>
+<td>Real Ollama optional (skipif not available)</td>
+</tr>
+<tr>
+<td>Coverage</td>
+<td>All modules ≥ 80%</td>
+<td>pytest-cov</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="20-environment-variables">20. ENVIRONMENT VARIABLES</h2>
+<div class="highlight"><pre><span></span><code><span class="nv">THOS_CONFIG_PATH</span><span class="o">=</span>/data/thos/config/thos.yaml
+<span class="nv">THOS_DATA_DIR</span><span class="o">=</span>/data/thos
+<span class="nv">THOS_LOG_LEVEL</span><span class="o">=</span>INFO
+<span class="nv">OLLAMA_BASE_URL</span><span class="o">=</span>http://localhost:11434
+<span class="nv">THOS_SQLITE_PATH</span><span class="o">=</span>/data/thos/db/thos.db
+<span class="nv">THOS_DUCKDB_PATH</span><span class="o">=</span>/data/thos/db/thos.duckdb
+<span class="nv">THOS_CHROMA_DIR</span><span class="o">=</span>/data/thos/vector
+<span class="nv">THOS_REPORTS_DIR</span><span class="o">=</span>/data/thos/reports
+<span class="nv">THOS_REPOS_CONFIG</span><span class="o">=</span>/data/thos/config/repositories.yaml
+</code></pre></div>
+<hr />
+<p><em>End of PROJECT_SPECIFICATION.md</em>
+<em>THOS v1.0.0 - Offline AI-Powered Threat Hunting Operating System</em></p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.indexes", "navigation.top", "toc.follow", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="../../assets/javascripts/navigation-tabs.js"></script>
+      
+    
+  </body>
+</html>

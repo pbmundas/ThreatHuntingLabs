@@ -1,0 +1,37 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Threat Hunting Exercise: Analyzing Firewall Outbound SMTP Relay Spam Botnet Dataset</title><link rel="stylesheet" href="../assets/site.css"></head><body><header><a href="../index.html">← All Threat Hunting Reports</a><span>Threat Hunting Exercise</span></header><main class="report"><h3 id="threat-hunting-exercise-analyzing-firewall-outbound-smtp-relay-spam-botnet-dataset">Threat Hunting Exercise: Analyzing Firewall Outbound SMTP Relay Spam Botnet Dataset</h3>
+<p>This hunt uses a simulated perimeter firewall dataset (<code>firewall_smtp_relay_2022-11-02T031500.json</code>) capturing <strong>T1583.001 / T1071.003 (via compromised host abuse)</strong>, where a compromised internal host is repurposed as an open relay, sending high-volume outbound SMTP traffic on port 25/587 to hundreds of distinct external mail servers  -  a hallmark of spam-botnet or BEC-infrastructure abuse.</p>
+<h4 id="step-1-hypothesis-formation">Step 1: Hypothesis Formation</h4>
+<p><strong>Hypothesis</strong>: A non-mail-server host (workstation or server not on the approved SMTP relay list) establishes an abnormally high number of distinct outbound SMTP connections in a short window, indicating it has been compromised and conscripted into a spam-sending botnet or is being used to relay BEC phishing emails. Indicators:</p>
+<ul>
+<li>Source host is not in the organization&#39;s authorized mail-relay/MTA inventory.</li>
+<li>High fan-out: dozens to hundreds of unique destination IPs on TCP/25 or TCP/587 within minutes.</li>
+<li>Connections occur outside normal business-application traffic patterns for that host (e.g., a finance workstation, not an Exchange server).</li>
+<li>SMTP payload/banner grabs show non-standard or spoofed HELO/EHLO strings.</li>
+</ul>
+<p><strong>Null Hypothesis</strong>: The host is a legitimate application server (e.g., a marketing automation or ticketing system) configured to send transactional email directly rather than through the corporate MTA. Invalidate by checking CMDB/application-inventory records and DNS PTR/SPF alignment for the source IP.</p>
+<p><strong>Rationale</strong>: Spam botnets and BEC actors frequently abuse compromised internal hosts as email relays because outbound port 25/587 is often left open for legitimate application mail, making it a low-friction path that blends with normal business traffic unless fan-out and host-role are cross-checked.</p>
+<h4 id="step-2-data-sources-and-scope">Step 2: Data Sources and Scope</h4>
+<ul>
+<li><strong>Sources</strong>: Perimeter firewall/NGFW connection logs; internal MTA/relay inventory (CMDB); DNS PTR and SPF records.</li>
+<li><strong>Scope</strong>: ~2022-11-02T03:15:00-04:05:00 UTC; Host: WKS-FIN-114 (10.44.6.91); Destinations: 214 distinct external mail-server IPs.</li>
+<li><strong>SIEM Queries</strong> (Splunk/ELK):</li>
+<li><code>index=firewall dest_port IN (25,587) | stats dc(dest_ip) as unique_dests, count by src_ip | where unique_dests &gt; 50</code></li>
+<li>Relay-inventory check: <code>| lookup authorized_mta_hosts src_ip OUTPUT is_authorized | where is_authorized=false</code></li>
+<li>SMTP banner: <code>index=firewall dest_port=25 src_ip=&quot;10.44.6.91&quot; | table _time dest_ip smtp_helo</code></li>
+</ul>
+<h4 id="step-3-key-findings">Step 3: Key Findings</h4>
+<p>Parsed events (5 shown) confirm WKS-FIN-114, a standard finance workstation, sent SMTP connections to 214 distinct external mail servers in under an hour, immediately following a phishing-delivered macro execution.</p>
+<div class="table-wrap"><table><thead><tr><th>Timestamp (UTC)</th><th>Host</th><th>Event</th><th>Detail</th><th>IOC/Why Suspicious?</th></tr></thead><tbody><tr><td>2022-11-02 03:12:40</td><td>WKS-FIN-114</td><td>(EDR process event)</td><td><code>winword.exe</code> spawned <code>powershell.exe -enc &lt;b64&gt;</code>, which dropped <code>svchost32.exe</code> in <code>%APPDATA%</code></td><td><strong>Delivery IOC</strong>: process lineage shows a macro-triggered dropper immediately preceding the mass-mail activity, consistent with a spam-bot payload installation.</td></tr><tr><td>2022-11-02 03:15:02</td><td>WKS-FIN-114</td><td>Firewall (allow, TCP/25)</td><td>First of 214 unique SMTP connections, HELO string <code>mail-out-921.local</code> (does not resolve)</td><td><strong>Fan-Out IOC</strong>: this host has no history of direct SMTP traffic; the sudden onset of mass connections to unrelated external mail servers is a classic spam-botnet signature.</td></tr><tr><td>2022-11-02 03:15:02 - 04:04:51</td><td>WKS-FIN-114</td><td>Firewall (aggregate)</td><td>214 unique destination IPs, port 25/587, ~1,900 total connection attempts</td><td><strong>Volume IOC</strong>: this volume vastly exceeds any legitimate transactional-mail use case for a finance workstation, and matches known spam-relay throughput patterns.</td></tr><tr><td>2022-11-02 03:16:10</td><td>WKS-FIN-114</td><td>(EDR process event)</td><td><code>svchost32.exe</code> reading <code>contacts.csv</code> and <code>outlook_addresses.txt</code> from user profile</td><td><strong>Targeting IOC</strong>: local harvesting of address-book data immediately before mass-SMTP activity suggests the bot is using stolen contacts as a spam/BEC target list.</td></tr><tr><td>-</td><td>-</td><td>(CMDB/relay-inventory check)</td><td>WKS-FIN-114 is absent from the authorized-MTA host list; SPF record for the domain does not include this host&#39;s IP</td><td>Confirms the host has no legitimate business reason to originate direct SMTP traffic.</td></tr></tbody></table></div>
+<p><strong>Validation</strong>:</p>
+<ul>
+<li><strong>Timeline</strong>: macro-delivered dropper, local contact-list harvesting, then mass fan-out SMTP relay activity  -  a complete spam-botnet conscription chain.</li>
+<li><strong>False Positives</strong>: no CMDB entry or SPF authorization exists for this host as a mail sender.</li>
+<li><strong>Correlation</strong>: malicious process lineage, contact-harvesting, and abnormal SMTP fan-out jointly confirm the host was compromised and used as an unauthorized spam relay.</li>
+</ul>
+<h4 id="step-4-recommendations-next-steps">Step 4: Recommendations &amp; Next Steps</h4>
+<ul>
+<li><strong>Immediate Response</strong>: Isolate WKS-FIN-114, block outbound TCP/25 and TCP/587 from non-MTA subnets at the firewall, notify email-reputation/blocklist providers proactively, and rotate credentials for the affected user.</li>
+<li><strong>Detection</strong>: Sigma-style rule: <code>title: Non-MTA Host SMTP Fan-Out</code> → <code>selection: dest_port IN (25,587) AND src_ip NOT IN authorized_mta_hosts | stats dc(dest_ip) as fanout by src_ip | where fanout &gt; 20</code> → <code>condition: selection</code>.</li>
+<li><strong>Pro Tip</strong>: Enforce an explicit outbound-SMTP allow-list at the firewall (only designated MTA/relay hosts permitted on 25/587) rather than relying on host-based egress filtering alone  -  this collapses an entire class of spam-botnet and BEC-relay abuse to a single, easily monitored choke point.</li>
+</ul>
+<p>Hypothesis <strong>confirmed</strong> - a phishing-compromised finance workstation harvested local contact data and was conscripted into a spam-relay botnet, firing SMTP connections at 214 external mail servers within an hour!</p></main><footer>Local Threat Hunting Reports Library</footer></body></html>

@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Equifax (2017) MITRE ATT&CK Navigator</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.18.9/babel.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis-network.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 font-sans">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const attacksData = {
+            "Equifax (2017)": {
+                "name": "Equifax Data Breach (2017) MITRE ATT&CK Mapping",
+                "versions": { "attack": "14", "navigator": "4.9.1", "layer": "4.5" },
+                "domain": "enterprise-attack",
+                "techniques": [
+                    {
+                        "techniqueID": "T1190",
+                        "tactic": "initial-access",
+                        "color": "#ff9999",
+                        "comment": "Exploited Apache Struts CVE-2017-5638",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Vulnerability", "value": "CVE-2017-5638 (Apache Struts 2.3.x/2.5.x, CVSS 10.0)" },
+                            { "name": "Assets", "value": "Public-facing web server" },
+                            { "name": "IOCs", "value": "Malicious HTTP POST requests to /struts2-showcase/, IPs: 59.188.0.0/16, 122.10.0.0/16" },
+                            { "name": "Threat Actors", "value": "Alleged PLA members (Chinese state-sponsored)" },
+                            { "name": "Parameters", "value": "Web server logs, IDS/IPS alerts, patch management records" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1059.003",
+                        "tactic": "execution",
+                        "color": "#ffcc99",
+                        "comment": "Executed commands via web shells",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "Compromised web server" },
+                            { "name": "IOCs", "value": "Suspicious .jsp files (e.g., webshell.jsp, cmd.jsp, SHA256: a1b2c3d4...)" },
+                            { "name": "Parameters", "value": "Process execution logs, web server error logs, command-line audits" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1505.003",
+                        "tactic": "persistence",
+                        "color": "#ffcc99",
+                        "comment": "Deployed web shells for persistent access",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "Web server file system" },
+                            { "name": "IOCs", "value": "Files like shell.jsp, webshell.jsp in /webapps/, SHA256: e5f6g7h8..." },
+                            { "name": "Parameters", "value": "File creation/modification logs, integrity checks, web server configuration audits" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1078",
+                        "tactic": "privilege-escalation",
+                        "color": "#ffcc99",
+                        "comment": "Used stolen credentials for higher access",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "Web server, back-end systems" },
+                            { "name": "IOCs", "value": "Unauthorized admin logins (e.g., admin:admin123), privilege elevation logs" },
+                            { "name": "Parameters", "value": "Authentication logs, privilege escalation audit trails, account permission changes" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1068",
+                        "tactic": "privilege-escalation",
+                        "color": "#ffcc99",
+                        "comment": "Exploited vulnerabilities for privilege escalation",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "Web server, back-end systems" },
+                            { "name": "IOCs", "value": "Exploit attempt logs for CVE-2017-5638, privilege elevation artifacts" },
+                            { "name": "Parameters", "value": "System call analysis, exploit detection logs, EDR alerts" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1003",
+                        "tactic": "credential-access",
+                        "color": "#ffcc99",
+                        "comment": "Dumped credentials from memory or files",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "Web server, back-end systems" },
+                            { "name": "IOCs", "value": "Mimikatz execution (SHA256: 1a2b3c4d...), LSASS memory dumps" },
+                            { "name": "Parameters", "value": "Memory analysis, process execution logs, EDR telemetry" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1552.001",
+                        "tactic": "credential-access",
+                        "color": "#ffcc99",
+                        "comment": "Extracted credentials from configuration files",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "Web server configuration files" },
+                            { "name": "IOCs", "value": "Access to files with plaintext credentials (e.g., config.xml with admin:admin123)" },
+                            { "name": "Parameters", "value": "File access logs, configuration file audits, credential exposure checks" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1082",
+                        "tactic": "discovery",
+                        "color": "#ffcc99",
+                        "comment": "Collected system information for reconnaissance",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "Web server, back-end systems" },
+                            { "name": "IOCs", "value": "Systeminfo command output, netstat -an execution" },
+                            { "name": "Parameters", "value": "System logs, command execution logs, EDR telemetry" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1083",
+                        "tactic": "discovery",
+                        "color": "#ffcc99",
+                        "comment": "Enumerated SQL databases",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "SQL databases" },
+                            { "name": "IOCs", "value": "Over 9,000 SQL queries executed, SELECT * FROM customers" },
+                            { "name": "Parameters", "value": "SQL query logs, network traffic analysis, database enumeration logs" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1018",
+                        "tactic": "discovery",
+                        "color": "#ffcc99",
+                        "comment": "Discovered remote systems",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "SQL databases, network infrastructure" },
+                            { "name": "IOCs", "value": "Network scans targeting 10.0.0.0/8" },
+                            { "name": "Parameters", "value": "Network traffic analysis, system enumeration logs" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1071.001",
+                        "tactic": "command-and-control",
+                        "color": "#ffcc99",
+                        "comment": "Used web shells for C2 communication",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "Web server, external C2 servers" },
+                            { "name": "IOCs", "value": "HTTP traffic to IPs (59.188.14.128, 122.10.8.132), unusual POST requests to /cmd" },
+                            { "name": "Parameters", "value": "Network traffic (PCAP), IDS/IPS alerts, C2 traffic patterns" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1105",
+                        "tactic": "command-and-control",
+                        "color": "#ffcc99",
+                        "comment": "Transferred tools via C2",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "Web server" },
+                            { "name": "IOCs", "value": "Suspicious file downloads via HTTP (e.g., tool.exe, SHA256: 5a6b7c8d...)" },
+                            { "name": "Parameters", "value": "Network traffic (PCAP), proxy logs, file transfer logs" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1074.001",
+                        "tactic": "collection",
+                        "color": "#ffcc99",
+                        "comment": "Staged PII data in compressed files",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "SQL databases" },
+                            { "name": "IOCs", "value": "Creation of data.zip, customer_data.7z in /tmp" },
+                            { "name": "Parameters", "value": "File system logs, database access logs, temporary folder monitoring" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1119",
+                        "tactic": "collection",
+                        "color": "#ffcc99",
+                        "comment": "Automated collection of PII from databases",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "SQL databases" },
+                            { "name": "IOCs", "value": "Automated SQL query scripts (e.g., extract.sh), bulk SELECT * FROM users" },
+                            { "name": "Parameters", "value": "Database query logs, file system logs, DLP alerts" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1041",
+                        "tactic": "exfiltration",
+                        "color": "#ffcc99",
+                        "comment": "Exfiltrated data over C2 channel",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "SQL databases, external servers" },
+                            { "name": "IOCs", "value": "Large HTTP transfers to 59.188.14.128, deleted data.zip files" },
+                            { "name": "Parameters", "value": "Network traffic (PCAP), DLP alerts, file deletion logs" }
+                        ]
+                    },
+                    {
+                        "techniqueID": "T1070.004",
+                        "tactic": "defense-evasion",
+                        "color": "#ffcc99",
+                        "comment": "Deleted files and logs to cover tracks",
+                        "enabled": true,
+                        "metadata": [
+                            { "name": "Assets", "value": "Web server, SQL databases" },
+                            { "name": "IOCs", "value": "Deleted data.zip, cleared /var/log/apache2/access.log" },
+                            { "name": "Parameters", "value": "File deletion logs, log integrity checks, event log encryption status" }
+                        ]
+                    }
+                ]
+            }
+        };
+
+        const App = () => {
+            const flowchartRef = React.useRef(null);
+            const selectedAttack = "Equifax (2017)";
+            const [selectedTechnique, setSelectedTechnique] = React.useState(null);
+
+            React.useEffect(() => {
+                const mitreData = attacksData[selectedAttack];
+                const nodes = mitreData.techniques.map((tech, index) => ({
+                    id: index + 1,
+                    label: `${tech.techniqueID}: ${tech.tactic}`,
+                    shape: "box",
+                    color: tech.color
+                }));
+
+                const edges = [];
+                const tacticOrder = [
+                    "initial-access", "execution", "persistence", "privilege-escalation",
+                    "credential-access", "discovery", "lateral-movement", "command-and-control",
+                    "collection", "exfiltration", "defense-evasion", "impact"
+                ];
+
+                const tacticNodes = {};
+                mitreData.techniques.forEach((tech, index) => {
+                    const nodeId = index + 1;
+                    const tacticIndex = tacticOrder.indexOf(tech.tactic);
+                    if (!tacticNodes[tech.tactic]) {
+                        tacticNodes[tech.tactic] = [nodeId];
+                    } else {
+                        tacticNodes[tech.tactic].push(nodeId);
+                    }
+                    if (tacticIndex > 0) {
+                        const prevTactic = tacticOrder[tacticIndex - 1];
+                        if (tacticNodes[prevTactic]) {
+                            tacticNodes[prevTactic].forEach(prevNodeId => {
+                                edges.push({ from: prevNodeId, to: nodeId, arrows: "to" });
+                            });
+                        }
+                    }
+                });
+
+                const container = flowchartRef.current;
+                const data = { nodes: new vis.DataSet(nodes), edges: new vis.DataSet(edges) };
+                const options = {
+								physics: {
+								enabled: true
+											},
+								nodes: { font: { size: 12 }, shape: 'box', shapeProperties: { borderRadius: 5 } },
+								edges: { arrows: 'to', smooth: false },
+								interaction: { dragNodes: true, dragView: true, zoomView: true }
+								};
+                const network = new vis.Network(container, data, options);
+
+                network.on("click", (params) => {
+                    if (params.nodes.length > 0) {
+                        const nodeId = params.nodes[0];
+                        setSelectedTechnique(mitreData.techniques[nodeId - 1]);
+                    }
+                });
+
+                // Fit the network to the container
+                network.fit();
+
+                // Add resize listener
+                const handleResize = () => {
+                    network.fit();
+                };
+                window.addEventListener('resize', handleResize);
+
+                return () => {
+                    window.removeEventListener('resize', handleResize);
+                    network.destroy();
+                };
+            }, []);
+
+            return (
+                <div className="container mx-auto p-4">
+				<a href="index.html" className="text-blue-600 hover:underline absolute top-4 right-4">Back to Index</a>
+                    <h2 className="text-2xl font-bold mb-4">Equifax (2017) MITRE ATT&CK Navigator</h2>
+                    <div className="flex gap-4">
+                        <div ref={flowchartRef} className="flex-[3] border border-gray-300 bg-white" style={{ height: '600px' }}></div>
+                        <div className="flex-1 p-4 bg-gray-200 rounded-md overflow-y-auto" style={{ height: '600px' }}>
+                            <h3 className="text-lg font-semibold">Technique Details</h3>
+                            {selectedTechnique ? (
+                                <pre className="whitespace-pre-wrap text-sm">
+                                    <strong>Technique ID:</strong> {selectedTechnique.techniqueID}<br/>
+                                    <strong>Tactic:</strong> {selectedTechnique.tactic}<br/>
+                                    <strong>Comment:</strong> {selectedTechnique.comment}<br/>
+                                    <strong>Metadata:</strong><br/>
+                                    {selectedTechnique.metadata.map((meta, idx) => (
+                                        <div key={idx}>
+                                            <strong>{meta.name}:</strong> {meta.value}<br/>
+                                        </div>
+                                    ))}
+                                </pre>
+                            ) : (
+                                <p>Click a node to view technique details, MITRE TTPs, IOCs, and technical information. Drag nodes to move them.</p>
+                            )}
+							<br></br><strong>Background:</strong><br/>
+							<p>Equifax (2017): The Equifax data breach in 2017 exposed the personal information of 147 million people due to an unpatched vulnerability in Apache Struts. Attackers exploited this weakness, gaining unauthorized access and exfiltrating sensitive data over months, highlighting the risks of delayed software updates.</p>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>

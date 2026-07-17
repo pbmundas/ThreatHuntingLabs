@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#08110f">
+  <title>Blacksite // Browser Threat Lab</title>
+  <link rel="stylesheet" href="assets/styles.css">
+  <link rel="stylesheet" href="assets/library.css">
+  <link rel="stylesheet" href="assets/launch.css">
+  <link rel="stylesheet" href="assets/siem.css">
+  <link rel="stylesheet" href="assets/account.css">
+</head>
+<body>
+  <header class="topbar"><a class="brand" href="#">BLACKSITE<span>//LAB</span></a><div class="case-meta"><span class="pulse"></span><span id="caseTitle">ADMIN-PUBLISHED THREAT HUNT</span></div><div class="top-actions"><span id="engineStatus">ENGINE · STARTING</span><span id="profileName" class="profile-name hidden"></span><button id="libraryBtn" class="ghost library-btn" type="button">ALL LABS</button><button id="sidebarToggle" class="ghost sidebar-toggle" type="button" aria-expanded="true">HIDE CHALLENGES</button><button id="resetBtn" class="ghost">RESET</button><button id="logoutBtn" class="ghost hidden">SIGN OUT</button></div></header>
+  <main class="shell">
+    <aside class="case-panel">
+      <div class="eyebrow">ASSIGNED EVIDENCE WORKSPACE</div><h1>Query the logs.<br><em>Prove the hypothesis.</em></h1>
+      <p id="caseDescription" class="lede">Choose an administrator-published investigation. Its evidence is mounted automatically and processed only inside this browser tab.</p>
+      <section class="data-card"><div class="section-head"><span>ASSIGNED EVIDENCE</span><b id="sourceCount">0 TABLES</b></div><div id="sourceList" class="source-list"><span>Launch a lab to mount its evidence</span></div><div id="logSourceList" class="log-source-list"></div><button id="changeLab" class="manifest-btn">← RETURN TO LAB LIBRARY</button></section>
+      <section class="briefing"><div class="section-head"><span>MISSION OBJECTIVES</span><b id="progressText">0 / 0</b></div><div id="objectives" class="no-objectives">Load a lab manifest to activate evidence-based objectives.</div></section>
+      <section class="mitre-card"><div class="section-head"><span>ATT&amp;CK COVERAGE</span><b>LIVE</b></div><div id="mitreTags" class="tags"><span class="tag">AWAITING MANIFEST</span></div></section>
+    </aside>
+    <section class="workspace">
+      <nav class="tabs" aria-label="Query language"><button class="tab active" data-lang="sql">SQL</button><button class="tab" data-lang="kql">KQL</button><button id="guideBtn" class="guide-toggle" type="button" aria-expanded="false">QUERY GUIDE</button><span class="shortcut">CTRL / CMD + ENTER TO RUN</span></nav>
+      <aside id="queryGuide" class="query-guide hidden" aria-label="Query guide">
+        <div class="guide-head"><div><span>QUERY GUIDE</span><b id="guideLanguage">SQL</b></div><button id="closeGuide" type="button">CLOSE</button></div>
+        <div class="guide-body">
+          <section><h3>BUILD A QUERY</h3><div id="queryRecipes" class="query-recipes"></div></section>
+          <section><div class="field-head"><h3>AVAILABLE FIELDS</h3><input id="fieldSearch" type="search" placeholder="Filter fields" aria-label="Filter available fields"></div><div id="fieldList" class="field-list"><span>Launch a lab to inspect its schema.</span></div></section>
+          <section><h3>SUPPORTED SYNTAX</h3><div id="syntaxHelp" class="syntax-help"></div></section>
+        </div>
+      </aside>
+      <div class="editor-wrap"><div class="line-nos" aria-hidden="true">1<br>2<br>3<br>4</div><textarea id="queryEditor" spellcheck="false" aria-label="Threat hunting query">-- Load evidence, then query its table
+SHOW TABLES;</textarea></div>
+      <div class="querybar"><span id="queryInfo">Waiting for DuckDB-Wasm</span><button id="runBtn" class="run" disabled>▶ RUN QUERY</button></div>
+      <section class="analytics" aria-label="Result statistics"><div class="results-head"><span>HUNT STATISTICS</span><span id="analyticsMeta">RUN A QUERY TO PROFILE EVENTS</span></div><div id="analyticsBody" class="analytics-body"><div class="analytics-empty">Event volume, top values, and field distributions appear here.</div></div></section>
+      <section class="results"><div class="results-head"><span>PARSED EVENTS</span><span id="resultMeta">NO DATA</span></div><div class="grid-scroll" id="gridScroll"><table><thead id="gridHead"></thead><tbody id="gridBody"></tbody></table></div><div id="emptyState" class="empty">Load evidence or run a query to begin.</div></section>
+      <aside id="eventInspector" class="event-inspector hidden" aria-label="Event field inspector"><div class="inspector-head"><div><span>EVENT INSPECTOR</span><b id="inspectorTitle">PARSED FIELDS + RAW EVENT</b></div><button id="closeInspector" type="button">CLOSE</button></div><div id="inspectorBody"></div></aside>
+      <section class="timeline-card"><div class="results-head"><span>UNIFIED THREAT TIMELINE</span><span id="timelineRange">AWAITING TIMESTAMPED RESULTS</span></div><div class="timeline" id="timeline"><div class="axis"></div></div><div class="legend"><span><i class="low"></i> event</span><span><i class="high"></i> suspicious / high severity</span></div></section>
+    </section>
+  </main>
+  <div id="accountGate" class="account-gate"><section class="account-card"><div class="eyebrow">DEVICE-LOCAL HUNTER PROFILE</div><h2>Threat Hunter Login</h2><p>Sign in to continue your labs and challenges. New users can create a local profile with Register.</p><form id="loginForm" class="account-form"><h3>LOGIN</h3><label>USERNAME<input id="loginUsername" autocomplete="username" required autofocus></label><label>PASSWORD<input id="loginPassword" type="password" autocomplete="current-password" required></label><div class="account-actions"><button type="submit">LOGIN</button><button type="button" class="secondary" data-auth-tab="register">REGISTER</button></div></form><form id="registerForm" class="account-form hidden"><h3>REGISTER</h3><label>USERNAME<input id="registerUsername" minlength="3" maxlength="24" autocomplete="username" required></label><label>PASSWORD<input id="registerPassword" type="password" minlength="8" autocomplete="new-password" required></label><label>CONFIRM PASSWORD<input id="registerConfirm" type="password" minlength="8" autocomplete="new-password" required></label><div class="account-actions"><button type="submit">REGISTER</button><button type="button" class="secondary" data-auth-tab="login">BACK TO LOGIN</button></div></form><div id="authMessage" class="auth-message" role="status" aria-live="polite"></div><small>LOCAL ONLY · Password verifier and progress remain in this browser's storage. Use a non-sensitive password.</small></section></div>
+  <div id="labLibrary" class="library-overlay hidden"><section class="library-panel"><div class="library-profile"><div><div class="eyebrow">ADMIN-PUBLISHED RANGE</div><h2>Threat hunting labs</h2></div><span id="libraryUser"></span></div><p>Select an investigation. Data sources, hypotheses, challenges, answers, and verification rules are predefined by the lab administrator.</p><div class="library-order">SORTED BY TOUGHNESS · NOVICE → INTERMEDIATE → EXPERT</div><div id="labCards" class="lab-cards"><div class="loading-card">Loading lab manifest…</div></div></section></div>
+  <div id="toast" role="status" aria-live="polite"></div>
+  <script type="module" src="assets/app.js"></script>
+</body>
+</html>

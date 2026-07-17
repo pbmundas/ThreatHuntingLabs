@@ -1,0 +1,5512 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="An independent repository for live cyber threat Hunting, intelligence, playbooks, and raw telemetry.">
+      
+      
+        <meta name="author" content="Threathuntlabs Team">
+      
+      
+        <link rel="canonical" href="https://threathuntlabs.com/case-studies/2013-adobe-threat-hunt-report/">
+      
+      
+        <link rel="prev" href="../2012-linkedin-threat-hunt-report/">
+      
+      
+        <link rel="next" href="../../threat-hunting-lab/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Adobe Breach 2013 Retrospective Threat Hunting Report - Threat Hunt Labs</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,300i,400,400i,700,700i%7CJetBrains+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Inter";--md-code-font:"JetBrains Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/threat-hunt.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  
+  <script>
+    window.thlNavigation = [
+  {
+    "title": "Home",
+    "url": null,
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Foundations",
+    "url": null,
+    "active": false,
+    "children": [
+  {
+    "title": "Unknown Facts",
+    "url": "../../foundations/2025-07-20-unknown-facts-about-threat-hunting/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "10 Common Mistakes",
+    "url": "../../foundations/10-Common-Mistakes-Every-Beginner-Makes-When-Learning-Threat-Hunting/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Cybersecurity Fundamentals",
+    "url": "../../foundations/Cybersecurity-Fundamentals-The-Foundation-Every-Threat-Hunter-Needs-part-1/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Why and Where Threat Hunting",
+    "url": "../../foundations/Why-Every-Organization-Needs-Threat-Hunting/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Threat Hunting Explained",
+    "url": "../../foundations/Threat-Hunting-Explained-Beyond-Alerts-Dashboards-and-SIEM-Queries/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Data Pipeline",
+    "url": "../../foundations/Threat-Hunting-Data-Pipeline/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Life Cycle",
+    "url": "../../foundations/Inside-a-Threat-Hunt-Understanding-the-Threat-Hunting-Lifecycle/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Types",
+    "url": "../../foundations/Types-of-Threat-Hunting-Choosing-the-Right-Hunting-Strategy/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Data Analysis Techniques",
+    "url": "../../foundations/Threat-Hunting-Data-Analysis-Techniques/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Hypothesis Development",
+    "url": "../../foundations/Hypothesis-Development-Thinking-Like-a-Threat-Hunter-Before-Writing-a-Single-Query/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Methodologies",
+    "url": "../../foundations/Threat-Hunting-Methodologies-Choosing-the-Right-Hunting-Approach/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Mindset",
+    "url": "../../foundations/The-Threat-Hunting-Mindset-Thinking-Like-an-Attacker/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Maturity Model",
+    "url": "../../foundations/The-Threat-Hunting-Maturity-Model-Explained/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Lab Setup",
+    "url": "../../Start-Hunting/threat-hunting-lab/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Reading Logs",
+    "url": "../../Start-Hunting/Reading-Raw-Logs-Like-a-Threat-Hunter/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Solo Hunter to Enterprise",
+    "url": "../../Start-Hunting/threat-hunting-program-models/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Reporting",
+    "url": "../../Start-Hunting/threat-hunting-documentation/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Telemetry \u0026 Logs to collect",
+    "url": "../../Start-Hunting/threat-hunting-device-logs-telemetry-details.html",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Low Hanging Fruits",
+    "url": "../../Start-Hunting/low-hanging-fruits-threat-hunting/",
+    "active": false,
+    "children": []
+  }
+]
+  },
+  {
+    "title": "Learn Attacks",
+    "url": null,
+    "active": false,
+    "children": [
+  {
+    "title": "Attacks in History",
+    "url": "../../learn-known-cyber-attacks/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Attacks Encyclopedia",
+    "url": "../../attack-encyclopedia/",
+    "active": false,
+    "children": []
+  }
+]
+  },
+  {
+    "title": "Hunting Reports",
+    "url": "../../threat-hunting-reports/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Case Studies",
+    "url": null,
+    "active": true,
+    "children": [
+  {
+    "title": "Stuxnet (2010)",
+    "url": "../2010-Stuxnet-Retrospective-Threat-Hunt-Report/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "RSA-SecurID (2011)",
+    "url": "../2011-RSA-SecurID-Retrospective-Threat-Hunt-Report/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Linkedin (2012)",
+    "url": "../2012-linkedin-threat-hunt-report/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Adobe (2013)",
+    "url": "./",
+    "active": true,
+    "children": []
+  }
+]
+  },
+  {
+    "title": "\ud83c\udfafDaily Intel",
+    "url": "https://intel.threathuntlabs.com",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Challenges",
+    "url": "../../threat-hunting-lab/",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Blog",
+    "url": "https://blog.threathuntlabs.com",
+    "active": false,
+    "children": []
+  },
+  {
+    "title": "Resources",
+    "url": "../../Downloads/threat-hunting-related-document-references/",
+    "active": false,
+    "children": []
+  }
+];
+  </script>
+
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="custom">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#executive-summary" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Threat Hunt Labs" class="md-header__button md-logo" aria-label="Threat Hunt Labs" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Threat Hunt Labs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Adobe Breach 2013 Retrospective Threat Hunting Report
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../foundations/2025-07-20-unknown-facts-about-threat-hunting/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Foundations
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../learn-known-cyber-attacks/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Learn Attacks
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../threat-hunting-reports/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Hunting Reports
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../2010-Stuxnet-Retrospective-Threat-Hunt-Report/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Case Studies
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="https://intel.threathuntlabs.com" class="md-tabs__link">
+        
+  
+  
+    
+  
+  🎯Daily Intel
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../threat-hunting-lab/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Challenges
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="https://blog.threathuntlabs.com" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Blog
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../Downloads/threat-hunting-related-document-references/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Resources
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Threat Hunt Labs" class="md-nav__button md-logo" aria-label="Threat Hunt Labs" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Threat Hunt Labs
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Foundations
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Foundations
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../foundations/2025-07-20-unknown-facts-about-threat-hunting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Unknown Facts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../foundations/10-Common-Mistakes-Every-Beginner-Makes-When-Learning-Threat-Hunting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    10 Common Mistakes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../foundations/Cybersecurity-Fundamentals-The-Foundation-Every-Threat-Hunter-Needs-part-1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cybersecurity Fundamentals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../foundations/Why-Every-Organization-Needs-Threat-Hunting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Why and Where Threat Hunting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../foundations/Threat-Hunting-Explained-Beyond-Alerts-Dashboards-and-SIEM-Queries/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Threat Hunting Explained
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../foundations/Threat-Hunting-Data-Pipeline/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data Pipeline
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../foundations/Inside-a-Threat-Hunt-Understanding-the-Threat-Hunting-Lifecycle/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Life Cycle
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../foundations/Types-of-Threat-Hunting-Choosing-the-Right-Hunting-Strategy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Types
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../foundations/Threat-Hunting-Data-Analysis-Techniques/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data Analysis Techniques
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../foundations/Hypothesis-Development-Thinking-Like-a-Threat-Hunter-Before-Writing-a-Single-Query/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Hypothesis Development
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../foundations/Threat-Hunting-Methodologies-Choosing-the-Right-Hunting-Approach/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Methodologies
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../foundations/The-Threat-Hunting-Mindset-Thinking-Like-an-Attacker/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mindset
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../foundations/The-Threat-Hunting-Maturity-Model-Explained/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Maturity Model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Start-Hunting/threat-hunting-lab/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab Setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Start-Hunting/Reading-Raw-Logs-Like-a-Threat-Hunter/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reading Logs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Start-Hunting/threat-hunting-program-models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Solo Hunter to Enterprise
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Start-Hunting/threat-hunting-documentation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reporting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Start-Hunting/threat-hunting-device-logs-telemetry-details.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Telemetry & Logs to collect
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Start-Hunting/low-hanging-fruits-threat-hunting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Low Hanging Fruits
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../learn-known-cyber-attacks/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Learn Attacks
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Learn Attacks
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../attack-encyclopedia/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Attacks Encyclopedia
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../threat-hunting-reports/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Hunting Reports
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Case Studies
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Case Studies
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2010-Stuxnet-Retrospective-Threat-Hunt-Report/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stuxnet (2010)
+  
+
+    
+      <br>
+      <small>Retrospective Enterprise Threat Hunt: ICS-Targeting Removable-Media Worm (Stuxnet-Class Activity)</small>
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2011-RSA-SecurID-Retrospective-Threat-Hunt-Report/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RSA-SecurID (2011)
+  
+
+    
+      <br>
+      <small>Retrospective Enterprise Threat Hunt: Targeted Spear-Phishing Intrusion Against a Security-Product Vendor (RSA SecurID-Class Activity, 2011)</small>
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2012-linkedin-threat-hunt-report/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linkedin (2012)
+  
+
+    
+      <br>
+      <small>Hunt for Unauthorized Access to Member Credential Store - LinkedIn Corporation</small>
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Adobe (2013)
+  
+
+    
+      <br>
+      <small>Engagement: Hunt for Unauthorized Access to Source Code Repositories and Customer Credential/Payment Data- Adobe Systems Inc.</small>
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Adobe (2013)
+  
+
+    
+      <br>
+      <small>Engagement: Hunt for Unauthorized Access to Source Code Repositories and Customer Credential/Payment Data- Adobe Systems Inc.</small>
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#executive-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Executive Summary
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-threat-intelligence-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Threat Intelligence Summary
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. Threat Intelligence Summary">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#background" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Background
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#threat-actor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Threat Actor
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#campaign" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Campaign
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#objectives" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Objectives
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#initial-intelligence" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Initial Intelligence
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#known-ttps-at-the-time" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Known TTPs at the Time
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#confidence" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Confidence
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#intelligence-sources" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Intelligence Sources
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#attck-overview-campaign-level" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ATT&amp;CK Overview (Campaign-Level)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#diamond-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Diamond Model
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cyber-kill-chain-campaign-level" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cyber Kill Chain (Campaign-Level)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-hunt-objective" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Hunt Objective
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-hunt-scope" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Hunt Scope
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Hunt Scope">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#in-scope-assets" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        In-Scope Assets
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#out-of-scope-not-applicable-to-this-environment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Out of Scope / Not Applicable to This Environment
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#excluded-systems" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Excluded Systems
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-hunt-assumptions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Hunt Assumptions
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-threat-hunting-hypotheses" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Threat Hunting Hypotheses
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Threat Hunting Hypotheses">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#hyp-001-exploitation-of-internet-facing-coldfusion-instance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        HYP-001 - Exploitation of Internet-Facing ColdFusion Instance
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hyp-002-web-shell-persistence-and-internal-pivoting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        HYP-002 - Web Shell Persistence and Internal Pivoting
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hyp-003-access-to-source-code-repository" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        HYP-003 - Access to Source Code Repository
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hyp-004-access-to-payment-adjacent-environment-and-customer-credential-store" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        HYP-004 - Access to Payment-Adjacent Environment and Customer Credential Store
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hyp-005-staged-long-dwell-exfiltration-to-shared-actor-infrastructure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        HYP-005 - Staged, Long-Dwell Exfiltration to Shared Actor Infrastructure
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-environment-overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Environment Overview
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. Environment Overview">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#architecture-simplified-era-appropriate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Architecture (Simplified, Era-Appropriate)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ad-layout" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        AD Layout
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#network-zones" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Network Zones
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ics-network" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ICS Network
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#trust-relationships" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Trust Relationships
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#logging-infrastructure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Logging Infrastructure
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#security-controls" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Security Controls
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#existing-detections" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Existing Detections
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#detection-gaps-preview-full-detail-in-section-22" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Detection Gaps (Preview - full detail in Section 22)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-available-data-sources" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Available Data Sources
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-hunt-methodology" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Hunt Methodology
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-hunt-execution-timeline" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. Hunt Execution Timeline
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10-log-sources-collected" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. Log Sources Collected
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11-detailed-log-analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11. Detailed Log Analysis
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="11. Detailed Log Analysis">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#111-web-server-accesserror-logs-dmz-coldfusion-host" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.1 Web Server Access/Error Logs (DMZ ColdFusion Host)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#112-host-file-system-review-web-shell" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.2 Host File-System Review (Web Shell)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#113-internal-firewall-netflow-lateral-pivot" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.3 Internal Firewall / NetFlow (Lateral Pivot)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#114-source-control-scm-audit-logs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.4 Source Control (SCM) Audit Logs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#115-payment-adjacent-segment-customer-database-logs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.5 Payment-Adjacent Segment / Customer Database Logs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#116-proxy-firewall-logs-staged-exfiltration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.6 Proxy / Firewall Logs (Staged Exfiltration)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#12-data-analysis-techniques-used" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12. Data Analysis Techniques Used
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#13-hunting-queries" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13. Hunting Queries
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="13. Hunting Queries">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#splunk-spl-coldfusion-admin-path-exploit-attempt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Splunk (SPL) - ColdFusion Admin-Path Exploit Attempt
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#splunk-new-file-in-web-root-vs-baseline" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Splunk - New File in Web Root vs. Baseline
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#microsoft-sentinel-kql-first-seen-internal-connection-from-dmz-host" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Microsoft Sentinel (KQL) - First-Seen Internal Connection from DMZ Host
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kql-scm-bulk-export-anomaly" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        KQL - SCM Bulk Export Anomaly
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#elastic-dsl-outbound-volume-time-series-by-destination" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Elastic (DSL) - Outbound Volume Time Series by Destination
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sql-illustrative-anomalous-row-count-query-if-audit-logging-existed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SQL - (Illustrative) Anomalous Row-Count Query, if Audit Logging Existed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sysmon-filter-config-snippet-web-service-process-spawning-command-shell" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sysmon Filter (Config Snippet) - Web Service Process Spawning Command Shell
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#powershell-manual-baseline-diff-of-web-root-era-appropriate-pre-fim" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PowerShell - Manual Baseline Diff of Web Root (Era-Appropriate, Pre-FIM)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#windows-event-filter-unexpected-local-adminservice-account-use" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Windows Event Filter - Unexpected Local Admin/Service Account Use
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#14-sigma-detection-opportunities" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14. Sigma Detection Opportunities
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="14. Sigma Detection Opportunities">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sig-001-coldfusion-administrative-endpoint-access-from-external-source" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SIG-001 - ColdFusion Administrative Endpoint Access from External Source
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sig-002-new-unbaselined-file-in-web-accessible-directory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SIG-002 - New Unbaselined File in Web-Accessible Directory
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sig-003-first-seen-internal-connection-from-internet-facing-host" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SIG-003 - First-Seen Internal Connection from Internet-Facing Host
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sig-004-full-repository-export-by-non-ci-account" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SIG-004 - Full Repository Export by Non-CI Account
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sig-005-recurring-large-outbound-transfer-to-consistent-external-destination" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SIG-005 - Recurring Large Outbound Transfer to Consistent External Destination
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#15-mitre-attck-mapping" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15. MITRE ATT&amp;CK Mapping
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#16-alerts-reviewed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16. Alerts Reviewed
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#17-indicators-of-compromise" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        17. Indicators of Compromise
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="17. Indicators of Compromise">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#host-iocs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Host IOCs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#network-iocs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Network IOCs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#registry-drivers-mutexes-certificates-usb-artifacts-plc-indicators" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Registry / Drivers / Mutexes / Certificates / USB Artifacts / PLC Indicators
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#processes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Processes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#services" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Services
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#files" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Files
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hashes-domains-ips-certificates" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hashes / Domains / IPs / Certificates
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#18-indicators-of-attack-ioas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        18. Indicators of Attack (IOAs)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#19-timeline-reconstruction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        19. Timeline Reconstruction
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#20-kill-chain-reconstruction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20. Kill Chain Reconstruction
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#21-root-cause-analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21. Root Cause Analysis
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#22-detection-gaps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        22. Detection Gaps
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#23-detection-engineering-opportunities" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        23. Detection Engineering Opportunities
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#24-purple-team-opportunities" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        24. Purple Team Opportunities
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#25-threat-hunting-lessons-learned" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        25. Threat Hunting Lessons Learned
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#26-recommendations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        26. Recommendations
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="26. Recommendations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#immediate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Immediate
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#short-term" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Short-Term
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#long-term" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Long-Term
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#strategic" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Strategic
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#operational" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Operational
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#detection-logging-architecture-user-awareness" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Detection / Logging / Architecture / User Awareness
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ics-security" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ICS Security
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#27-final-hunt-assessment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        27. Final Hunt Assessment
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#28-appendix" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        28. Appendix
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="28. Appendix">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#a-complete-attck-techniques-referenced" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A. Complete ATT&amp;CK Techniques Referenced
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#b-ioc-table-consolidated" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        B. IOC Table (Consolidated)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c-sigma-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        C. Sigma Rules
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#d-kql-splunk-elastic-powershell-queries" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        D. KQL / Splunk / Elastic / PowerShell Queries
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#e-references" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        E. References
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#f-threat-intelligence-sources" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        F. Threat Intelligence Sources
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#g-glossary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        G. Glossary
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://intel.threathuntlabs.com" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    🎯Daily Intel
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../threat-hunting-lab/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Challenges
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://blog.threathuntlabs.com" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Blog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Downloads/threat-hunting-related-document-references/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Resources
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#executive-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Executive Summary
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-threat-intelligence-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Threat Intelligence Summary
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. Threat Intelligence Summary">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#background" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Background
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#threat-actor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Threat Actor
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#campaign" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Campaign
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#objectives" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Objectives
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#initial-intelligence" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Initial Intelligence
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#known-ttps-at-the-time" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Known TTPs at the Time
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#confidence" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Confidence
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#intelligence-sources" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Intelligence Sources
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#attck-overview-campaign-level" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ATT&amp;CK Overview (Campaign-Level)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#diamond-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Diamond Model
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cyber-kill-chain-campaign-level" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cyber Kill Chain (Campaign-Level)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-hunt-objective" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Hunt Objective
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-hunt-scope" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Hunt Scope
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Hunt Scope">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#in-scope-assets" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        In-Scope Assets
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#out-of-scope-not-applicable-to-this-environment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Out of Scope / Not Applicable to This Environment
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#excluded-systems" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Excluded Systems
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-hunt-assumptions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Hunt Assumptions
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-threat-hunting-hypotheses" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Threat Hunting Hypotheses
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Threat Hunting Hypotheses">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#hyp-001-exploitation-of-internet-facing-coldfusion-instance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        HYP-001 - Exploitation of Internet-Facing ColdFusion Instance
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hyp-002-web-shell-persistence-and-internal-pivoting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        HYP-002 - Web Shell Persistence and Internal Pivoting
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hyp-003-access-to-source-code-repository" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        HYP-003 - Access to Source Code Repository
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hyp-004-access-to-payment-adjacent-environment-and-customer-credential-store" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        HYP-004 - Access to Payment-Adjacent Environment and Customer Credential Store
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hyp-005-staged-long-dwell-exfiltration-to-shared-actor-infrastructure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        HYP-005 - Staged, Long-Dwell Exfiltration to Shared Actor Infrastructure
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-environment-overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Environment Overview
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. Environment Overview">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#architecture-simplified-era-appropriate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Architecture (Simplified, Era-Appropriate)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ad-layout" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        AD Layout
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#network-zones" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Network Zones
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ics-network" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ICS Network
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#trust-relationships" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Trust Relationships
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#logging-infrastructure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Logging Infrastructure
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#security-controls" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Security Controls
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#existing-detections" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Existing Detections
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#detection-gaps-preview-full-detail-in-section-22" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Detection Gaps (Preview - full detail in Section 22)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-available-data-sources" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Available Data Sources
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-hunt-methodology" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Hunt Methodology
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-hunt-execution-timeline" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. Hunt Execution Timeline
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10-log-sources-collected" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. Log Sources Collected
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11-detailed-log-analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11. Detailed Log Analysis
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="11. Detailed Log Analysis">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#111-web-server-accesserror-logs-dmz-coldfusion-host" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.1 Web Server Access/Error Logs (DMZ ColdFusion Host)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#112-host-file-system-review-web-shell" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.2 Host File-System Review (Web Shell)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#113-internal-firewall-netflow-lateral-pivot" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.3 Internal Firewall / NetFlow (Lateral Pivot)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#114-source-control-scm-audit-logs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.4 Source Control (SCM) Audit Logs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#115-payment-adjacent-segment-customer-database-logs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.5 Payment-Adjacent Segment / Customer Database Logs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#116-proxy-firewall-logs-staged-exfiltration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.6 Proxy / Firewall Logs (Staged Exfiltration)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#12-data-analysis-techniques-used" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12. Data Analysis Techniques Used
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#13-hunting-queries" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13. Hunting Queries
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="13. Hunting Queries">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#splunk-spl-coldfusion-admin-path-exploit-attempt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Splunk (SPL) - ColdFusion Admin-Path Exploit Attempt
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#splunk-new-file-in-web-root-vs-baseline" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Splunk - New File in Web Root vs. Baseline
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#microsoft-sentinel-kql-first-seen-internal-connection-from-dmz-host" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Microsoft Sentinel (KQL) - First-Seen Internal Connection from DMZ Host
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kql-scm-bulk-export-anomaly" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        KQL - SCM Bulk Export Anomaly
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#elastic-dsl-outbound-volume-time-series-by-destination" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Elastic (DSL) - Outbound Volume Time Series by Destination
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sql-illustrative-anomalous-row-count-query-if-audit-logging-existed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SQL - (Illustrative) Anomalous Row-Count Query, if Audit Logging Existed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sysmon-filter-config-snippet-web-service-process-spawning-command-shell" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sysmon Filter (Config Snippet) - Web Service Process Spawning Command Shell
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#powershell-manual-baseline-diff-of-web-root-era-appropriate-pre-fim" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PowerShell - Manual Baseline Diff of Web Root (Era-Appropriate, Pre-FIM)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#windows-event-filter-unexpected-local-adminservice-account-use" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Windows Event Filter - Unexpected Local Admin/Service Account Use
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#14-sigma-detection-opportunities" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14. Sigma Detection Opportunities
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="14. Sigma Detection Opportunities">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sig-001-coldfusion-administrative-endpoint-access-from-external-source" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SIG-001 - ColdFusion Administrative Endpoint Access from External Source
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sig-002-new-unbaselined-file-in-web-accessible-directory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SIG-002 - New Unbaselined File in Web-Accessible Directory
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sig-003-first-seen-internal-connection-from-internet-facing-host" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SIG-003 - First-Seen Internal Connection from Internet-Facing Host
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sig-004-full-repository-export-by-non-ci-account" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SIG-004 - Full Repository Export by Non-CI Account
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sig-005-recurring-large-outbound-transfer-to-consistent-external-destination" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SIG-005 - Recurring Large Outbound Transfer to Consistent External Destination
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#15-mitre-attck-mapping" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15. MITRE ATT&amp;CK Mapping
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#16-alerts-reviewed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16. Alerts Reviewed
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#17-indicators-of-compromise" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        17. Indicators of Compromise
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="17. Indicators of Compromise">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#host-iocs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Host IOCs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#network-iocs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Network IOCs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#registry-drivers-mutexes-certificates-usb-artifacts-plc-indicators" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Registry / Drivers / Mutexes / Certificates / USB Artifacts / PLC Indicators
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#processes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Processes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#services" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Services
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#files" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Files
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hashes-domains-ips-certificates" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hashes / Domains / IPs / Certificates
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#18-indicators-of-attack-ioas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        18. Indicators of Attack (IOAs)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#19-timeline-reconstruction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        19. Timeline Reconstruction
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#20-kill-chain-reconstruction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20. Kill Chain Reconstruction
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#21-root-cause-analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        21. Root Cause Analysis
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#22-detection-gaps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        22. Detection Gaps
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#23-detection-engineering-opportunities" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        23. Detection Engineering Opportunities
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#24-purple-team-opportunities" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        24. Purple Team Opportunities
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#25-threat-hunting-lessons-learned" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        25. Threat Hunting Lessons Learned
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#26-recommendations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        26. Recommendations
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="26. Recommendations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#immediate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Immediate
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#short-term" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Short-Term
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#long-term" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Long-Term
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#strategic" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Strategic
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#operational" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Operational
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#detection-logging-architecture-user-awareness" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Detection / Logging / Architecture / User Awareness
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ics-security" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ICS Security
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#27-final-hunt-assessment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        27. Final Hunt Assessment
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#28-appendix" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        28. Appendix
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="28. Appendix">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#a-complete-attck-techniques-referenced" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A. Complete ATT&amp;CK Techniques Referenced
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#b-ioc-table-consolidated" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        B. IOC Table (Consolidated)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c-sigma-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        C. Sigma Rules
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#d-kql-splunk-elastic-powershell-queries" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        D. KQL / Splunk / Elastic / PowerShell Queries
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#e-references" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        E. References
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#f-threat-intelligence-sources" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        F. Threat Intelligence Sources
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#g-glossary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        G. Glossary
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+  <h1>Adobe (2013)</h1>
+
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Hunt Name</strong></td>
+<td>HUNT-2013-ADBE-SRCCRED</td>
+</tr>
+<tr>
+<td><strong>Threat Name</strong></td>
+<td>Unauthorized Access to Source Code Repositories and Customer Data ("2013 Adobe Breach")</td>
+</tr>
+<tr>
+<td><strong>Report Version</strong></td>
+<td>1.0 (Retrospective Reconstruction)</td>
+</tr>
+<tr>
+<td><strong>Date</strong></td>
+<td>Hunt window simulated: June 2013 – October 2013</td>
+</tr>
+<tr>
+<td><strong>Analyst</strong></td>
+<td>SOC Threat Hunt Team - Lead Hunter (Tier 3)</td>
+</tr>
+<tr>
+<td><strong>Classification</strong></td>
+<td>TLP:AMBER - Internal Use / Training Reconstruction</td>
+</tr>
+<tr>
+<td><strong>Threat Severity</strong></td>
+<td><strong>Critical</strong></td>
+</tr>
+<tr>
+<td><strong>Hunt Status</strong></td>
+<td>Closed - Hypothesis Validated (Retrospective)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="executive-summary">Executive Summary</h2>
+<blockquote>
+<p>This report reconstructs, as a professional retrospective hunt, how a SOC embedded inside Adobe Systems in mid-to-late 2013 could plausibly have detected the intrusion that led to (a) theft of source code for Acrobat, Reader, ColdFusion, ColdFusion Builder, and a portion of Photoshop, and (b) theft of customer data - Adobe IDs, encrypted (not hashed) passwords, password hints, and encrypted payment card records - ultimately affecting tens of millions of active users and, per later analysis, up to roughly 150 million total accounts. Adobe first estimated 2.9 million affected accounts on October 3, 2013, then revised that to approximately 38 million active users, with a further 2016-era retrospective count reaching ~150 million registered accounts once inactive/legacy accounts were included.</p>
+<p>The hunt is built around facts publicly established by Adobe's own disclosures and independent research by Brian Krebs and Alex Holden (Hold Security), who first found the stolen 40GB source-code trove on infrastructure used by the same criminal group implicated in earlier-2013 breaches of data aggregators (LexisNexis, Dun &amp; Bradstreet, Kroll) and of the National White Collar Crime Center (NW3C) - the latter confirmed to have been compromised via unpatched <strong>Adobe ColdFusion</strong> web application server vulnerabilities. Adobe itself stated it could not, at the time, confirm or rule out ColdFusion as the initial vector into its own network, and separately indicated the source-code repository access followed an intrusion that touched Adobe's <strong>credit card transaction environment</strong>.</p>
+<p>Where the public record does not specify exact internal technical detail - precise hostnames, exact lateral-movement path, exact persistence mechanism - this report clearly labels that content as <strong>plausible reconstruction</strong>, not confirmed fact. It is written as a <strong>training and reference document</strong>.</p>
+<p><strong>This engagement scope has been deliberately adapted</strong> from the ICS/PLC/USB-worm template it was generated against. Adobe in 2013 was a software/SaaS company with no industrial control environment. ICS, PLC, and USB-propagation sections are marked <strong>N/A - Not Applicable to this Environment</strong> rather than fabricated, and "Engineering Workstations" is correctly interpreted as <strong>software engineering developer workstations with source-control access</strong>, not ICS engineering stations.</p>
+</blockquote>
+<hr />
+<h2 id="1-threat-intelligence-summary">1. Threat Intelligence Summary</h2>
+<h3 id="background">Background</h3>
+<p>Beginning no later than mid-August 2013 (Adobe's own estimate) and possibly earlier per Hold Security's analysis, an intrusion into Adobe's network resulted in exfiltration of source code for several flagship products and a very large volume of customer account data. Adobe identified the incident internally on September 17, 2013, and publicly disclosed it on October 3, 2013 - after being alerted by independent researchers, not through its own detection.</p>
+<h3 id="threat-actor">Threat Actor</h3>
+<p>Not formally, publicly attributed to a named individual or group by Adobe or by U.S. law enforcement in the way the LinkedIn/Formspring intrusions were attributed to Nikulin. Krebs and Holden linked the infrastructure hosting the stolen Adobe data to <strong>the same criminal group</strong> responsible for earlier-2013 breaches of large commercial data aggregators (LexisNexis, Dun &amp; Bradstreet, Kroll Background America) and of the NW3C. This group's known, confirmed MO in the NW3C intrusion was exploitation of <strong>unpatched Adobe ColdFusion vulnerabilities</strong>.</p>
+<h3 id="campaign">Campaign</h3>
+<p>The group appears to have run a sustained campaign through 2013 against organizations running outdated, internet-facing ColdFusion instances, using that access as a foothold to move toward higher-value internal systems (source code, customer databases) - a pattern consistent with, though not proven identical to, what happened inside Adobe.</p>
+<h3 id="objectives">Objectives</h3>
+<p>Primarily data theft for resale/exploitation value: customer credential and payment data has direct criminal monetization value; proprietary source code has value both for further vulnerability research (to enable follow-on attacks against Adobe's own customers) and potential resale.</p>
+<h3 id="initial-intelligence">Initial Intelligence</h3>
+<p>For this simulated hunt, the SOC's trigger is a <strong>generic threat intelligence advisory</strong> received mid-2013 warning that <strong>a criminal group was actively compromising organizations via unpatched, internet-facing ColdFusion servers</strong>, and using that access to pivot toward source-control and internal data systems at software companies and data aggregators. This is consistent with the kind of non-Adobe-specific, TTP-level warning a hunt team plausibly could have received months before Adobe's own disclosure.</p>
+<h3 id="known-ttps-at-the-time">Known TTPs at the Time</h3>
+<ul>
+<li>Exploitation of known, unpatched ColdFusion vulnerabilities (e.g., authentication bypass / arbitrary file upload classes of bugs prevalent in ColdFusion advisories from 2013) against internet-facing application servers</li>
+<li>Use of that foothold to pivot toward adjacent internal networks, including payment-processing-adjacent segments and source-control systems</li>
+<li>Long-dwell, quiet data staging (weeks to months) prior to bulk exfiltration</li>
+<li>Storage of stolen data on shared "trophy" infrastructure reused across multiple victim organizations - itself a detection opportunity if that infrastructure is later identified</li>
+</ul>
+<h3 id="confidence">Confidence</h3>
+<p><strong>Moderate.</strong> High confidence in the general shape (internet-facing application-server compromise → internal pivot → source code and customer data theft) based on Adobe's own statements and independent researcher findings; <strong>low confidence</strong> in the exact internal lateral-movement path and persistence mechanisms, since Adobe never published a full DFIR timeline and explicitly said it could not confirm or rule out ColdFusion as the entry vector.</p>
+<h3 id="intelligence-sources">Intelligence Sources</h3>
+<ul>
+<li>Adobe corporate blog posts and customer notifications, October 2013</li>
+<li>Brian Krebs (KrebsOnSecurity) reporting, October 2013, in coordination with Alex Holden / Hold Security LLC</li>
+<li>Contemporary trade press (Dark Reading, InformationWeek, Christian Science Monitor), October 2013</li>
+<li>Simulated sector threat advisory (hunt trigger)</li>
+</ul>
+<h3 id="attck-overview-campaign-level">ATT&amp;CK Overview (Campaign-Level)</h3>
+<table>
+<thead>
+<tr>
+<th>Tactic</th>
+<th>Representative Technique</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Initial Access</td>
+<td>T1190 Exploit Public-Facing Application (candidate: ColdFusion)</td>
+</tr>
+<tr>
+<td>Execution</td>
+<td>T1059 Command and Scripting Interpreter</td>
+</tr>
+<tr>
+<td>Persistence</td>
+<td>T1505.003 Web Shell (common with ColdFusion exploitation of this era)</td>
+</tr>
+<tr>
+<td>Privilege Escalation</td>
+<td>T1068 Exploitation for Privilege Escalation (hypothesized)</td>
+</tr>
+<tr>
+<td>Credential Access</td>
+<td>T1552 Unsecured Credentials, T1555 Credentials from Password Stores (hypothesized)</td>
+</tr>
+<tr>
+<td>Lateral Movement</td>
+<td>T1021 Remote Services</td>
+</tr>
+<tr>
+<td>Collection</td>
+<td>T1005 Data from Local System, T1213 Data from Information Repositories (source control)</td>
+</tr>
+<tr>
+<td>Exfiltration</td>
+<td>T1041 Exfiltration Over C2 Channel, T1567 Exfiltration Over Web Service</td>
+</tr>
+</tbody>
+</table>
+<h3 id="diamond-model">Diamond Model</h3>
+<p><img width="50%" alt="Diamond Model" src="https://github.com/user-attachments/assets/26d48e8f-7c80-448f-a20d-a7af059a0999" /></p>
+<h3 id="cyber-kill-chain-campaign-level">Cyber Kill Chain (Campaign-Level)</h3>
+<table>
+<thead>
+<tr>
+<th>Stage</th>
+<th>Activity (Reconstructed)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Reconnaissance</td>
+<td>Scanning for internet-facing ColdFusion instances, consistent with group's known pattern against NW3C</td>
+</tr>
+<tr>
+<td>Weaponization</td>
+<td>Preparation of exploit for known ColdFusion vulnerability class + web shell payload</td>
+</tr>
+<tr>
+<td>Delivery</td>
+<td>Direct exploitation of a public-facing application server (no user interaction required)</td>
+</tr>
+<tr>
+<td>Exploitation</td>
+<td>Successful exploit against unpatched ColdFusion instance</td>
+</tr>
+<tr>
+<td>Installation</td>
+<td>Web shell/backdoor placed on the compromised application server</td>
+</tr>
+<tr>
+<td>Command &amp; Control</td>
+<td>Interactive access via web shell; possible secondary backdoor for persistence</td>
+</tr>
+<tr>
+<td>Actions on Objectives</td>
+<td>Pivot toward source-control systems and customer/payment-adjacent database infrastructure; bulk staging and exfiltration of source code and customer records</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="2-hunt-objective">2. Hunt Objective</h2>
+<p><strong>Mission:</strong> Proactively determine whether Adobe's internet-facing application infrastructure - specifically any ColdFusion-based systems - has been compromised and used as a pivot point toward source-control systems and customer data stores, in response to a sector-level advisory about active ColdFusion exploitation campaigns.</p>
+<p><strong>Expected Outcome:</strong> Either (a) validate the hypothesis with concrete evidence of compromise and characterize scope across source code and customer data exposure, or (b) formally document a negative finding with residual confidence and monitoring recommendations.</p>
+<p><strong>Success Criteria:</strong>
+- Identification of any compromised internet-facing ColdFusion host
+- Reconstruction of any lateral movement path from that host toward source control and customer databases
+- Determination of whether source code repositories and/or the customer credential/payment store were accessed or exfiltrated
+- Actionable IOCs and at least one deployable detection per confirmed technique</p>
+<p><strong>Business Impact:</strong> Compromise of source code directly threatens every customer running Adobe software (increased zero-day risk against the installed base), while compromise of the customer data store affects tens of millions of account holders' credentials and payment data - both categories represent maximal reputational, legal, and regulatory exposure.</p>
+<hr />
+<h2 id="3-hunt-scope">3. Hunt Scope</h2>
+<h3 id="in-scope-assets">In-Scope Assets</h3>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Internet-Facing Application Servers</td>
+<td>Public web/application tier, including any ColdFusion-based services</td>
+</tr>
+<tr>
+<td>Source Control Systems</td>
+<td>Repositories hosting Acrobat, Reader, ColdFusion, ColdFusion Builder, and Photoshop source</td>
+</tr>
+<tr>
+<td>Engineering Workstations</td>
+<td>Software developer/engineer endpoints with source-control and build-system access</td>
+</tr>
+<tr>
+<td>Payment Processing-Adjacent Systems</td>
+<td>Systems handling or adjacent to encrypted credit/debit card transaction data</td>
+</tr>
+<tr>
+<td>Customer Database Tier</td>
+<td>Systems storing Adobe ID, encrypted password, and password-hint data</td>
+</tr>
+<tr>
+<td>Domain Controllers / Directory Services</td>
+<td>Corporate identity infrastructure</td>
+</tr>
+<tr>
+<td>Corporate Windows/Unix Fleet</td>
+<td>General corporate endpoints and server estate</td>
+</tr>
+<tr>
+<td>Windows Versions</td>
+<td>Windows 7 / Windows Server 2008 R2 / 2012 (era-appropriate)</td>
+</tr>
+<tr>
+<td>Network Segments</td>
+<td>DMZ/application tier, corporate/engineering LAN, source-control VLAN, payment-adjacent VLAN</td>
+</tr>
+<tr>
+<td>Time Range</td>
+<td>June 1, 2013 – October 3, 2013 (advisory receipt through public disclosure)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="out-of-scope-not-applicable-to-this-environment">Out of Scope / Not Applicable to This Environment</h3>
+<blockquote>
+<p><strong>N/A - Not Applicable.</strong> The original hunt template referenced ICS assets, PLC systems, industrial engineering workstations, and USB-borne worm propagation. Adobe in 2013 was a commercial software/SaaS company with no industrial control systems, PLCs, or OT network. Those asset classes, and any USB-autorun-worm hypothesis, are explicitly <strong>excluded from scope</strong>. "Engineering Workstations" in this report refers to <strong>software developer endpoints</strong>, consistent with Adobe's actual business.</p>
+</blockquote>
+<h3 id="excluded-systems">Excluded Systems</h3>
+<ul>
+<li>Marketing/CDN infrastructure with no path to source control or the customer database</li>
+<li>Third-party SaaS vendors not integrated with payment or credential systems</li>
+<li>Physical badge/facility access systems</li>
+</ul>
+<hr />
+<h2 id="4-hunt-assumptions">4. Hunt Assumptions</h2>
+<ul>
+<li>The adversary may already be inside the environment; initial compromise is not yet confirmed at hunt start.</li>
+<li>Initial access vector is unconfirmed at hunt start - leading hypothesis is exploitation of an internet-facing ColdFusion instance, given the group's confirmed MO against NW3C, but Adobe itself could not confirm or rule this out even after its own investigation, so the hunt treats this as a strong-but-unproven lead, not a certainty.</li>
+<li>Malware/web-shell persistence mechanism on any compromised host is unknown at hunt start.</li>
+<li>Lateral movement from the application tier toward source control and/or the customer database is suspected but unconfirmed.</li>
+<li>No indication of insider involvement; hunt does not assume malicious insider unless evidence emerges.</li>
+<li>USB/removable-media propagation and ICS involvement are <strong>not assumed relevant</strong> (see Section 3).</li>
+<li>The organization has centralized logging with meaningful retention for security-relevant sources (a plausible but generous assumption for the era, stated explicitly).</li>
+</ul>
+<hr />
+<h2 id="5-threat-hunting-hypotheses">5. Threat Hunting Hypotheses</h2>
+<h3 id="hyp-001-exploitation-of-internet-facing-coldfusion-instance">HYP-001 - Exploitation of Internet-Facing ColdFusion Instance</h3>
+<p><strong>Statement:</strong> If the adversary gained initial access by exploiting an unpatched ColdFusion vulnerability, then web server access/error logs for internet-facing ColdFusion hosts should show requests matching known 2013 ColdFusion exploit patterns (e.g., requests to administrative or file-upload endpoints from external IPs), followed by creation of new, unexpected files in the web root consistent with a web shell.</p>
+<p><strong>Why created:</strong> Matches the confirmed MO used by the same actor group against NW3C, and Adobe's own statement that it could not exclude ColdFusion as the entry vector.</p>
+<p><strong>Priority:</strong> Critical
+<strong>MITRE ATT&amp;CK Mapping:</strong> T1190 (Exploit Public-Facing Application), T1505.003 (Web Shell)
+<strong>Expected Evidence:</strong> Exploit-pattern HTTP requests in access logs; new/unexpected file creation in web-accessible directories; anomalous outbound connections from the application server shortly after
+<strong>Data Required:</strong> Web server access/error logs, host file-integrity data, firewall/proxy logs
+<strong>Validation Method:</strong> Signature/pattern match against known 2013 ColdFusion exploit request paths, correlated with file-system change events on the same host
+<strong>Confidence:</strong> Medium-High at creation
+<strong>Status:</strong> Supported (see Section 11)</p>
+<h3 id="hyp-002-web-shell-persistence-and-internal-pivoting">HYP-002 - Web Shell Persistence and Internal Pivoting</h3>
+<p><strong>Statement:</strong> If a web shell was installed on a compromised application server, then that host should show interactive, script-driven command execution inconsistent with normal application behavior, followed by outbound authenticated connections to internal systems (source control, database hosts) that the application server does not normally initiate connections to.</p>
+<p><strong>Priority:</strong> Critical
+<strong>MITRE ATT&amp;CK Mapping:</strong> T1505.003 (Web Shell), T1021 (Remote Services)
+<strong>Expected Evidence:</strong> Unusual parent-child process chains on the web server (e.g., the ColdFusion service process spawning a command shell); new outbound internal connections from that host to source-control or database segments
+<strong>Data Required:</strong> Host process/event logs (where available), internal firewall/NetFlow logs, source-control access logs
+<strong>Validation Method:</strong> Baseline the application server's normal internal connection graph; flag new destination hosts
+<strong>Confidence:</strong> Medium at creation
+<strong>Status:</strong> Supported (see Section 11)</p>
+<h3 id="hyp-003-access-to-source-code-repository">HYP-003 - Access to Source Code Repository</h3>
+<p><strong>Statement:</strong> If the adversary reached source-control systems, then source-control access logs should show bulk clone/checkout/export operations for Acrobat, Reader, ColdFusion, ColdFusion Builder, or Photoshop repositories from an account or host inconsistent with that repository's normal access pattern (e.g., a service account or an unrelated team's credentials).</p>
+<p><strong>Priority:</strong> Critical
+<strong>MITRE ATT&amp;CK Mapping:</strong> T1213 (Data from Information Repositories)
+<strong>Expected Evidence:</strong> Large repository export/clone events outside normal build/CI patterns; access from a host not previously associated with that repository
+<strong>Data Required:</strong> Source-control (SCM) audit logs, build-system logs
+<strong>Validation Method:</strong> Volumetric/behavioral baselining of repository access per account/host
+<strong>Confidence:</strong> Medium-High at creation
+<strong>Status:</strong> Supported (see Section 11)</p>
+<h3 id="hyp-004-access-to-payment-adjacent-environment-and-customer-credential-store">HYP-004 - Access to Payment-Adjacent Environment and Customer Credential Store</h3>
+<p><strong>Statement:</strong> If the adversary's access extended into systems adjacent to credit card transaction processing, then network/authentication logs for the payment-adjacent segment should show connections or authentications originating from the compromised application server or its pivot hosts, and database logs for the customer credential store (Adobe ID, encrypted password, password hint) should show anomalous bulk query activity.</p>
+<p><strong>Priority:</strong> Critical
+<strong>MITRE ATT&amp;CK Mapping:</strong> T1210 (Exploitation of Remote Services, if lateral pivot used a service vulnerability), T1213 (Data from Information Repositories)
+<strong>Expected Evidence:</strong> New network flows from the application tier into the payment-adjacent VLAN; anomalous large-row-count queries against the customer credential table
+<strong>Data Required:</strong> Internal NetFlow/firewall logs between network zones, database query/audit logs (if enabled)
+<strong>Validation Method:</strong> Cross-zone connection-graph analysis; volumetric query baselining
+<strong>Confidence:</strong> Medium at creation
+<strong>Status:</strong> Partially Supported - direct database audit evidence unavailable, supported only indirectly (see Section 22, Detection Gaps)</p>
+<h3 id="hyp-005-staged-long-dwell-exfiltration-to-shared-actor-infrastructure">HYP-005 - Staged, Long-Dwell Exfiltration to Shared Actor Infrastructure</h3>
+<p><strong>Statement:</strong> If stolen source code and customer data were exfiltrated over an extended period, then proxy/firewall logs should show large or repeated outbound transfers from the compromised hosts to a small number of external destinations over multiple weeks, consistent with staged exfiltration rather than a single smash-and-grab transfer.</p>
+<p><strong>Priority:</strong> High
+<strong>MITRE ATT&amp;CK Mapping:</strong> T1041 (Exfiltration Over C2 Channel), T1567 (Exfiltration Over Web Service)
+<strong>Expected Evidence:</strong> Recurring, growing-volume outbound transfers to one or a small set of external IPs over a multi-week window
+<strong>Data Required:</strong> Proxy logs, firewall logs, NetFlow
+<strong>Validation Method:</strong> Time-series volumetric analysis per destination
+<strong>Confidence:</strong> Medium at creation
+<strong>Status:</strong> Supported (see Section 11)</p>
+<hr />
+<h2 id="6-environment-overview">6. Environment Overview</h2>
+<h3 id="architecture-simplified-era-appropriate">Architecture (Simplified, Era-Appropriate)</h3>
+<div class="highlight"><pre><span></span><code>graph TD
+    Internet((Internet)) --&gt; DMZ[DMZ / Internet-Facing App Tier incl. ColdFusion]
+    DMZ --&gt; Internal[Internal Corporate/Engineering LAN]
+    Internal --&gt; SCM[(Source Control - Acrobat, ColdFusion, Photoshop repos)]
+    Internal --&gt; PayAdj[Payment-Adjacent Segment]
+    PayAdj --&gt; CustDB[(Customer DB - Adobe ID, encrypted password, hints)]
+    Internal --&gt; AD[(Active Directory / Identity)]
+    Internal --&gt; EngWS[Developer Workstations]
+    EngWS --&gt; SCM
+</code></pre></div>
+<h3 id="ad-layout">AD Layout</h3>
+<p>Single primary corporate identity environment; engineering/product teams organized by product line (Acrobat, ColdFusion, Creative Suite/Photoshop, etc.), each with access scoped - nominally - to their own repositories, though cross-team access existed for shared build infrastructure.</p>
+<h3 id="network-zones">Network Zones</h3>
+<ul>
+<li><strong>DMZ / Internet-facing application tier</strong> - includes ColdFusion-based services</li>
+<li><strong>Corporate/Engineering LAN</strong> - developer workstations, internal tooling</li>
+<li><strong>Source-Control VLAN</strong> - SCM systems</li>
+<li><strong>Payment-Adjacent Segment</strong> - systems near, though not necessarily fully isolated from, credit card transaction processing</li>
+<li><strong>Customer Database Tier</strong> - Adobe ID/credential/payment-adjacent data stores</li>
+</ul>
+<h3 id="ics-network">ICS Network</h3>
+<p><strong>N/A - Not Applicable to this environment</strong> (see Section 3).</p>
+<h3 id="trust-relationships">Trust Relationships</h3>
+<p>The DMZ application tier had a broader-than-ideal trust relationship into internal segments for operational/support purposes; developer workstations had standing access to source control without strong per-session auditing; the boundary between the payment-adjacent segment and the broader internal network was not fully isolated, consistent with Adobe's own later characterization that "product engineering was totally separate from IT security" in the old model, and that this separation "didn't really hold anymore" as the company moved toward SaaS delivery.</p>
+<h3 id="logging-infrastructure">Logging Infrastructure</h3>
+<p>Centralized web server access logs for the DMZ tier; SCM audit logging present but not tuned for anomaly detection; limited to no database query-level audit logging on the customer credential store; internal NetFlow coverage inconsistent across zone boundaries.</p>
+<h3 id="security-controls">Security Controls</h3>
+<p>Perimeter firewall/WAF, patch management program that - per public reporting - had not been fully applied to all internet-facing ColdFusion instances at the time of compromise, basic IDS at the perimeter.</p>
+<h3 id="existing-detections">Existing Detections</h3>
+<p>Signature-based WAF/IDS rules for known exploit patterns (imperfect coverage - the group's later-disclosed techniques evidently were not fully caught), basic SCM access logging without behavioral alerting.</p>
+<h3 id="detection-gaps-preview-full-detail-in-section-22">Detection Gaps (Preview - full detail in Section 22)</h3>
+<p>No fleet-wide file-integrity monitoring on the DMZ application tier, no database audit logging on the customer credential store, weak cross-zone NetFlow visibility, no SCM behavioral/volumetric anomaly detection, unclear ColdFusion patch compliance visibility.</p>
+<hr />
+<h2 id="7-available-data-sources">7. Available Data Sources</h2>
+<table>
+<thead>
+<tr>
+<th>Source</th>
+<th>Purpose</th>
+<th>Retention</th>
+<th>Quality</th>
+<th>Coverage</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Web Server Access/Error Logs (DMZ)</td>
+<td>Requests to internet-facing app tier incl. ColdFusion</td>
+<td>60–90 days</td>
+<td>Medium-High</td>
+<td>Full for the DMZ tier</td>
+</tr>
+<tr>
+<td>WAF/IDS Logs</td>
+<td>Signature-based exploit attempt detection</td>
+<td>60 days</td>
+<td>Medium</td>
+<td>Signature-limited</td>
+</tr>
+<tr>
+<td>File Integrity Data</td>
+<td>Detect new/changed files in web roots</td>
+<td><strong>Not deployed fleet-wide</strong></td>
+<td>N/A</td>
+<td><strong>Gap</strong></td>
+</tr>
+<tr>
+<td>SCM (Source Control) Audit Logs</td>
+<td>Repository access, clone/checkout events</td>
+<td>90+ days</td>
+<td>Medium</td>
+<td>Full for logged operations, weak on behavioral tuning</td>
+</tr>
+<tr>
+<td>Firewall Logs</td>
+<td>Perimeter and inter-zone allow/deny</td>
+<td>90 days</td>
+<td>Medium</td>
+<td>Full at perimeter; partial inter-zone</td>
+</tr>
+<tr>
+<td>Proxy Logs</td>
+<td>Outbound web traffic, bytes transferred</td>
+<td>60 days</td>
+<td>Medium-High</td>
+<td>Full for proxied traffic</td>
+</tr>
+<tr>
+<td>DNS Logs</td>
+<td>Resolution requests</td>
+<td>30 days</td>
+<td>Medium</td>
+<td>Full for internal resolvers</td>
+</tr>
+<tr>
+<td>NetFlow</td>
+<td>Traffic volume/metadata between zones</td>
+<td>45 days</td>
+<td>Medium</td>
+<td>Partial - payment-adjacent segment flow logging limited</td>
+</tr>
+<tr>
+<td>Active Directory / Auth Logs</td>
+<td>Domain authentication</td>
+<td>90 days</td>
+<td>High</td>
+<td>Full for domain-joined systems</td>
+</tr>
+<tr>
+<td>Database Audit Logs (Customer Credential Store)</td>
+<td>Query-level auditing</td>
+<td><strong>Not enabled</strong></td>
+<td>N/A</td>
+<td><strong>Gap</strong></td>
+</tr>
+<tr>
+<td>Payment-Adjacent Segment Logs</td>
+<td>Access/authentication near card-processing systems</td>
+<td>Partial</td>
+<td>Low-Medium</td>
+<td><strong>Gap</strong> - limited dedicated monitoring</td>
+</tr>
+<tr>
+<td>Email/Gateway Logs</td>
+<td>Inbound phishing detection (secondary vector)</td>
+<td>30 days</td>
+<td>Low-Medium</td>
+<td>Partial</td>
+</tr>
+<tr>
+<td>Windows/Unix Host Event Logs</td>
+<td>Process/logon activity on engineering and server fleet</td>
+<td>30 days (local, mostly)</td>
+<td>Low-Medium</td>
+<td>Partial - no fleet-wide central collection</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Note on era accuracy:</strong> Centralized EDR and fleet-wide file-integrity monitoring were not yet standard in most 2013 enterprises. This hunt reflects <strong>what a realistic 2013 SOC actually had</strong>, while Section 22 notes what <em>should</em> have existed.</p>
+</blockquote>
+<hr />
+<h2 id="8-hunt-methodology">8. Hunt Methodology</h2>
+<ul>
+<li><strong>Intelligence-driven hunting:</strong> Started from the (simulated) sector advisory about active ColdFusion exploitation campaigns - not from Adobe-specific IOCs, which did not yet exist.</li>
+<li><strong>Hypothesis-driven hunting:</strong> Formalized into HYP-001 through HYP-005, each independently tested.</li>
+<li><strong>IOC hunting:</strong> Limited value at hunt start; became more useful once the connection to the NW3C/data-aggregator group's known infrastructure patterns was considered.</li>
+<li><strong>Behavior hunting:</strong> Primary method - anomalous SCM access patterns, anomalous cross-zone connections, anomalous outbound volume.</li>
+<li><strong>Analytics-driven hunting:</strong> Volumetric baselining of SCM export size and outbound transfer size.</li>
+<li><strong>Anomaly hunting:</strong> Cross-zone connection-graph analysis (DMZ → internal → payment-adjacent → customer DB).</li>
+<li><strong>Iterative hunting:</strong> Findings from HYP-001 (compromised ColdFusion host) directly scoped which host to pivot on for HYP-002 through HYP-005.</li>
+</ul>
+<hr />
+<h2 id="9-hunt-execution-timeline">9. Hunt Execution Timeline</h2>
+<table>
+<thead>
+<tr>
+<th>Step</th>
+<th>Action</th>
+<th>Reason</th>
+<th>Evidence</th>
+<th>Decision</th>
+<th>Next Step</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Reviewed sector advisory on ColdFusion exploitation campaign</td>
+<td>Trigger for hunt</td>
+<td>Advisory text</td>
+<td>Open formal hunt, draft hypotheses</td>
+<td>Identify all internet-facing ColdFusion instances</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Inventoried internet-facing ColdFusion hosts and patch levels</td>
+<td>Scope HYP-001</td>
+<td>Asset inventory</td>
+<td>Found at least one instance behind current patch baseline</td>
+<td>Pull access logs for that host</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Reviewed access/error logs for the unpatched host (HYP-001)</td>
+<td>Test exploitation hypothesis</td>
+<td>Requests matching known 2013 ColdFusion exploit request patterns from an external IP, in early-to-mid August</td>
+<td>Escalate to file-integrity/host review</td>
+<td>Check for new files in web root</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Manual file-system review of the host</td>
+<td>Confirm web shell placement</td>
+<td>New, unexpected script file in a web-accessible directory, timestamped shortly after the exploit-pattern requests</td>
+<td>Confirms likely web shell (HYP-002)</td>
+<td>Check outbound/internal connections from this host</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Reviewed internal firewall/NetFlow logs from that host (HYP-002)</td>
+<td>Check for internal pivoting</td>
+<td>New internal connections from the DMZ host to a source-control-adjacent internal host, not previously observed</td>
+<td>Escalate priority; hypothesis strengthened</td>
+<td>Review SCM access logs</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Reviewed SCM audit logs (HYP-003)</td>
+<td>Check for repository access</td>
+<td>Bulk clone/export events against Acrobat and ColdFusion repositories from an account/host combination inconsistent with normal build patterns</td>
+<td>Confirms likely source-code theft</td>
+<td>Check for payment-adjacent/customer-DB access</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Reviewed inter-zone NetFlow toward payment-adjacent segment and customer DB tier (HYP-004)</td>
+<td>Check for reach into highest-value data</td>
+<td>Some cross-zone flow anomalies observed; <strong>no database audit log available</strong> to confirm direct query-level access</td>
+<td>Document as confirmed Detection Gap; treat as partially supported</td>
+<td>Review outbound transfer patterns</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Reviewed proxy/firewall logs for outbound volume from the compromised DMZ host and pivot hosts (HYP-005)</td>
+<td>Confirm staged exfiltration</td>
+<td>Recurring outbound transfers over several weeks to a small set of external IPs, increasing in size over time</td>
+<td>Supports HYP-005</td>
+<td>Compile findings, move to containment/IR handoff</td>
+</tr>
+<tr>
+<td>9</td>
+<td>Cross-referenced exfiltration timing with SCM bulk-export timestamps</td>
+<td>Tie exfiltration to source code theft specifically</td>
+<td>Outbound volume increases align temporally with SCM export events</td>
+<td>Chain of custody established across HYP-001 → HYP-005</td>
+<td>Finalize report</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="10-log-sources-collected">10. Log Sources Collected</h2>
+<p><strong>How collected:</strong> Web server access/error logs and WAF/IDS logs pulled from centralized collection for the DMZ tier; SCM audit logs pulled from the source-control platform's own logging; internal firewall/NetFlow pulled from network security monitoring; host-level file-system review performed manually on the specific triaged DMZ host (no fleet-wide file-integrity monitoring existed).</p>
+<p><strong>Normalization:</strong> Timestamps normalized to UTC; hostnames enriched against asset inventory; external IPs enriched with ASN/geo data.</p>
+<p><strong>Parsing:</strong> Custom extraction for web server log formats and SCM-native audit formats (no universal schema adopted across all these disparate 2013-era tools).</p>
+<p><strong>Quality issues:</strong> No file-integrity baseline existed prior to the hunt, so "new" files on the DMZ host had to be identified by manual timestamp/hash comparison against a reconstructed known-good baseline from configuration management records, not a purpose-built FIM tool.</p>
+<p><strong>Coverage:</strong> Strong for the DMZ/application tier and SCM layer. Weak for the payment-adjacent segment and customer database layer - the two most sensitive systems in scope had the thinnest logging.</p>
+<p><strong>Missing logs:</strong> Database audit logs on the customer credential store, comprehensive payment-adjacent segment monitoring, fleet-wide file-integrity monitoring, fleet-wide endpoint process telemetry.</p>
+<hr />
+<h2 id="11-detailed-log-analysis">11. Detailed Log Analysis</h2>
+<h3 id="111-web-server-accesserror-logs-dmz-coldfusion-host">11.1 Web Server Access/Error Logs (DMZ ColdFusion Host)</h3>
+<p><strong>Purpose:</strong> Establish whether initial access occurred via exploitation of the internet-facing ColdFusion instance (HYP-001).
+<strong>Fields analyzed:</strong> <code>timestamp</code>, <code>source_ip</code>, <code>request_path</code>, <code>http_method</code>, <code>status_code</code>, <code>user_agent</code>.
+<strong>Sample entry:</strong>
+<div class="highlight"><pre><span></span><code>2013-08-09T03:14:52Z src_ip=203.0.113.77 GET /CFIDE/administrator/ HTTP/1.1
+2013-08-09T03:15:10Z src_ip=203.0.113.77 POST /CFIDE/scripts/ajax/... HTTP/1.1 status=200
+</code></pre></div>
+<strong>Indicators searched:</strong> Requests to known-sensitive ColdFusion administrative paths from external IPs; successful (200/302) responses to those requests, indicating the requests were not simply blocked.
+<strong>Analysis performed:</strong> Compared request patterns against public 2013-era ColdFusion vulnerability advisories describing administrative-access-bypass and arbitrary-file-upload issues.
+<strong>Findings:</strong> A short burst of requests to administrative endpoints from a single external IP on August 9, followed by successful status codes rather than the expected 403/401 pattern - consistent with a successful exploitation attempt against an unpatched instance.
+<strong>False positives considered:</strong> Legitimate vulnerability-scanning traffic (internal or authorized third-party) - checked against the organization's own scanning schedule; no match.
+<strong>Interpretation:</strong> Strong support for HYP-001. This is consistent with Adobe's own public statement that it could not confirm or exclude ColdFusion as the entry vector, and with the same actor group's confirmed use of ColdFusion exploitation against NW3C.
+<strong>Confidence:</strong> Raised from Medium-High to High.</p>
+<h3 id="112-host-file-system-review-web-shell">11.2 Host File-System Review (Web Shell)</h3>
+<p><strong>Purpose:</strong> Confirm persistence mechanism on the compromised DMZ host (HYP-002).
+<strong>Fields analyzed:</strong> File creation timestamps, file paths within the web-accessible directory tree, file content hashes vs. known-good baseline.
+<strong>Sample finding:</strong>
+<div class="highlight"><pre><span></span><code>Path: /cf_webroot/scripts/util/_diag.cfm
+Created: 2013-08-09 03:16:41 UTC (2 minutes after the exploit-pattern requests in 11.1)
+Not present in configuration-management baseline for this host.
+</code></pre></div>
+<strong>Indicators searched:</strong> New, unbaselined files in web-accessible paths, particularly with generic/innocuous-sounding names.
+<strong>Analysis performed:</strong> Manual diff against the last known-good configuration snapshot.
+<strong>Findings:</strong> A single new <code>.cfm</code> file appeared in a web-accessible utility directory two minutes after the exploit-pattern requests - consistent with a web shell dropped via the exploited vulnerability.
+<strong>False positives:</strong> Checked against recent legitimate deployments/change tickets for this host - no matching change record.
+<strong>Interpretation:</strong> Strong support for HYP-002 - persistence established immediately following exploitation.
+<strong>Confidence:</strong> High.</p>
+<h3 id="113-internal-firewall-netflow-lateral-pivot">11.3 Internal Firewall / NetFlow (Lateral Pivot)</h3>
+<p><strong>Purpose:</strong> Determine whether the compromised DMZ host reached source-control or payment-adjacent internal systems (HYP-002, HYP-004).
+<strong>Fields analyzed:</strong> <code>src_host</code>, <code>dst_host</code>, <code>dst_port</code>, <code>bytes</code>, <code>connection_count</code>, <code>first_seen</code>.
+<strong>Sample entry:</strong>
+<div class="highlight"><pre><span></span><code>2013-08-11T22:03:00Z src=dmz-cf-03 dst=scm-internal-02:443 first_seen=true
+2013-08-19T01:47:00Z src=dmz-cf-03 dst=payadj-gw-01:8443 first_seen=true
+</code></pre></div>
+<strong>Indicators searched:</strong> New (<code>first_seen</code>) internal connections from the DMZ host to internal segments it had no prior history of contacting.
+<strong>Analysis performed:</strong> Built a 90-day connection-history baseline for <code>dmz-cf-03</code> prior to August 9; flagged any post-compromise destination not in that baseline.
+<strong>Findings:</strong> Two new internal destinations appeared after the compromise date: an SCM-adjacent host on August 11, and a payment-adjacent gateway on August 19. Both are <code>first_seen</code> for this host in the available flow history.
+<strong>False positives:</strong> Considered legitimate infrastructure changes/new authorized integrations - checked against (simulated) change-management records; no corresponding authorized change found for either new connection.
+<strong>Interpretation:</strong> Supports HYP-002 (internal pivot confirmed) and provides the strongest available evidence for HYP-004 (reach toward the payment-adjacent segment), though this is network-flow evidence only, not proof of successful data access at the payment-adjacent host itself.
+<strong>Confidence:</strong> High for pivot occurring; Medium for confirming what, if anything, was accessed at the payment-adjacent destination (see 11.5 gap).</p>
+<h3 id="114-source-control-scm-audit-logs">11.4 Source Control (SCM) Audit Logs</h3>
+<p><strong>Purpose:</strong> Confirm access to and export of product source code repositories (HYP-003).
+<strong>Fields analyzed:</strong> <code>account</code>, <code>source_host</code>, <code>repository</code>, <code>operation</code>, <code>object_count</code>, <code>timestamp</code>.
+<strong>Sample entry:</strong>
+<div class="highlight"><pre><span></span><code>2013-08-12T02:20:11Z account=svc-build-legacy source_host=scm-internal-02
+repository=acrobat-core operation=full_export object_count=48213
+2013-08-13T04:05:58Z account=svc-build-legacy source_host=scm-internal-02
+repository=coldfusion-core operation=full_export object_count=31006
+</code></pre></div>
+<strong>Indicators searched:</strong> Full-repository export/clone operations outside the normal, incremental CI/build access pattern; access from a host or account combination not typical for that repository.
+<strong>Analysis performed:</strong> Compared against the normal build-system access pattern for these repositories (typically small, incremental checkouts tied to build jobs, not full exports).
+<strong>Findings:</strong> Two full-repository export operations against the Acrobat and ColdFusion core repositories, both originating from <code>scm-internal-02</code> - the same host identified as a pivot destination in 11.3 - under a legacy build service account not associated with either product team's normal CI pipeline.
+<strong>False positives:</strong> Checked against scheduled maintenance/migration activity - no corresponding change record for a legitimate full export during this window.
+<strong>Interpretation:</strong> Strong, near-direct evidence supporting HYP-003. This is one of the clearest findings in the hunt: an unexpected account, on the pivot host identified via network evidence, performing exactly the kind of bulk operation the hypothesis predicted.
+<strong>Confidence:</strong> High.</p>
+<h3 id="115-payment-adjacent-segment-customer-database-logs">11.5 Payment-Adjacent Segment / Customer Database Logs</h3>
+<p><strong>Purpose:</strong> Directly confirm access to the customer credential/payment-adjacent data store (HYP-004).
+<strong>Findings:</strong> <strong>No database query-level audit logging existed</strong> on the customer credential store, and payment-adjacent segment monitoring was limited to basic connection logging (already captured in 11.3) without content-level visibility.
+<strong>Interpretation:</strong> HYP-004 cannot be directly validated at the data-access level; the hunt team must rely on the network-flow evidence in 11.3 as circumstantial support, consistent with what was later publicly confirmed (that customer ID/password/payment data was in fact stolen), but this hunt - operating without that hindsight - can only flag it as a strong, unconfirmed lead at the time.
+<strong>Confidence:</strong> Medium (indirect only). <strong>Formally logged as a Detection Gap - Section 22.</strong></p>
+<h3 id="116-proxy-firewall-logs-staged-exfiltration">11.6 Proxy / Firewall Logs (Staged Exfiltration)</h3>
+<p><strong>Purpose:</strong> Confirm staged, long-dwell exfiltration (HYP-005).
+<strong>Fields analyzed:</strong> <code>dest_ip</code>, <code>bytes_out</code>, <code>timestamp</code>, <code>dest_asn</code>.
+<strong>Sample entry:</strong>
+<div class="highlight"><pre><span></span><code>2013-08-13  dst=198.51.100.9  bytes_out=6.2GB
+2013-08-21  dst=198.51.100.9  bytes_out=11.4GB
+2013-09-02  dst=198.51.100.9  bytes_out=18.9GB
+</code></pre></div>
+<strong>Indicators searched:</strong> Repeated large outbound transfers to a small, consistent set of external destinations over an extended window.
+<strong>Analysis performed:</strong> Time-series volumetric analysis per destination IP from <code>scm-internal-02</code> and <code>dmz-cf-03</code>.
+<strong>Findings:</strong> Three large, growing-volume outbound transfers to the same external destination over roughly three weeks in August–September, temporally consistent with the SCM export events in 11.4 (source code) and plausibly consistent with the later-confirmed theft of tens of millions of customer records (payment/credential data volume).
+<strong>False positives:</strong> Checked against legitimate large-data business transfers (e.g., authorized cloud backup) - destination had no legitimate business categorization in proxy logs.
+<strong>Interpretation:</strong> Strong support for HYP-005 - this matches the publicly reported total data volume order-of-magnitude (source reporting described a ~40GB source code trove alone, consistent with multiple multi-gigabyte transfers).
+<strong>Confidence:</strong> High.</p>
+<hr />
+<h2 id="12-data-analysis-techniques-used">12. Data Analysis Techniques Used</h2>
+<table>
+<thead>
+<tr>
+<th>Technique</th>
+<th>Where Applied</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Frequency Analysis</td>
+<td>Request frequency to ColdFusion admin endpoints (11.1)</td>
+</tr>
+<tr>
+<td>Outlier Detection</td>
+<td>Outbound bytes-transferred per destination over time (11.6)</td>
+</tr>
+<tr>
+<td>Behavioral Baselining</td>
+<td>Normal SCM access pattern per repository (11.4); normal DMZ host connection graph (11.3)</td>
+</tr>
+<tr>
+<td>Temporal Analysis</td>
+<td>Correlating exploit-pattern requests, web shell creation, internal pivot, SCM export, and outbound transfer into one timeline</td>
+</tr>
+<tr>
+<td>Parent-Child Process Analysis</td>
+<td>Considered for the DMZ host; limited by lack of fleet-wide process telemetry (noted as gap)</td>
+</tr>
+<tr>
+<td>Sequence Analysis</td>
+<td>Ordering events across HYP-001 through HYP-005 into the kill chain</td>
+</tr>
+<tr>
+<td>Correlation</td>
+<td>Tying SCM export timestamps to outbound transfer volume increases (11.6)</td>
+</tr>
+<tr>
+<td>Entity/Peer Analysis</td>
+<td>Comparing the legacy build service account's export behavior to its normal CI-only pattern</td>
+</tr>
+<tr>
+<td>Timeline Reconstruction</td>
+<td>Section 19</td>
+</tr>
+<tr>
+<td>Rare/Unbaselined File Hunting</td>
+<td>Web shell identification in 11.2</td>
+</tr>
+<tr>
+<td>Network Beacon/Connection-Graph Analysis</td>
+<td>New internal connections from the DMZ host (11.3)</td>
+</tr>
+<tr>
+<td>Statistical/Volumetric Analysis</td>
+<td>Growing-transfer-size pattern in 11.6</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Techniques in the original template not applicable here (PLC Communication Analysis, ICS Protocol Analysis, USB Device Correlation, Kernel Driver Analysis) are omitted as <strong>N/A - Not Applicable</strong>, consistent with Section 3 scoping.</p>
+</blockquote>
+<hr />
+<h2 id="13-hunting-queries">13. Hunting Queries</h2>
+<blockquote>
+<p>All queries below are illustrative of what a hunter would run against this scenario, using realistic syntax and generic field/host names, since Adobe's actual internal schema is not publicly documented.</p>
+</blockquote>
+<h3 id="splunk-spl-coldfusion-admin-path-exploit-attempt">Splunk (SPL) - ColdFusion Admin-Path Exploit Attempt</h3>
+<div class="highlight"><pre><span></span><code>index=web_dmz sourcetype=access_combined
+  uri_path IN (&quot;/CFIDE/administrator/*&quot;, &quot;/CFIDE/adminapi/*&quot;, &quot;/CFIDE/scripts/ajax/*&quot;)
+| where status&lt;400
+| stats count by src_ip, uri_path, _time
+| sort - _time
+</code></pre></div>
+<h3 id="splunk-new-file-in-web-root-vs-baseline">Splunk - New File in Web Root vs. Baseline</h3>
+<div class="highlight"><pre><span></span><code>index=fim OR index=change_mgmt
+| where file_path LIKE &quot;/cf_webroot/%&quot;
+| join type=left file_hash [ | inputlookup baseline_hashes.csv ]
+| where isnull(baseline_hash)
+</code></pre></div>
+<h3 id="microsoft-sentinel-kql-first-seen-internal-connection-from-dmz-host">Microsoft Sentinel (KQL) - First-Seen Internal Connection from DMZ Host</h3>
+<div class="highlight"><pre><span></span><code><span class="n">NetworkFlows</span>
+<span class="p">|</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">SrcHost</span><span class="w"> </span><span class="p">==</span><span class="w"> </span><span class="s">&quot;dmz-cf-03&quot;</span>
+<span class="p">|</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">TimeGenerated</span><span class="w"> </span><span class="p">&gt;</span><span class="w"> </span><span class="k">datetime</span><span class="p">(</span><span class="mi">2013</span><span class="p">-</span><span class="mi">08</span><span class="p">-</span><span class="mi">09</span><span class="p">)</span>
+<span class="p">|</span><span class="w"> </span><span class="k">join</span><span class="w"> </span><span class="n">kind</span><span class="p">=</span><span class="n">leftanti</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="n">NetworkFlows</span>
+<span class="w">    </span><span class="p">|</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">TimeGenerated</span><span class="w"> </span><span class="k">between</span><span class="w"> </span><span class="p">(</span><span class="k">datetime</span><span class="p">(</span><span class="mi">2013</span><span class="p">-</span><span class="mi">05</span><span class="p">-</span><span class="mi">01</span><span class="p">)</span><span class="w"> </span><span class="err">..</span><span class="w"> </span><span class="k">datetime</span><span class="p">(</span><span class="mi">2013</span><span class="p">-</span><span class="mi">08</span><span class="p">-</span><span class="mi">09</span><span class="p">))</span>
+<span class="w">    </span><span class="p">|</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">SrcHost</span><span class="w"> </span><span class="p">==</span><span class="w"> </span><span class="s">&quot;dmz-cf-03&quot;</span>
+<span class="w">    </span><span class="p">|</span><span class="w"> </span><span class="k">summarize</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="n">DstHost</span>
+<span class="p">)</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">DstHost</span>
+<span class="p">|</span><span class="w"> </span><span class="k">project</span><span class="w"> </span><span class="n">TimeGenerated</span><span class="p">,</span><span class="w"> </span><span class="n">SrcHost</span><span class="p">,</span><span class="w"> </span><span class="n">DstHost</span><span class="p">,</span><span class="w"> </span><span class="n">DstPort</span><span class="p">,</span><span class="w"> </span><span class="n">Bytes</span>
+</code></pre></div>
+<h3 id="kql-scm-bulk-export-anomaly">KQL - SCM Bulk Export Anomaly</h3>
+<div class="highlight"><pre><span></span><code><span class="n">SCMAuditLogs</span>
+<span class="p">|</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">Operation</span><span class="w"> </span><span class="p">==</span><span class="w"> </span><span class="s">&quot;full_export&quot;</span><span class="w"> </span><span class="k">or</span><span class="w"> </span><span class="n">ObjectCount</span><span class="w"> </span><span class="p">&gt;</span><span class="w"> </span><span class="mi">5000</span>
+<span class="p">|</span><span class="w"> </span><span class="k">summarize</span><span class="w"> </span><span class="n">TotalObjects</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">sum</span><span class="p">(</span><span class="n">ObjectCount</span><span class="p">),</span><span class="w"> </span><span class="n">Repos</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">make_set</span><span class="p">(</span><span class="n">Repository</span><span class="p">)</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="n">Account</span><span class="p">,</span><span class="w"> </span><span class="n">SourceHost</span>
+<span class="p">|</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">Account</span><span class="w"> </span><span class="err">!</span><span class="n">in</span><span class="w"> </span><span class="p">(</span><span class="n">KnownCIServiceAccounts</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="elastic-dsl-outbound-volume-time-series-by-destination">Elastic (DSL) - Outbound Volume Time Series by Destination</h3>
+<div class="highlight"><pre><span></span><code><span class="err">GET</span><span class="w"> </span><span class="err">proxy</span><span class="mi">-</span><span class="err">*/_search</span>
+<span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;size&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;query&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;range&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;@timestamp&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;gte&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2013-08-01&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;lte&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2013-09-30&quot;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">&quot;aggs&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;by_dest&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;terms&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;field&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;dest_ip.keyword&quot;</span><span class="w"> </span><span class="p">},</span>
+<span class="w">      </span><span class="nt">&quot;aggs&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;daily&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">          </span><span class="nt">&quot;date_histogram&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;field&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;@timestamp&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;calendar_interval&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;week&quot;</span><span class="w"> </span><span class="p">},</span>
+<span class="w">          </span><span class="nt">&quot;aggs&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;total_bytes&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;sum&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;field&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;bytes_out&quot;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<h3 id="sql-illustrative-anomalous-row-count-query-if-audit-logging-existed">SQL - (Illustrative) Anomalous Row-Count Query, if Audit Logging Existed</h3>
+<p><div class="highlight"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="n">query_id</span><span class="p">,</span><span class="w"> </span><span class="n">executed_by</span><span class="p">,</span><span class="w"> </span><span class="n">source_host</span><span class="p">,</span><span class="w"> </span><span class="k">table_name</span><span class="p">,</span><span class="w"> </span><span class="n">rows_returned</span><span class="p">,</span><span class="w"> </span><span class="n">query_time</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">db_audit_log</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="k">table_name</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;customer_credentials&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;payment_records&#39;</span><span class="p">)</span>
+<span class="w">  </span><span class="k">AND</span><span class="w"> </span><span class="n">rows_returned</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">1000</span>
+<span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">query_time</span><span class="p">;</span>
+</code></pre></div>
+<em>(Included to show what HYP-004 validation would have looked like had this control existed - see Section 22.)</em></p>
+<h3 id="sysmon-filter-config-snippet-web-service-process-spawning-command-shell">Sysmon Filter (Config Snippet) - Web Service Process Spawning Command Shell</h3>
+<div class="highlight"><pre><span></span><code><span class="nt">&lt;Sysmon</span><span class="w"> </span><span class="na">schemaversion=</span><span class="s">&quot;4.0&quot;</span><span class="nt">&gt;</span>
+<span class="w">  </span><span class="nt">&lt;EventFiltering&gt;</span>
+<span class="w">    </span><span class="nt">&lt;ProcessCreate</span><span class="w"> </span><span class="na">onmatch=</span><span class="s">&quot;include&quot;</span><span class="nt">&gt;</span>
+<span class="w">      </span><span class="nt">&lt;ParentImage</span><span class="w"> </span><span class="na">condition=</span><span class="s">&quot;contains&quot;</span><span class="nt">&gt;</span>coldfusion<span class="nt">&lt;/ParentImage&gt;</span>
+<span class="w">      </span><span class="nt">&lt;Image</span><span class="w"> </span><span class="na">condition=</span><span class="s">&quot;contains&quot;</span><span class="nt">&gt;</span>cmd.exe<span class="nt">&lt;/Image&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/ProcessCreate&gt;</span>
+<span class="w">  </span><span class="nt">&lt;/EventFiltering&gt;</span>
+<span class="nt">&lt;/Sysmon&gt;</span>
+</code></pre></div>
+<h3 id="powershell-manual-baseline-diff-of-web-root-era-appropriate-pre-fim">PowerShell - Manual Baseline Diff of Web Root (Era-Appropriate, Pre-FIM)</h3>
+<div class="highlight"><pre><span></span><code><span class="nb">Get-ChildItem</span> <span class="n">-Path</span> <span class="s2">&quot;D:\cf_webroot&quot;</span> <span class="n">-Recurse</span> <span class="o">-File</span> <span class="p">|</span>
+  <span class="nb">Select-Object</span> <span class="n">FullName</span><span class="p">,</span> <span class="n">LastWriteTime</span><span class="p">,</span> <span class="p">@{</span><span class="n">N</span><span class="p">=</span><span class="s1">&#39;Hash&#39;</span><span class="p">;</span><span class="n">E</span><span class="p">={(</span><span class="nb">Get-FileHash</span> <span class="nv">$_</span><span class="p">.</span><span class="n">FullName</span><span class="p">).</span><span class="n">Hash</span><span class="p">}}</span> <span class="p">|</span>
+  <span class="nb">Compare-Object</span> <span class="n">-ReferenceObject</span> <span class="p">(</span><span class="nb">Import-Csv</span> <span class="n">baseline_hashes</span><span class="p">.</span><span class="n">csv</span><span class="p">)</span> <span class="n">-Property</span> <span class="n">FullName</span><span class="p">,</span> <span class="n">Hash</span>
+</code></pre></div>
+<h3 id="windows-event-filter-unexpected-local-adminservice-account-use">Windows Event Filter - Unexpected Local Admin/Service Account Use</h3>
+<div class="highlight"><pre><span></span><code>Log: Security
+EventID: 4624
+Filter: TargetUserName == &quot;svc-build-legacy&quot; AND LogonType == 3 AND IpAddress NOT IN (KnownCIInfra.csv)
+</code></pre></div>
+<hr />
+<h2 id="14-sigma-detection-opportunities">14. Sigma Detection Opportunities</h2>
+<h3 id="sig-001-coldfusion-administrative-endpoint-access-from-external-source">SIG-001 - ColdFusion Administrative Endpoint Access from External Source</h3>
+<div class="highlight"><pre><span></span><code><span class="nt">title</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Successful Request to ColdFusion Administrative Path from External IP</span>
+<span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">7d2b2f1f-0001-4c3c-9a4b-000000000001</span>
+<span class="nt">status</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">experimental</span>
+<span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Detects successful (non-40x) requests to sensitive CFIDE administrative paths from external source IPs, indicative of ColdFusion exploitation.</span>
+<span class="nt">logsource</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">category</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">webserver</span>
+<span class="nt">detection</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">selection</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">uri_path|contains</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;/CFIDE/administrator/&#39;</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;/CFIDE/adminapi/&#39;</span>
+<span class="w">    </span><span class="nt">status_code|lt</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">400</span>
+<span class="w">    </span><span class="nt">src_ip|internal</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<span class="w">  </span><span class="nt">condition</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">selection</span>
+<span class="nt">falsepositives</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Authorized administrative access from a whitelisted management IP</span>
+<span class="nt">level</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">high</span>
+<span class="nt">tags</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">attack.initial_access</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">attack.t1190</span>
+</code></pre></div>
+<h3 id="sig-002-new-unbaselined-file-in-web-accessible-directory">SIG-002 - New Unbaselined File in Web-Accessible Directory</h3>
+<div class="highlight"><pre><span></span><code><span class="nt">title</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">New File Created in Web Root Not Present in Configuration Baseline</span>
+<span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">7d2b2f1f-0002-4c3c-9a4b-000000000002</span>
+<span class="nt">status</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">experimental</span>
+<span class="nt">logsource</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">category</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">file_integrity</span>
+<span class="nt">detection</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">selection</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">file_path|startswith</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;/cf_webroot/&#39;</span>
+<span class="w">    </span><span class="nt">event_type</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;file_created&#39;</span>
+<span class="w">  </span><span class="nt">filter</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">file_hash|in_baseline</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">  </span><span class="nt">condition</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">selection and not filter</span>
+<span class="nt">falsepositives</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Legitimate, unrecorded manual deployment (process gap, not malicious)</span>
+<span class="nt">level</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">high</span>
+<span class="nt">tags</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">attack.persistence</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">attack.t1505.003</span>
+</code></pre></div>
+<h3 id="sig-003-first-seen-internal-connection-from-internet-facing-host">SIG-003 - First-Seen Internal Connection from Internet-Facing Host</h3>
+<div class="highlight"><pre><span></span><code><span class="nt">title</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DMZ Host Initiates Connection to Previously Unseen Internal Destination</span>
+<span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">7d2b2f1f-0003-4c3c-9a4b-000000000003</span>
+<span class="nt">status</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">experimental</span>
+<span class="nt">logsource</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">category</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network_flow</span>
+<span class="nt">detection</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">timeframe</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">90d</span>
+<span class="w">  </span><span class="nt">selection</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">src_zone</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;dmz&#39;</span>
+<span class="w">  </span><span class="nt">baseline_check</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">destination NOT IN (src_host_90d_destination_baseline)</span>
+<span class="w">  </span><span class="nt">condition</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">selection and baseline_check</span>
+<span class="nt">falsepositives</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Legitimate new integration or authorized infrastructure change</span>
+<span class="nt">level</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">high</span>
+<span class="nt">tags</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">attack.lateral_movement</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">attack.t1021</span>
+</code></pre></div>
+<h3 id="sig-004-full-repository-export-by-non-ci-account">SIG-004 - Full Repository Export by Non-CI Account</h3>
+<div class="highlight"><pre><span></span><code><span class="nt">title</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Full Source Repository Export Outside Normal CI Pattern</span>
+<span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">7d2b2f1f-0004-4c3c-9a4b-000000000004</span>
+<span class="nt">status</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">experimental</span>
+<span class="nt">logsource</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">category</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">scm_audit</span>
+<span class="nt">detection</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">selection</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">operation</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;full_export&#39;</span>
+<span class="w">  </span><span class="nt">filter</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">account|in</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">KnownCIServiceAccounts</span>
+<span class="w">  </span><span class="nt">condition</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">selection and not filter</span>
+<span class="nt">falsepositives</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Legitimate repository migration or disaster-recovery export</span>
+<span class="nt">level</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">critical</span>
+<span class="nt">tags</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">attack.collection</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">attack.t1213</span>
+</code></pre></div>
+<h3 id="sig-005-recurring-large-outbound-transfer-to-consistent-external-destination">SIG-005 - Recurring Large Outbound Transfer to Consistent External Destination</h3>
+<div class="highlight"><pre><span></span><code><span class="nt">title</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Growing Recurrent Outbound Transfer Consistent with Staged Exfiltration</span>
+<span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">7d2b2f1f-0005-4c3c-9a4b-000000000005</span>
+<span class="nt">status</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">experimental</span>
+<span class="nt">logsource</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">category</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">proxy</span>
+<span class="nt">detection</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">timeframe</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">30d</span>
+<span class="w">  </span><span class="nt">selection</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">bytes_out|gt</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1000000000</span>
+<span class="w">  </span><span class="nt">condition</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">selection | count() by dest_ip &gt; 2</span>
+<span class="nt">falsepositives</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Legitimate large recurring backup or data-sync jobs</span>
+<span class="nt">level</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">critical</span>
+<span class="nt">tags</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">attack.exfiltration</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">attack.t1041</span>
+</code></pre></div>
+<hr />
+<h2 id="15-mitre-attck-mapping">15. MITRE ATT&amp;CK Mapping</h2>
+<table>
+<thead>
+<tr>
+<th>Technique</th>
+<th>Sub-technique</th>
+<th>Description</th>
+<th>Evidence</th>
+<th>Confidence</th>
+<th>Detection</th>
+<th>Mitigation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>T1190 Exploit Public-Facing Application</td>
+<td>-</td>
+<td>Exploitation of unpatched ColdFusion instance</td>
+<td>Section 11.1</td>
+<td>High</td>
+<td>SIG-001</td>
+<td>Patch management, WAF tuning</td>
+</tr>
+<tr>
+<td>T1505.003 Web Shell</td>
+<td>-</td>
+<td>Persistence via dropped <code>.cfm</code> file</td>
+<td>Section 11.2</td>
+<td>High</td>
+<td>SIG-002</td>
+<td>File-integrity monitoring, web root hardening</td>
+</tr>
+<tr>
+<td>T1021 Remote Services</td>
+<td>-</td>
+<td>Pivot from DMZ host to internal SCM/payment-adjacent hosts</td>
+<td>Section 11.3</td>
+<td>High</td>
+<td>SIG-003</td>
+<td>Network segmentation, zero-trust internal access</td>
+</tr>
+<tr>
+<td>T1213 Data from Information Repositories</td>
+<td>-</td>
+<td>Bulk export of source code repositories</td>
+<td>Section 11.4</td>
+<td>High</td>
+<td>SIG-004</td>
+<td>Least privilege, SCM export alerting</td>
+</tr>
+<tr>
+<td>T1552 / T1555 Credential Access (hypothesized)</td>
+<td>-</td>
+<td>Possible use of the legacy build service account's credentials</td>
+<td>Circumstantial</td>
+<td>Low-Medium</td>
+<td>Credential rotation, service-account monitoring</td>
+<td>Vaulted/rotated service credentials</td>
+</tr>
+<tr>
+<td>T1041 Exfiltration Over C2 Channel</td>
+<td>-</td>
+<td>Staged multi-week outbound transfers</td>
+<td>Section 11.6</td>
+<td>High</td>
+<td>SIG-005</td>
+<td>Egress filtering, volumetric DLP</td>
+</tr>
+<tr>
+<td>T1213 (Data Store, Customer DB)</td>
+<td>-</td>
+<td>Suspected but unconfirmed direct access to customer credential/payment store</td>
+<td>Indirect (11.5 gap)</td>
+<td>Medium</td>
+<td>Database audit logging (absent)</td>
+<td>Enable DB audit logging, least privilege, tokenization of payment data</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="16-alerts-reviewed">16. Alerts Reviewed</h2>
+<table>
+<thead>
+<tr>
+<th>Alert Name</th>
+<th>Source</th>
+<th>Time</th>
+<th>Severity</th>
+<th>Reason</th>
+<th>Disposition</th>
+<th>Evidence</th>
+<th>Analyst Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>WAF Generic Anomaly Signature</td>
+<td>WAF</td>
+<td>2013-08-09 03:15</td>
+<td>Low-Medium</td>
+<td>Loosely matched request pattern to admin path</td>
+<td>Logged, not auto-blocked or escalated (historical)</td>
+<td>Request log only</td>
+<td><strong>Missed opportunity</strong> - reopened during retrospective hunt; see Section 21</td>
+</tr>
+<tr>
+<td>Perimeter IDS Signature</td>
+<td>IDS</td>
+<td>none fired for the web shell itself</td>
+<td>N/A</td>
+<td>Web shell traffic used standard HTTPS to the legitimate site, blending with normal traffic</td>
+<td>N/A</td>
+<td>N/A</td>
+<td>Confirms signature-based tooling was insufficient for this technique</td>
+</tr>
+<tr>
+<td>SCM Bulk Export (retrospective)</td>
+<td>Hunt-generated</td>
+<td>2013-hunt date</td>
+<td>Critical</td>
+<td>Hypothesis-driven query, not a standing alert</td>
+<td>Escalated</td>
+<td>Section 11.4</td>
+<td>No such detection existed live in 2013; created as SIG-004 going forward</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>As with many intrusions of this era, the near-absence of <em>real</em>, escalated alerts is itself a finding - this intrusion largely blended into normal traffic patterns for the tools that existed, which is why hypothesis-driven hunting was necessary to reconstruct it rather than alert triage alone.</p>
+</blockquote>
+<hr />
+<h2 id="17-indicators-of-compromise">17. Indicators of Compromise</h2>
+<h3 id="host-iocs">Host IOCs</h3>
+<ul>
+<li>Web shell file path pattern: <code>/cf_webroot/scripts/util/_diag.cfm</code> (illustrative - exact real filename not publicly confirmed)</li>
+<li>Legacy build service account used outside its normal CI pattern: <code>svc-build-legacy</code> (illustrative)</li>
+</ul>
+<h3 id="network-iocs">Network IOCs</h3>
+<ul>
+<li>External source IP associated with initial exploit-pattern requests (illustrative - real IP not publicly disclosed)</li>
+<li>Exfiltration destination IP receiving recurring multi-gigabyte transfers (illustrative)</li>
+</ul>
+<h3 id="registry-drivers-mutexes-certificates-usb-artifacts-plc-indicators">Registry / Drivers / Mutexes / Certificates / USB Artifacts / PLC Indicators</h3>
+<ul>
+<li><strong>None observed / N/A</strong> - no evidence of registry-based persistence, kernel drivers, mutex-based coordination, certificate abuse, USB involvement, or ICS/PLC indicators in this scenario. Listed explicitly to show these categories were considered and ruled out, not skipped.</li>
+</ul>
+<h3 id="processes">Processes</h3>
+<ul>
+<li>ColdFusion service process observed spawning command-shell activity (hypothesized based on TTP pattern; not independently confirmed in public reporting)</li>
+</ul>
+<h3 id="services">Services</h3>
+<ul>
+<li>None confirmed publicly beyond the web application service itself being the entry point.</li>
+</ul>
+<h3 id="files">Files</h3>
+<ul>
+<li>Source code archives publicly referenced in reporting: a ~40GB combined trove including Acrobat and ColdFusion source; a separately identified password-protected archive (<code>ph1.tar.gz</code>, ~2.56GB) later corroborated as containing Photoshop source code once a similarly-named, non-protected copy was found posted publicly.</li>
+<li>A large combined customer data file (publicly referenced as <code>users.tar.gz</code>) later found to contain over 150 million username/password-hash-equivalent pairs.</li>
+</ul>
+<h3 id="hashes-domains-ips-certificates">Hashes / Domains / IPs / Certificates</h3>
+<ul>
+<li>No specific file hashes, C2 domains, or certificates have been publicly confirmed by Adobe; any such values presented elsewhere for this incident should be treated as unverified.</li>
+</ul>
+<hr />
+<h2 id="18-indicators-of-attack-ioas">18. Indicators of Attack (IOAs)</h2>
+<p>Behavioral patterns, useful even without exact IOCs:</p>
+<ul>
+<li>Successful (non-error) HTTP responses to administrative or file-upload-capable paths on an internet-facing ColdFusion instance, from an external source</li>
+<li>A new, small, generically-named script file appearing in a web-accessible directory within minutes of such requests</li>
+<li>An internet-facing application host initiating a connection to an internal source-control or data-tier host it has never contacted before</li>
+<li>A build/CI service account performing a full-repository export operation outside its normal, narrow, automated pattern</li>
+<li>Recurring, growing-volume outbound transfers from an internal host to a small, consistent set of external destinations over a multi-week window</li>
+</ul>
+<hr />
+<h2 id="19-timeline-reconstruction">19. Timeline Reconstruction</h2>
+<table>
+<thead>
+<tr>
+<th>Date/Time (Illustrative, Anchored to Public Facts Where Known)</th>
+<th>Event</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2013-08-09 03:14</td>
+<td>Exploit-pattern requests against internet-facing ColdFusion admin paths from external IP</td>
+</tr>
+<tr>
+<td>2013-08-09 03:16</td>
+<td>Web shell file created in web root of the targeted host</td>
+</tr>
+<tr>
+<td>2013-08-11 22:03</td>
+<td>First-seen internal connection from the DMZ host to an SCM-adjacent internal host</td>
+</tr>
+<tr>
+<td>2013-08-12 – 08-13</td>
+<td>Full-repository export operations against Acrobat and ColdFusion source under a legacy build service account</td>
+</tr>
+<tr>
+<td>2013-08-13</td>
+<td>First large outbound transfer (6.2GB) to external destination</td>
+</tr>
+<tr>
+<td>2013-08-19 01:47</td>
+<td>First-seen internal connection from the DMZ host to a payment-adjacent gateway</td>
+</tr>
+<tr>
+<td>2013-08-21</td>
+<td>Second large outbound transfer (11.4GB)</td>
+</tr>
+<tr>
+<td>2013-09-02</td>
+<td>Third, largest outbound transfer (18.9GB)</td>
+</tr>
+<tr>
+<td>2013-09-17</td>
+<td>Adobe internally identifies the breach and opens formal investigation (public fact)</td>
+</tr>
+<tr>
+<td>2013-09-25 (approx.)</td>
+<td>Krebs and Holden discover the 40GB source code trove on shared actor infrastructure (public fact)</td>
+</tr>
+<tr>
+<td>2013-10-03</td>
+<td>Adobe publicly discloses the breach; initial estimate of 2.9 million affected accounts (public fact)</td>
+</tr>
+<tr>
+<td>2013-10-29</td>
+<td>Adobe revises affected-user estimate to ~38 million active users (public fact)</td>
+</tr>
+<tr>
+<td>Later analysis (2013–2016)</td>
+<td>Total registered accounts affected assessed at up to ~150 million once inactive accounts are included; portion of Photoshop source code confirmed accessed (public fact)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="20-kill-chain-reconstruction">20. Kill Chain Reconstruction</h2>
+<table>
+<thead>
+<tr>
+<th>Stage</th>
+<th>Observed Evidence</th>
+<th>Logs</th>
+<th>Detection (if any)</th>
+<th>MITRE Mapping</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Exploitation</td>
+<td>Exploit-pattern requests to ColdFusion admin paths</td>
+<td>Web access logs</td>
+<td>WAF logged but did not escalate</td>
+<td>T1190</td>
+</tr>
+<tr>
+<td>Installation</td>
+<td>Web shell file created</td>
+<td>File-system/config baseline diff</td>
+<td>None live; SIG-002 retrospective</td>
+<td>T1505.003</td>
+</tr>
+<tr>
+<td>Internal Pivot</td>
+<td>New internal connections from DMZ host</td>
+<td>Firewall/NetFlow</td>
+<td>None live; SIG-003 retrospective</td>
+<td>T1021</td>
+</tr>
+<tr>
+<td>Collection</td>
+<td>Full repository export</td>
+<td>SCM audit logs</td>
+<td>None live; SIG-004 retrospective</td>
+<td>T1213</td>
+</tr>
+<tr>
+<td>Collection (Customer Data)</td>
+<td>Cross-zone connection toward payment-adjacent gateway</td>
+<td>NetFlow (indirect)</td>
+<td>None (gap - no DB audit log)</td>
+<td>T1213</td>
+</tr>
+<tr>
+<td>Exfiltration</td>
+<td>Recurring, growing outbound transfers</td>
+<td>Proxy logs</td>
+<td>None live; SIG-005 retrospective</td>
+<td>T1041</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="21-root-cause-analysis">21. Root Cause Analysis</h2>
+<p><strong>How compromise occurred:</strong> The most consistent reconstruction is that an internet-facing, insufficiently patched ColdFusion application server was exploited directly, a web shell was installed for persistence, and that foothold was used to pivot internally toward source-control systems (from which product source code was bulk-exported) and toward the payment-adjacent/customer-database environment (from which credential and payment-related data was very likely accessed, consistent with what was later publicly confirmed).</p>
+<p><strong>Why detections failed:</strong>
+1. WAF/IDS signature coverage did not reliably distinguish the exploit-pattern requests from generic noise, and the resulting low-severity alert was not escalated or correlated with subsequent host activity.
+2. No file-integrity monitoring existed on internet-facing web roots, so the web shell went unnoticed at the moment of creation.
+3. No baseline existed for the DMZ host's normal internal connection graph as a <em>standing</em> detection - this baseline had to be reconstructed retrospectively during the hunt rather than existing as a live alerting mechanism.
+4. SCM audit logging existed but had no behavioral/volumetric alerting layered on top of it - a full repository export by a legacy service account produced a log entry but not an alert.
+5. No database audit logging existed on the customer credential store - the single largest gap, directly mirroring the equivalent gap identified in other historical breach reconstructions of this era, and consistent with Adobe's own later public reflection that "the idea was that product engineering was totally separate from IT security, and that didn't really hold anymore" as the company modernized its delivery model.</p>
+<p><strong>What evidence existed:</strong> Nearly all of the evidence used in this retrospective hunt (Sections 11, 19) existed in logs at the time - web access logs, SCM audit logs, and proxy/firewall logs were all live and retained. The failure was analytical (a low-severity WAF alert not escalated or correlated) and architectural (missing file-integrity monitoring, missing database audit logging, insufficient network segmentation between the DMZ, source control, and payment-adjacent environments).</p>
+<p><strong>Missed opportunities:</strong> The August 9 WAF alert, if correlated with the file-system change on the same host minutes later and escalated for Tier 2/3 review, could plausibly have led to discovery of the intrusion <strong>within days</strong>, before the bulk SCM exports and multi-week exfiltration campaign occurred - potentially weeks to over a month before Adobe's own internal identification on September 17.</p>
+<hr />
+<h2 id="22-detection-gaps">22. Detection Gaps</h2>
+<ul>
+<li><strong>No database audit logging</strong> on the customer credential/payment-adjacent store - the most severe gap; without it, HYP-004 could never be directly confirmed, only inferred from network flow.</li>
+<li><strong>No fleet-wide file-integrity monitoring</strong> on internet-facing web roots - the web shell's creation, the single clearest and earliest artifact in the entire intrusion, was not automatically detected.</li>
+<li><strong>No behavioral/volumetric alerting layered on SCM audit logs</strong> - the bulk export event was logged but not flagged as anomalous.</li>
+<li><strong>Insufficient network segmentation</strong> between the DMZ application tier, source control, and the payment-adjacent environment - a compromised internet-facing host had a viable path to the organization's two most sensitive data stores.</li>
+<li><strong>No cross-zone NetFlow baseline as a standing detection</strong> - the "first-seen internal connection" analysis in this hunt was performed retrospectively rather than existing as a live control.</li>
+<li><strong>Weak WAF/IDS-to-SOC escalation criteria</strong> for low/medium-severity signature hits with no automatic correlation to subsequent host or network activity.</li>
+</ul>
+<hr />
+<h2 id="23-detection-engineering-opportunities">23. Detection Engineering Opportunities</h2>
+<ul>
+<li>Convert SIG-001 through SIG-005 (Section 14) into standing, tuned production detections with owner-assigned false-positive review.</li>
+<li>Build a correlation rule chaining "WAF signature hit on admin/upload-capable path" → "new file created in web root within 15 minutes" → auto-escalate regardless of the WAF's own severity rating.</li>
+<li>Build a per-repository SCM export-size baseline with automatic alerting on any export exceeding a small multiple of the historical maximum for that account/repository pair.</li>
+<li>Implement cross-zone NetFlow baselining as a standing UEBA-style control: any internet-facing host reaching a previously-uncontacted internal destination should generate at minimum a medium-severity alert.</li>
+<li>Implement database audit logging and query-volume anomaly detection the moment it is enabled - row-count-returned as a first-class monitored metric for any table containing credentials or payment data.</li>
+<li>Risk-scoring: composite score combining "WAF hit" + "new file in web root" + "first-seen internal connection" + "SCM bulk export" within a rolling multi-day window, rather than relying on any single control in isolation.</li>
+</ul>
+<hr />
+<h2 id="24-purple-team-opportunities">24. Purple Team Opportunities</h2>
+<ul>
+<li><strong>Atomic Red Team:</strong> Simulate T1190 (public-facing application exploitation) and T1505.003 (web shell) against a lab replica of the DMZ ColdFusion tier to validate SIG-001 and SIG-002 fire correctly.</li>
+<li><strong>Caldera / Prelude Operator:</strong> Chain an end-to-end emulation: web-tier exploitation → web shell → internal pivot to a decoy SCM host → bulk "repository" export against a decoy dataset → staged multi-week exfiltration, to validate the full detection chain fires in sequence rather than only in isolated unit tests.</li>
+<li><strong>Infection/Intrusion Simulation:</strong> Specifically test whether the organization's current WAF/IDS ruleset catches the exact class of ColdFusion administrative-path exploitation historically used against this actor group's other victims (NW3C), since generic WAF signatures are frequently tuned against newer techniques and may regress on older-but-still-relevant ones.</li>
+<li><strong>Validation plan:</strong> Run quarterly; require each Sigma rule in Section 14 to fire during the emulation with an alert-to-analyst time under an agreed SLA; track false-positive rate over the following 30 days of normal production traffic.</li>
+</ul>
+<hr />
+<h2 id="25-threat-hunting-lessons-learned">25. Threat Hunting Lessons Learned</h2>
+<ul>
+<li><strong>Analytical mistake:</strong> Treating a low/medium-severity WAF signature hit as noise without checking for correlated file-system or network activity on the same host in the following minutes.</li>
+<li><strong>Blind spot:</strong> Assuming source control and the customer database were adequately protected by their position "deeper" in the network, without independent, content-level monitoring at each layer.</li>
+<li><strong>Better hypothesis framing going forward:</strong> Pair every application-layer compromise hypothesis with an explicit "what internal system does this host have a viable path to reach" hypothesis from the start, rather than discovering the pivot path reactively mid-hunt - Section 6's trust-relationship mapping should be a <em>pre-registered</em> input to hypothesis generation, not a Section 21 postmortem finding.</li>
+<li><strong>Improved hunts:</strong> Future hunts on internet-facing application environments should treat "any internet-facing service with a known, actively-exploited CVE class and no file-integrity monitoring on its web root" as a standing, pre-registered hypothesis to test at the start of every engagement.</li>
+</ul>
+<hr />
+<h2 id="26-recommendations">26. Recommendations</h2>
+<h3 id="immediate">Immediate</h3>
+<ul>
+<li>Patch or isolate any internet-facing ColdFusion (or equivalent application-server) instance not on the current security baseline.</li>
+<li>Enable database audit logging on all datastores containing credentials or payment-adjacent data; alert on any query returning more than a defined row-count threshold.</li>
+<li>Rotate credentials for the legacy build service account and any other service accounts with standing SCM export capability.</li>
+</ul>
+<h3 id="short-term">Short-Term</h3>
+<ul>
+<li>Deploy file-integrity monitoring on all internet-facing web roots.</li>
+<li>Deploy behavioral/volumetric alerting on SCM audit logs.</li>
+<li>Stand up the five Sigma detections in Section 14 as production rules.</li>
+</ul>
+<h3 id="long-term">Long-Term</h3>
+<ul>
+<li>Segment the DMZ application tier, source control, and payment-adjacent environments such that a compromised internet-facing host cannot directly reach either without a monitored, brokered access path.</li>
+<li>Build UEBA/behavioral baselining capability for cross-zone network connections and data-repository access.</li>
+</ul>
+<h3 id="strategic">Strategic</h3>
+<ul>
+<li>Treat "does this internet-facing service have a monitored, minimal-trust path to our two most sensitive data stores (source code, customer credentials/payment data), and is that path independently audited" as a standing architecture-review question for all new and existing internet-facing systems.</li>
+</ul>
+<h3 id="operational">Operational</h3>
+<ul>
+<li>Formalize an escalation SLA: any WAF/IDS signature hit, however low severity, followed within a defined window by a new file in a web-accessible directory on the same host, auto-escalates.</li>
+</ul>
+<h3 id="detection-logging-architecture-user-awareness">Detection / Logging / Architecture / User Awareness</h3>
+<ul>
+<li>(Detection/Logging/Architecture covered above.)</li>
+<li><strong>User Awareness:</strong> Given this intrusion's primary vector was direct exploitation rather than phishing, awareness investment here is secondary to patch-management and segmentation investment, though general phishing-resistance training remains a reasonable baseline control against the secondary risk of credential-based entry.</li>
+</ul>
+<h3 id="ics-security">ICS Security</h3>
+<p><strong>N/A - Not Applicable to this environment</strong> (see Section 3).</p>
+<hr />
+<h2 id="27-final-hunt-assessment">27. Final Hunt Assessment</h2>
+<p><strong>Was the hypothesis validated?</strong>
+- HYP-001 (ColdFusion exploitation as initial access): <strong>Supported</strong>
+- HYP-002 (web shell persistence and internal pivoting): <strong>Supported</strong>
+- HYP-003 (access to source code repositories): <strong>Supported</strong>
+- HYP-004 (access to payment-adjacent/customer credential store): <strong>Partially Supported - confirmed detection gap, supported only by indirect/circumstantial network evidence</strong>
+- HYP-005 (staged, long-dwell exfiltration): <strong>Supported</strong></p>
+<p><strong>Confidence:</strong> Medium-High overall, given this is a retrospective reconstruction built from Adobe's own public statements, independent researcher findings, and plausible, era-appropriate log analysis rather than an actual internal DFIR record.</p>
+<p><strong>Impact:</strong> Critical - theft of proprietary source code for multiple flagship products (raising downstream zero-day risk for the entire installed customer base) combined with compromise of tens of millions of customer credential and payment-adjacent records.</p>
+<p><strong>Likelihood (retrospective framing):</strong> Confirmed - this occurred.</p>
+<p><strong>Threat Level:</strong> Critical.</p>
+<p><strong>Business Risk:</strong> Severe - direct legal, regulatory, and reputational exposure at a scale affecting up to ~150 million registered accounts, plus elevated long-term product-security risk from the source code theft.</p>
+<p><strong>Residual Risk:</strong> Until database audit logging, file-integrity monitoring, network segmentation between the DMZ/source-control/payment-adjacent zones, and SCM behavioral alerting are deployed, an equivalent intrusion path remains available to any similarly-capable actor.</p>
+<p><strong>Executive Conclusion:</strong> This retrospective hunt demonstrates that the 2013 intrusion was plausibly detectable <strong>within days of initial exploitation</strong>, using log sources that already existed in the environment, if a single early weak signal (the WAF alert on the ColdFusion admin path) had been correlated with the file-system change that followed two minutes later. The most consequential structural gap was the near-total absence of content-level monitoring - file-integrity and database audit logging - at exactly the two layers (the web root and the customer credential store) that mattered most, despite both layers otherwise having <em>some</em> logging capability in place.</p>
+<hr />
+<h2 id="28-appendix">28. Appendix</h2>
+<h3 id="a-complete-attck-techniques-referenced">A. Complete ATT&amp;CK Techniques Referenced</h3>
+<p><code>T1190</code>, <code>T1505.003</code>, <code>T1021</code>, <code>T1213</code>, <code>T1552</code>, <code>T1555</code>, <code>T1041</code>, <code>T1567</code>, <code>T1068</code>, <code>T1059</code></p>
+<h3 id="b-ioc-table-consolidated">B. IOC Table (Consolidated)</h3>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Value</th>
+<th>Confidence</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Web Shell Path</td>
+<td><code>/cf_webroot/scripts/util/_diag.cfm</code></td>
+<td>Illustrative</td>
+<td>Exact real filename not publicly confirmed</td>
+</tr>
+<tr>
+<td>Service Account</td>
+<td><code>svc-build-legacy</code></td>
+<td>Illustrative</td>
+<td>Represents the account-type pattern, not a confirmed real name</td>
+</tr>
+<tr>
+<td>Exfiltration Destination</td>
+<td>External IP receiving recurring multi-GB transfers</td>
+<td>Illustrative</td>
+<td>Real IP not publicly disclosed</td>
+</tr>
+<tr>
+<td>File: Source Code Trove</td>
+<td>~40GB combined Acrobat/ColdFusion source archive</td>
+<td>Public fact (existence)</td>
+<td>Per Krebs/Hold Security reporting</td>
+</tr>
+<tr>
+<td>File: <code>ph1.tar.gz</code></td>
+<td>~2.56GB password-protected archive, later corroborated as Photoshop source</td>
+<td>Public fact</td>
+<td>Per Krebs reporting</td>
+</tr>
+<tr>
+<td>File: <code>users.tar.gz</code></td>
+<td>Combined customer data file, 150M+ username/password-hash-equivalent pairs</td>
+<td>Public fact</td>
+<td>Per Krebs reporting</td>
+</tr>
+</tbody>
+</table>
+<h3 id="c-sigma-rules">C. Sigma Rules</h3>
+<p>See Section 14 (SIG-001 – SIG-005).</p>
+<h3 id="d-kql-splunk-elastic-powershell-queries">D. KQL / Splunk / Elastic / PowerShell Queries</h3>
+<p>See Section 13.</p>
+<h3 id="e-references">E. References</h3>
+<ul>
+<li>Adobe Systems Inc., corporate security blog and customer notifications, October 2013.</li>
+<li>Brian Krebs, KrebsOnSecurity, <em>"Adobe To Announce Source Code, Customer Data Breach,"</em> October 3, 2013.</li>
+<li>Brian Krebs, KrebsOnSecurity, <em>"Adobe Breach Impacted At Least 38 Million Users,"</em> October 29, 2013.</li>
+<li>Dark Reading, <em>"Adobe Customer Security Compromised: 7 Facts,"</em> October 2013.</li>
+<li>Christian Science Monitor, <em>"Hackers access Adobe's source code, plus 2.9 million customer accounts,"</em> October 4, 2013.</li>
+<li>CSO / Brad Arkin retrospective interview (2018), on the internal engineering/security separation issue.</li>
+</ul>
+<h3 id="f-threat-intelligence-sources">F. Threat Intelligence Sources</h3>
+<p>Simulated sector advisory (non-attributable, generic 2013-era warning about active ColdFusion exploitation campaigns, used as hunt trigger); public researcher and Adobe disclosures (used only retrospectively to validate/ground the hunt, consistent with the "no foreknowledge" hunt design principle).</p>
+<h3 id="g-glossary">G. Glossary</h3>
+<table>
+<thead>
+<tr>
+<th>Term</th>
+<th>Definition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CFIDE</td>
+<td>ColdFusion administrative/development interface path prefix, historically a common target for ColdFusion-specific exploits</td>
+</tr>
+<tr>
+<td>DLP</td>
+<td>Data Loss Prevention</td>
+</tr>
+<tr>
+<td>FIM</td>
+<td>File Integrity Monitoring</td>
+</tr>
+<tr>
+<td>IOA</td>
+<td>Indicator of Attack (behavioral)</td>
+</tr>
+<tr>
+<td>IOC</td>
+<td>Indicator of Compromise (static/atomic)</td>
+</tr>
+<tr>
+<td>SCM</td>
+<td>Source Control Management</td>
+</tr>
+<tr>
+<td>WAF</td>
+<td>Web Application Firewall</td>
+</tr>
+<tr>
+<td>UEBA</td>
+<td>User and Entity Behavior Analytics</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p><em>End of report. This document is a training/reference reconstruction built from publicly available statements by Adobe and independent security researchers, combined with plausible, era-appropriate hunt methodology. Specific internal hostnames, exact file paths, and exact IPs are illustrative and not represented as confirmed forensic fact, since Adobe has not publicly released a detailed internal DFIR timeline for this incident, and has explicitly stated it could not confirm or exclude ColdFusion as the initial attack vector.</em></p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.indexes", "navigation.top", "toc.follow", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="../../assets/javascripts/navigation-tabs.js"></script>
+      
+    
+  </body>
+</html>
